@@ -17,8 +17,9 @@ pipeline {
         stage ('Test Titan') {
             steps {
                 echo 'Building..'
-                sh "cd titan"
-                sh "sbt test"
+                dir ('titan') {
+                  sh "sbt test"
+                }
             }
         }
     }
