@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Organization;
 import play.mvc.*;
 
 /**
@@ -15,6 +16,9 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
+        Organization testOrg = new Organization();
+        testOrg.setName("Test Name");
+        testOrg.save();
         return ok(views.html.index.render());
     }
 

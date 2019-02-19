@@ -7,3 +7,4 @@ project/target
 project/plugins/target
 .target
 logs
+*temp/
