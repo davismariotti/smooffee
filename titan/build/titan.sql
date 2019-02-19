@@ -16,14 +16,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -34,22 +34,24 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: card; Type: TABLE; Schema: public; Owner: -
+-- Name: card; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public.card (
     id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deprecated_at timestamp without time zone NOT NULL,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0,
     token character varying NOT NULL,
     user_id integer NOT NULL
 );
 
 
+ALTER TABLE public.card OWNER TO gomeow;
+
 --
--- Name: card_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: card_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.card_id_seq
@@ -61,15 +63,17 @@ CREATE SEQUENCE public.card_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.card_id_seq OWNER TO gomeow;
+
 --
--- Name: card_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: card_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 
 
 --
--- Name: order; Type: TABLE; Schema: public; Owner: -
+-- Name: order; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public."order" (
@@ -85,8 +89,10 @@ CREATE TABLE public."order" (
 );
 
 
+ALTER TABLE public."order" OWNER TO gomeow;
+
 --
--- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.order_id_seq
@@ -98,29 +104,33 @@ CREATE SEQUENCE public.order_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.order_id_seq OWNER TO gomeow;
+
 --
--- Name: order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.order_id_seq OWNED BY public."order".id;
 
 
 --
--- Name: organization; Type: TABLE; Schema: public; Owner: -
+-- Name: organization; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public.organization (
     id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone NOT NULL,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     name character varying
 );
 
 
+ALTER TABLE public.organization OWNER TO gomeow;
+
 --
--- Name: organization_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: organization_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.organization_id_seq
@@ -132,22 +142,24 @@ CREATE SEQUENCE public.organization_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.organization_id_seq OWNER TO gomeow;
+
 --
--- Name: organization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: organization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.organization_id_seq OWNED BY public.organization.id;
 
 
 --
--- Name: payment; Type: TABLE; Schema: public; Owner: -
+-- Name: payment; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public.payment (
     id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone NOT NULL,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     user_id integer NOT NULL,
     type character varying NOT NULL,
@@ -156,8 +168,10 @@ CREATE TABLE public.payment (
 );
 
 
+ALTER TABLE public.payment OWNER TO gomeow;
+
 --
--- Name: payment_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: payment_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.payment_id_seq
@@ -169,15 +183,17 @@ CREATE SEQUENCE public.payment_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.payment_id_seq OWNER TO gomeow;
+
 --
--- Name: payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.payment_id_seq OWNED BY public.payment.id;
 
 
 --
--- Name: product; Type: TABLE; Schema: public; Owner: -
+-- Name: product; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public.product (
@@ -193,8 +209,10 @@ CREATE TABLE public.product (
 );
 
 
+ALTER TABLE public.product OWNER TO gomeow;
+
 --
--- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.product_id_seq
@@ -206,15 +224,17 @@ CREATE SEQUENCE public.product_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.product_id_seq OWNER TO gomeow;
+
 --
--- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 
 --
--- Name: refund; Type: TABLE; Schema: public; Owner: -
+-- Name: refund; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public.refund (
@@ -229,8 +249,10 @@ CREATE TABLE public.refund (
 );
 
 
+ALTER TABLE public.refund OWNER TO gomeow;
+
 --
--- Name: refund_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: refund_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.refund_id_seq
@@ -242,21 +264,23 @@ CREATE SEQUENCE public.refund_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.refund_id_seq OWNER TO gomeow;
+
 --
--- Name: refund_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: refund_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.refund_id_seq OWNED BY public.refund.id;
 
 
 --
--- Name: user; Type: TABLE; Schema: public; Owner: -
+-- Name: user; Type: TABLE; Schema: public; Owner: gomeow
 --
 
 CREATE TABLE public."user" (
     id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
     deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     organization_id integer NOT NULL,
@@ -269,8 +293,10 @@ CREATE TABLE public."user" (
 );
 
 
+ALTER TABLE public."user" OWNER TO gomeow;
+
 --
--- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: gomeow
 --
 
 CREATE SEQUENCE public.user_id_seq
@@ -282,64 +308,66 @@ CREATE SEQUENCE public.user_id_seq
     CACHE 1;
 
 
+ALTER TABLE public.user_id_seq OWNER TO gomeow;
+
 --
--- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gomeow
 --
 
 ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
 
 
 --
--- Name: card id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: card id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.card ALTER COLUMN id SET DEFAULT nextval('public.card_id_seq'::regclass);
 
 
 --
--- Name: order id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: order id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."order" ALTER COLUMN id SET DEFAULT nextval('public.order_id_seq'::regclass);
 
 
 --
--- Name: organization id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: organization id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.organization ALTER COLUMN id SET DEFAULT nextval('public.organization_id_seq'::regclass);
 
 
 --
--- Name: payment id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: payment id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.payment ALTER COLUMN id SET DEFAULT nextval('public.payment_id_seq'::regclass);
 
 
 --
--- Name: product id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: product id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.product ALTER COLUMN id SET DEFAULT nextval('public.product_id_seq'::regclass);
 
 
 --
--- Name: refund id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: refund id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.refund ALTER COLUMN id SET DEFAULT nextval('public.refund_id_seq'::regclass);
 
 
 --
--- Name: user id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
 
 
 --
--- Data for Name: card; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: card; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user_id) FROM stdin;
@@ -347,7 +375,7 @@ COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user
 
 
 --
--- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public."order" (id, created_at, updated_at, deprecated_at, status, user_id, product_id, location, notes) FROM stdin;
@@ -355,7 +383,7 @@ COPY public."order" (id, created_at, updated_at, deprecated_at, status, user_id,
 
 
 --
--- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public.organization (id, created_at, updated_at, deprecated_at, status, name) FROM stdin;
@@ -363,7 +391,7 @@ COPY public.organization (id, created_at, updated_at, deprecated_at, status, nam
 
 
 --
--- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public.payment (id, created_at, updated_at, deprecated_at, status, user_id, type, amount, card_id) FROM stdin;
@@ -371,7 +399,7 @@ COPY public.payment (id, created_at, updated_at, deprecated_at, status, user_id,
 
 
 --
--- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public.product (id, created_at, updated_at, deprecated_at, status, organization_id, name, description, price) FROM stdin;
@@ -379,7 +407,7 @@ COPY public.product (id, created_at, updated_at, deprecated_at, status, organiza
 
 
 --
--- Data for Name: refund; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: refund; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public.refund (id, created_at, updated_at, deprecated_at, status, user_id, order_id, amount) FROM stdin;
@@ -387,7 +415,7 @@ COPY public.refund (id, created_at, updated_at, deprecated_at, status, user_id, 
 
 
 --
--- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: gomeow
 --
 
 COPY public."user" (id, created_at, updated_at, deprecated_at, status, organization_id, firstname, lastname, password, last_logged_in, role, email) FROM stdin;
@@ -395,56 +423,56 @@ COPY public."user" (id, created_at, updated_at, deprecated_at, status, organizat
 
 
 --
--- Name: card_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: card_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.card_id_seq', 1, false);
 
 
 --
--- Name: order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.order_id_seq', 1, false);
 
 
 --
--- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
-SELECT pg_catalog.setval('public.organization_id_seq', 1, true);
+SELECT pg_catalog.setval('public.organization_id_seq', 2, true);
 
 
 --
--- Name: payment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: payment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.payment_id_seq', 1, false);
 
 
 --
--- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.product_id_seq', 1, false);
 
 
 --
--- Name: refund_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: refund_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.refund_id_seq', 1, false);
 
 
 --
--- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gomeow
 --
 
 SELECT pg_catalog.setval('public.user_id_seq', 1, true);
 
 
 --
--- Name: card card_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: card card_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.card
@@ -452,7 +480,7 @@ ALTER TABLE ONLY public.card
 
 
 --
--- Name: order order_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: order order_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."order"
@@ -460,7 +488,7 @@ ALTER TABLE ONLY public."order"
 
 
 --
--- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.organization
@@ -468,7 +496,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- Name: payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.payment
@@ -476,7 +504,7 @@ ALTER TABLE ONLY public.payment
 
 
 --
--- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.product
@@ -484,7 +512,7 @@ ALTER TABLE ONLY public.product
 
 
 --
--- Name: refund refund_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: refund refund_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.refund
@@ -492,7 +520,7 @@ ALTER TABLE ONLY public.refund
 
 
 --
--- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."user"
@@ -500,7 +528,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- Name: card card_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: card card_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.card
@@ -508,7 +536,7 @@ ALTER TABLE ONLY public.card
 
 
 --
--- Name: order order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: order order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."order"
@@ -516,7 +544,7 @@ ALTER TABLE ONLY public."order"
 
 
 --
--- Name: order order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: order order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."order"
@@ -524,7 +552,7 @@ ALTER TABLE ONLY public."order"
 
 
 --
--- Name: payment payment_card_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: payment payment_card_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.payment
@@ -532,7 +560,7 @@ ALTER TABLE ONLY public.payment
 
 
 --
--- Name: payment payment_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: payment payment_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.payment
@@ -540,7 +568,7 @@ ALTER TABLE ONLY public.payment
 
 
 --
--- Name: product product_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: product product_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.product
@@ -548,7 +576,7 @@ ALTER TABLE ONLY public.product
 
 
 --
--- Name: refund refund_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: refund refund_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.refund
@@ -556,7 +584,7 @@ ALTER TABLE ONLY public.refund
 
 
 --
--- Name: refund refund_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: refund refund_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public.refund
@@ -564,7 +592,7 @@ ALTER TABLE ONLY public.refund
 
 
 --
--- Name: user user_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: user user_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gomeow
 --
 
 ALTER TABLE ONLY public."user"

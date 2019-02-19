@@ -3,8 +3,9 @@ pipeline {
     options {
         ansiColor('xterm')
     }
-    tools {
-        jdk 'jdk8'
+    environment {
+        JENKINS_TEST = 'true'
+        POSTGRES_LOGIN = credentials('jenkins-postgres')
     }
     stages {
         stage ('Initialize') {
