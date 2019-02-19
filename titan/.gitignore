@@ -1,0 +1,9 @@
+.idea/
+.g8/
+target/
+dist
+project/boot
+project/target
+project/plugins/target
+.target
+logs
