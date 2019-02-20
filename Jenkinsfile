@@ -4,7 +4,7 @@ pipeline {
         ansiColor('xterm')
     }
     environment {
-        JENKINS_TEST = 'true'
+        ARABICA_USE_LOGIN = 'true'
         ARABICA_POSTGRES_LOGIN = credentials('jenkins-postgres')
     }
     stages {
@@ -15,10 +15,10 @@ pipeline {
                 '''
             }
         }
-        stage ('Test Titan') {
+        stage ('Test Arabica') {
             steps {
-                echo 'Building..'
-                dir ('titan') {
+                echo 'Building Arabica..'
+                dir ('arabica') {
                   sh "sbt test"
                 }
             }

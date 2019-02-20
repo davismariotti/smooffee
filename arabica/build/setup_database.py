@@ -7,6 +7,8 @@ def setup_pgpass(remote,user,pw):
         pw = getpass.getpass("Enter password for user %s: " % user)
 
     if pw is not None:
+        if not os.path.exists('temp'):
+            os.mkdir('temp')
         execute_shell("echo *:*:*:%s:%s > temp/pgpass" % (user,pw))
         execute_shell("chmod 600 temp/pgpass")
         return "PGPASSFILE=temp/pgpass "
@@ -19,14 +21,14 @@ def execute_shell(cmd):
 
 
 # Check if on test server
-use_login = 'JENKINS_TEST' in os.environ
+use_login = 'ARABICA_USE_LOGIN' in os.environ
 print("USE LOGIN " + str(use_login))
 
 
 if use_login:
-    jenkins_user = os.environ['POSTGRES_LOGIN_USR']
-    login_data = setup_pgpass(None, jenkins_user, os.environ['POSTGRES_LOGIN_PSW'])
-    jenkins_flag = "-U " + os.environ['POSTGRES_LOGIN_USR']
+    jenkins_user = os.environ['ARABICA_POSTGRES_LOGIN_USR']
+    login_data = setup_pgpass(None, jenkins_user, os.environ['ARABICA_POSTGRES_LOGIN_PSW'])
+    jenkins_flag = "-U " + os.environ['ARABICA_POSTGRES_LOGIN_USR']
 else:
     jenkins_user = ""
     login_data = ""

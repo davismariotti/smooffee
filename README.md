@@ -8,18 +8,19 @@
 4. [Ebean Enhancement Plugin 11 for IntelliJ](https://ebean.io/docs/tooling/idea)
 
 ## Starting the Application
-#### Running Titan
+#### Running Arabica
 Execute the following:
 
 ```
-cd titan
-python build/setup_database.py
+cd arabica/build/
+python setup_database.py
+cd ../
 sbt run
 ```
 
-#### Testing Titan
+#### Testing Arabica
 ```
-cd titan
+cd arabica
 sbt test
 ```
 You can also use `sbt testOnly path.to.test.class` to test an individual test.
