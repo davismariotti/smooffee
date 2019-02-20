@@ -11,5 +11,8 @@ scalaVersion := "2.12.8"
 libraryDependencies += guice
 libraryDependencies ++= Seq("com.novocode" % "junit-interface" % "0.11" % "test")
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.5"
+libraryDependencies += "com.graphql-java" % "graphql-java" % "11.0"
+libraryDependencies += "com.graphql-java-kickstart" % "graphql-java-tools" % "5.5.0"
+libraryDependencies += "com.google.code.gson" % "gson" % "2.8.5"
 
 crossPaths := false
