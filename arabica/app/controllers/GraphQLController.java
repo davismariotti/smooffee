@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class GraphQLController extends Controller {
 
-    private final static Logger.ALogger logger = Logger.of("titan");
+    private final static Logger.ALogger logger = Logger.of("arabica");
 
     private Gson gson = new Gson();
 
@@ -26,7 +26,7 @@ public class GraphQLController extends Controller {
     public Result graphql(Http.Request request) {
         Query query = gson.fromJson(request.body().asJson().toString(), Query.class);
 
-        logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", ""));
+        logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
 
         ExecutionInput input = ExecutionInput.newExecutionInput()
                 .query(query.query)

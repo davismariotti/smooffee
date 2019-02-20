@@ -1,4 +1,4 @@
-name := """titan"""
+name := """arabica"""
 organization := "com.davismariotti"
 
 version := "1.0-SNAPSHOT"

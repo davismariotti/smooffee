@@ -1,5 +1,6 @@
 import subprocess
 import os
+import getpass
 
 def setup_pgpass(remote,user,pw):
     if (user is not None) and (pw is None):
@@ -33,10 +34,10 @@ else:
 
 
 stdout_data, stderr_data = execute_shell("%spsql -lqt %s -h localhost | cut -d \| -f 1" % (login_data, jenkins_flag))
-if "titan_db" in stdout_data:
+if "arabica_db" in stdout_data:
     # Drop the database
-    execute_shell("%sdropdb -h localhost %s titan_db" % (login_data, jenkins_flag))
+    execute_shell("%sdropdb -h localhost %s arabica_db" % (login_data, jenkins_flag))
 
 # Create the new database
-execute_shell("%screatedb -h localhost %s titan_db" % (login_data, jenkins_flag))
-execute_shell("%spsql -h localhost %s titan_db < titan.sql" % (login_data, jenkins_flag))
+execute_shell("%screatedb -h localhost %s arabica_db" % (login_data, jenkins_flag))
+execute_shell("%spsql -h localhost %s arabica_db < arabica.sql" % (login_data, jenkins_flag))
