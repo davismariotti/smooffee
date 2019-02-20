@@ -32,10 +32,19 @@
   <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
   <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
   <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
+  <logger name="com.coxautodev.graphql.tools.SchemaClassScanner" level="OFF" />
+
+  <logger name="titan" level="DEBUG" />
 
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />
     <appender-ref ref="ASYNCSTDOUT" />
   </root>
+
+  <!-- SQL logging, enable to print all sql statements -->
+  <!--
+  <logger name="io.ebean.SQL" level="TRACE"/>
+  <logger name="io.ebean.TXN" level="TRACE"/>
+  -->
 
 </configuration>
