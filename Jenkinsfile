@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         JENKINS_TEST = 'true'
-        POSTGRES_LOGIN = credentials('jenkins-postgres')
+        TITAN_POSTGRES_LOGIN = credentials('jenkins-postgres')
     }
     stages {
         stage ('Initialize') {
