@@ -8,5 +8,9 @@ public class MainGraphQLResolver {
         public String ping() {
             return "pong";
         }
+
+        public QLAuth.Query auth() {
+            return new QLAuth.Query();
+        }
     }
 }

@@ -2,10 +2,10 @@ package controllers;
 
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.google.gson.Gson;
+import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.MainGraphQLResolver;
-import graphql.schema.GraphQLSchema;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -19,23 +19,33 @@ public class GraphQLController extends Controller {
     private Gson gson = new Gson();
 
     public Result graphql(Http.Request request) {
-        request.body();
+        Query query = gson.fromJson(request.body().asJson().toString(), Query.class);
 
-        GraphQLSchema schema = SchemaParser.newParser()
+        ExecutionInput input = ExecutionInput.newExecutionInput()
+                .query(query.query)
+                .operationName(query.operationName)
+                .variables(query.variables)
+                .build();
+
+        GraphQL root = GraphQL.newGraphQL(SchemaParser.newParser()
                 .file("schema/root.graphql")
+                .file("schema/auth.graphql")
                 .resolvers(new MainGraphQLResolver.Query())
                 .build()
-                .makeExecutableSchema();
+                .makeExecutableSchema()).build();
 
-        GraphQL root = GraphQL.newGraphQL(schema).build();
-
+        ExecutionResult executionResult = root.execute(input);
         Map<String, Object> result = new LinkedHashMap<>();
-        ExecutionResult executionResult = root.execute(gson.toJson(request.body().asJson().toString()));
         result.put("data", executionResult.getData());
 
         return ok(Json.toJson(result));
     }
 
+    static class Query {
+        String query;
+        String operationName;
+        Map<String,Object> variables;
+    }
 
 
 }
