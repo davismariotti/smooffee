@@ -1,6 +1,7 @@
 package models;
 
 import io.ebean.annotation.NotNull;
+import models.finders.RefundFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,6 +9,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "refund")
 public class Refund extends BaseModel {
+
+    public static final RefundFinder find = new RefundFinder();
 
     @NotNull
     private int amount;

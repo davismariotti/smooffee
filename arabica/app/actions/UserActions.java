@@ -1,6 +1,5 @@
 package actions;
 
-import io.ebean.Ebean;
 import models.Organization;
 import models.User;
 
@@ -11,7 +10,8 @@ public class UserActions {
         newUser.setFirstname(firstname);
         newUser.setLastname(lastname);
         newUser.setEmail(email);
-        Organization org = Ebean.find(Organization.class).where().eq("id", organizationId).findOne();
+
+        Organization org = Organization.find.byId(organizationId);
         newUser.setOrganization(org);
         newUser.save();
         newUser.refresh();

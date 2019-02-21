@@ -1,6 +1,7 @@
 package models;
 
 import io.ebean.annotation.NotNull;
+import models.finders.UserFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,6 +10,8 @@ import java.util.Date;
 @Entity
 @Table(name = "user")
 public class User extends BaseModel {
+
+    public static final UserFinder find = new UserFinder();
 
     @NotNull
     private String firstname;

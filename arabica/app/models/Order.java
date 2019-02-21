@@ -1,14 +1,16 @@
 package models;
 
 import io.ebean.annotation.NotNull;
+import models.finders.OrderFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Entity
 @Table(name = "order")
 public class Order extends BaseModel {
+
+    public static final OrderFinder find = new OrderFinder();
 
     @NotNull
     private User user;

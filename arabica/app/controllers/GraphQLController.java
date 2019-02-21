@@ -6,7 +6,6 @@ import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.MainGraphQLResolver;
-import play.Logger;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;

@@ -1,6 +1,7 @@
 package models;
 
 import io.ebean.annotation.NotNull;
+import models.finders.ProductFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,6 +9,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "product")
 public class Product extends BaseModel {
+
+    public static final ProductFinder find = new ProductFinder();
 
     @NotNull
     private String name;

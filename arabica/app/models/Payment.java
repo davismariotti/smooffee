@@ -1,8 +1,11 @@
 package models;
 
 import io.ebean.annotation.NotNull;
+import models.finders.PaymentFinder;
 
 public class Payment extends BaseModel {
+
+    public static final PaymentFinder find = new PaymentFinder();
 
     @NotNull
     private int amount;
