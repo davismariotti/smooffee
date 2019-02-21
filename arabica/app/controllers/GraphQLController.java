@@ -11,13 +11,12 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import utilities.ArabicaLogger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class GraphQLController extends Controller {
-
-    private final static Logger.ALogger logger = Logger.of("arabica");
 
     private Gson gson = new Gson();
 
@@ -26,7 +25,7 @@ public class GraphQLController extends Controller {
     public Result graphql(Http.Request request) {
         Query query = gson.fromJson(request.body().asJson().toString(), Query.class);
 
-        logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
+        ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
 
         ExecutionInput input = ExecutionInput.newExecutionInput()
                 .query(query.query)
@@ -43,7 +42,7 @@ public class GraphQLController extends Controller {
 
         ExecutionResult executionResult = root.execute(input);
 
-        logger.debug("[RSP-" + count +"] - " + executionResult.getData());
+        ArabicaLogger.logger.debug("[RSP-" + count +"] - " + executionResult.getData());
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("data", executionResult.getData());
