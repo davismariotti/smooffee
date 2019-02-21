@@ -2,7 +2,8 @@ import subprocess
 import os
 import getpass
 
-def setup_pgpass(remote,user,pw):
+
+def setup_pgpass(remote, user, pw):
     if (user is not None) and (pw is None):
         pw = getpass.getpass("Enter password for user %s: " % user)
 
@@ -14,6 +15,7 @@ def setup_pgpass(remote,user,pw):
         return "PGPASSFILE=temp/pgpass "
     else:
         return ""
+
 
 def execute_shell(cmd):
     print(" +" + cmd)
