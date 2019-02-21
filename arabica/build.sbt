@@ -17,5 +17,6 @@ libraryDependencies += "com.google.code.gson" % "gson" % "2.8.5"
 libraryDependencies += "com.sun.jersey" % "jersey-core" % "1.19.4"
 libraryDependencies += "com.sun.jersey" % "jersey-client" % "1.19.4"
 libraryDependencies += "com.sun.jersey.contribs" % "jersey-multipart" % "1.19.4"
+libraryDependencies += "com.google.firebase" % "firebase-admin" % "6.7.0"
 
 crossPaths := false
