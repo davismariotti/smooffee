@@ -1,13 +1,22 @@
 package graphql;
 
+import models.User;
+import utilities.ThreadStorage;
+
 public class QLUser {
+    public static class Query {
+        public String currentUser() {
+            // Lookup user by firebase token
+            User user = User.findByFirebaseUid(ThreadStorage.get().uid);
+            return user.getId().toString();
+        }
+    }
 
     public static class UserInput {
-        public String firstName;
-        public  String lastName;
-        public String email;
-        public String firebaseAuthToken;
-        public Long organizationId;
+        String firstName;
+        String lastName;
+        String email;
+        Long organizationId;
 
         public String getFirstname() {
             return firstName;
@@ -31,14 +40,6 @@ public class QLUser {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public String getFirebaseAuthToken() {
-            return firebaseAuthToken;
-        }
-
-        public void setFirebaseAuthToken(String firebaseAuthToken) {
-            this.firebaseAuthToken = firebaseAuthToken;
         }
 
         public Long getOrganizationId() {

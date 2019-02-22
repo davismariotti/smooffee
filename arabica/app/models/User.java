@@ -89,4 +89,8 @@ public class User extends BaseModel {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public static User findByFirebaseUid(String firebaseUserId) {
+        return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
+    }
 }

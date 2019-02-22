@@ -12,5 +12,9 @@ public class MainGraphQLResolver {
         public QLAuth.Query auth() {
             return new QLAuth.Query();
         }
+
+        public QLUser.Query user() {
+            return new QLUser.Query();
+        }
     }
 }

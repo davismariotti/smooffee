@@ -1,7 +1,10 @@
 input UserInput {
-    firebaseAuthToken: String
     firstName: String!
     lastName: String!
     email: String!
     organizationId: Long!
+}
+
+type UserQuery {
+    currentUser: String
 }

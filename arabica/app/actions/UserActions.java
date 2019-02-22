@@ -6,7 +6,7 @@ import models.User;
 public class UserActions {
 
     public User createUser(String firstname, String lastname, String fireBaseUserId, String email, Long organizationId) {
-        User potentialUser = User.find.query().where().eq("firebase_user_id", fireBaseUserId).findOne();
+        User potentialUser = User.findByFirebaseUid(fireBaseUserId);
         if (potentialUser == null) {
             User newUser = new User();
             newUser.setFirstname(firstname);

@@ -1,4 +1,5 @@
 type Query {
     ping: String!
     auth: AuthQuery!
+    user: UserQuery!
 }

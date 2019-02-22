@@ -1,6 +1,7 @@
 package controllers;
 
 import com.coxautodev.graphql.tools.SchemaParser;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
@@ -11,6 +12,8 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import utilities.ArabicaLogger;
+import utilities.Authenticator;
+import utilities.ThreadStorage;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,8 +24,27 @@ public class GraphQLController extends Controller {
 
     private int count = 0;
 
-    public Result graphql(Http.Request request) {
+    public Result graphql(Http.Request request) throws IllegalAccessException { // TODO Exception handling
         Query query = gson.fromJson(request.body().asJson().toString(), Query.class);
+        String uid;
+
+        if (!query.query.startsWith("query IntrospectionQuery {")) {
+            // Get firebase token
+            String authToken = request.getHeaders().get("Authorization").orElseThrow(IllegalAccessException::new);
+            if (authToken.equals("Bearer undefined")) {
+                return forbidden();
+            }
+
+            try {
+                uid = Authenticator.getUidFromToken(authToken.replace("Bearer ", ""));
+            } catch (FirebaseAuthException e) {
+                ArabicaLogger.logger.error("auth error", e);
+                return forbidden();
+            }
+            ThreadStorage.Storage storage = new ThreadStorage.Storage();
+            storage.uid = uid;
+            ThreadStorage.put(storage);
+        }
 
         ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
 
@@ -41,6 +63,10 @@ public class GraphQLController extends Controller {
                 .makeExecutableSchema()).build();
 
         ExecutionResult executionResult = root.execute(input);
+
+        if (ThreadStorage.get() != null && !ThreadStorage.get().hasCheckedPermissions) {
+            ArabicaLogger.logger.warn("Permissions not checked!");
+        }
 
         ArabicaLogger.logger.debug("[RSP-" + count +"] - " + executionResult.getData());
 
