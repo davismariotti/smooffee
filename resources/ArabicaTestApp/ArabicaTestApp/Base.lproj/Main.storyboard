@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ArabicaTestApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KtH-Mh-Azd">
+                                <rect key="frame" x="135" y="51" width="105" height="30"/>
+                                <state key="normal" title="Create account"/>
+                                <connections>
+                                    <action selector="createAccount:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sXk-zG-pUR"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBn-jd-9CQ">
+                                <rect key="frame" x="168.5" y="91" width="38" height="30"/>
+                                <state key="normal" title="Login"/>
+                                <connections>
+                                    <action selector="loginBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6ms-vA-cGv"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yIq-vK-LIF">
+                                <rect key="frame" x="0.0" y="141" width="375" height="526"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="jBn-jd-9CQ" firstAttribute="top" secondItem="KtH-Mh-Azd" secondAttribute="bottom" constant="10" id="0hR-mS-CxW"/>
+                            <constraint firstItem="yIq-vK-LIF" firstAttribute="top" secondItem="jBn-jd-9CQ" secondAttribute="bottom" constant="20" id="6m3-TW-3Ks"/>
+                            <constraint firstItem="jBn-jd-9CQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YU2-bR-kXt"/>
+                            <constraint firstItem="yIq-vK-LIF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="b5I-KY-nJM"/>
+                            <constraint firstItem="KtH-Mh-Azd" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="31" id="eVQ-3Y-YwD"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yIq-vK-LIF" secondAttribute="trailing" id="mmE-DI-wt0"/>
+                            <constraint firstItem="KtH-Mh-Azd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="obc-SP-drK"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yIq-vK-LIF" secondAttribute="bottom" id="uLe-wO-6ot"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="createAccountBtn" destination="KtH-Mh-Azd" id="prE-Xr-K9g"/>
+                        <outlet property="loginBtn" destination="jBn-jd-9CQ" id="0TO-6x-684"/>
+                        <outlet property="tableView" destination="yIq-vK-LIF" id="Cs9-n2-kaH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="94.902548725637189"/>
+        </scene>
+    </scenes>
+</document>

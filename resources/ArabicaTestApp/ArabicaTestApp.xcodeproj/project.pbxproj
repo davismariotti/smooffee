@@ -1,0 +1,500 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		72069F1E221FCFD9007848F8 /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72069F1C221FCFD9007848F8 /* TextTableViewCell.swift */; };
+		72069F1F221FCFD9007848F8 /* TextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72069F1D221FCFD9007848F8 /* TextTableViewCell.xib */; };
+		728A0657221E8A6400C3E1FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728A0656221E8A6400C3E1FD /* AppDelegate.swift */; };
+		728A0659221E8A6400C3E1FD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728A0658221E8A6400C3E1FD /* ViewController.swift */; };
+		728A065C221E8A6400C3E1FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 728A065A221E8A6400C3E1FD /* Main.storyboard */; };
+		728A065E221E8A6500C3E1FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 728A065D221E8A6500C3E1FD /* Assets.xcassets */; };
+		728A0661221E8A6500C3E1FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 728A065F221E8A6500C3E1FD /* LaunchScreen.storyboard */; };
+		728A066A221F1B5600C3E1FD /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728A0669221F1B5600C3E1FD /* API.swift */; };
+		728A066E221F1B6200C3E1FD /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 728A066B221F1B6200C3E1FD /* Podfile */; };
+		728A066F221F1B6200C3E1FD /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 728A066C221F1B6200C3E1FD /* package.json */; };
+		7297E281221F1CAA001C3823 /* ViewController.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 7297E280221F1CAA001C3823 /* ViewController.graphql */; };
+		7297E283221F1DDD001C3823 /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 7297E282221F1DDD001C3823 /* schema.json */; };
+		80BFFAD408F4025A4D7239F5 /* Pods_ArabicaTestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 989E1E2F103D4D34616D0DE8 /* Pods_ArabicaTestApp.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		72069F1C221FCFD9007848F8 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
+		72069F1D221FCFD9007848F8 /* TextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextTableViewCell.xib; sourceTree = "<group>"; };
+		728A0653221E8A6400C3E1FD /* ArabicaTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArabicaTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		728A0656221E8A6400C3E1FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		728A0658221E8A6400C3E1FD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		728A065B221E8A6400C3E1FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		728A065D221E8A6500C3E1FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		728A0660221E8A6500C3E1FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		728A0662221E8A6500C3E1FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		728A0669221F1B5600C3E1FD /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		728A066B221F1B6200C3E1FD /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		728A066C221F1B6200C3E1FD /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		7297E280221F1CAA001C3823 /* ViewController.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ViewController.graphql; sourceTree = "<group>"; };
+		7297E282221F1DDD001C3823 /* schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
+		989E1E2F103D4D34616D0DE8 /* Pods_ArabicaTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ArabicaTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D610FD6C9E771D26167729C8 /* Pods-ArabicaTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArabicaTestApp.release.xcconfig"; path = "Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp.release.xcconfig"; sourceTree = "<group>"; };
+		E57FDAAAA09D2DC2DD4404F6 /* Pods-ArabicaTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ArabicaTestApp.debug.xcconfig"; path = "Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		728A0650221E8A6400C3E1FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80BFFAD408F4025A4D7239F5 /* Pods_ArabicaTestApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		728A064A221E8A6400C3E1FD = {
+			isa = PBXGroup;
+			children = (
+				728A0655221E8A6400C3E1FD /* ArabicaTestApp */,
+				728A0654221E8A6400C3E1FD /* Products */,
+				BBD71C1644F47567842AFCC7 /* Pods */,
+				96A43AF2B3D4FFE174239938 /* Frameworks */,
+				728A066C221F1B6200C3E1FD /* package.json */,
+				728A066B221F1B6200C3E1FD /* Podfile */,
+			);
+			sourceTree = "<group>";
+		};
+		728A0654221E8A6400C3E1FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				728A0653221E8A6400C3E1FD /* ArabicaTestApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		728A0655221E8A6400C3E1FD /* ArabicaTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				7297E282221F1DDD001C3823 /* schema.json */,
+				728A0669221F1B5600C3E1FD /* API.swift */,
+				728A0656221E8A6400C3E1FD /* AppDelegate.swift */,
+				728A0658221E8A6400C3E1FD /* ViewController.swift */,
+				728A065A221E8A6400C3E1FD /* Main.storyboard */,
+				728A065D221E8A6500C3E1FD /* Assets.xcassets */,
+				728A065F221E8A6500C3E1FD /* LaunchScreen.storyboard */,
+				728A0662221E8A6500C3E1FD /* Info.plist */,
+				7297E280221F1CAA001C3823 /* ViewController.graphql */,
+				72069F1C221FCFD9007848F8 /* TextTableViewCell.swift */,
+				72069F1D221FCFD9007848F8 /* TextTableViewCell.xib */,
+			);
+			path = ArabicaTestApp;
+			sourceTree = "<group>";
+		};
+		96A43AF2B3D4FFE174239938 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				989E1E2F103D4D34616D0DE8 /* Pods_ArabicaTestApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BBD71C1644F47567842AFCC7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E57FDAAAA09D2DC2DD4404F6 /* Pods-ArabicaTestApp.debug.xcconfig */,
+				D610FD6C9E771D26167729C8 /* Pods-ArabicaTestApp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		728A0652221E8A6400C3E1FD /* ArabicaTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 728A0665221E8A6500C3E1FD /* Build configuration list for PBXNativeTarget "ArabicaTestApp" */;
+			buildPhases = (
+				A076A2108D27DA1135E3058A /* [CP] Check Pods Manifest.lock */,
+				728A0668221F182600C3E1FD /* Generate Apollo GraphQL API */,
+				728A064F221E8A6400C3E1FD /* Sources */,
+				728A0650221E8A6400C3E1FD /* Frameworks */,
+				728A0651221E8A6400C3E1FD /* Resources */,
+				2258725ADE01EB32526B3FC0 /* [CP] Embed Pods Frameworks */,
+				868D524EAF1CE84B72F558B1 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ArabicaTestApp;
+			productName = ArabicaTestApp;
+			productReference = 728A0653221E8A6400C3E1FD /* ArabicaTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		728A064B221E8A6400C3E1FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Davis Mariotti";
+				TargetAttributes = {
+					728A0652221E8A6400C3E1FD = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 728A064E221E8A6400C3E1FD /* Build configuration list for PBXProject "ArabicaTestApp" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 728A064A221E8A6400C3E1FD;
+			productRefGroup = 728A0654221E8A6400C3E1FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				728A0652221E8A6400C3E1FD /* ArabicaTestApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		728A0651221E8A6400C3E1FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7297E283221F1DDD001C3823 /* schema.json in Resources */,
+				728A0661221E8A6500C3E1FD /* LaunchScreen.storyboard in Resources */,
+				728A065E221E8A6500C3E1FD /* Assets.xcassets in Resources */,
+				728A066E221F1B6200C3E1FD /* Podfile in Resources */,
+				728A065C221E8A6400C3E1FD /* Main.storyboard in Resources */,
+				7297E281221F1CAA001C3823 /* ViewController.graphql in Resources */,
+				728A066F221F1B6200C3E1FD /* package.json in Resources */,
+				72069F1F221FCFD9007848F8 /* TextTableViewCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2258725ADE01EB32526B3FC0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Apollo/Apollo.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Apollo.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		728A0668221F182600C3E1FD /* Generate Apollo GraphQL API */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Apollo GraphQL API";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nAPOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"error: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 1\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-cli.sh codegen:generate --queries=\"$(find . -name '*.graphql')\" --schema=schema.json API.swift\n";
+		};
+		868D524EAF1CE84B72F558B1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseEmailAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseEmailAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseGoogleAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ArabicaTestApp/Pods-ArabicaTestApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A076A2108D27DA1135E3058A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ArabicaTestApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		728A064F221E8A6400C3E1FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				728A0659221E8A6400C3E1FD /* ViewController.swift in Sources */,
+				728A066A221F1B5600C3E1FD /* API.swift in Sources */,
+				72069F1E221FCFD9007848F8 /* TextTableViewCell.swift in Sources */,
+				728A0657221E8A6400C3E1FD /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		728A065A221E8A6400C3E1FD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				728A065B221E8A6400C3E1FD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		728A065F221E8A6500C3E1FD /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				728A0660221E8A6500C3E1FD /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		728A0663221E8A6500C3E1FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		728A0664221E8A6500C3E1FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		728A0666221E8A6500C3E1FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E57FDAAAA09D2DC2DD4404F6 /* Pods-ArabicaTestApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89C3C5UDK7;
+				INFOPLIST_FILE = ArabicaTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.davismariotti.ArabicaTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		728A0667221E8A6500C3E1FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D610FD6C9E771D26167729C8 /* Pods-ArabicaTestApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 89C3C5UDK7;
+				INFOPLIST_FILE = ArabicaTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.davismariotti.ArabicaTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		728A064E221E8A6400C3E1FD /* Build configuration list for PBXProject "ArabicaTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				728A0663221E8A6500C3E1FD /* Debug */,
+				728A0664221E8A6500C3E1FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		728A0665221E8A6500C3E1FD /* Build configuration list for PBXNativeTarget "ArabicaTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				728A0666221E8A6500C3E1FD /* Debug */,
+				728A0667221E8A6500C3E1FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 728A064B221E8A6400C3E1FD /* Project object */;
+}

@@ -1,0 +1,12 @@
+
+query AuthCreateUserTest($userInput: UserInput!) {
+    auth {
+        createUser(userInput: $userInput)
+    }
+}
+
+query CurrentUser {
+    user {
+        currentUser
+    }
+}
