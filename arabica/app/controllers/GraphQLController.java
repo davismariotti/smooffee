@@ -77,6 +77,8 @@ public class GraphQLController extends Controller {
             result.put("errors", executionResult.getErrors());
         }
 
+        ThreadStorage.remove();
+
         count++;
         return ok(Json.toJson(result));
     }
