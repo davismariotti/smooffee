@@ -3,6 +3,9 @@ package models;
 import io.ebean.annotation.NotNull;
 import models.finders.PaymentFinder;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+
 public class Payment extends BaseModel {
 
     public static final PaymentFinder find = new PaymentFinder();
@@ -11,9 +14,12 @@ public class Payment extends BaseModel {
     private int amount;
 
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
+    @ManyToOne(cascade = CascadeType.ALL)
     private Card card;
+
     @NotNull
     private String type;
 

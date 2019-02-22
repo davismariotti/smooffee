@@ -3,12 +3,14 @@ package models;
 import io.ebean.annotation.NotNull;
 import models.finders.UserFinder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseModel {
 
     public static final UserFinder find = new UserFinder();
@@ -20,13 +22,25 @@ public class User extends BaseModel {
     private String lastname;
 
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
 
     @NotNull
     private String email;
 
     private Date lastLoggedIn;
+
     private int role;
+
+    private String firebaseUserId;
+
+    public String getFirebaseUserId() {
+        return firebaseUserId;
+    }
+
+    public void setFirebaseUserId(String firebaseUserId) {
+        this.firebaseUserId = firebaseUserId;
+    }
 
     public String getLastname() {
         return lastname;

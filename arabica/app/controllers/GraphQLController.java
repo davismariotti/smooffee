@@ -35,6 +35,7 @@ public class GraphQLController extends Controller {
         GraphQL root = GraphQL.newGraphQL(SchemaParser.newParser()
                 .file("schema/root.graphql")
                 .file("schema/auth.graphql")
+                .file("schema/user.graphql")
                 .resolvers(new MainGraphQLResolver.Query())
                 .build()
                 .makeExecutableSchema()).build();
