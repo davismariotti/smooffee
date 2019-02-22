@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.typesafe.config.ConfigFactory;
 import play.api.inject.ApplicationLifecycle;
 
 import java.io.FileInputStream;
@@ -16,7 +17,7 @@ public class Authenticator {
 
     public static void setup(ApplicationLifecycle lifecycle) {
         try {
-            FileInputStream serviceAccount = new FileInputStream("conf/smooffee-firebase-adminsdk-rg9sa-bf3af991f3.json");
+            FileInputStream serviceAccount = new FileInputStream(ConfigFactory.load().getString("firebase.conf.location"));
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
