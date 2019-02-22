@@ -5,11 +5,12 @@ import models.User;
 
 public class UserActions {
 
-    public User createUser(String firstname, String lastname, String password, String email, Long organizationId) {
+    public User createUser(String firstname, String lastname, String fireBaseUserId, String email, Long organizationId) {
         User newUser = new User();
         newUser.setFirstname(firstname);
         newUser.setLastname(lastname);
         newUser.setEmail(email);
+        newUser.setFirebaseUserId(fireBaseUserId);
 
         Organization org = Organization.find.byId(organizationId);
         newUser.setOrganization(org);

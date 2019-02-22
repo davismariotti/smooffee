@@ -3,7 +3,9 @@ package models;
 import io.ebean.annotation.NotNull;
 import models.finders.RefundFinder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,7 @@ public class Refund extends BaseModel {
     private Order order;
 
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     public int getAmount() {
