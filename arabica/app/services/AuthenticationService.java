@@ -1,4 +1,4 @@
-package utilities;
+package services;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -8,12 +8,13 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.typesafe.config.ConfigFactory;
 import play.api.inject.ApplicationLifecycle;
+import utilities.ArabicaLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-public class Authenticator {
+public class AuthenticationService {
 
     public static void setup(ApplicationLifecycle lifecycle) {
         try {

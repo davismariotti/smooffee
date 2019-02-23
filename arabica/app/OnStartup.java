@@ -2,7 +2,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import play.api.inject.ApplicationLifecycle;
 import utilities.ArabicaLogger;
-import utilities.Authenticator;
+import services.AuthenticationService;
 
 @Singleton
 public class OnStartup {
@@ -10,6 +10,6 @@ public class OnStartup {
     public OnStartup(ApplicationLifecycle lifecycle) {
         ArabicaLogger.logger.debug("Starting Arabica....");
 
-        Authenticator.setup(lifecycle);
+        AuthenticationService.setup(lifecycle);
     }
 }

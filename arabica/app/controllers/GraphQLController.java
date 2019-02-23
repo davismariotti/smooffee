@@ -12,7 +12,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import utilities.ArabicaLogger;
-import utilities.Authenticator;
+import services.AuthenticationService;
 import utilities.ThreadStorage;
 
 import java.util.LinkedHashMap;
@@ -36,7 +36,7 @@ public class GraphQLController extends Controller {
             }
 
             try {
-                uid = Authenticator.getUidFromToken(authToken.replace("Bearer ", ""));
+                uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer ", ""));
             } catch (FirebaseAuthException e) {
                 ArabicaLogger.logger.error("auth error", e);
                 return forbidden();

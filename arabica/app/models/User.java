@@ -2,6 +2,7 @@ package models;
 
 import io.ebean.annotation.NotNull;
 import models.finders.UserFinder;
+import services.AuthorizationService;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -66,8 +67,12 @@ public class User extends BaseModel {
         this.lastLoggedIn = lastLoggedIn;
     }
 
-    public int getRole() {
+    public int getRoleInteger() {
         return role;
+    }
+
+    public AuthorizationService.Role getRole() {
+        return AuthorizationService.Role.fromInt(role);
     }
 
     public void setRole(int role) {
