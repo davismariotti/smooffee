@@ -1,3 +1,0 @@
-type AuthQuery {
-    createUser(userInput: UserInput!): String!
-}
