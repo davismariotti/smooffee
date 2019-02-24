@@ -55,10 +55,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         print(idToken)
                         let userInput = UserInput(firstName: "Davis", lastName: "Mariotti", email: authResult.user.email!, organizationId: "3")
                         
-                        let query = AuthCreateUserTestQuery(userInput: userInput)
+                        let mutation = CreateUserTestMutation(input: userInput)
                         
-                        AppDelegate.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { (result, error) in
-                            print(result?.data?.auth.createUser as Any)
+                        AppDelegate.apollo.perform(mutation: mutation) { (result, error) in
+                            print(result?.data?.user.create.id as Any)
                         }
                     }
                 }

@@ -81,16 +81,25 @@ public class QLUser {
     }
 
     public static class UserEntry {
-        String firstName;
-        String lastName;
-        String email;
-        Long organizationId;
-
+        private String id;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private Long organizationId;
         public UserEntry(User user) {
+            this.id = user.getFirebaseUserId();
             this.firstName = user.getFirstname();
             this.lastName = user.getLastname();
             this.email = user.getEmail();
             this.organizationId = user.getOrganization().getId();
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
 
         public String getFirstname() {

@@ -46,25 +46,25 @@ public struct UserInput: GraphQLMapConvertible {
   }
 }
 
-public final class AuthCreateUserTestQuery: GraphQLQuery {
+public final class CreateUserTestMutation: GraphQLMutation {
   public let operationDefinition =
-    "query AuthCreateUserTest($userInput: UserInput!) {\n  auth {\n    __typename\n    createUser(userInput: $userInput)\n  }\n}"
+    "mutation CreateUserTest($input: UserInput!) {\n  user {\n    __typename\n    create(input: $input) {\n      __typename\n      id\n    }\n  }\n}"
 
-  public var userInput: UserInput
+  public var input: UserInput
 
-  public init(userInput: UserInput) {
-    self.userInput = userInput
+  public init(input: UserInput) {
+    self.input = input
   }
 
   public var variables: GraphQLMap? {
-    return ["userInput": userInput]
+    return ["input": input]
   }
 
   public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes = ["Query"]
+    public static let possibleTypes = ["Mutation"]
 
     public static let selections: [GraphQLSelection] = [
-      GraphQLField("auth", type: .nonNull(.object(Auth.selections))),
+      GraphQLField("user", type: .nonNull(.object(User.selections))),
     ]
 
     public private(set) var resultMap: ResultMap
@@ -73,25 +73,25 @@ public final class AuthCreateUserTestQuery: GraphQLQuery {
       self.resultMap = unsafeResultMap
     }
 
-    public init(auth: Auth) {
-      self.init(unsafeResultMap: ["__typename": "Query", "auth": auth.resultMap])
+    public init(user: User) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "user": user.resultMap])
     }
 
-    public var auth: Auth {
+    public var user: User {
       get {
-        return Auth(unsafeResultMap: resultMap["auth"]! as! ResultMap)
+        return User(unsafeResultMap: resultMap["user"]! as! ResultMap)
       }
       set {
-        resultMap.updateValue(newValue.resultMap, forKey: "auth")
+        resultMap.updateValue(newValue.resultMap, forKey: "user")
       }
     }
 
-    public struct Auth: GraphQLSelectionSet {
-      public static let possibleTypes = ["AuthQuery"]
+    public struct User: GraphQLSelectionSet {
+      public static let possibleTypes = ["UserMutation"]
 
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("createUser", arguments: ["userInput": GraphQLVariable("userInput")], type: .nonNull(.scalar(String.self))),
+        GraphQLField("create", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.object(Create.selections))),
       ]
 
       public private(set) var resultMap: ResultMap
@@ -100,8 +100,8 @@ public final class AuthCreateUserTestQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(createUser: String) {
-        self.init(unsafeResultMap: ["__typename": "AuthQuery", "createUser": createUser])
+      public init(create: Create) {
+        self.init(unsafeResultMap: ["__typename": "UserMutation", "create": create.resultMap])
       }
 
       public var __typename: String {
@@ -113,12 +113,49 @@ public final class AuthCreateUserTestQuery: GraphQLQuery {
         }
       }
 
-      public var createUser: String {
+      public var create: Create {
         get {
-          return resultMap["createUser"]! as! String
+          return Create(unsafeResultMap: resultMap["create"]! as! ResultMap)
         }
         set {
-          resultMap.updateValue(newValue, forKey: "createUser")
+          resultMap.updateValue(newValue.resultMap, forKey: "create")
+        }
+      }
+
+      public struct Create: GraphQLSelectionSet {
+        public static let possibleTypes = ["UserEntry"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: String) {
+          self.init(unsafeResultMap: ["__typename": "UserEntry", "id": id])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: String {
+          get {
+            return resultMap["id"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
         }
       }
     }
@@ -127,7 +164,7 @@ public final class AuthCreateUserTestQuery: GraphQLQuery {
 
 public final class CurrentUserQuery: GraphQLQuery {
   public let operationDefinition =
-    "query CurrentUser {\n  user {\n    __typename\n    currentUser\n  }\n}"
+    "query CurrentUser {\n  user {\n    __typename\n    currentUser {\n      __typename\n      id\n    }\n  }\n}"
 
   public init() {
   }
@@ -163,7 +200,7 @@ public final class CurrentUserQuery: GraphQLQuery {
 
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-        GraphQLField("currentUser", type: .scalar(String.self)),
+        GraphQLField("currentUser", type: .object(CurrentUser.selections)),
       ]
 
       public private(set) var resultMap: ResultMap
@@ -172,8 +209,8 @@ public final class CurrentUserQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(currentUser: String? = nil) {
-        self.init(unsafeResultMap: ["__typename": "UserQuery", "currentUser": currentUser])
+      public init(currentUser: CurrentUser? = nil) {
+        self.init(unsafeResultMap: ["__typename": "UserQuery", "currentUser": currentUser.flatMap { (value: CurrentUser) -> ResultMap in value.resultMap }])
       }
 
       public var __typename: String {
@@ -185,12 +222,49 @@ public final class CurrentUserQuery: GraphQLQuery {
         }
       }
 
-      public var currentUser: String? {
+      public var currentUser: CurrentUser? {
         get {
-          return resultMap["currentUser"] as? String
+          return (resultMap["currentUser"] as? ResultMap).flatMap { CurrentUser(unsafeResultMap: $0) }
         }
         set {
-          resultMap.updateValue(newValue, forKey: "currentUser")
+          resultMap.updateValue(newValue?.resultMap, forKey: "currentUser")
+        }
+      }
+
+      public struct CurrentUser: GraphQLSelectionSet {
+        public static let possibleTypes = ["UserEntry"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(String.self))),
+        ]
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(id: String) {
+          self.init(unsafeResultMap: ["__typename": "UserEntry", "id": id])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: String {
+          get {
+            return resultMap["id"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "id")
+          }
         }
       }
     }

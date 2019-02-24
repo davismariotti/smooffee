@@ -1,12 +1,16 @@
 
-query AuthCreateUserTest($userInput: UserInput!) {
-    auth {
-        createUser(userInput: $userInput)
+mutation CreateUserTest($input: UserInput!) {
+    user {
+        create(input: $input) {
+            id
+        }
     }
 }
 
 query CurrentUser {
     user {
-        currentUser
+        currentUser {
+            id
+        }
     }
 }
