@@ -24,6 +24,10 @@ public enum Role {
         return this.name;
     }
 
+    public int getValue() {
+        return this.value;
+    }
+
     static {
         for (Role type : Role.values()) {
             intToTypeMap.put(type.value, type);
