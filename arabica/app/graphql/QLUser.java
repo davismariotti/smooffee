@@ -5,6 +5,8 @@ import models.User;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
 
+import java.util.Objects;
+
 public class QLUser {
     public static class Query {
         public UserEntry currentUser() {
@@ -30,14 +32,21 @@ public class QLUser {
     }
 
     public static class Mutation {
-        public UserEntry create(QLUser.UserInput userInput) {
+        public UserEntry create(UserInput input) {
             Permission.ignore();
             String uid = ThreadStorage.get().uid;
-            User user = new UserActions().createUser(userInput.firstName, userInput.lastName, uid, userInput.email, userInput.organizationId);
+            User user = UserActions.createUser(input.firstName, input.lastName, uid, input.email, input.organizationId);
             if (user == null) {
                 return null;
             }
             return new UserEntry(user);
+        }
+
+        public UserEntry update(UserInput input) {
+            Permission.check(Permission.THIS_USER);
+            String uid = ThreadStorage.get().uid;
+            User user = UserActions.updateUser(ThreadStorage.get().uid, input);
+            return (user == null) ? null : new UserEntry(user);
         }
     }
 

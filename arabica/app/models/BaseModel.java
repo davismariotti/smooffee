@@ -4,10 +4,13 @@ import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.NotNull;
 import io.ebean.annotation.UpdatedTimestamp;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 @MappedSuperclass
@@ -43,6 +46,11 @@ public class BaseModel extends Model {
 
     public Date getDeprecatedAt() {
         return deprecatedAt;
+    }
+
+    public void deprecate() {
+        this.deprecatedAt = Timestamp.from(Instant.now());
+        this.save();
     }
 
     public Date getUpdatedAt() {

@@ -20,4 +20,5 @@ type UserQuery {
 
 type UserMutation {
     create(input: UserInput!): UserEntry!
+    update(input: UserInput!): UserEntry!
 }
