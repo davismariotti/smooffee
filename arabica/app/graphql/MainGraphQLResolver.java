@@ -18,6 +18,10 @@ public class MainGraphQLResolver {
         public QLOrganization.Query organization() {
             return new QLOrganization.Query();
         }
+
+        public QLProduct.Query product() {
+            return new QLProduct.Query();
+        }
     }
 
     public static class Mutation implements GraphQLMutationResolver {
@@ -27,6 +31,10 @@ public class MainGraphQLResolver {
 
         public QLOrganization.Mutation organization() {
             return new QLOrganization.Mutation();
+        }
+
+        public QLProduct.Mutation product() {
+            return new QLProduct.Mutation();
         }
     }
 }

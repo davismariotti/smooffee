@@ -1,0 +1,20 @@
+type ProductEntry {
+    id: Long!
+    name: String!
+    description: String!
+    price: Int!
+}
+
+input ProductInput {
+    name: String!
+    description: String!
+    price: Int!
+}
+
+type ProductQuery {
+    read(id: Long!): ProductEntry
+}
+
+type ProductMutation {
+    create(input: ProductInput!): ProductEntry!
+}

@@ -2,9 +2,11 @@ type Query {
     ping: String!
     user: UserQuery!
     organization: OrganizationQuery!
+    product: ProductQuery!
 }
 
 type Mutation {
     organization: OrganizationMutation!
     user: UserMutation!
+    product: ProductMutation!
 }

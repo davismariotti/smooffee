@@ -58,6 +58,7 @@ public class GraphQLController extends Controller {
                 .file("schema/root.graphql")
                 .file("schema/user.graphql")
                 .file("schema/organization.graphql")
+                .file("schema/product.graphql")
                 .resolvers(new MainGraphQLResolver.Query(), new MainGraphQLResolver.Mutation())
                 .build()
                 .makeExecutableSchema()).build();
