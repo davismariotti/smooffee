@@ -7,7 +7,7 @@ type ProductEntry {
 
 input ProductInput {
     name: String!
-    descriptio: String!
+    description: String!
     price: Int!
 }
 
