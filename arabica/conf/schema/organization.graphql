@@ -1,6 +1,7 @@
 type OrganizationEntry {
     id: Long!
     name: String!
+    products: [ProductEntry!]!
 }
 
 input OrganizationInput {
