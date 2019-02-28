@@ -1,5 +1,10 @@
 type Query {
     ping: String!
-    auth: AuthQuery!
     user: UserQuery!
+    organization: OrganizationQuery!
+}
+
+type Mutation {
+    organization: OrganizationMutation!
+    user: UserMutation!
 }

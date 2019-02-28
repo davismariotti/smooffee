@@ -1,11 +1,12 @@
 package actions;
 
+import graphql.QLUser;
 import models.Organization;
 import models.User;
 
 public class UserActions {
 
-    public User createUser(String firstname, String lastname, String fireBaseUserId, String email, Long organizationId) {
+    public static User createUser(String firstname, String lastname, String fireBaseUserId, String email, Long organizationId) {
         User potentialUser = User.findByFirebaseUid(fireBaseUserId);
         if (potentialUser == null) {
             User newUser = new User();
@@ -24,15 +25,24 @@ public class UserActions {
         }
     }
 
-    public User updateUser() {
-        return null;
+    public static User updateUser(String uid, QLUser.UserInput input) {
+        User user = User.findByFirebaseUid(uid);
+        if (user == null) {
+            return null;
+        }
+        user.setFirstname(input.getFirstname());
+        user.setLastname(input.getLastname());
+        user.setEmail(input.getEmail());
+        user.save();
+        user.refresh();
+        return user;
     }
 
-    public boolean deleteUser() {
+    public static boolean deleteUser() {
         return false;
     }
 
-    public boolean sendForgotPassword() {
+    public static boolean sendForgotPassword() {
         return false;
     }
 }

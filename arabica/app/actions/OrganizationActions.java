@@ -4,7 +4,7 @@ import models.Organization;
 
 public class OrganizationActions {
 
-    public Organization createOrganization(String name) {
+    public static Organization createOrganization(String name) {
         Organization newOrg = new Organization();
         newOrg.setName(name);
         newOrg.save();
@@ -12,7 +12,7 @@ public class OrganizationActions {
         return newOrg;
     }
 
-    public Organization updateOrganization(Long organizationId, String name) {
+    public static Organization updateOrganization(Long organizationId, String name) {
         Organization organization = Organization.find.byId(organizationId);
         if (organization == null) {
             // TODO
@@ -23,7 +23,7 @@ public class OrganizationActions {
         return organization;
     }
 
-    public boolean deleteOrganization() {
+    public static boolean deleteOrganization() {
         return false; // TODO
     }
 }

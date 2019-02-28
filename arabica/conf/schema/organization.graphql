@@ -1,0 +1,17 @@
+type OrganizationEntry {
+    id: Long!
+    name: String!
+}
+
+input OrganizationInput {
+    name: String!
+}
+
+type OrganizationQuery {
+    current: OrganizationEntry
+    read(id: Long!): OrganizationEntry
+}
+
+type OrganizationMutation {
+    create(input: OrganizationInput!): OrganizationEntry!
+}

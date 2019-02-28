@@ -5,6 +5,20 @@ input UserInput {
     organizationId: Long!
 }
 
+type UserEntry {
+    id: String!
+    firstName: String!
+    lastName: String!
+    email: String!
+    organizationId: Long!
+}
+
 type UserQuery {
-    currentUser: String
+    currentUser: UserEntry
+    read(id: String!): UserEntry
+}
+
+type UserMutation {
+    create(input: UserInput!): UserEntry!
+    update(input: UserInput!): UserEntry!
 }
