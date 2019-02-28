@@ -1,23 +1,26 @@
 {
-  "name": "robustica",
-  "version": "0.1.0",
+  "name": "create-react-app",
+  "version": "0.0.1",
   "private": true,
+  "devDependencies": {
+    "react-scripts": "0.2.3"
+  },
   "dependencies": {
-    "apollo-boost": "^0.3.1",
-    "graphql": "^14.1.1",
-    "react": "^16.8.3",
-    "react-apollo": "^2.5.1",
-    "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
+    "bootstrap": "^3.3.7",
+    "firebase": "^3.3.0",
+    "react": "^15.3.1",
+    "react-bootstrap": "^0.30.3",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.7.0",
+    "validator": "^5.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "./node_modules/react-scripts/config/eslint.js"
   },
   "browserslist": [
     ">0.2%",
