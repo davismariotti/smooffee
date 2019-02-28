@@ -2,9 +2,14 @@ package graphql;
 
 import actions.OrganizationActions;
 import models.Organization;
+import models.Product;
 import models.User;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QLOrganization {
     public static class Query {
@@ -48,10 +53,12 @@ public class QLOrganization {
     public static class OrganizationEntry {
         private Long id;
         private String name;
+        private Organization organization;
 
         public OrganizationEntry(Organization organization) {
             this.id = organization.getId();
             this.name = organization.getName();
+            this.organization = organization;
         }
 
         public Long getId() {
@@ -68,6 +75,10 @@ public class QLOrganization {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public List<QLProduct.ProductEntry> getProducts() {
+            return organization.getProducts().stream().map(QLProduct.ProductEntry::new).collect(Collectors.toList());
         }
     }
 }
