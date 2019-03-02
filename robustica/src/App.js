@@ -4,6 +4,12 @@ import { hashHistory } from "react-router";
 import Navbar from "./Navbar";
 import "./css/font-awesome.css";
 import "./css/bootstrap-social.css";
+import ApolloClient from "apollo-boost";
+import { ApolloProvier } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: "http://localhost:9000/graphql"
+});
 
 class App extends Component {
   constructor(props) {

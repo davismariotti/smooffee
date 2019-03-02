@@ -14,10 +14,10 @@ import "bootstrap/dist/css/bootstrap.css";
 render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Home} />
-      <Route path="login" component={Login} />
+      <IndexRoute component={Login} />
       <Route path="signup" component={Signup} />
       <Route path="recover" component={Recover} />
+      <Route path="Home" component={Home} onEnter={requireAuth} />
       <Route path="dashboard" component={Dashboard} onEnter={requireAuth} />
     </Route>
   </Router>,
