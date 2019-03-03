@@ -39,32 +39,36 @@ public class User extends BaseModel {
         return firebaseUserId;
     }
 
-    public void setFirebaseUserId(String firebaseUserId) {
+    public User setFirebaseUserId(String firebaseUserId) {
         this.firebaseUserId = firebaseUserId;
+        return this;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
+    public User setLastname(String lastname) {
         this.lastname = lastname;
+        return this;
     }
 
     public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public User setOrganization(Organization organization) {
         this.organization = organization;
+        return this;
     }
 
     public Date getLastLoggedIn() {
         return lastLoggedIn;
     }
 
-    public void setLastLoggedIn(Date lastLoggedIn) {
+    public User setLastLoggedIn(Date lastLoggedIn) {
         this.lastLoggedIn = lastLoggedIn;
+        return this;
     }
 
     public int getRoleInteger() {
@@ -75,24 +79,27 @@ public class User extends BaseModel {
         return Role.fromInt(role);
     }
 
-    public void setRole(int role) {
+    public User setRole(int role) {
         this.role = role;
+        return this;
     }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
+    public User setFirstname(String firstname) {
         this.firstname = firstname;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public static User findByFirebaseUid(String firebaseUserId) {

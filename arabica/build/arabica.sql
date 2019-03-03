@@ -16,14 +16,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -76,7 +76,7 @@ ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 -- Name: order; Type: TABLE; Schema: public; Owner: davis
 --
 
-CREATE TABLE public."order" (
+CREATE TABLE public.orders (
     id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE public."order" (
 );
 
 
-ALTER TABLE public."order" OWNER TO davis;
+ALTER TABLE public.orders OWNER TO davis;
 
 --
 -- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
@@ -110,7 +110,7 @@ ALTER TABLE public.order_id_seq OWNER TO davis;
 -- Name: order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
 --
 
-ALTER SEQUENCE public.order_id_seq OWNED BY public."order".id;
+ALTER SEQUENCE public.order_id_seq OWNED BY public.orders.id;
 
 
 --
@@ -328,7 +328,7 @@ ALTER TABLE ONLY public.card ALTER COLUMN id SET DEFAULT nextval('public.card_id
 -- Name: order id; Type: DEFAULT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public."order" ALTER COLUMN id SET DEFAULT nextval('public.order_id_seq'::regclass);
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.order_id_seq'::regclass);
 
 
 --
@@ -378,7 +378,7 @@ COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user
 -- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public."order" (id, created_at, updated_at, deprecated_at, status, user_id, product_id, location, notes) FROM stdin;
+COPY public.orders (id, created_at, updated_at, deprecated_at, status, user_id, product_id, location, notes) FROM stdin;
 \.
 
 
@@ -484,7 +484,7 @@ ALTER TABLE ONLY public.card
 -- Name: order order_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public."order"
+ALTER TABLE ONLY public.orders
     ADD CONSTRAINT order_pkey PRIMARY KEY (id);
 
 
@@ -547,7 +547,7 @@ ALTER TABLE ONLY public.card
 -- Name: order order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public."order"
+ALTER TABLE ONLY public.orders
     ADD CONSTRAINT order_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.product(id);
 
 
@@ -555,7 +555,7 @@ ALTER TABLE ONLY public."order"
 -- Name: order order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public."order"
+ALTER TABLE ONLY public.orders
     ADD CONSTRAINT order_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
@@ -588,7 +588,7 @@ ALTER TABLE ONLY public.product
 --
 
 ALTER TABLE ONLY public.refund
-    ADD CONSTRAINT refund_order_id_fkey FOREIGN KEY (order_id) REFERENCES public."order"(id);
+    ADD CONSTRAINT refund_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(id);
 
 
 --
@@ -610,4 +610,3 @@ ALTER TABLE ONLY public.users
 --
 -- PostgreSQL database dump complete
 --
-

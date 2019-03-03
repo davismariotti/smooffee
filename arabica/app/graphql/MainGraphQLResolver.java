@@ -2,13 +2,11 @@ package graphql;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import services.authorization.Permission;
 
 public class MainGraphQLResolver {
 
     public static class Query implements GraphQLQueryResolver {
         public String ping() {
-            Permission.ignore();
             return "pong";
         }
         public QLUser.Query user() {

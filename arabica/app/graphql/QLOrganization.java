@@ -2,12 +2,10 @@ package graphql;
 
 import actions.OrganizationActions;
 import models.Organization;
-import models.Product;
 import models.User;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

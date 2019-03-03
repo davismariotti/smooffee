@@ -25,7 +25,8 @@ public class Organization extends BaseModel {
         return name;
     }
 
-    public void setName(String name) {
+    public Organization setName(String name) {
         this.name = name;
+        return this;
     }
 }
