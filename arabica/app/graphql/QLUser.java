@@ -5,8 +5,6 @@ import models.User;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
 
-import java.util.Objects;
-
 public class QLUser {
     public static class Query {
         public UserEntry currentUser() {

@@ -24,13 +24,18 @@ public class GraphQLController extends Controller {
 
     private int count = 0;
 
-    public Result graphql(Http.Request request) throws IllegalAccessException { // TODO Exception handling
-        Query query = gson.fromJson(request.body().asJson().toString(), Query.class);
+    public Result graphql(Http.Request request) {
+        Query query = gson.fromJson(request.body().asText(), Query.class);
         String uid;
 
-        if (!query.query.startsWith("query IntrospectionQuery {")) {
+        ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
+
+        if (!query.query.startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
             // Get firebase token
-            String authToken = request.getHeaders().get("Authorization").orElseThrow(IllegalAccessException::new);
+            if (!request.getHeaders().get("Authorization").isPresent()) {
+                return forbidden();
+            }
+            String authToken = request.getHeaders().get("Authorization").get();
             if (authToken.equals("Bearer undefined")) {
                 return forbidden();
             }
@@ -46,7 +51,6 @@ public class GraphQLController extends Controller {
             ThreadStorage.put(storage);
         }
 
-        ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
 
         ExecutionInput input = ExecutionInput.newExecutionInput()
                 .query(query.query)

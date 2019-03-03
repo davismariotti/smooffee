@@ -4,7 +4,6 @@ import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.NotNull;
 import io.ebean.annotation.UpdatedTimestamp;
-import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -72,5 +71,11 @@ public class BaseModel extends Model {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof BaseModel && ((BaseModel) obj).getId().equals(this.id));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends BaseModel> T store() {
+        save();
+        return (T)this;
     }
 }
