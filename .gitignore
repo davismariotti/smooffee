@@ -34,3 +34,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 venv
+
+npm-debug.log
