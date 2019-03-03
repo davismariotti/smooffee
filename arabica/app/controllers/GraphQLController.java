@@ -29,6 +29,7 @@ public class GraphQLController extends Controller {
         String uid;
 
         ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
+        count++;
 
         if (!query.query.startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
             // Get firebase token
@@ -84,7 +85,6 @@ public class GraphQLController extends Controller {
 
         ThreadStorage.remove();
 
-        count++;
         return ok(Json.toJson(result));
     }
 
