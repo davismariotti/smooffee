@@ -30,20 +30,19 @@ public class QLUser {
     }
 
     public static class Mutation {
-        public UserEntry create(UserInput input) {
+        public UserEntry create(Long organizationId, UserInput userInput) {
             Permission.ignore();
             String uid = ThreadStorage.get().uid;
-            User user = UserActions.createUser(input.firstName, input.lastName, uid, input.email, input.organizationId);
+            User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
             if (user == null) {
                 return null;
             }
             return new UserEntry(user);
         }
 
-        public UserEntry update(UserInput input) {
+        public UserEntry update(UserInput userInput) {
             Permission.check(Permission.THIS_USER);
-            String uid = ThreadStorage.get().uid;
-            User user = UserActions.updateUser(ThreadStorage.get().uid, input);
+            User user = UserActions.updateUser(ThreadStorage.get().uid, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
     }
@@ -52,7 +51,6 @@ public class QLUser {
         String firstName;
         String lastName;
         String email;
-        Long organizationId;
 
         public String getFirstname() {
             return firstName;
@@ -77,14 +75,6 @@ public class QLUser {
         public void setEmail(String email) {
             this.email = email;
         }
-
-        public Long getOrganizationId() {
-            return organizationId;
-        }
-
-        public void setOrganizationId(Long organizationId) {
-            this.organizationId = organizationId;
-        }
     }
 
     public static class UserEntry {
@@ -93,6 +83,7 @@ public class QLUser {
         private String lastName;
         private String email;
         private Long organizationId;
+
         public UserEntry(User user) {
             this.id = user.getFirebaseUserId();
             this.firstName = user.getFirstname();

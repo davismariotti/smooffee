@@ -32,7 +32,7 @@ public class UserActions {
         }
         user.setFirstname(input.getFirstname());
         user.setLastname(input.getLastname());
-        user.setEmail(input.getEmail());
+        user.setEmail(input.getEmail()); // TODO Allow?
         user.save();
         user.refresh();
         return user;

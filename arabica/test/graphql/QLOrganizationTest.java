@@ -2,7 +2,6 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
-import models.Organization;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +17,6 @@ public class QLOrganizationTest {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
-        FakeApplication.authToken.push("davismariotti@gmail.com");
     }
 
     @AfterClass
@@ -30,7 +28,7 @@ public class QLOrganizationTest {
     public void createOrganization() {
         Result result = FakeApplication.routeGraphQLRequest("mutation { organization { create(input: { name: \\\"Next Organization\\\"}) { id name } } }");
         assertEquals(OK, result.status());
-        Organization organization = FakeApplication.graphQLResultToObject(result, "organization/create", Organization.class);
+        QLOrganization.OrganizationEntry organization = FakeApplication.graphQLResultToObject(result, "organization/create", QLOrganization.OrganizationEntry.class);
         assertEquals("Next Organization", organization.getName());
     }
 }

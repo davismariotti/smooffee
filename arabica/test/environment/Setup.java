@@ -24,6 +24,7 @@ public class Setup {
                 .setFirebaseUserId("davismariotti@gmail.com")
                 .setOrganization(defaultOrganization)
                 .store();
+        FakeApplication.authToken.push("davismariotti@gmail.com");
         AuthenticationService.mockMap.put("davismariotti@gmail.com", "davismariotti@gmail.com");
     }
 }
