@@ -12,33 +12,47 @@ import utilities.ArabicaLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class AuthenticationService {
 
+    public static boolean mock = false;
+    public static Map<String, String> mockMap = new HashMap<>();
+
     public static void setup(ApplicationLifecycle lifecycle) {
-        try {
-            FileInputStream serviceAccount = new FileInputStream(ConfigFactory.load().getString("firebase.conf.location"));
+        if (!mock) {
+            try {
+                FileInputStream serviceAccount = new FileInputStream(ConfigFactory.load().getString("firebase.conf.location"));
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://smooffee.firebaseio.com")
-                    .build();
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .setDatabaseUrl("https://smooffee.firebaseio.com")
+                        .build();
 
-            FirebaseApp.initializeApp(options);
-        } catch (IOException | IllegalStateException e) {
-            ArabicaLogger.logger.error("Error in authenticate - ", e);
+                FirebaseApp.initializeApp(options);
+            } catch (IOException | IllegalStateException e) {
+                ArabicaLogger.logger.error("Error in authenticate - ", e);
+            }
+            lifecycle.addStopHook(() -> {
+                if (FirebaseApp.getInstance() != null) {
+                    FirebaseApp.getInstance().delete();
+                }
+                return CompletableFuture.completedFuture(null);
+            });
         }
-        lifecycle.addStopHook(() -> {
-            FirebaseApp.getInstance().delete();
-            return CompletableFuture.completedFuture(null);
-        });
     }
 
     public static String getUidFromToken(String firebaseAuthToken) throws FirebaseAuthException {
-        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken);
+        if (!mock) {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken);
 
-        ArabicaLogger.logger.debug("Decoded uid - {}", decodedToken.getUid());
-        return decodedToken.getUid();
+            ArabicaLogger.logger.debug("Decoded uid - {}", decodedToken.getUid());
+            return decodedToken.getUid();
+        } else {
+            if (mockMap.containsKey(firebaseAuthToken)) return mockMap.get(firebaseAuthToken);
+            else throw new FirebaseAuthException("MAPDOESNOTCONTAIN", "Firebase mock map does not contain token");
+        }
     }
 }
