@@ -13,6 +13,7 @@ import play.mvc.Result;
 import play.test.Helpers;
 import services.AuthenticationService;
 import utilities.ArabicaLogger;
+import utilities.QLException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -88,7 +89,7 @@ public class FakeApplication {
             return new Gson().fromJson(node.toString(), clazz);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new QLException(e);
         }
     }
 }

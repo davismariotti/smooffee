@@ -2,11 +2,12 @@ package actions;
 
 import models.Organization;
 import models.Product;
+import utilities.QLException;
 
 public class ProductActions {
     public static Product createProduct(Long organizationId, String name, String description, Integer price) {
         Organization organization = Organization.find.byId(organizationId);
-        if (organization == null) throw new RuntimeException("Organization not found");
+        if (organization == null) throw new QLException("Organization not found");
         Product product = new Product();
         product.setName(name);
         product.setDescription(description);
@@ -18,7 +19,7 @@ public class ProductActions {
 
     public static Product updateProduct(Long productId, String name, String description, Integer price) {
         Product product = Product.find.byId(productId);
-        if (product == null) throw new RuntimeException("Product not found");
+        if (product == null) throw new QLException("Product not found");
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);

@@ -3,6 +3,7 @@ package actions;
 import graphql.QLUser;
 import models.Organization;
 import models.User;
+import utilities.QLException;
 
 public class UserActions {
 
@@ -27,9 +28,7 @@ public class UserActions {
 
     public static User updateUser(String uid, QLUser.UserInput input) {
         User user = User.findByFirebaseUid(uid);
-        if (user == null) {
-            return null;
-        }
+        if (user == null) throw new QLException("User not found");
         user.setFirstname(input.getFirstname());
         user.setLastname(input.getLastname());
         user.setEmail(input.getEmail()); // TODO Allow?
@@ -44,5 +43,17 @@ public class UserActions {
 
     public static boolean sendForgotPassword() {
         return false;
+    }
+
+    public static User addToBalance(String userId, Integer amount) {
+        User user = User.findByFirebaseUid(userId);
+        if (user == null) throw new QLException("User not found");
+        return user.setBalance(user.getBalance() + amount).store();
+    }
+
+    public static User removeFromBalance(String userId, int amount) {
+        User user = User.findByFirebaseUid(userId);
+        if (user == null) throw new QLException("User not found");
+        return user.setBalance(user.getBalance() - amount).store();
     }
 }
