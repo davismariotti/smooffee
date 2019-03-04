@@ -80,6 +80,9 @@ public class FakeApplication {
             String str = contentAsString(result);
             JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("data");
             for (String pathNode : path.split("/")) {
+                if (!node.has(pathNode)) {
+                    throw new NullPointerException(String.format("Node '%s' not found for path '%s'", pathNode, path));
+                }
                 node = node.get(pathNode);
             }
             return new Gson().fromJson(node.toString(), clazz);

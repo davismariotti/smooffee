@@ -29,21 +29,23 @@ public class GraphQLController extends Controller {
         String uid;
 
         ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
-        count++;
 
         if (!query.query.startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
             // Get firebase token
             if (!request.getHeaders().get("Authorization").isPresent()) {
+                count++;
                 return forbidden();
             }
             String authToken = request.getHeaders().get("Authorization").get();
             if (authToken.equals("Bearer undefined")) {
+                count++;
                 return forbidden();
             }
 
             try {
                 uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer ", ""));
             } catch (FirebaseAuthException e) {
+                count++;
                 ArabicaLogger.logger.error("auth error", e);
                 return forbidden();
             }
@@ -75,6 +77,7 @@ public class GraphQLController extends Controller {
         }
 
         ArabicaLogger.logger.debug("[RSP-" + count +"] - " + executionResult.getData());
+        count++;
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("data", executionResult.getData());

@@ -17,9 +17,14 @@ public class QLProduct {
     }
 
     public static class Mutation {
-        public ProductEntry create(ProductInput input) {
-            Permission.check(Permission.ALL);
-            return new ProductEntry(ProductActions.createProduct(input.getName(), input.getDescription(), input.getPrice()));
+        public ProductEntry create(Long organizationId, ProductInput productInput) {
+            Permission.check(Permission.ALL); // TODO
+            return new ProductEntry(ProductActions.createProduct(organizationId, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
+        }
+
+        public ProductEntry update(Long id, ProductInput productInput) {
+            // TODO Check permissions
+            return new ProductEntry(ProductActions.updateProduct(id, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
         }
     }
 
@@ -55,6 +60,7 @@ public class QLProduct {
 
     public static class ProductEntry {
         private Long id;
+        private Long organizationId;
         private String name;
         private String description;
         private Integer price;
@@ -62,6 +68,17 @@ public class QLProduct {
         public ProductEntry(Product product) {
             this.id = product.getId();
             this.name = product.getName();
+            this.organizationId = product.getOrganization().getId();
+            this.description = product.getDescription();
+            this.price = product.getPrice();
+        }
+
+        public Long getOrganizationId() {
+            return organizationId;
+        }
+
+        public void setOrganizationId(Long organizationId) {
+            this.organizationId = organizationId;
         }
 
         public String getDescription() {
