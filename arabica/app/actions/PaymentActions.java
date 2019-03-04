@@ -19,6 +19,7 @@ public class PaymentActions {
                 .store();
 
         UserActions.addToBalance(userId, amount);
+        payment.refresh();
 
         return payment;
     }
@@ -38,6 +39,7 @@ public class PaymentActions {
                 .store();
 
         UserActions.addToBalance(userId, amount);
+        payment.refresh();
 
         return payment;
     }

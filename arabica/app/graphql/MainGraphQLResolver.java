@@ -43,14 +43,12 @@ public class MainGraphQLResolver {
             return new QLProduct.Mutation();
         }
 
-
         public QLOrder.Mutation order() {
             return new QLOrder.Mutation();
         }
 
         public QLPayment.Mutation payment() {
             return new QLPayment.Mutation();
-
         }
     }
 }

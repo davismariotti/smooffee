@@ -28,7 +28,7 @@ public class QLPaymentTest {
 
     @Test
     public void createPaymentCashTest() {
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { payment { create(userId: \\\"%s\\\", paymentInput: { type: \\\"cash\\\", amount: 600 }) { id amount type user { id } } } }", Setup.defaultSysadmin.getFirebaseUserId()));
+        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { payment { create(userId: \\\"%s\\\", paymentInput: { type: \\\"cash\\\", amount: 600 }) { id amount type user { id balance } } } }", Setup.defaultSysadmin.getFirebaseUserId()));
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());
@@ -36,5 +36,6 @@ public class QLPaymentTest {
         assertEquals("cash", entry.getType());
         assertNotNull(entry.getUser());
         assertEquals(Setup.defaultSysadmin.getFirebaseUserId(), entry.getUser().getId());
+        assertEquals(600, entry.getUser().getBalance().intValue());
     }
 }
