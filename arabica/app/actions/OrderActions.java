@@ -7,7 +7,7 @@ import utilities.QLException;
 
 public class OrderActions {
 
-    public Order createOrder(String userId, Long productId, String location, String notes) {
+    public static Order createOrder(String userId, Long productId, String location, String notes) {
         User user = User.findByFirebaseUid(userId);
         Product product = Product.find.byId(productId);
 
@@ -25,7 +25,7 @@ public class OrderActions {
         return order;
     }
 
-    public boolean deprecateOrder(Order order) {
+    public static boolean deprecateOrder(Order order) {
         order.deprecate();
         return true;
     }

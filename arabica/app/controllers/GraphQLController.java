@@ -26,11 +26,14 @@ public class GraphQLController extends Controller {
 
     public Result graphql(Http.Request request) {
         Query query = gson.fromJson(request.body().asText(), Query.class);
+        if (query == null) {
+            query = gson.fromJson(request.body().asJson().toString(), Query.class);
+        }
         String uid;
 
         ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", ""));
 
-        if (!query.query.startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
+        if (!query.query.trim().startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
             // Get firebase token
             if (!request.getHeaders().get("Authorization").isPresent()) {
                 count++;
@@ -43,10 +46,9 @@ public class GraphQLController extends Controller {
             }
 
             try {
-                uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer ", ""));
-            } catch (FirebaseAuthException e) {
+                uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer", "").trim());
+            } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
-                ArabicaLogger.logger.error("auth error", e);
                 return forbidden();
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
@@ -66,6 +68,7 @@ public class GraphQLController extends Controller {
                 .file("schema/user.graphql")
                 .file("schema/organization.graphql")
                 .file("schema/product.graphql")
+                .file("schema/order.graphql")
                 .resolvers(new MainGraphQLResolver.Query(), new MainGraphQLResolver.Mutation())
                 .build()
                 .makeExecutableSchema()).build();

@@ -4,85 +4,85 @@
 # --- !Ups
 
 create table card (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
   token                         varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_card primary key (id)
 );
 
 create table cardrefund (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_cardrefund primary key (id)
 );
 
 create table orders (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
   location                      varchar(255) not null,
   notes                         varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_orders primary key (id)
 );
 
 create table organization (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   name                          varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_organization primary key (id)
 );
 
 create table product (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   name                          varchar(255) not null,
   price                         integer not null,
   description                   varchar(255),
   organization_id               bigint not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_product primary key (id)
 );
 
 create table refund (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   amount                        integer not null,
   user_id                       bigint not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_refund primary key (id)
 );
 
 create table users (
-  id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   firstname                     varchar(255) not null,
   lastname                      varchar(255) not null,
   organization_id               bigint not null,
   email                         varchar(255) not null,
-  last_logged_in                timestamptz,
+  last_logged_in                timestamp,
   role                          integer not null,
   firebase_user_id              varchar(255),
   balance                       integer not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_users primary key (id)
 );
 
@@ -104,32 +104,32 @@ alter table users add constraint fk_users_organization_id foreign key (organizat
 
 # --- !Downs
 
-alter table if exists card drop constraint if exists fk_card_user_id;
+alter table card drop constraint if exists fk_card_user_id;
 drop index if exists ix_card_user_id;
 
-alter table if exists orders drop constraint if exists fk_orders_user_id;
+alter table orders drop constraint if exists fk_orders_user_id;
 drop index if exists ix_orders_user_id;
 
-alter table if exists product drop constraint if exists fk_product_organization_id;
+alter table product drop constraint if exists fk_product_organization_id;
 drop index if exists ix_product_organization_id;
 
-alter table if exists refund drop constraint if exists fk_refund_user_id;
+alter table refund drop constraint if exists fk_refund_user_id;
 drop index if exists ix_refund_user_id;
 
-alter table if exists users drop constraint if exists fk_users_organization_id;
+alter table users drop constraint if exists fk_users_organization_id;
 drop index if exists ix_users_organization_id;
 
-drop table if exists card cascade;
+drop table if exists card;
 
-drop table if exists cardrefund cascade;
+drop table if exists cardrefund;
 
-drop table if exists orders cascade;
+drop table if exists orders;
 
-drop table if exists organization cascade;
+drop table if exists organization;
 
-drop table if exists product cascade;
+drop table if exists product;
 
-drop table if exists refund cascade;
+drop table if exists refund;
 
-drop table if exists users cascade;
+drop table if exists users;
 

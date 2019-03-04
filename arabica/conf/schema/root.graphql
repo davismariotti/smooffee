@@ -3,10 +3,12 @@ type Query {
     user: UserQuery!
     organization: OrganizationQuery!
     product: ProductQuery!
+    order: OrderQuery!
 }
 
 type Mutation {
     organization: OrganizationMutation!
     user: UserMutation!
     product: ProductMutation!
+    order: OrderMutation!
 }

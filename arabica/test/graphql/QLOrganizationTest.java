@@ -2,8 +2,8 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import play.mvc.Result;
 
@@ -12,15 +12,15 @@ import static play.mvc.Http.Status.OK;
 
 public class QLOrganizationTest {
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
     }
 
-    @AfterClass
-    public static void teardown() {
+    @After
+    public void teardown() {
         FakeApplication.stop();
     }
 

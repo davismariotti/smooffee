@@ -10,16 +10,16 @@ public class UserActions {
     public static User createUser(String firstname, String lastname, String fireBaseUserId, String email, Long organizationId) {
         User potentialUser = User.findByFirebaseUid(fireBaseUserId);
         if (potentialUser == null) {
-            User newUser = new User();
-            newUser.setFirstname(firstname);
-            newUser.setLastname(lastname);
-            newUser.setEmail(email);
-            newUser.setFirebaseUserId(fireBaseUserId);
+            User newUser = new User()
+                    .setFirstname(firstname)
+                    .setLastname(lastname)
+                    .setEmail(email)
+                    .setFirebaseUserId(fireBaseUserId)
+                    .setBalance(0);
 
             Organization org = Organization.find.byId(organizationId);
             newUser.setOrganization(org);
             newUser.save();
-            newUser.refresh();
             return newUser;
         } else {
             return null; // TODO
@@ -29,11 +29,10 @@ public class UserActions {
     public static User updateUser(String uid, QLUser.UserInput input) {
         User user = User.findByFirebaseUid(uid);
         if (user == null) throw new QLException("User not found");
-        user.setFirstname(input.getFirstname());
-        user.setLastname(input.getLastname());
-        user.setEmail(input.getEmail()); // TODO Allow?
-        user.save();
-        user.refresh();
+        user = user.setFirstname(input.getFirstname())
+                .setLastname(input.getLastname())
+                .setEmail(input.getEmail()) // TODO Allow?
+                .store();
         return user;
     }
 
