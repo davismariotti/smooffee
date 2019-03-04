@@ -24,6 +24,10 @@ public class MainGraphQLResolver {
         public QLOrder.Query order() {
             return new QLOrder.Query();
         }
+
+        public QLPayment.Query payment() {
+            return new QLPayment.Query();
+        }
     }
 
     public static class Mutation implements GraphQLMutationResolver {
@@ -39,8 +43,14 @@ public class MainGraphQLResolver {
             return new QLProduct.Mutation();
         }
 
+
         public QLOrder.Mutation order() {
             return new QLOrder.Mutation();
+        }
+
+        public QLPayment.Mutation payment() {
+            return new QLPayment.Mutation();
+
         }
     }
 }
