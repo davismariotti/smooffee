@@ -4,8 +4,12 @@ import io.ebean.annotation.NotNull;
 import models.finders.PaymentFinder;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "payment")
 public class Payment extends BaseModel {
 
     public static final PaymentFinder find = new PaymentFinder();

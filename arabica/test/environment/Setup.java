@@ -21,6 +21,7 @@ public class Setup {
                 .setEmail("davismariotti@gmail.com")
                 .setFirstname("Davis")
                 .setLastname("Mariotti")
+                .setBalance(0)
                 .setFirebaseUserId("davismariotti@gmail.com")
                 .setOrganization(defaultOrganization)
                 .store();

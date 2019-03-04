@@ -20,18 +20,4 @@ type UserQuery {
 type UserMutation {
     create(organizationId: Long!, userInput: UserInput!): UserEntry!
     update(userInput: UserInput!): UserEntry!
-    makePayment(userId: String!, paymentInput: PaymentInput!): PaymentEntry!
-}
-
-input PaymentInput {
-    type: String!
-    amount: Int!
-    cardId: Long
-}
-
-type PaymentEntry {
-    id: Long!
-    amount: Int!
-    cardId: Long
-    user: UserEntry!
 }

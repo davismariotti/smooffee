@@ -20,6 +20,10 @@ public class MainGraphQLResolver {
         public QLProduct.Query product() {
             return new QLProduct.Query();
         }
+
+        public QLPayment.Query payment() {
+            return new QLPayment.Query();
+        }
     }
 
     public static class Mutation implements GraphQLMutationResolver {
@@ -33,6 +37,10 @@ public class MainGraphQLResolver {
 
         public QLProduct.Mutation product() {
             return new QLProduct.Mutation();
+        }
+
+        public QLPayment.Mutation payment() {
+            return new QLPayment.Mutation();
         }
     }
 }
