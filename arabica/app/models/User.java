@@ -34,6 +34,21 @@ public class User extends BaseModel {
     private int role;
 
     private String firebaseUserId;
+    @NotNull
+    private Integer balance;
+
+    public static User findByFirebaseUid(String firebaseUserId) {
+        return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public User setBalance(Integer balance) {
+        this.balance = balance;
+        return this;
+    }
 
     public String getFirebaseUserId() {
         return firebaseUserId;
@@ -100,9 +115,5 @@ public class User extends BaseModel {
     public User setEmail(String email) {
         this.email = email;
         return this;
-    }
-
-    public static User findByFirebaseUid(String firebaseUserId) {
-        return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
     }
 }

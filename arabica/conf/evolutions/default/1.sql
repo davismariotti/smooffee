@@ -14,6 +14,15 @@ create table card (
   constraint pk_card primary key (id)
 );
 
+create table cardrefund (
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
+  status                        INTEGER DEFAULT 0 not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
+  constraint pk_cardrefund primary key (id)
+);
+
 create table orders (
   id                            bigint auto_increment not null,
   deprecated_at                 timestamp,
@@ -34,6 +43,19 @@ create table organization (
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_organization primary key (id)
+);
+
+create table payment (
+  id                            bigint auto_increment not null,
+  deprecated_at                 timestamp,
+  status                        INTEGER DEFAULT 0 not null,
+  amount                        integer not null,
+  user_id                       bigint not null,
+  card_id                       bigint,
+  type                          varchar(255) not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
+  constraint pk_payment primary key (id)
 );
 
 create table product (
@@ -71,6 +93,7 @@ create table users (
   last_logged_in                timestamp,
   role                          integer not null,
   firebase_user_id              varchar(255),
+  balance                       integer not null,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_users primary key (id)
@@ -81,6 +104,12 @@ alter table card add constraint fk_card_user_id foreign key (user_id) references
 
 create index ix_orders_user_id on orders (user_id);
 alter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
+
+create index ix_payment_user_id on payment (user_id);
+alter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
+
+create index ix_payment_card_id on payment (card_id);
+alter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;
 
 create index ix_product_organization_id on product (organization_id);
 alter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;
@@ -100,6 +129,12 @@ drop index if exists ix_card_user_id;
 alter table orders drop constraint if exists fk_orders_user_id;
 drop index if exists ix_orders_user_id;
 
+alter table payment drop constraint if exists fk_payment_user_id;
+drop index if exists ix_payment_user_id;
+
+alter table payment drop constraint if exists fk_payment_card_id;
+drop index if exists ix_payment_card_id;
+
 alter table product drop constraint if exists fk_product_organization_id;
 drop index if exists ix_product_organization_id;
 
@@ -111,9 +146,13 @@ drop index if exists ix_users_organization_id;
 
 drop table if exists card;
 
+drop table if exists cardrefund;
+
 drop table if exists orders;
 
 drop table if exists organization;
+
+drop table if exists payment;
 
 drop table if exists product;
 
