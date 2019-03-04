@@ -21,6 +21,10 @@ public class MainGraphQLResolver {
             return new QLProduct.Query();
         }
 
+        public QLOrder.Query order() {
+            return new QLOrder.Query();
+        }
+
         public QLPayment.Query payment() {
             return new QLPayment.Query();
         }
@@ -37,6 +41,10 @@ public class MainGraphQLResolver {
 
         public QLProduct.Mutation product() {
             return new QLProduct.Mutation();
+        }
+
+        public QLOrder.Mutation order() {
+            return new QLOrder.Mutation();
         }
 
         public QLPayment.Mutation payment() {

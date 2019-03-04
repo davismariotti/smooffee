@@ -46,10 +46,9 @@ public class GraphQLController extends Controller {
             }
 
             try {
-                uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer ", ""));
-            } catch (FirebaseAuthException e) {
+                uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer", "").trim());
+            } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
-                ArabicaLogger.logger.error("auth error", e);
                 return forbidden();
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
@@ -69,6 +68,7 @@ public class GraphQLController extends Controller {
                 .file("schema/user.graphql")
                 .file("schema/organization.graphql")
                 .file("schema/product.graphql")
+                .file("schema/order.graphql")
                 .file("schema/payment.graphql")
                 .resolvers(new MainGraphQLResolver.Query(), new MainGraphQLResolver.Mutation())
                 .build()

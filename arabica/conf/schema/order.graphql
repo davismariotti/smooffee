@@ -1,0 +1,20 @@
+input OrderInput {
+    location: String!
+    notes: String
+    productId: Long!
+}
+
+type OrderEntry {
+    id: Long!
+    location: String!
+    notes: String
+    product: ProductEntry!
+}
+
+type OrderQuery {
+    read(id: Long!): OrderEntry!
+}
+
+type OrderMutation {
+    create(userId: String!, orderInput: OrderInput!): OrderEntry!
+}

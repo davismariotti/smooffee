@@ -3,6 +3,7 @@ type Query {
     user: UserQuery!
     organization: OrganizationQuery!
     product: ProductQuery!
+    order: OrderQuery!
     payment: PaymentQuery!
 }
 
@@ -10,5 +11,6 @@ type Mutation {
     organization: OrganizationMutation!
     user: UserMutation!
     product: ProductMutation!
+    order: OrderMutation!
     payment: PaymentMutation!
 }
