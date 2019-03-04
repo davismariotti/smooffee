@@ -1,0 +1,21 @@
+input PaymentInput {
+    type: String!
+    amount: Int!
+    cardId: Long
+}
+
+type PaymentEntry {
+    id: Long!
+    amount: Int!
+    cardId: Long
+    user: UserEntry!
+    type: String!
+}
+
+type PaymentQuery {
+    read(id: Long!): PaymentEntry
+}
+
+type PaymentMutation {
+    create(userId: String!, paymentInput: PaymentInput!): PaymentEntry!
+}

@@ -2,13 +2,11 @@ package graphql;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import services.authorization.Permission;
 
 public class MainGraphQLResolver {
 
     public static class Query implements GraphQLQueryResolver {
         public String ping() {
-            Permission.ignore();
             return "pong";
         }
         public QLUser.Query user() {
@@ -21,6 +19,14 @@ public class MainGraphQLResolver {
 
         public QLProduct.Query product() {
             return new QLProduct.Query();
+        }
+
+        public QLOrder.Query order() {
+            return new QLOrder.Query();
+        }
+
+        public QLPayment.Query payment() {
+            return new QLPayment.Query();
         }
     }
 
@@ -35,6 +41,14 @@ public class MainGraphQLResolver {
 
         public QLProduct.Mutation product() {
             return new QLProduct.Mutation();
+        }
+
+        public QLOrder.Mutation order() {
+            return new QLOrder.Mutation();
+        }
+
+        public QLPayment.Mutation payment() {
+            return new QLPayment.Mutation();
         }
     }
 }

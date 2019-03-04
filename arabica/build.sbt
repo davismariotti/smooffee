@@ -18,8 +18,7 @@ libraryDependencies += "com.sun.jersey" % "jersey-core" % "1.19.4"
 libraryDependencies += "com.sun.jersey" % "jersey-client" % "1.19.4"
 libraryDependencies += "com.sun.jersey.contribs" % "jersey-multipart" % "1.19.4"
 libraryDependencies += "com.google.firebase" % "firebase-admin" % "6.7.0"
-libraryDependencies += "org.mockito" % "mockito-core" % "2.24.5" % Test
-libraryDependencies += "org.powermock" % "powermock-module-junit4" % "2.0.0" % Test
-libraryDependencies += "org.powermock" % "powermock-api-easymock" % "2.0.0" % Test
+libraryDependencies += "com.h2database" % "h2" % "1.4.198"
+libraryDependencies ++= Seq(evolutions, jdbc)
 
 crossPaths := false

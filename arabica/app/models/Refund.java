@@ -28,24 +28,27 @@ public class Refund extends BaseModel {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public Refund setAmount(int amount) {
         this.amount = amount;
+        return this;
     }
 
     public Order getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public Refund setOrder(Order order) {
         this.order = order;
+        return this;
     }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public Refund setUser(User user) {
         this.user = user;
+        return this;
     }
 
 

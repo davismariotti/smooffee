@@ -30,32 +30,36 @@ public class Product extends BaseModel {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public Product setOrganization(Organization organization) {
         this.organization = organization;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Product setName(String name) {
         this.name = name;
+        return this;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public Product setPrice(int price) {
         this.price = price;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Product setDescription(String description) {
         this.description = description;
+        return this;
     }
 
 

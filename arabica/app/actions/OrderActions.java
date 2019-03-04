@@ -3,10 +3,17 @@ package actions;
 import models.Order;
 import models.Product;
 import models.User;
+import utilities.QLException;
 
 public class OrderActions {
 
-    public Order createOrder(User user, Product product, String location, String notes) {
+    public static Order createOrder(String userId, Long productId, String location, String notes) {
+        User user = User.findByFirebaseUid(userId);
+        Product product = Product.find.byId(productId);
+
+        if (user == null) throw new QLException("User not found");
+        if (product == null) throw new QLException("Product not found");
+
         Order order = new Order();
         order.setProduct(product);
         order.setUser(user);
@@ -18,11 +25,7 @@ public class OrderActions {
         return order;
     }
 
-    public Order updateOrder() {
-        return null;
-    }
-
-    public boolean deprecateOrder(Order order) {
+    public static boolean deprecateOrder(Order order) {
         order.deprecate();
         return true;
     }

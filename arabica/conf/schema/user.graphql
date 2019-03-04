@@ -2,7 +2,6 @@ input UserInput {
     firstName: String!
     lastName: String!
     email: String!
-    organizationId: Long!
 }
 
 type UserEntry {
@@ -11,6 +10,7 @@ type UserEntry {
     lastName: String!
     email: String!
     organizationId: Long!
+    balance: Int!
 }
 
 type UserQuery {
@@ -19,6 +19,6 @@ type UserQuery {
 }
 
 type UserMutation {
-    create(input: UserInput!): UserEntry!
-    update(input: UserInput!): UserEntry!
+    create(organizationId: Long!, userInput: UserInput!): UserEntry!
+    update(userInput: UserInput!): UserEntry!
 }

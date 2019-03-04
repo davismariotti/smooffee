@@ -5,8 +5,6 @@ import models.User;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
 
-import java.util.Objects;
-
 public class QLUser {
     public static class Query {
         public UserEntry currentUser() {
@@ -32,20 +30,19 @@ public class QLUser {
     }
 
     public static class Mutation {
-        public UserEntry create(UserInput input) {
+        public UserEntry create(Long organizationId, UserInput userInput) {
             Permission.ignore();
             String uid = ThreadStorage.get().uid;
-            User user = UserActions.createUser(input.firstName, input.lastName, uid, input.email, input.organizationId);
+            User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
             if (user == null) {
                 return null;
             }
             return new UserEntry(user);
         }
 
-        public UserEntry update(UserInput input) {
+        public UserEntry update(UserInput userInput) {
             Permission.check(Permission.THIS_USER);
-            String uid = ThreadStorage.get().uid;
-            User user = UserActions.updateUser(ThreadStorage.get().uid, input);
+            User user = UserActions.updateUser(ThreadStorage.get().uid, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
     }
@@ -54,7 +51,6 @@ public class QLUser {
         String firstName;
         String lastName;
         String email;
-        Long organizationId;
 
         public String getFirstname() {
             return firstName;
@@ -78,14 +74,6 @@ public class QLUser {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public Long getOrganizationId() {
-            return organizationId;
-        }
-
-        public void setOrganizationId(Long organizationId) {
-            this.organizationId = organizationId;
         }
     }
 
@@ -95,52 +83,39 @@ public class QLUser {
         private String lastName;
         private String email;
         private Long organizationId;
+        private Integer balance;
+
         public UserEntry(User user) {
             this.id = user.getFirebaseUserId();
             this.firstName = user.getFirstname();
             this.lastName = user.getLastname();
             this.email = user.getEmail();
             this.organizationId = user.getOrganization().getId();
+            this.balance = user.getBalance();
+        }
+
+        public Integer getBalance() {
+            return balance;
         }
 
         public String getId() {
             return id;
         }
 
-        public void setId(String id) {
-            this.id = id;
-        }
-
         public String getFirstname() {
             return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
         }
 
         public String getLastname() {
             return lastName;
         }
 
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
         public String getEmail() {
             return email;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
         public Long getOrganizationId() {
             return organizationId;
-        }
-
-        public void setOrganizationId(Long organizationId) {
-            this.organizationId = organizationId;
         }
     }
 }
