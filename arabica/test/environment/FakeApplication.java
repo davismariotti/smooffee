@@ -28,24 +28,16 @@ public class FakeApplication {
     public static Stack<String> authToken = new Stack<>();
 
     public static void start(boolean mockFirebase) {
+        AuthenticationService.mock = mockFirebase;
+
         ArabicaLogger.logger.debug("---------------------");
         ArabicaLogger.logger.debug(String.format("--- Starting %s", Thread.currentThread().getStackTrace()[2].getClassName()));
         ArabicaLogger.logger.debug("---------------------");
         Map<String, Object> conf = new HashMap<>();
-        conf.put("db.default.url","jdbc:postgresql://localhost:5432/arabica_test_db");
+        conf.put("db.default.url","jdbc:h2:mem:play;MODE=PostgreSQL;DATABASE_TO_UPPER=FALSE");
+        conf.put("db.default.driver", "org.h2.Driver");
         conf.put("play.evolutions.enabled","true");
         conf.put("play.evolutions.autoApply","true");
-
-        AuthenticationService.mock = mockFirebase;
-
-        // Make test db
-        try {
-            ArabicaLogger.logger.debug("Recreating test database.");
-            ArabicaLogger.logger.debug(exec(String.format("python '%s'", FakeApplication.class.getResource("/setup_test_db.py").getPath())));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
 
         app = Helpers.fakeApplication(conf);
 
