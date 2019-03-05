@@ -6,7 +6,6 @@ import Home from "./Home";
 import Login from "./authscreens/Login";
 import Signup from "./authscreens/Signup";
 import Recover from "./authscreens/Recover";
-import Dashboard from "./Dashboard";
 import requireAuth from "./utils/RequireAuth";
 import "./css/index.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -15,10 +14,10 @@ render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Login} />
+      <Route path="login" component={Login} />
       <Route path="signup" component={Signup} />
       <Route path="recover" component={Recover} />
-      <Route path="Home" component={Home} onEnter={requireAuth} />
-      <Route path="dashboard" component={Dashboard} onEnter={requireAuth} />
+      <Route path="home" component={Home} onEnter={requireAuth} />
     </Route>
   </Router>,
   document.getElementById("root")

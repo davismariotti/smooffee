@@ -46,12 +46,6 @@ class Navbar extends Component {
     }
     return (
       <div className="Navbar">
-        <Link to="/">
-          <button className="btn btn-default">Home</button>
-        </Link>
-        <Link to="/dashboard">
-          <button className="btn btn-default dash-btn">Dashboard</button>
-        </Link>
         {loginButton}
         {signup}
       </div>

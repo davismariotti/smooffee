@@ -4,12 +4,6 @@ import { hashHistory } from "react-router";
 import Navbar from "./Navbar";
 import "./css/font-awesome.css";
 import "./css/bootstrap-social.css";
-import ApolloClient from "apollo-boost";
-import { ApolloProvier } from "react-apollo";
-
-const client = new ApolloClient({
-  uri: "http://localhost:9000/graphql"
-});
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +16,7 @@ class App extends Component {
       if (user) {
         //if logged in...
         _this.setState({ loggedin: true });
-        hashHistory.push("/dashboard"); //after login, redirect to dashboard
+        hashHistory.push("/home"); //after login, redirect to home
       } else {
         //if not logged in...
         _this.setState({ loggedin: false });
