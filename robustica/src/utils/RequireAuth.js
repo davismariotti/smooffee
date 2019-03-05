@@ -1,11 +1,11 @@
-import firebaseApp from '../firebase/Firebase';
+import firebaseApp from '../services/AuthService'
 
 export default (nextState, replace) => {
-	var user = firebaseApp.auth().currentUser;
-  if (!user) {
-    replace({
-      pathname: '/login',
-      state: { nextPathname: nextState.location.pathname }
-    })
-  }
+    const user = firebaseApp.auth().currentUser
+    if (!user) {
+        replace({
+            pathname: '/login',
+            state: {nextPathname: nextState.location.pathname}
+        })
+    }
 }

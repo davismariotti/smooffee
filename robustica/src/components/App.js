@@ -1,0 +1,43 @@
+import React, {Component} from "react"
+import firebaseApp from '../services/AuthService'
+import "firebase/auth"
+import {hashHistory} from "react-router"
+import Navbar from "../Navbar"
+import "../css/font-awesome.css"
+import "../css/bootstrap-social.css"
+
+class App extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {loggedin: false}
+    }
+
+    componentWillMount() {
+        let _this = this
+        firebaseApp.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                //if logged in...
+                _this.setState({loggedin: true})
+                hashHistory.push("/home") //after login, redirect to home
+            } else {
+                //if not logged in...
+                _this.setState({loggedin: false})
+                hashHistory.get()
+            }
+        })
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <div className="App-header">
+                    <h4>Smooffee</h4>
+                </div>
+                <Navbar loggedin={this.state.loggedin}/>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export default App
