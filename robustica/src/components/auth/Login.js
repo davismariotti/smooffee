@@ -72,12 +72,6 @@ class Login extends Component {
                 //var user = result.user;
                 console.log("Google login success")
                 console.log("current user", firebaseApp.auth().currentUser.getToken())
-                firebaseApp
-                    .auth()
-                    .currentUser.getIdTokenResult(true)
-                    .then(function (result) {
-                        console.log("Test Two", result)
-                    })
             })
             .catch(function (error) {
                 var errorMessage = error.message

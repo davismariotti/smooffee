@@ -24,9 +24,6 @@ class Signup extends Component {
         super(props)
     }
 
-    registerUserGQL() {
-    }
-
 
     // handleSubmit(e) {
     //     e.preventDefault()

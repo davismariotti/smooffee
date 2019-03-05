@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {hashHistory, Link} from "react-router"
-import firebaseApp from './services/AuthService'
+import firebaseApp from '../services/AuthService'
 
 class Navbar extends Component {
     constructor(props) {

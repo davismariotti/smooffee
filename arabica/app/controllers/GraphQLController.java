@@ -3,14 +3,12 @@ package controllers;
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
-import graphql.ExecutionInput;
-import graphql.ExecutionResult;
-import graphql.GraphQL;
-import graphql.MainGraphQLResolver;
+import graphql.*;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.With;
 import utilities.ArabicaLogger;
 import services.AuthenticationService;
 import utilities.ThreadStorage;
@@ -24,6 +22,12 @@ public class GraphQLController extends Controller {
 
     private int count = 0;
 
+    @With(Headers.class)
+    public Result options() {
+        return noContent();
+    }
+
+    @With(Headers.class)
     public Result graphql(Http.Request request) {
         Query query = gson.fromJson(request.body().asText(), Query.class);
         if (query == null) {
@@ -49,6 +53,7 @@ public class GraphQLController extends Controller {
                 uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer", "").trim());
             } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
+                e.printStackTrace();
                 return forbidden();
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
