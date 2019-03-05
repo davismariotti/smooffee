@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import OrderList from "./components/orderList";
-
+import Options from "./options";
 class Home extends Component {
   render() {
     return (
       <div className="Home">
-        <h1> This is where orders appear</h1>
+        <Options />
         <OrderList />
       </div>
     );
