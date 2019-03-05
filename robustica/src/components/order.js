@@ -15,11 +15,9 @@ class Order extends Component {
   render() {
     return (
       <div>
-        <p>
-          {this.props.item}
-          {this.props.user}
-          {this.props.location}
-        </p>
+        {this.props.item}
+        {this.props.user}
+        {this.props.location}
         <button onClick={this.edit}>Edit</button>
         <button onClick={this.fulfill}>Fulfill</button>
       </div>
