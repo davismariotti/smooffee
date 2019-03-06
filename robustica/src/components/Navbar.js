@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { hashHistory, Link } from 'react-router';
 import firebaseApp from '../services/AuthService';
+import {AUTH_TOKEN} from "../constants"
 
 class Navbar extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class Navbar extends Component {
       .signOut()
       .then(
         function() {
+          localStorage.setItem(AUTH_TOKEN, '');
           console.log('sign out succesful');
           hashHistory.push('/login');
         },

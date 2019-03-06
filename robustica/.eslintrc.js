@@ -29,6 +29,7 @@ module.exports = {
   'rules': {
     'react/jsx-uses-react': 1,
     'react/jsx-uses-vars': 1,
+    'react/jsx-filename-extension': 0,
     'react/react-in-jsx-scope': 1,
     'react/prefer-stateless-function': 0,
     'quotes': [2, 'single', 'avoid-escape'],

@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import Recover from './components/auth/Recover';
+import SignupContinued from './components/auth/SignupContinued'
 import requireAuth from './utils/RequireAuth';
 import './css/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -32,6 +33,7 @@ render(
         <IndexRoute component={Login}/>
         <Route path="login" component={Login}/>
         <Route path="signup" component={Signup}/>
+        <Route path="signupcontinued" component={SignupContinued}/>
         <Route path="recover" component={Recover}/>
         <Route path="home" component={Home} onEnter={requireAuth}/>
       </Route>

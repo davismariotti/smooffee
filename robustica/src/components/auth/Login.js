@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
+import {hashHistory} from 'react-router'
 import firebaseApp from '../../services/AuthService';
+import App from '../App'
 
 class Login extends Component {
   constructor(props) {
@@ -30,6 +32,9 @@ class Login extends Component {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          hashHistory.push('/home')
+        })
         .catch(function(error) {
           // Handle Errors here.
           const errorMessage = error.message;
@@ -47,11 +52,8 @@ class Login extends Component {
       .auth()
       .signInWithPopup(provider)
       .then(function(result) {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        // var token = result.credential.accessToken;
-        // The signed-in user info.
-        // var user = result.user;
         console.log('Facebook login success');
+        hashHistory.push('/home')
       })
       .catch(function(error) {
         const errorMessage = error.message;
@@ -66,12 +68,9 @@ class Login extends Component {
       .auth()
       .signInWithPopup(provider)
       .then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // var token = result.credential.accessToken;
-        // The signed-in user info.
-        // var user = result.user;
         console.log('Google login success');
         console.log('current user', firebaseApp.auth().currentUser.getToken());
+        hashHistory.push('/home')
       })
       .catch(function(error) {
         const errorMessage = error.message;

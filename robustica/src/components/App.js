@@ -15,22 +15,18 @@ class App extends Component {
 
   componentWillMount() {
     const _this = this;
-    firebaseApp.auth().onAuthStateChanged(function(user) {
+    firebaseApp.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
+        console.log('AUTH STATE CHANGED', user);
         // If logged in...
         _this.setState({ loggedin: true });
-        hashHistory.push('/home'); // After login, redirect to home
-
         user.getToken()
-          .then(function(result) {
+          .then((result) => {
             localStorage.setItem(AUTH_TOKEN, result);
-            console.log('Test Two', result);
           });
       } else {
         // If not logged in...
         _this.setState({ loggedin: false });
-        hashHistory.get();
       }
     });
   }
