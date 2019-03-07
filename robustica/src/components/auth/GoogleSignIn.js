@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
 import firebaseApp from '../../services/AuthService';
+import history from '../../utils/robusticaHistory'
 
 export class GoogleSignIn extends Component {
   handleGoogle(e) {
@@ -15,13 +16,7 @@ export class GoogleSignIn extends Component {
         // The signed-in user info.
         // var user = result.user;
         console.log('Google login success');
-        console.log('Test One');
-        // firebaseApp
-        //     .auth()
-        //     .currentUser.getIdTokenResult(true)
-        //     .then(function (result) {
-        //         console.log("Test Two", result)
-        //     })
+        history.push('/home')
       })
       .catch((error) => {
         const errorMessage = error.message;

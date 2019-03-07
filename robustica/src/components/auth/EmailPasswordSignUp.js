@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService'
 import {AUTH_TOKEN} from '../../constants'
+import history from '../../utils/robusticaHistory'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
@@ -19,7 +20,6 @@ export class EmailPasswordSignUp extends Component {
   }
 
   handleSubmit(e) {
-    const {history} = this.props
     e.preventDefault()
     const { email, password } = this.state
     if (isEmail(email)) {

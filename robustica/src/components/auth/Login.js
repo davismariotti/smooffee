@@ -1,58 +1,57 @@
-import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
+import React, { Component } from 'react';
 import firebaseApp from '../../services/AuthService';
-import { AUTH_TOKEN } from '../../constants';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { AUTH_TOKEN } from '../../constants'
+import Button from '@material-ui/core/Button'
+import {AUTH_TOKEN} from '../../constants'
+import history from '../../utils/robusticaHistory'
+
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
-    //
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  postLoginRedirect() {
-    firebaseApp
-      .auth()
-      .currentUser.getToken()
-      .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token);
-        // browserHistory.push('/home');
-        window.location.reload();
-      });
+    this.state = { email: '', password: '' }
+    this.handleEmailChange = this.handleEmailChange.bind(this)
+    this.handlePassChange = this.handlePassChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    // this.postLoginRedirect = this.postLoginRedirect.bind(this)
   }
 
   handleEmailChange(e) {
-    this.setState({ email: e.target.value });
+    this.setState({
+      email: e.target.value
+    })
   }
 
   handlePassChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({
+      password: e.target.value
+    })
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-    const email = this.state.email.trim();
-    const password = this.state.password.trim();
+    const { email, password } = this.state
+    e.preventDefault()
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
-          this.postLoginRedirect();
+          firebaseApp.auth().currentUser.getToken().then((token) => {
+            localStorage.setItem(AUTH_TOKEN, token)
+            history.push('/home')
+          })
         })
         .catch(error => {
           // Handle Errors here.
           const errorMessage = error.message;
-          alert(`errorMessage: ${errorMessage}`);
+          alert(`errorMessage: ${errorMessage}`)
         });
     } else {
-      alert('Email Address is not valid');
+      alert('Email Address is not valid')
     }
   }
 
@@ -63,8 +62,11 @@ class Login extends Component {
       .auth()
       .signInWithPopup(provider)
       .then(() => {
-        console.log('Facebook login success');
-        this.postLoginRedirect();
+        console.log('Facebook login success')
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          history.push('/home')
+        })
       })
       .catch(error => {
         const errorMessage = error.message;
@@ -80,9 +82,13 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Google login success');
-        this.postLoginRedirect();
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          history.push('/home')
+        })
       })
-      .catch(error => {
+      .catch((error) => {
+        console.error(error)
         const errorMessage = error.message;
         alert(`Google sign in error: ${errorMessage}`);
       });
@@ -145,5 +151,9 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  updateClientCallback: PropTypes.func.isRequired
+};
 
 export default Login;

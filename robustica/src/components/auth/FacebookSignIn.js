@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import firebaseApp from '../../services/AuthService';
+import history from '../../utils/robusticaHistory'
 
 export class FacebookSignIn extends Component {
 
@@ -16,6 +17,7 @@ export class FacebookSignIn extends Component {
         // The signed-in user info.
         // var user = result.user;
         console.log('Facebook login success');
+        history.push('/home')
       })
       .catch((error) => {
         const errorMessage = error.message;

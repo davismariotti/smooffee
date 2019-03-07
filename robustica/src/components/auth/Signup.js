@@ -26,7 +26,7 @@ class Signup extends Component {
           <GoogleSignIn/>
           <br/>
           <p className="text-center">------------- Or -------------</p>
-          <EmailPasswordSignUp {...this.props} updateClientCallback={updateClientCallback}/>
+          <EmailPasswordSignUp updateClientCallback={updateClientCallback}/>
           <br/>
           <p>
             Already Signed up? <Link to="/login">Log In</Link>
@@ -36,7 +36,6 @@ class Signup extends Component {
     );
   }
 }
-
 
 Signup.propTypes = {
   updateClientCallback: PropTypes.func.isRequired

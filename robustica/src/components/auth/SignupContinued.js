@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Mutation} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
+import history from '../../utils/robusticaHistory'
 
 const SignUpMutation = gql`
     mutation CreateUser($userInput: UserInput!) {
@@ -43,7 +44,7 @@ class SignupContinued extends Component {
                       userInput
                     }
                   }).then(() => {
-                    // browserHistory.push('/home')
+                    history.push('/home')
                   })
                   firstname.value = ''
                   lastname.value = ''
