@@ -3,21 +3,23 @@ import PropTypes from 'prop-types'
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button'
 import firebaseApp from '../../services/AuthService';
 import { AUTH_TOKEN } from '../../constants'
-import Button from '@material-ui/core/Button'
-import {AUTH_TOKEN} from '../../constants'
 import history from '../../utils/robusticaHistory'
 
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' }
+    this.state = {
+      email: '',
+      password: '',
+      updateClientCallback: props.updateClientCallback
+    }
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    // this.postLoginRedirect = this.postLoginRedirect.bind(this)
   }
 
   handleEmailChange(e) {
@@ -40,9 +42,11 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
+          const {updateClientCallback} = this.state
           firebaseApp.auth().currentUser.getToken().then((token) => {
             localStorage.setItem(AUTH_TOKEN, token)
             history.push('/home')
+            updateClientCallback()
           })
         })
         .catch(error => {
@@ -63,9 +67,11 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Facebook login success')
+        const {updateClientCallback} = this.state
         firebaseApp.auth().currentUser.getToken().then((token) => {
           localStorage.setItem(AUTH_TOKEN, token)
           history.push('/home')
+          updateClientCallback()
         })
       })
       .catch(error => {
@@ -81,10 +87,12 @@ class Login extends Component {
       .auth()
       .signInWithPopup(provider)
       .then(() => {
-        console.log('Google login success');
+        console.log('Google login success')
+        const {updateClientCallback} = this.state
         firebaseApp.auth().currentUser.getToken().then((token) => {
           localStorage.setItem(AUTH_TOKEN, token)
           history.push('/home')
+          updateClientCallback()
         })
       })
       .catch((error) => {
@@ -95,6 +103,7 @@ class Login extends Component {
   }
 
   render() {
+    const {email, password} = this.state
     return (
       <div className="Login">
         <h1>Login Screen</h1>
@@ -122,14 +131,14 @@ class Login extends Component {
             <input
               type="text"
               className="form-control"
-              value={this.state.email}
+              value={email}
               onChange={this.handleEmailChange}
               placeholder="Enter Email"
             />
             <input
               type="password"
               className="form-control"
-              value={this.state.password}
+              value={password}
               onChange={this.handlePassChange}
               placeholder="Enter Password"
             />
