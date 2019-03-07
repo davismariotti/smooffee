@@ -1,46 +1,53 @@
-import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
+import React, { Component } from 'react';
 import firebaseApp from '../../services/AuthService';
 import {AUTH_TOKEN} from '../../constants'
-import {Link} from 'react-router-dom'
+import history from '../../utils/robusticaHistory'
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
-    //
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { email: '', password: '' }
+    this.handleEmailChange = this.handleEmailChange.bind(this)
+    this.handlePassChange = this.handlePassChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    // this.postLoginRedirect = this.postLoginRedirect.bind(this)
   }
 
-  postLoginRedirect() {
-    firebaseApp.auth().currentUser.getToken().then((token) => {
-      localStorage.setItem(AUTH_TOKEN, token)
-      // browserHistory.push('/home');
-      window.location.reload()
+  // postLoginRedirect() {
+  //   firebaseApp.auth().currentUser.getToken().then((token) => {
+  //     localStorage.setItem(AUTH_TOKEN, token)
+  //     history.push('/home')
+  //   })
+  // }
+
+  handleEmailChange(e) {
+    this.setState({
+      email: e.target.value
     })
   }
 
-  handleEmailChange(e) {
-    this.setState({ email: e.target.value });
-  }
-
   handlePassChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({
+      password: e.target.value
+    })
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-    const email = this.state.email.trim();
-    const password = this.state.password.trim();
+    const { email, password } = this.state
+    e.preventDefault()
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
-          this.postLoginRedirect()
+          firebaseApp.auth().currentUser.getToken().then((token) => {
+            localStorage.setItem(AUTH_TOKEN, token)
+            history.push('/home')
+          })
         })
         .catch((error) => {
           // Handle Errors here.
@@ -60,7 +67,10 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Facebook login success');
-        this.postLoginRedirect()
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          history.push('/home')
+        })
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -76,9 +86,13 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Google login success');
-        this.postLoginRedirect()
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          history.push('/home')
+        })
       })
       .catch((error) => {
+        console.error(error)
         const errorMessage = error.message;
         alert(`Google sign in error: ${  errorMessage}`);
       });
@@ -139,5 +153,9 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  updateClientCallback: PropTypes.func.isRequired
+};
 
 export default Login;
