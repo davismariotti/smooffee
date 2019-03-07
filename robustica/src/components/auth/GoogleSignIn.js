@@ -9,7 +9,7 @@ export class GoogleSignIn extends Component {
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(() => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // var token = result.credential.accessToken;
         // The signed-in user info.
@@ -23,7 +23,7 @@ export class GoogleSignIn extends Component {
         //         console.log("Test Two", result)
         //     })
       })
-      .catch(function(error) {
+      .catch((error) => {
         const errorMessage = error.message;
         alert(`Google sign in error: ${  errorMessage}`);
       });

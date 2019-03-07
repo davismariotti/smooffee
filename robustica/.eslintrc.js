@@ -32,6 +32,7 @@ module.exports = {
     'react/jsx-filename-extension': 0,
     'react/react-in-jsx-scope': 1,
     'react/prefer-stateless-function': 0,
+    'react/no-unused-state': 1,
     'quotes': [2, 'single', 'avoid-escape'],
     'no-unused-vars': 1,
     'no-console': 0,

@@ -18,10 +18,10 @@ class Recover extends Component {
     e.preventDefault();
     const email = this.state.email.trim();
 
-    firebase.auth().sendPasswordResetEmail(email).then(function() {
+    firebase.auth().sendPasswordResetEmail(email).then(() => {
       // Email sent.
       alert(`Please check your email ${ email } for instructions. `);
-    }, function(error) {
+    }, () => {
       alert('Sorry an error has occured, Please try again');
     });
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { browserHistory, Link } from 'react-router';
+import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
 import firebaseApp from '../services/AuthService';
 import {AUTH_TOKEN} from '../constants'
 
@@ -15,12 +16,12 @@ class Navbar extends Component {
       .auth()
       .signOut()
       .then(
-        function() {
+        () => {
           localStorage.setItem(AUTH_TOKEN, '');
           console.log('sign out succesful');
-          browserHistory.push('/login');
+          // browserHistory.push('/login');
         },
-        function(error) {
+        () => {
           console.log('an error happened');
         }
       );
@@ -29,9 +30,10 @@ class Navbar extends Component {
   render() {
     let loginButton;
     let signup;
-    if (this.props.loggedin) {
+    const { loggedin } = this.props
+    if (loggedin) {
       loginButton = (
-        <button className="btn btn-default" onClick={this.signout}>
+        <button type="submit" className="btn btn-default" onClick={this.signout}>
           Logout
         </button>
       );
@@ -39,12 +41,12 @@ class Navbar extends Component {
     } else {
       loginButton = (
         <Link to="/login">
-          <button className="btn btn-default">login</button>
+          <button type="submit" className="btn btn-default">login</button>
         </Link>
       );
       signup = (
         <Link to="/signup">
-          <button className="btn btn-default">Sign up</button>
+          <button type="submit" className="btn btn-default">Sign up</button>
         </Link>
       );
     }
@@ -56,5 +58,9 @@ class Navbar extends Component {
     );
   }
 }
+
+Navbar.propTypes = {
+  loggedin: PropTypes.bool.isRequired
+};
 
 export default Navbar;

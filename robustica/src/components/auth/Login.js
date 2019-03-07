@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link, browserHistory } from 'react-router';
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
 import firebaseApp from '../../services/AuthService';
 import {AUTH_TOKEN} from '../../constants'
+import {Link} from 'react-router-dom'
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Login extends Component {
   postLoginRedirect() {
     firebaseApp.auth().currentUser.getToken().then((token) => {
       localStorage.setItem(AUTH_TOKEN, token)
-      browserHistory.push('/home');
+      // browserHistory.push('/home');
       window.location.reload()
     })
   }

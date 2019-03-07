@@ -10,14 +10,14 @@ export class FacebookSignIn extends Component {
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(() => {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // var token = result.credential.accessToken;
         // The signed-in user info.
         // var user = result.user;
         console.log('Facebook login success');
       })
-      .catch(function(error) {
+      .catch((error) => {
         const errorMessage = error.message;
         alert(`Facebook sign in error: ${ errorMessage }`);
       });
