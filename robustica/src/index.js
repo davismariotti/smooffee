@@ -1,41 +1,64 @@
-import React from "react"
-import {render} from "react-dom"
-import {hashHistory, IndexRoute, Route, Router} from "react-router"
-import App from "./components/App"
-import Home from "./components/Home"
-import Login from "./components/auth/Login"
-import Signup from "./components/auth/Signup"
-import Recover from "./components/auth/Recover"
-import requireAuth from "./utils/RequireAuth"
-import "./css/index.css"
-import "bootstrap/dist/css/bootstrap.css"
+import React, {Component} from 'react'
+import {render} from 'react-dom'
 import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
-import {ApolloProvider} from "react-apollo"
-// import {setContext} from 'apollo-link-context'
-import {AUTH_TOKEN} from "./constants"
+import {ApolloProvider} from 'react-apollo'
+import {BrowserRouter} from 'react-router-dom'
+import App from './components/App'
+import './css/index.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import {AUTH_TOKEN} from './constants'
 
-const token = localStorage.getItem(AUTH_TOKEN)
+class RootComponent extends Component {
+  constructor(props) {
+    super(props)
+    const localToken = localStorage.getItem(AUTH_TOKEN)
+    this.state = {
+      token: localToken,
+      client: new ApolloClient({
+        link: new HttpLink({
+          uri: 'http://localhost:9000/graphql',
+          headers: {
+            authorization: localToken ? `Bearer ${localToken}` : ''
+          }
+        }),
+        cache: new InMemoryCache()
+      })
+    }
+    this.updateApolloClient = this.updateApolloClient.bind(this);
+  }
 
-const client = new ApolloClient({
-    link: new HttpLink({
-        uri: 'http://localhost:9000/graphql',
-        headers: {
-            authorization: token ? `Bearer ${token}` : ''
-        }}),
-    cache: new InMemoryCache(),
-})
+  updateApolloClient() {
+    const localToken = localStorage.getItem(AUTH_TOKEN)
+    this.setState({
+      token: localToken,
+      client: new ApolloClient({
+        link: new HttpLink({
+          uri: 'http://localhost:9000/graphql',
+          headers: {
+            authorization: localToken ? `Bearer ${localToken}` : ''
+          }
+        }),
+        cache: new InMemoryCache()
+      })
+    })
+    const {client, token} = this.state
+    console.log('updateApolloClient', client)
+    console.log('updateApolloClient', token)
+  }
 
-render(
-    <ApolloProvider client={client}>
-        <Router history={hashHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Login}/>
-                <Route path="login" component={Login}/>
-                <Route path="signup" component={Signup}/>
-                <Route path="recover" component={Recover}/>
-                <Route path="home" component={Home} onEnter={requireAuth}/>
-            </Route>
-        </Router>
-    </ApolloProvider>,
-    document.getElementById("root")
+  render() {
+    const {client} = this.state
+    console.log('client', client)
+    return (
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <App updateClientCallback={this.updateApolloClient}/>
+        </BrowserRouter>
+      </ApolloProvider>
+    )
+  }
+}
+
+render(<RootComponent/>,
+  document.getElementById('root')
 )

@@ -1,58 +1,66 @@
-import React, {Component} from "react"
-import {hashHistory, Link} from "react-router"
-import firebaseApp from '../services/AuthService'
+import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import firebaseApp from '../services/AuthService';
+import {AUTH_TOKEN} from '../constants'
 
 class Navbar extends Component {
-    constructor(props) {
-        super(props)
-        //
-        this.signout = this.signout.bind(this)
-    }
+  constructor(props) {
+    super(props);
+    //
+    this.signout = this.signout.bind(this);
+  }
 
-    signout() {
-        firebaseApp
-            .auth()
-            .signOut()
-            .then(
-                function () {
-                    console.log("sign out succesful")
-                    hashHistory.push("/login")
-                },
-                function (error) {
-                    console.log("an error happened")
-                }
-            )
-    }
-
-    render() {
-        var loginButton
-        var signup
-        if (this.props.loggedin) {
-            loginButton = (
-                <button className="btn btn-default" onClick={this.signout}>
-                    Logout
-                </button>
-            )
-            signup = ""
-        } else {
-            loginButton = (
-                <Link to="/login">
-                    <button className="btn btn-default">login</button>
-                </Link>
-            )
-            signup = (
-                <Link to="/signup">
-                    <button className="btn btn-default">Sign up</button>
-                </Link>
-            )
+  signout() {
+    firebaseApp
+      .auth()
+      .signOut()
+      .then(
+        () => {
+          localStorage.setItem(AUTH_TOKEN, '');
+          console.log('sign out succesful');
+          // browserHistory.push('/login');
+        },
+        () => {
+          console.log('an error happened');
         }
-        return (
-            <div className="Navbar">
-                {loginButton}
-                {signup}
-            </div>
-        )
+      );
+  }
+
+  render() {
+    let loginButton;
+    let signup;
+    const { loggedin } = this.props
+    if (loggedin) {
+      loginButton = (
+        <button type="submit" className="btn btn-default" onClick={this.signout}>
+          Logout
+        </button>
+      );
+      signup = '';
+    } else {
+      loginButton = (
+        <Link to="/login">
+          <button type="submit" className="btn btn-default">login</button>
+        </Link>
+      );
+      signup = (
+        <Link to="/signup">
+          <button type="submit" className="btn btn-default">Sign up</button>
+        </Link>
+      );
     }
+    return (
+      <div className="Navbar">
+        {loginButton}
+        {signup}
+      </div>
+    );
+  }
 }
 
-export default Navbar
+Navbar.propTypes = {
+  loggedin: PropTypes.bool.isRequired
+};
+
+export default Navbar;
