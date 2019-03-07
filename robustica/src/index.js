@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import {render} from 'react-dom'
 import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
 import {ApolloProvider} from 'react-apollo'
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter, Router} from 'react-router-dom'
 import App from './components/App'
 import './css/index.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import {AUTH_TOKEN} from './constants'
+import history from './utils/robusticaHistory'
 
 class RootComponent extends Component {
   constructor(props) {
@@ -51,9 +52,9 @@ class RootComponent extends Component {
     console.log('client', client)
     return (
       <ApolloProvider client={client}>
-        <BrowserRouter>
+        <Router history={history}>
           <App updateClientCallback={this.updateApolloClient}/>
-        </BrowserRouter>
+        </Router>
       </ApolloProvider>
     )
   }

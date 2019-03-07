@@ -50,8 +50,8 @@ class App extends Component {
           <Navbar loggedin={loggedin}/>
         </div>
         <Switch>
-          <Route exact path="/" component={Login}/>
-          <Route path="/login" component={Login}/>
+          <Route exact path="/" render={(routeProps) => <Login {...routeProps} updateClientCallback={updateClientCallback}/>}/>
+          <Route path="/login" render={(routeProps) => <Login {...routeProps} updateClientCallback={updateClientCallback}/>}/>
           <Route path="/signup"
                  render={(routeProps) => <Signup {...routeProps} updateClientCallback={updateClientCallback}/>}/>
           <Route path="/signupcontinued" component={SignupContinued}/>

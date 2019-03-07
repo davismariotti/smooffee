@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import firebaseApp from '../services/AuthService';
 import {AUTH_TOKEN} from '../constants'
+import history from '../utils/robusticaHistory'
 
 class Navbar extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Navbar extends Component {
         () => {
           localStorage.setItem(AUTH_TOKEN, '');
           console.log('sign out succesful');
-          // browserHistory.push('/login');
+          history.push('/')
         },
         () => {
           console.log('an error happened');
