@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
 import firebaseApp from '../../services/AuthService';
-import {AUTH_TOKEN} from '../../constants'
-import {Link} from 'react-router-dom'
+import { AUTH_TOKEN } from '../../constants';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 class Login extends Component {
   constructor(props) {
@@ -16,11 +17,14 @@ class Login extends Component {
   }
 
   postLoginRedirect() {
-    firebaseApp.auth().currentUser.getToken().then((token) => {
-      localStorage.setItem(AUTH_TOKEN, token)
-      // browserHistory.push('/home');
-      window.location.reload()
-    })
+    firebaseApp
+      .auth()
+      .currentUser.getToken()
+      .then(token => {
+        localStorage.setItem(AUTH_TOKEN, token);
+        // browserHistory.push('/home');
+        window.location.reload();
+      });
   }
 
   handleEmailChange(e) {
@@ -40,12 +44,12 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
-          this.postLoginRedirect()
+          this.postLoginRedirect();
         })
-        .catch((error) => {
+        .catch(error => {
           // Handle Errors here.
           const errorMessage = error.message;
-          alert(`errorMessage: ${  errorMessage}`);
+          alert(`errorMessage: ${errorMessage}`);
         });
     } else {
       alert('Email Address is not valid');
@@ -60,11 +64,11 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Facebook login success');
-        this.postLoginRedirect()
+        this.postLoginRedirect();
       })
-      .catch((error) => {
+      .catch(error => {
         const errorMessage = error.message;
-        alert(`Facebook sign in error: ${  errorMessage}`);
+        alert(`Facebook sign in error: ${errorMessage}`);
       });
   }
 
@@ -76,11 +80,11 @@ class Login extends Component {
       .signInWithPopup(provider)
       .then(() => {
         console.log('Google login success');
-        this.postLoginRedirect()
+        this.postLoginRedirect();
       })
-      .catch((error) => {
+      .catch(error => {
         const errorMessage = error.message;
-        alert(`Google sign in error: ${  errorMessage}`);
+        alert(`Google sign in error: ${errorMessage}`);
       });
   }
 
@@ -88,23 +92,25 @@ class Login extends Component {
     return (
       <div className="Login">
         <h1>Login Screen</h1>
-        <div className="col-md-4"/>
+        <div className="col-md-4" />
         <div className="form-group col-md-4">
-          <button type="submit"
+          <button
+            type="submit"
             className="btn btn-block btn-social btn-facebook"
             onClick={this.handleFacebook}
           >
-            <span className="fa fa-facebook"/>
+            <span className="fa fa-facebook" />
             Sign in with Facebook
           </button>
-          <button type="submit"
+          <button
+            type="submit"
             className="btn btn-block btn-social btn-google"
             onClick={this.handleGoogle}
           >
-            <span className="fa fa-google"/>
+            <span className="fa fa-google" />
             Sign in with Google
           </button>
-          <br/>
+          <br />
           <p className="text-center">------------- Or -------------</p>
           <form onSubmit={this.handleSubmit}>
             <input
@@ -121,13 +127,13 @@ class Login extends Component {
               onChange={this.handlePassChange}
               placeholder="Enter Password"
             />
-            <br/>
-            <button type="submit" className="btn btn-default">
+            <br />
+            <Button type="submit" variant="contained" color="primary">
               Submit
-            </button>
+            </Button>
           </form>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <p>
             Forgot Password? <Link to="/recover"> Click Here</Link>
           </p>

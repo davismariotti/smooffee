@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core';
 
 class Order extends Component {
   constructor(props) {
@@ -22,8 +23,8 @@ class Order extends Component {
         {this.props.item}
         {this.props.user}
         {this.props.location}
-        <button onClick={this.edit}>Edit</button>
-        <button onClick={this.fulfill}>Fulfill</button>
+        <Button onClick={this.edit}>Edit</Button>
+        <Button onClick={this.fulfill}>Fulfill</Button>
       </div>
     );
   }
