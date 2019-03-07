@@ -16,14 +16,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -73,7 +73,46 @@ ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 
 
 --
--- Name: order; Type: TABLE; Schema: public; Owner: davis
+-- Name: cardrefund; Type: TABLE; Schema: public; Owner: davis
+--
+
+CREATE TABLE public.cardrefund (
+    id integer NOT NULL,
+    created_at timestamp without time zone DEFAULT '2019-03-03 17:42:29.029802'::timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone DEFAULT '2019-03-03 17:42:29.029802'::timestamp without time zone NOT NULL,
+    deprecated_at timestamp without time zone,
+    status integer DEFAULT 0 NOT NULL,
+    card_id bigint NOT NULL,
+    payment_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.cardrefund OWNER TO davis;
+
+--
+-- Name: cardrefund_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
+--
+
+CREATE SEQUENCE public.cardrefund_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cardrefund_id_seq OWNER TO davis;
+
+--
+-- Name: cardrefund_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
+--
+
+ALTER SEQUENCE public.cardrefund_id_seq OWNED BY public.cardrefund.id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: davis
 --
 
 CREATE TABLE public.orders (
@@ -289,7 +328,8 @@ CREATE TABLE public.users (
     firebase_user_id character varying NOT NULL,
     last_logged_in timestamp without time zone,
     role integer NOT NULL,
-    email character varying NOT NULL
+    email character varying NOT NULL,
+    balance integer DEFAULT 0 NOT NULL
 );
 
 
@@ -325,7 +365,14 @@ ALTER TABLE ONLY public.card ALTER COLUMN id SET DEFAULT nextval('public.card_id
 
 
 --
--- Name: order id; Type: DEFAULT; Schema: public; Owner: davis
+-- Name: cardrefund id; Type: DEFAULT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.cardrefund ALTER COLUMN id SET DEFAULT nextval('public.cardrefund_id_seq'::regclass);
+
+
+--
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.order_id_seq'::regclass);
@@ -375,7 +422,15 @@ COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user
 
 
 --
--- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: davis
+-- Data for Name: cardrefund; Type: TABLE DATA; Schema: public; Owner: davis
+--
+
+COPY public.cardrefund (id, created_at, updated_at, deprecated_at, status, card_id, payment_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
 COPY public.orders (id, created_at, updated_at, deprecated_at, status, user_id, product_id, location, notes) FROM stdin;
@@ -419,7 +474,8 @@ COPY public.refund (id, created_at, updated_at, deprecated_at, status, user_id, 
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.users (id, created_at, updated_at, deprecated_at, status, organization_id, firstname, lastname, firebase_user_id, last_logged_in, role, email) FROM stdin;
+COPY public.users (id, created_at, updated_at, deprecated_at, status, organization_id, firstname, lastname, firebase_user_id, last_logged_in, role, email, balance) FROM stdin;
+5	2019-03-04 21:56:04.264	2019-03-04 21:56:04.264	\N	0	3	Davis	Mariotti	76GqSI6ohMaBGAiDRvGOqgb6tp03	\N	0	davismariotti@gmail.com	0
 \.
 
 
@@ -428,6 +484,13 @@ COPY public.users (id, created_at, updated_at, deprecated_at, status, organizati
 --
 
 SELECT pg_catalog.setval('public.card_id_seq', 1, false);
+
+
+--
+-- Name: cardrefund_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
+--
+
+SELECT pg_catalog.setval('public.cardrefund_id_seq', 1, false);
 
 
 --
@@ -441,7 +504,7 @@ SELECT pg_catalog.setval('public.order_id_seq', 1, false);
 -- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.organization_id_seq', 3, true);
+SELECT pg_catalog.setval('public.organization_id_seq', 12, true);
 
 
 --
@@ -469,7 +532,7 @@ SELECT pg_catalog.setval('public.refund_id_seq', 1, false);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 3, true);
+SELECT pg_catalog.setval('public.user_id_seq', 5, true);
 
 
 --
@@ -481,7 +544,15 @@ ALTER TABLE ONLY public.card
 
 
 --
--- Name: order order_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: cardrefund cardrefund_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.cardrefund
+    ADD CONSTRAINT cardrefund_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: orders order_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
@@ -544,7 +615,23 @@ ALTER TABLE ONLY public.card
 
 
 --
--- Name: order order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: cardrefund cardrefund_card_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.cardrefund
+    ADD CONSTRAINT cardrefund_card_id_fkey FOREIGN KEY (card_id) REFERENCES public.card(id);
+
+
+--
+-- Name: cardrefund cardrefund_payment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.cardrefund
+    ADD CONSTRAINT cardrefund_payment_id_fkey FOREIGN KEY (payment_id) REFERENCES public.payment(id);
+
+
+--
+-- Name: orders order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
@@ -552,7 +639,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- Name: order order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: orders order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
@@ -610,3 +697,4 @@ ALTER TABLE ONLY public.users
 --
 -- PostgreSQL database dump complete
 --
+
