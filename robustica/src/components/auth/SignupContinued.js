@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Mutation} from 'react-apollo'
 import {gql} from 'apollo-boost'
-import {hashHistory} from 'react-router'
+import {browserHistory} from 'react-router'
 import firebaseApp from '../../services/AuthService'
 
 const SignUpMutation = gql`
@@ -18,6 +18,7 @@ const SignUpMutation = gql`
       }
     }
 `
+
 
 class SignupContinued extends Component {
     render() {
@@ -41,7 +42,7 @@ class SignupContinued extends Component {
                           signup({ variables: {
                               userInput
                           }}).then(() => {
-                            hashHistory.push('/home')
+                            browserHistory.push('/home')
                           });
                           firstname.value = '';
                           lastname.value = '';

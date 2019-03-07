@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
-import {hashHistory} from 'react-router'
 import firebaseApp from '../../services/AuthService';
-import App from '../App'
+import {AUTH_TOKEN} from '../../constants'
 
 class Login extends Component {
   constructor(props) {
@@ -14,6 +13,14 @@ class Login extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  postLoginRedirect() {
+    firebaseApp.auth().currentUser.getToken().then((token) => {
+      localStorage.setItem(AUTH_TOKEN, token)
+      browserHistory.push('/home');
+      window.location.reload()
+    })
   }
 
   handleEmailChange(e) {
@@ -33,9 +40,9 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
-          hashHistory.push('/home')
+          this.postLoginRedirect()
         })
-        .catch(function(error) {
+        .catch((error) => {
           // Handle Errors here.
           const errorMessage = error.message;
           alert(`errorMessage: ${  errorMessage}`);
@@ -51,11 +58,11 @@ class Login extends Component {
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(() => {
         console.log('Facebook login success');
-        hashHistory.push('/home')
+        this.postLoginRedirect()
       })
-      .catch(function(error) {
+      .catch((error) => {
         const errorMessage = error.message;
         alert(`Facebook sign in error: ${  errorMessage}`);
       });
@@ -67,12 +74,11 @@ class Login extends Component {
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(function(result) {
+      .then(() => {
         console.log('Google login success');
-        console.log('current user', firebaseApp.auth().currentUser.getToken());
-        hashHistory.push('/home')
+        this.postLoginRedirect()
       })
-      .catch(function(error) {
+      .catch((error) => {
         const errorMessage = error.message;
         alert(`Google sign in error: ${  errorMessage}`);
       });

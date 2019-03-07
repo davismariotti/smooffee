@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { hashHistory, IndexRoute, Route, Router } from 'react-router';
+import { browserHistory, IndexRoute, Route, Router } from 'react-router';
 import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import App from './components/App';
@@ -28,14 +28,14 @@ const client = new ApolloClient({
 
 render(
   <ApolloProvider client={client}>
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={Login}/>
         <Route path="login" component={Login}/>
         <Route path="signup" component={Signup}/>
         <Route path="signupcontinued" component={SignupContinued}/>
         <Route path="recover" component={Recover}/>
-        <Route path="home" component={Home} onEnter={requireAuth}/>
+        <Route path="home" component={Home} /* onEnter={requireAuth} */ />
       </Route>
     </Router>
   </ApolloProvider>,

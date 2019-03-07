@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { hashHistory, Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import firebaseApp from '../services/AuthService';
-import {AUTH_TOKEN} from "../constants"
+import {AUTH_TOKEN} from '../constants'
 
 class Navbar extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Navbar extends Component {
         function() {
           localStorage.setItem(AUTH_TOKEN, '');
           console.log('sign out succesful');
-          hashHistory.push('/login');
+          browserHistory.push('/login');
         },
         function(error) {
           console.log('an error happened');
@@ -27,8 +27,8 @@ class Navbar extends Component {
   }
 
   render() {
-    var loginButton;
-    var signup;
+    let loginButton;
+    let signup;
     if (this.props.loggedin) {
       loginButton = (
         <button className="btn btn-default" onClick={this.signout}>

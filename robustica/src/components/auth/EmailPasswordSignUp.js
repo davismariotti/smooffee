@@ -1,7 +1,8 @@
 import isEmail from 'validator/lib/isEmail'
 import React, {Component} from 'react'
-import {hashHistory} from 'react-router'
+import {browserHistory} from 'react-router'
 import firebaseApp from '../../services/AuthService'
+import {AUTH_TOKEN} from '../../constants'
 
 export class EmailPasswordSignUp extends Component {
     constructor(props) {
@@ -21,7 +22,11 @@ export class EmailPasswordSignUp extends Component {
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                  hashHistory.push('/signupcontinued');
+                  firebaseApp.auth().currentUser.getToken().then((token) => {
+                    localStorage.setItem(AUTH_TOKEN, token)
+                    browserHistory.push('/signupcontinued');
+                    window.location.reload()
+                  })
                 })
                 .catch((error) => {
                     // Handle Errors here.

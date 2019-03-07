@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { hashHistory } from 'react-router';
 import firebaseApp from '../services/AuthService';
 import 'firebase/auth';
 import Navbar from './Navbar';
@@ -28,7 +27,7 @@ class App extends Component {
         // If not logged in...
         _this.setState({ loggedin: false });
       }
-    });
+    })
   }
 
   render() {

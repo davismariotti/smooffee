@@ -21,7 +21,6 @@ const USER_READ_QUERY = gql`
 export default class UserInfo extends Component {
 
   render() {
-    console.log('current', firebaseApp.auth().currentUser)
     return (
       <Query query={USER_READ_QUERY} variables={{ userId: firebaseApp.auth().currentUser.uid }}>
         {({ loading, error, data }) => {
