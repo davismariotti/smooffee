@@ -14,13 +14,20 @@ public class OrderActions {
         if (user == null) throw new QLException("User not found");
         if (product == null) throw new QLException("Product not found");
 
+        // Check user funds
+        int balance = user.getBalance();
+        if (balance < product.getPrice()) throw new QLException("Insufficient funds");
+
+        user.setBalance(balance - product.getPrice());
+
         Order order = new Order();
         order.setProduct(product);
         order.setUser(user);
         order.setLocation(location);
         order.setNotes(notes);
         order.save();
-        order.refresh();
+
+        user.save();
 
         return order;
     }
