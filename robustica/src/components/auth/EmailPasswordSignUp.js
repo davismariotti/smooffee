@@ -3,7 +3,6 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService'
 import {AUTH_TOKEN} from '../../constants'
-import history from '../../utils/robusticaHistory'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
@@ -12,7 +11,8 @@ export class EmailPasswordSignUp extends Component {
     this.state = {
       email: '',
       password: '',
-      updateClientCallback: props.updateClientCallback
+      updateClientCallback: props.updateClientCallback,
+      callback: props.callback
     }
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
@@ -20,8 +20,9 @@ export class EmailPasswordSignUp extends Component {
   }
 
   handleSubmit(e) {
+    const {callback} = this.state
     e.preventDefault()
-    const { email, password } = this.state
+    const {email, password} = this.state
     if (isEmail(email)) {
       firebaseApp
         .auth()
@@ -30,7 +31,7 @@ export class EmailPasswordSignUp extends Component {
           const {updateClientCallback} = this.state
           firebaseApp.auth().currentUser.getToken().then((token) => {
             localStorage.setItem(AUTH_TOKEN, token)
-            history.push('/signupcontinued')
+            callback()
             updateClientCallback()
           })
         })
@@ -80,5 +81,6 @@ export class EmailPasswordSignUp extends Component {
 }
 
 EmailPasswordSignUp.propTypes = {
-  updateClientCallback: PropTypes.func.isRequired
-};
+  updateClientCallback: PropTypes.func.isRequired,
+  callback: PropTypes.func.isRequired
+}

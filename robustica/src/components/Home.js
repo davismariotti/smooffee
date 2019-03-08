@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import OrderList from './orders/OrderList';
-import Options from './options';
-import UserInfo from './UserInfo';
+import React, { Component } from 'react'
+import OrderList from './orders/OrderList'
+import Options from './options'
+import UserInfo from './UserInfo'
 
 class Home extends Component {
   render() {
@@ -11,8 +11,8 @@ class Home extends Component {
         <UserInfo/>
         <OrderList/>
       </div>
-    );
+    )
   }
 }
 
-export default Home;
+export default Home

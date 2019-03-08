@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button'
 import {Route, Switch} from 'react-router-dom'
-import firebaseApp from '../services/AuthService'
+import firebaseApp, {AuthService} from '../services/AuthService'
 import 'firebase/auth'
-import {AUTH_TOKEN} from '../constants'
-import Navbar from './Navbar'
+import {AUTH_TOKEN, LOGGED_USER_ID} from '../constants'
 import '../css/font-awesome.css'
 import '../css/bootstrap-social.css'
 import Home from './Home'
@@ -11,7 +12,6 @@ import SignupContinued from './auth/SignupContinued'
 import Login from './auth/Login'
 import Recover from './auth/Recover'
 import Signup from './auth/Signup'
-import PropTypes from 'prop-types'
 
 class App extends Component {
   constructor(props) {
@@ -31,6 +31,7 @@ class App extends Component {
         user.getToken()
           .then((result) => {
             localStorage.setItem(AUTH_TOKEN, result)
+            localStorage.setItem(LOGGED_USER_ID, user.uid)
           })
       } else {
         // If not logged in...
@@ -40,14 +41,14 @@ class App extends Component {
   }
 
   render() {
-    const {loggedin, updateClientCallback} = this.state
+    const {updateClientCallback, loggedin} = this.state
     return (
       <div>
         <div className="App">
           <div className="App-header">
             <h4>Smooffee</h4>
+            {loggedin && <Button onClick={AuthService.signout} variant="contained" color="primary">Logout</Button>}
           </div>
-          <Navbar loggedin={loggedin}/>
         </div>
         <Switch>
           <Route exact path="/" render={(routeProps) => <Login {...routeProps} updateClientCallback={updateClientCallback}/>}/>
@@ -65,6 +66,6 @@ class App extends Component {
 
 App.propTypes = {
   updateClientCallback: PropTypes.func.isRequired
-};
+}
 
 export default App

@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { EmailPasswordSignUp } from './EmailPasswordSignUp';
-import { GoogleSignIn } from './GoogleSignIn';
-import { FacebookSignIn } from './FacebookSignIn';
 import {Link} from 'react-router-dom'
+import { EmailPasswordSignUp } from './EmailPasswordSignUp'
+import { GoogleSignIn } from './GoogleSignIn'
+import { FacebookSignIn } from './FacebookSignIn'
+import history from '../../utils/robusticaHistory'
 
 class Signup extends Component {
   constructor(props) {
@@ -14,31 +15,35 @@ class Signup extends Component {
     }
   }
 
+  static pushToContinued() {
+    history.push('/signupcontinued')
+  }
+
   render() {
     const { updateClientCallback } = this.state
     return (
-      <div className="Signup">
+      <div className="Signup text-center">
         <h1>Sign up</h1>
         <div className="col-md-4"/>
 
         <div className="form-group col-md-4">
-          <FacebookSignIn/>
-          <GoogleSignIn/>
+          <FacebookSignIn callback={Signup.pushToContinued}/>
+          <GoogleSignIn callback={Signup.pushToContinued}/>
           <br/>
           <p className="text-center">------------- Or -------------</p>
-          <EmailPasswordSignUp updateClientCallback={updateClientCallback}/>
+          <EmailPasswordSignUp updateClientCallback={updateClientCallback} callback={Signup.pushToContinued}/>
           <br/>
           <p>
             Already Signed up? <Link to="/login">Log In</Link>
           </p>
         </div>
       </div>
-    );
+    )
   }
 }
 
 Signup.propTypes = {
   updateClientCallback: PropTypes.func.isRequired
-};
+}
 
-export default Signup;
+export default Signup

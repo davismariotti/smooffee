@@ -9,3 +9,9 @@ build
 # misc
 .DS_Store
 npm-debug.log
+
+public/
+
+.firebase/
+.firebaserc
+firebase.json
