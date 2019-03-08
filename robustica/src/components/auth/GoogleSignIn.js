@@ -1,22 +1,35 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService';
-import history from '../../utils/robusticaHistory'
+import {AUTH_TOKEN, LOGGED_USER_ID} from '../../constants'
 
 export class GoogleSignIn extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      callback: props.callback,
+      updateClientCallback: props.updateClientCallback
+    }
+    this.handleGoogle = this.handleGoogle.bind(this)
+  }
+
   handleGoogle(e) {
+    const { callback } = this.state
     e.preventDefault();
     const provider = new firebase.auth.GoogleAuthProvider();
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(() => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // var token = result.credential.accessToken;
-        // The signed-in user info.
-        // var user = result.user;
+      .then((result) => {
         console.log('Google login success');
-        history.push('/home')
+        const {updateClientCallback} = this.state
+        localStorage.setItem(LOGGED_USER_ID, result.user.uid)
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          callback()
+          updateClientCallback()
+        })
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -32,4 +45,9 @@ export class GoogleSignIn extends Component {
       </button>
     );
   }
+}
+
+GoogleSignIn.propTypes = {
+  callback: PropTypes.func.isRequired,
+  updateClientCallback: PropTypes.func.isRequired
 }

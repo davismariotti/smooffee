@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Query } from 'react-apollo';
-import { gql } from 'apollo-boost';
-import firebaseApp from '../services/AuthService';
+import React, { Component } from 'react'
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
+import firebaseApp from '../services/AuthService'
+import {LOGGED_USER_ID} from '../constants'
 
 const USER_READ_QUERY = gql`
   query UserRead($userId: String!) {
@@ -16,18 +17,18 @@ const USER_READ_QUERY = gql`
         }
       }
   }
-`;
+`
 
 export default class UserInfo extends Component {
 
   render() {
     return (
-      <Query query={USER_READ_QUERY} variables={{ userId: firebaseApp.auth().currentUser.uid }}>
+      <Query query={USER_READ_QUERY} variables={{ userId: localStorage.getItem(LOGGED_USER_ID) }}>
         {({ loading, error, data }) => {
-          if (loading) return <div>Loading...</div>;
-          if (error) return <div>Error :(</div>;
+          if (loading) return <div>Loading...</div>
+          if (error) return <div>Error :(</div>
 
-          const user = data.user.read;
+          const user = data.user.read
           return (
             <div className="userInfo">
               <p>
@@ -46,9 +47,9 @@ export default class UserInfo extends Component {
                 Organization Id: {user.organizationId}
               </p>
             </div>
-          );
+          )
         }}
       </Query>
-    );
+    )
   }
 }

@@ -1,28 +1,40 @@
-import React, { Component } from 'react';
-import * as firebase from 'firebase';
-import firebaseApp from '../../services/AuthService';
-import history from '../../utils/robusticaHistory'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import * as firebase from 'firebase'
+import firebaseApp from '../../services/AuthService'
+import {AUTH_TOKEN, LOGGED_USER_ID} from '../../constants'
 
 export class FacebookSignIn extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      callback: props.callback,
+      updateClientCallback: props.updateClientCallback
+    }
+    this.handleFacebook = this.handleFacebook.bind(this)
+  }
 
   handleFacebook(e) {
-    e.preventDefault();
-    const provider = new firebase.auth.FacebookAuthProvider();
+    e.preventDefault()
+    const provider = new firebase.auth.FacebookAuthProvider()
+    const { callback } = this.state
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then(() => {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        // var token = result.credential.accessToken;
-        // The signed-in user info.
-        // var user = result.user;
-        console.log('Facebook login success');
-        history.push('/home')
+      .then((result) => {
+        console.log('Facebook login success')
+        const {updateClientCallback} = this.state
+        localStorage.setItem(LOGGED_USER_ID, result.user.uid)
+        firebaseApp.auth().currentUser.getToken().then((token) => {
+          localStorage.setItem(AUTH_TOKEN, token)
+          callback()
+          updateClientCallback()
+        })
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        alert(`Facebook sign in error: ${ errorMessage }`);
-      });
+        const errorMessage = error.message
+        alert(`Facebook sign in error: ${ errorMessage }`)
+      })
   }
 
   render() {
@@ -31,6 +43,11 @@ export class FacebookSignIn extends Component {
         <span className="fa fa-facebook"/>
         Sign in with Facebook
       </button>
-    );
+    )
   }
+}
+
+FacebookSignIn.propTypes = {
+  callback: PropTypes.func.isRequired,
+  updateClientCallback: PropTypes.func.isRequired
 }

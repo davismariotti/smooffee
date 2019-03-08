@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class Options extends Component {
   render() {
@@ -6,8 +6,8 @@ class Options extends Component {
       <div>
         <p>Options Popup should popup</p>
       </div>
-    );
+    )
   }
 }
 
-export default Options;
+export default Options

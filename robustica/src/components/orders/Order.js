@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core';
+import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button'
 
-class Order extends Component {
+export default class Order extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+    this.state = {
+      item: props.item,
+      user: props.user,
+      location: props.location
+    }
     // TODO create fullfil and edit buttons(need to bind them to DB)
     this.fulfill = this.fulfill.bind(this);
     this.edit = this.edit.bind(this);
@@ -18,16 +24,21 @@ class Order extends Component {
   }
 
   render() {
+    const {item, user, location} = this.state
     return (
       <div>
-        {this.props.item}
-        {this.props.user}
-        {this.props.location}
+        {item}
+        {user}
+        {location}
         <Button onClick={this.edit}>Edit</Button>
         <Button onClick={this.fulfill}>Fulfill</Button>
       </div>
-    );
+    )
   }
 }
 
-export default Order;
+Order.propTypes = {
+  item: PropTypes.string.isRequired,
+  user: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired
+}

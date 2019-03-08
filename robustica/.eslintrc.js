@@ -36,6 +36,7 @@ module.exports = {
     'quotes': [2, 'single', 'avoid-escape'],
     'no-unused-vars': 1,
     'no-console': 0,
+    'class-methods-use-this': 1,
     'import/order': 1,
     'import/prefer-default-export': 0
   }

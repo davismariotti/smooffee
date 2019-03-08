@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {render} from 'react-dom'
 import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
 import {ApolloProvider} from 'react-apollo'
-import {BrowserRouter, Router} from 'react-router-dom'
+import {Router} from 'react-router-dom'
 import App from './components/App'
 import './css/index.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -25,7 +25,7 @@ class RootComponent extends Component {
         cache: new InMemoryCache()
       })
     }
-    this.updateApolloClient = this.updateApolloClient.bind(this);
+    this.updateApolloClient = this.updateApolloClient.bind(this)
   }
 
   updateApolloClient() {
@@ -43,13 +43,10 @@ class RootComponent extends Component {
       })
     })
     const {client, token} = this.state
-    console.log('updateApolloClient', client)
-    console.log('updateApolloClient', token)
   }
 
   render() {
     const {client} = this.state
-    console.log('client', client)
     return (
       <ApolloProvider client={client}>
         <Router history={history}>
