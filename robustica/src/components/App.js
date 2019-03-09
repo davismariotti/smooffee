@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import firebaseApp, { AuthService } from '../services/AuthService';
 import 'firebase/auth';
 import { AUTH_TOKEN, LOGGED_USER_ID } from '../constants';
-import '../css/font-awesome.css';
 import '../css/bootstrap-social.css';
 import Home from './Home';
 import SignupContinued from './auth/SignupContinued';

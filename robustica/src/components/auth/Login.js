@@ -2,15 +2,51 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
 import {
-  CssBaseline,
   Button,
   Paper,
   Typography,
-  withStyles
+  withStyles,
+  CssBaseline,
+  FormControl,
+  Input,
+  InputLabel
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import firebaseApp from '../../services/AuthService';
 import { AUTH_TOKEN } from '../../constants';
+
+const styles = theme => ({
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    }
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing.unit
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3
+  }
+});
 
 class Login extends Component {
   constructor(props) {
@@ -20,6 +56,7 @@ class Login extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.classes = props;
   }
 
   postLoginRedirect() {
@@ -96,35 +133,48 @@ class Login extends Component {
 
   render() {
     return (
-      <main>
-        <Paper>
+      <main className={this.classes.main}>
+        <CssBaseline />
+        <Paper className={this.classes.paper}>
           <Typography component="h1" variant="h5">
             Login Screen
           </Typography>
           <Button onClick={this.handleFacebook}>Sign in with Facebook</Button>
           <Button onClick={this.handleGoogle}>Sign in with Google</Button>
-          <br />
-          <p className="text-center">------------- Or -------------</p>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-              placeholder="Enter Email"
-            />
-            <input
-              type="password"
-              className="form-control"
-              value={this.state.password}
-              onChange={this.handlePassChange}
-              placeholder="Enter Password"
-            />
-            <br />
-            <Button>Submit</Button>
+
+          <form className={this.classes.form} onSubmit={this.handleSubmit}>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <Input
+                type="email"
+                name="email"
+                autoComplete="email"
+                value={this.state.email}
+                onChange={this.handleEmailChange}
+                autoFocus
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                autoComplete="current-password"
+                value={this.state.password}
+                onChange={this.handlePassChange}
+              />
+            </FormControl>
           </form>
-          <br />
-          <br />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={this.classes.submit}
+          >
+            Submit
+          </Button>
           <p>
             Forgot Password? <Link to="/recover"> Click Here</Link>
           </p>
@@ -137,4 +187,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withStyles(styles)(Login);

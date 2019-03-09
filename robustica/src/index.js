@@ -1,18 +1,17 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
-import {ApolloProvider} from 'react-apollo'
-import {Router} from 'react-router-dom'
-import App from './components/App'
-import './css/index.css'
-import 'bootstrap/dist/css/bootstrap.css'
-import {AUTH_TOKEN} from './constants'
-import history from './utils/robusticaHistory'
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+import { Router } from 'react-router-dom';
+import App from './components/App';
+import 'bootstrap/dist/css/bootstrap.css';
+import { AUTH_TOKEN } from './constants';
+import history from './utils/robusticaHistory';
 
 class RootComponent extends Component {
   constructor(props) {
-    super(props)
-    const localToken = localStorage.getItem(AUTH_TOKEN)
+    super(props);
+    const localToken = localStorage.getItem(AUTH_TOKEN);
     this.state = {
       token: localToken,
       client: new ApolloClient({
@@ -24,12 +23,12 @@ class RootComponent extends Component {
         }),
         cache: new InMemoryCache()
       })
-    }
-    this.updateApolloClient = this.updateApolloClient.bind(this)
+    };
+    this.updateApolloClient = this.updateApolloClient.bind(this);
   }
 
   updateApolloClient() {
-    const localToken = localStorage.getItem(AUTH_TOKEN)
+    const localToken = localStorage.getItem(AUTH_TOKEN);
     this.setState({
       token: localToken,
       client: new ApolloClient({
@@ -41,22 +40,20 @@ class RootComponent extends Component {
         }),
         cache: new InMemoryCache()
       })
-    })
-    const {client, token} = this.state
+    });
+    const { client, token } = this.state;
   }
 
   render() {
-    const {client} = this.state
+    const { client } = this.state;
     return (
       <ApolloProvider client={client}>
         <Router history={history}>
-          <App updateClientCallback={this.updateApolloClient}/>
+          <App updateClientCallback={this.updateApolloClient} />
         </Router>
       </ApolloProvider>
-    )
+    );
   }
 }
 
-render(<RootComponent/>,
-  document.getElementById('root')
-)
+render(<RootComponent />, document.getElementById('root'));
