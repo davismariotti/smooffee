@@ -1,0 +1,17 @@
+.home {
+  padding: 5px;
+}
+
+.centerSquare {
+  display: block;
+  width: 400px;
+  margin: auto;
+  padding: 10px;
+}
+
+.navBar {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 10px;
+}

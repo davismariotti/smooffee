@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import firebaseApp, { AuthService } from '../services/AuthService';
 import 'firebase/auth';
 import { AUTH_TOKEN, LOGGED_USER_ID } from '../constants';
-import '../css/bootstrap-social.css';
 import Home from './Home';
 import SignupContinued from './auth/SignupContinued';
 import Login from './auth/Login';
@@ -42,9 +41,9 @@ class App extends Component {
   render() {
     const { updateClientCallback, loggedin } = this.state;
     return (
-      <div>
+      <div className="home">
         <Navbar loggedin={loggedin} />
-
+        <br />
         <Switch>
           <Route
             exact

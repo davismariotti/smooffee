@@ -5,8 +5,6 @@ import {
   Button,
   Paper,
   Typography,
-  withStyles,
-  CssBaseline,
   FormControl,
   Input,
   InputLabel
@@ -14,39 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import firebaseApp from '../../services/AuthService';
 import { AUTH_TOKEN } from '../../constants';
-
-const styles = theme => ({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3
-  }
-});
+import '../../css/index.css';
 
 class Login extends Component {
   constructor(props) {
@@ -56,7 +22,6 @@ class Login extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.classes = props;
   }
 
   postLoginRedirect() {
@@ -133,16 +98,16 @@ class Login extends Component {
 
   render() {
     return (
-      <main className={this.classes.main}>
-        <CssBaseline />
-        <Paper className={this.classes.paper}>
-          <Typography component="h1" variant="h5">
+      <main>
+        <Paper className="centerSquare">
+          <Typography component="h6" variant="h5" align="center">
             Login Screen
           </Typography>
-          <Button onClick={this.handleFacebook}>Sign in with Facebook</Button>
-          <Button onClick={this.handleGoogle}>Sign in with Google</Button>
-
-          <form className={this.classes.form} onSubmit={this.handleSubmit}>
+          <div align="center">
+            <Button onClick={this.handleFacebook}>Sign in with Facebook</Button>
+            <Button onClick={this.handleGoogle}>Sign in with Google</Button>
+          </div>
+          <form onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
               <Input
@@ -165,21 +130,15 @@ class Login extends Component {
                 onChange={this.handlePassChange}
               />
             </FormControl>
+            <Button type="submit" fullWidth variant="contained">
+              Submit
+            </Button>
           </form>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={this.classes.submit}
-          >
-            Submit
-          </Button>
           <p>
-            Forgot Password? <Link to="/recover"> Click Here</Link>
+            Forgot Password<Link to="/recover"> Click Here</Link>
           </p>
           <p>
-            Not SIgned up yet? <Link to="/signup"> Sign Up</Link>
+            Not Signed up yet? <Link to="/signup"> Sign Up</Link>
           </p>
         </Paper>
       </main>
@@ -187,4 +146,4 @@ class Login extends Component {
   }
 }
 
-export default withStyles(styles)(Login);
+export default Login;

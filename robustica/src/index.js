@@ -4,9 +4,9 @@ import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import { Router } from 'react-router-dom';
 import App from './components/App';
-import 'bootstrap/dist/css/bootstrap.css';
 import { AUTH_TOKEN } from './constants';
 import history from './utils/robusticaHistory';
+import 'typeface-roboto';
 
 class RootComponent extends Component {
   constructor(props) {

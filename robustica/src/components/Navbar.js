@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import {
   AppBar,
@@ -10,22 +9,10 @@ import {
   Toolbar
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import history from '../utils/robusticaHistory';
 import firebaseApp from '../services/AuthService';
 import { AUTH_TOKEN } from '../constants';
-
-const styles = {
-  root: {
-    flexGrow: 1
-  },
-  grow: {
-    flexGrow: 1,
-    alignItems: 'center'
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  }
-};
+import '../css/index.css';
 
 class Navbar extends Component {
   constructor(props) {
@@ -47,7 +34,7 @@ class Navbar extends Component {
         () => {
           localStorage.setItem(AUTH_TOKEN, '');
           console.log('sign out succesful');
-          // browserHistory.push('/login');
+          history.push('/login');
         },
         () => {
           console.log('an error happened');
@@ -61,43 +48,27 @@ class Navbar extends Component {
     if (loggedin) {
       viewableNavBar = (
         <Toolbar>
-          <IconButton className={this.classes.menuButton} color="inherit">
+          <IconButton className="navBar" color="inherit">
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h4"
-            color="inherit"
-            className={this.classes.grow}
-          >
+          <Typography variant="h4" color="inherit">
             Smooffee
           </Typography>
-          <Button
-            type={this.classes.menuButton}
-            onClick={this.signout}
-            color="inherit"
-          >
-            Logout
+          <Button className="navSignOut" onClick={this.signout} color="inherit">
+            Sign Out
           </Button>
         </Toolbar>
       );
     } else {
       viewableNavBar = (
         <Toolbar>
-          <Typography
-            variant="h4"
-            color="inherit"
-            className={this.classes.grow}
-          >
+          <Typography variant="h4" color="inherit">
             Smooffee
           </Typography>
         </Toolbar>
       );
     }
-    return (
-      <div className={this.classes.root}>
-        <AppBar position="static">{viewableNavBar}</AppBar>
-      </div>
-    );
+    return <AppBar position="static">{viewableNavBar}</AppBar>;
   }
 }
 
@@ -105,4 +76,4 @@ Navbar.propTypes = {
   loggedin: PropTypes.bool.isRequired
 };
 
-export default withStyles(styles)(Navbar);
+export default Navbar;
