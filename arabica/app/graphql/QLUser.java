@@ -2,6 +2,7 @@ package graphql;
 
 import actions.UserActions;
 import models.User;
+import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.ThreadStorage;
 
@@ -18,7 +19,7 @@ public class QLUser {
         }
 
         public UserEntry read(String id) {
-            Permission.check(Permission.OTHER_USERS, id);
+            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(id));
             // Lookup user by firebase token
             User user = User.findByFirebaseUid(id);
             if (user == null) {
@@ -41,7 +42,7 @@ public class QLUser {
         }
 
         public UserEntry update(UserInput userInput) {
-            Permission.check(Permission.THIS_USER);
+            Permission.check(Permission.THIS_USER_INFO_WRITE);
             User user = UserActions.updateUser(ThreadStorage.get().uid, userInput);
             return (user == null) ? null : new UserEntry(user);
         }

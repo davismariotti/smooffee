@@ -1,5 +1,6 @@
 package services.authorization;
 
+import models.Organization;
 import models.User;
 import utilities.ThreadStorage;
 
@@ -8,84 +9,153 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum Permission {
-    NONE,
-    THIS_USER,
-    OTHER_USERS,
-    THIS_ORGANIZATION,
-    ALL;
+public class Permission {
 
-    private static final Map<Role, List<Permission>> permissionAssignments = new HashMap<Role, List<Permission>>() {{
-        put(Role.SYSADMIN, new ArrayList<Permission>() {{
+    // SPECIAL PERMISSIONS
+    public static final int ALL = -2;
+    public static final int NONE = -1;
+
+    // THIS USER
+    public static final int THIS_USER_INFO_READ = 100;
+    public static final int THIS_USER_INFO_WRITE = 101;
+    public static final int THIS_USER_CARD_READ = 102;
+    public static final int THIS_USER_CARD_WRITE = 103;
+    public static final int THIS_USER_ORDER_READ = 104;
+    public static final int THIS_USER_ORDER_WRITE = 105;
+
+    // OTHER USER
+    // OTHER_USER must be exactly 100 more than THIS_USER entry of same type
+    public static final int OTHER_USER_INFO_READ = 200;
+    public static final int OTHER_USER_INFO_WRITE = 201;
+    public static final int OTHER_USER_CARD_READ = 202;
+    public static final int OTHER_USER_CARD_WRITE = 203;
+    public static final int OTHER_USER_ORDER_READ = 204;
+    public static final int OTHER_USER_ORDER_WRITE = 205;
+
+    // THIS ORGANIZATION
+    public static final int THIS_ORGANIZATION_ORDERS_READ = 300;
+    public static final int THIS_ORGANIZATION_ORDERS_WRITE = 301;
+    public static final int THIS_ORGANIZATION_SETTINGS_READ = 302;
+    public static final int THIS_ORGANIZATION_SETTINGS_WRITE = 303;
+    public static final int THIS_ORGANIZATION_REPORTS_READ = 304;
+    public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE = 305;
+
+    // ALL OTHER PERMISSIONS
+    public static final int ORGANIZATION_CREATE = 400;
+
+    private static final Map<Role, List<Integer>> permissionAssignments = new HashMap<Role, List<Integer>>() {{
+        put(Role.SYSADMIN, new ArrayList<Integer>() {{
             add(Permission.ALL);
         }});
-        put(Role.ADMIN, new ArrayList<Permission>() {{
-            add(Permission.THIS_ORGANIZATION);
-            add(Permission.OTHER_USERS);
-            add(Permission.THIS_USER);
+        put(Role.ADMIN, new ArrayList<Integer>() {{
+            add(Permission.THIS_USER_INFO_READ);
+            add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_ORDER_READ);
+            add(Permission.THIS_USER_ORDER_WRITE);
+            add(Permission.THIS_USER_CARD_READ);
+            add(Permission.THIS_USER_CARD_WRITE);
+
+            add(Permission.OTHER_USER_INFO_READ);
+            add(Permission.OTHER_USER_INFO_WRITE);
+            add(Permission.OTHER_USER_ORDER_READ);
+            add(Permission.OTHER_USER_ORDER_WRITE);
+
+            add(Permission.THIS_ORGANIZATION_ORDERS_READ);
+            add(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
+            add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
+            add(Permission.THIS_ORGANIZATION_SETTINGS_WRITE);
+            add(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
         }});
-        put(Role.EMPLOYEE, new ArrayList<Permission>() {{
-            add(Permission.OTHER_USERS);
-            add(Permission.THIS_USER);
+        put(Role.EMPLOYEE, new ArrayList<Integer>() {{
+            add(Permission.THIS_USER_INFO_READ);
+            add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_ORDER_READ);
+            add(Permission.THIS_USER_ORDER_WRITE);
+            add(Permission.THIS_USER_CARD_READ);
+            add(Permission.THIS_USER_CARD_WRITE);
+
+            add(Permission.OTHER_USER_INFO_READ);
+            add(Permission.OTHER_USER_ORDER_READ);
+
+            add(Permission.THIS_ORGANIZATION_ORDERS_READ);
+            add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
+            add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
         }});
-        put(Role.CUSTOMER, new ArrayList<Permission>() {{
-            add(Permission.THIS_USER);
+        put(Role.CUSTOMER, new ArrayList<Integer>() {{
+            add(Permission.THIS_USER_INFO_READ);
+            add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_ORDER_READ);
+            add(Permission.THIS_USER_ORDER_WRITE);
+            add(Permission.THIS_USER_CARD_READ);
+            add(Permission.THIS_USER_CARD_WRITE);
         }});
-        put(Role.ANONYMOUS, new ArrayList<Permission>() {{
+        put(Role.ANONYMOUS, new ArrayList<Integer>() {{
             add(Permission.NONE);
         }});
     }};
 
-//    private static final Map<Permission, List<Action>> actionPermissions = new HashMap<Permission, List<Action>>() {{
-//        put(Permission.THIS_USER, new ArrayList<Action>() {{
-//            add(Action.MAKE_ORDER);
-//            add(Action.READ_USER);
-//            add(Action.WRITE_USER);
-//        }}); // TODO
-//    }};
-
-    public static void check(Permission permission) {
+    public static void check(int permission) {
         check(permission, null);
     }
 
-    public static void check(Permission permission, String context) {
-        // Get uid
+    public static void check(int permission, AuthorizationContext context) {
+        ThreadStorage.get().hasCheckedPermissions = true;
 
-        String uid = ThreadStorage.get().uid;
-        User user = User.findByFirebaseUid(uid);
+        // Get uid
+        User user = User.findByFirebaseUid(ThreadStorage.get().uid);
         if (user == null) {
             throw new AccessDeniedException();
         }
         // Get role
         Role userRole = user.getRole();
 
-        List<Permission> userPermissions = permissionAssignments.get(userRole);
+        List<Integer> userPermissions = permissionAssignments.get(userRole);
         if (userPermissions.contains(Permission.NONE)) throw new AccessDeniedException();
         if (userPermissions.contains(Permission.ALL)) return; // User can access anything
-        if (!userPermissions.contains(permission)) throw new AccessDeniedException();
+//        if (!userPermissions.contains(permission)) throw new AccessDeniedException();
 
-        switch (permission) {
-            case THIS_USER:
-                if (uid.equals(context)) {
-                    return;
-                }
-                break;
-            case OTHER_USERS:
-                if (context != null) {
-                    User contextUser = User.findByFirebaseUid(context);
-                    if (contextUser != null && contextUser.getOrganization().equals(user.getOrganization())) {
-                        return;
-                    }
-                }
-                break;
-            case THIS_ORGANIZATION:
-                if (user.getOrganization().getId().toString().equals(context)) {
-                    return;
-                }
-                break;
+        // THIS_USER
+        if (permission >= 100 && permission <= 199) {
+            if (context == null) throw new AccessDeniedException(); // Context needed
+
+            if (userPermissions.contains(permission)) {
+                // Check if the context user matches the calling user
+                if (user.getFirebaseUserId().equals(context.getFirebaseUid())) return; // Access granted
+            }
+
+            // Otherwise check if the user has the corresponding OTHER_USER permission
+            else if (userPermissions.contains(permission + 100)) {
+                // Check if the context user's organization matches the calling user's organization
+                User contextUser = User.findByFirebaseUid(context.getFirebaseUid());
+                if (contextUser == null || !user.getOrganization().equals(contextUser.getOrganization())) return; // Access granted
+            }
         }
-        ThreadStorage.get().hasCheckedPermissions = true;
+        // OTHER_USER
+        else if (permission >= 200 && permission <= 299) {
+            if (context == null) throw new AccessDeniedException(); // Context needed
 
+            if (userPermissions.contains(permission)) {
+                // Check if the context user's organization matches the calling user's organization
+                User contextUser = User.findByFirebaseUid(context.getFirebaseUid());
+                if (contextUser == null || !user.getOrganization().equals(contextUser.getOrganization())) return; // Access granted
+            }
+        }
+        // THIS_ORGANIZATION and all others (normal permissions
+        else if (permission >= 300 && permission <= 399) {
+            if (context == null) throw new AccessDeniedException(); // Context needed
+
+            if (userPermissions.contains(permission)) {
+                // Check if the context organization matches the calling user's organization
+                Organization contextOrganization = Organization.find.byId(context.getOrganizationId());
+                if (!user.getOrganization().equals(contextOrganization)) return; // Access granted
+            }
+        }
+        // All other permissions that don't rely on context
+        else {
+            if (userPermissions.contains(permission)) return; // Access granted
+        }
+
+        // Deny access if userPermissions doesn't contain permission or context is invalid for operation
         throw new AccessDeniedException();
     }
 
@@ -93,6 +163,7 @@ public enum Permission {
         ThreadStorage.get().hasCheckedPermissions = true;
     }
 
-    public static class AccessDeniedException extends RuntimeException {}
+    public static class AccessDeniedException extends RuntimeException {
+    }
 
 }
