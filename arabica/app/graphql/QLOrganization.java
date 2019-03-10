@@ -11,12 +11,6 @@ import java.util.stream.Collectors;
 
 public class QLOrganization {
     public static class Query {
-        public OrganizationEntry current() {
-            Permission.check(Permission.THIS_ORGANIZATION);
-            Organization organization = User.findByFirebaseUid(ThreadStorage.get().uid).getOrganization();
-
-            return new OrganizationEntry(organization);
-        }
 
         public OrganizationEntry read(Long id) {
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_READ);
@@ -63,16 +57,8 @@ public class QLOrganization {
             return id;
         }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
-
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public List<QLProduct.ProductEntry> getProducts() {

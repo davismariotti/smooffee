@@ -11,6 +11,7 @@ type UserEntry {
     email: String!
     organizationId: Long!
     balance: Int!
+    role: String!
 }
 
 type UserQuery {

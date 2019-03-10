@@ -36,6 +36,12 @@ public class QLUser {
             User user = UserActions.updateUser(ThreadStorage.get().uid, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
+
+        public UserEntry promote(String id, String role) {
+            Permission.check(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
+
+            return null;
+        }
     }
 
     public static class UserInput {
@@ -75,6 +81,7 @@ public class QLUser {
         private String email;
         private Long organizationId;
         private Integer balance;
+        private String role;
 
         public UserEntry(User user) {
             this.id = user.getFirebaseUserId();
@@ -83,6 +90,7 @@ public class QLUser {
             this.email = user.getEmail();
             this.organizationId = user.getOrganization().getId();
             this.balance = user.getBalance();
+            this.role = user.getRole().getName();
         }
 
         public Integer getBalance() {
@@ -107,6 +115,10 @@ public class QLUser {
 
         public Long getOrganizationId() {
             return organizationId;
+        }
+
+        public String getRole() {
+            return role;
         }
     }
 }
