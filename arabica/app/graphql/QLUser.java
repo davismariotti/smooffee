@@ -8,16 +8,6 @@ import utilities.ThreadStorage;
 
 public class QLUser {
     public static class Query {
-        public UserEntry currentUser() {
-            Permission.check(Permission.THIS_USER, ThreadStorage.get().uid);
-            // Lookup user by firebase token
-            User user = User.findByFirebaseUid(ThreadStorage.get().uid);
-            if (user == null) {
-                return null;
-            }
-            return new UserEntry(user);
-        }
-
         public UserEntry read(String id) {
             Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(id));
             // Lookup user by firebase token
