@@ -4,6 +4,8 @@ import actions.UserActions;
 import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
+import services.authorization.Role;
+import utilities.QLException;
 import utilities.ThreadStorage;
 
 public class QLUser {
@@ -12,9 +14,7 @@ public class QLUser {
             Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(id));
             // Lookup user by firebase token
             User user = User.findByFirebaseUid(id);
-            if (user == null) {
-                return null;
-            }
+            if (user == null) throw new QLException("User not found.");
 
             return new UserEntry(user);
         }
@@ -26,21 +26,27 @@ public class QLUser {
             String uid = ThreadStorage.get().uid;
             User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
             if (user == null) {
-                return null;
+                return null; // TODO what if user exists?
             }
             return new UserEntry(user);
         }
 
-        public UserEntry update(UserInput userInput) {
-            Permission.check(Permission.THIS_USER_INFO_WRITE);
-            User user = UserActions.updateUser(ThreadStorage.get().uid, userInput);
+        public UserEntry update(String userId, UserInput userInput) {
+            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(userId));
+            User user = UserActions.updateUser(userId, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
 
-        public UserEntry promote(String id, String role) {
-            Permission.check(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
+        public UserEntry promote(String userId, String role) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
 
-            return null;
+            Permission.check(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE, new AuthorizationContext(user.getOrganization().getId()));
+
+            // TODO use int values of role
+            if (role.equals(Role.SYSADMIN.getName()) || role.equals(Role.ANONYMOUS.getName())) throw new Permission.AccessDeniedException(); // Can't make a user a sysadmin
+
+            return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
         }
     }
 

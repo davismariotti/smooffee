@@ -2,23 +2,25 @@ package graphql;
 
 import actions.PaymentActions;
 import models.Payment;
+import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
 
 public class QLPayment {
     public static class Query {
         public PaymentEntry read(Long id) {
-            Permission.check(Permission.THIS_ORGANIZATION); // TODO
             Payment payment = Payment.find.byId(id);
-            if (payment == null) {
-                return null;
-            }
+            if (payment == null) throw new QLException("Payment not found.");
+            
+            Permission.check(Permission.THIS_USER_INFO_READ); // TODO Decide if this is the correct permission
             return new PaymentEntry(payment);
         }
     }
 
     public static class Mutation {
         public PaymentEntry create(String userId, PaymentInput paymentInput) {
+            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(userId)); // TODO Decide if this is the correct permission
+
             if (paymentInput.getType().equals("card")) {
                 return new PaymentEntry(PaymentActions.makeCardPayment(userId, paymentInput.getAmount(), paymentInput.getCardId()));
 

@@ -54,7 +54,7 @@ public class QLUserTest {
         assertEquals(Setup.defaultOrganization.getId(), user.getOrganizationId());
         assertEquals("test2@test.com", user.getEmail());
 
-        result = FakeApplication.routeGraphQLRequest(("mutation { user { update(userInput: { firstName: \\\"Usen\\\", lastName: \\\"3\\\", email: \\\"test2@test.com\\\"}) { id firstName lastName email organizationId } } }"));
+        result = FakeApplication.routeGraphQLRequest(String.format("mutation { user { update(userId: \\\"%s\\\", userInput: { firstName: \\\"Usen\\\", lastName: \\\"3\\\", email: \\\"test2@test.com\\\"}) { id firstName lastName email organizationId } } }", user.getId()));
         assertEquals(OK, result.status());
         user = FakeApplication.graphQLResultToObject(result, "user/update", QLUser.UserEntry.class);
         assertNotNull(user.getId());

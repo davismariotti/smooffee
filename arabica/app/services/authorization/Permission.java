@@ -39,6 +39,8 @@ public class Permission {
     public static final int THIS_ORGANIZATION_SETTINGS_WRITE = 303;
     public static final int THIS_ORGANIZATION_REPORTS_READ = 304;
     public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE = 305;
+    public static final int THIS_ORGANIZATION_PRODUCTS_READ = 306;
+
 
     // ALL OTHER PERMISSIONS
     public static final int ORGANIZATION_CREATE = 400;
@@ -65,6 +67,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
             add(Permission.THIS_ORGANIZATION_SETTINGS_WRITE);
             add(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
+            add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
         }});
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
@@ -80,6 +83,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_ORDERS_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
+            add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
         }});
         put(Role.CUSTOMER, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
@@ -88,6 +92,8 @@ public class Permission {
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
             add(Permission.THIS_USER_CARD_WRITE);
+
+            add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
         }});
         put(Role.ANONYMOUS, new ArrayList<Integer>() {{
             add(Permission.NONE);

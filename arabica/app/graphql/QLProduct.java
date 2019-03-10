@@ -2,23 +2,24 @@ package graphql;
 
 import actions.ProductActions;
 import models.Product;
+import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
+import utilities.QLException;
 
 public class QLProduct {
     public static class Query {
         public ProductEntry read(Long id) {
-            Permission.check(Permission.THIS_ORGANIZATION); // TODO
             Product product = Product.find.byId(id);
-            if (product == null) {
-                return null;
-            }
+            if (product == null) throw new QLException("Product not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_PRODUCTS_READ, new AuthorizationContext(product.getOrganization().getId()));
+
             return new ProductEntry(product);
         }
     }
 
     public static class Mutation {
         public ProductEntry create(Long organizationId, ProductInput productInput) {
-            Permission.check(Permission.ALL); // TODO
+            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organizationId));
             return new ProductEntry(ProductActions.createProduct(organizationId, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
         }
 

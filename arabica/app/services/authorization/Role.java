@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Role {
-    SYSADMIN("Sysadmin", 0),
-    ADMIN("Admin", 1),
-    EMPLOYEE("Employee", 2),
-    CUSTOMER("Customer", 3),
-    ANONYMOUS("Anonymous", -1);
+    ANONYMOUS("anonymous", -1),
+    SYSADMIN("sysadmin", 0),
+    ADMIN("admin", 1),
+    EMPLOYEE("employee", 2),
+    CUSTOMER("customer", 3);
 
     private static final Map<Integer, Role> intToTypeMap = new HashMap<>();
 
