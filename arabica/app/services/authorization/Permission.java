@@ -25,12 +25,12 @@ public class Permission {
 
     // OTHER USER
     // OTHER_USER must be exactly 100 more than THIS_USER entry of same type
-    public static final int OTHER_USER_INFO_READ = 200;
-    public static final int OTHER_USER_INFO_WRITE = 201;
-    public static final int OTHER_USER_CARD_READ = 202;
-    public static final int OTHER_USER_CARD_WRITE = 203;
-    public static final int OTHER_USER_ORDER_READ = 204;
-    public static final int OTHER_USER_ORDER_WRITE = 205;
+    public static final int OTHER_USER_INFO_READ = THIS_USER_INFO_READ + 100;
+    public static final int OTHER_USER_INFO_WRITE = THIS_USER_INFO_WRITE + 100;
+    public static final int OTHER_USER_CARD_READ = THIS_USER_CARD_READ + 100;
+    public static final int OTHER_USER_CARD_WRITE = THIS_USER_CARD_WRITE + 100;
+    public static final int OTHER_USER_ORDER_READ = THIS_USER_ORDER_READ + 100;
+    public static final int OTHER_USER_ORDER_WRITE = THIS_USER_ORDER_WRITE + 100;
 
     // THIS ORGANIZATION
     public static final int THIS_ORGANIZATION_ORDERS_READ = 300;
