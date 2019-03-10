@@ -13,7 +13,7 @@ public class QLOrganization {
     public static class Query {
 
         public OrganizationEntry read(Long id) {
-            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_READ);
+            Permission.check(Permission.THIS_ORGANIZATION_READ);
             // Lookup user by firebase token
             Organization organization = Organization.find.byId(id);
             if (organization == null) {

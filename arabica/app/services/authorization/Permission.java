@@ -16,30 +16,31 @@ public class Permission {
     public static final int NONE = -1;
 
     // THIS USER
-    public static final int THIS_USER_INFO_READ = 100;
-    public static final int THIS_USER_INFO_WRITE = 101;
-    public static final int THIS_USER_CARD_READ = 102;
-    public static final int THIS_USER_CARD_WRITE = 103;
-    public static final int THIS_USER_ORDER_READ = 104;
-    public static final int THIS_USER_ORDER_WRITE = 105;
+    public static final int THIS_USER_INFO_READ     = 100;
+    public static final int THIS_USER_INFO_WRITE    = 101;
+    public static final int THIS_USER_CARD_READ     = 102;
+    public static final int THIS_USER_CARD_WRITE    = 103;
+    public static final int THIS_USER_ORDER_READ    = 104;
+    public static final int THIS_USER_ORDER_WRITE   = 105;
 
     // OTHER USER
     // OTHER_USER must be exactly 100 more than THIS_USER entry of same type
-    public static final int OTHER_USER_INFO_READ = THIS_USER_INFO_READ + 100;
-    public static final int OTHER_USER_INFO_WRITE = THIS_USER_INFO_WRITE + 100;
-    public static final int OTHER_USER_CARD_READ = THIS_USER_CARD_READ + 100;
-    public static final int OTHER_USER_CARD_WRITE = THIS_USER_CARD_WRITE + 100;
-    public static final int OTHER_USER_ORDER_READ = THIS_USER_ORDER_READ + 100;
-    public static final int OTHER_USER_ORDER_WRITE = THIS_USER_ORDER_WRITE + 100;
+    public static final int OTHER_USER_INFO_READ    = THIS_USER_INFO_READ + 100;
+    public static final int OTHER_USER_INFO_WRITE   = THIS_USER_INFO_WRITE + 100;
+    public static final int OTHER_USER_CARD_READ    = THIS_USER_CARD_READ + 100;
+    public static final int OTHER_USER_CARD_WRITE   = THIS_USER_CARD_WRITE + 100;
+    public static final int OTHER_USER_ORDER_READ   = THIS_USER_ORDER_READ + 100;
+    public static final int OTHER_USER_ORDER_WRITE  = THIS_USER_ORDER_WRITE + 100;
 
     // THIS ORGANIZATION
-    public static final int THIS_ORGANIZATION_ORDERS_READ = 300;
-    public static final int THIS_ORGANIZATION_ORDERS_WRITE = 301;
-    public static final int THIS_ORGANIZATION_SETTINGS_READ = 302;
-    public static final int THIS_ORGANIZATION_SETTINGS_WRITE = 303;
-    public static final int THIS_ORGANIZATION_REPORTS_READ = 304;
-    public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE = 305;
-    public static final int THIS_ORGANIZATION_PRODUCTS_READ = 306;
+    public static final int THIS_ORGANIZATION_READ              = 300;
+    public static final int THIS_ORGANIZATION_ORDERS_READ       = 301;
+    public static final int THIS_ORGANIZATION_ORDERS_WRITE      = 302;
+    public static final int THIS_ORGANIZATION_SETTINGS_READ     = 303;
+    public static final int THIS_ORGANIZATION_SETTINGS_WRITE    = 304;
+    public static final int THIS_ORGANIZATION_REPORTS_READ      = 305;
+    public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE  = 306;
+    public static final int THIS_ORGANIZATION_PRODUCTS_READ     = 307;
 
 
     // ALL OTHER PERMISSIONS
@@ -62,6 +63,7 @@ public class Permission {
             add(Permission.OTHER_USER_ORDER_READ);
             add(Permission.OTHER_USER_ORDER_WRITE);
 
+            add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
@@ -80,6 +82,7 @@ public class Permission {
             add(Permission.OTHER_USER_INFO_READ);
             add(Permission.OTHER_USER_ORDER_READ);
 
+            add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
@@ -93,6 +96,7 @@ public class Permission {
             add(Permission.THIS_USER_CARD_READ);
             add(Permission.THIS_USER_CARD_WRITE);
 
+            add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
         }});
         put(Role.ANONYMOUS, new ArrayList<Integer>() {{

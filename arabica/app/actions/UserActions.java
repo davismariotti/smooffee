@@ -3,6 +3,7 @@ package actions;
 import graphql.QLUser;
 import models.Organization;
 import models.User;
+import services.authorization.Role;
 import utilities.QLException;
 
 public class UserActions {
@@ -15,6 +16,7 @@ public class UserActions {
                     .setLastname(lastname)
                     .setEmail(email)
                     .setFirebaseUserId(fireBaseUserId)
+                    .setRole(Role.CUSTOMER.getValue())
                     .setBalance(0);
 
             Organization org = Organization.find.byId(organizationId);
