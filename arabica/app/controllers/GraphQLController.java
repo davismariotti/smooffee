@@ -9,6 +9,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
+import services.authorization.Permission;
 import utilities.ArabicaLogger;
 import services.AuthenticationService;
 import utilities.ThreadStorage;
@@ -79,7 +80,12 @@ public class GraphQLController extends Controller {
                 .build()
                 .makeExecutableSchema()).build();
 
-        ExecutionResult executionResult = root.execute(input);
+        ExecutionResult executionResult;
+        try {
+            executionResult = root.execute(input);
+        } catch (Permission.AccessDeniedException e) {
+            return forbidden();
+        }
 
         if (ThreadStorage.get() != null && !ThreadStorage.get().hasCheckedPermissions) {
             ArabicaLogger.logger.warn("Permissions not checked!");
