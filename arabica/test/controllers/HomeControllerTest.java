@@ -1,5 +1,7 @@
 package controllers;
 
+import environment.FakeApplication;
+import org.junit.Before;
 import org.junit.Test;
 import play.Application;
 import play.inject.guice.GuiceApplicationBuilder;
@@ -12,11 +14,11 @@ import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.GET;
 import static play.test.Helpers.route;
 
-public class HomeControllerTest extends WithApplication {
+public class HomeControllerTest {
 
-    @Override
-    protected Application provideApplication() {
-        return new GuiceApplicationBuilder().build();
+    @Before
+    public void setup() {
+        FakeApplication.start(true);
     }
 
     @Test
@@ -25,7 +27,7 @@ public class HomeControllerTest extends WithApplication {
                 .method(GET)
                 .uri("/");
 
-        Result result = route(app, request);
+        Result result = FakeApplication.routeRequest(request);
         assertEquals(OK, result.status());
     }
 

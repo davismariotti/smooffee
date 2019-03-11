@@ -35,7 +35,7 @@ public class FakeApplication {
         ArabicaLogger.logger.debug(String.format("--- Starting %s", Thread.currentThread().getStackTrace()[2].getClassName()));
         ArabicaLogger.logger.debug("---------------------");
         Map<String, Object> conf = new HashMap<>();
-        conf.put("db.default.url","jdbc:h2:mem:play;MODE=PostgreSQL;DATABASE_TO_UPPER=FALSE;DB_CLOSE_DELAY=-1");
+        conf.put("db.default.url","jdbc:h2:mem:play;MODE=PostgreSQL;DATABASE_TO_UPPER=FALSE");
         conf.put("db.default.driver", "org.h2.Driver");
         conf.put("play.evolutions.enabled","true");
         conf.put("play.evolutions.autoApply","true");
@@ -51,6 +51,10 @@ public class FakeApplication {
         ArabicaLogger.logger.debug(String.format("--- Ending %s", Thread.currentThread().getStackTrace()[2].getClassName()));
         ArabicaLogger.logger.debug("---------------------");
         Helpers.stop(app);
+    }
+
+    public static Result routeRequest(Http.RequestBuilder request) {
+        return route(app, request);
     }
 
     public static Result routeGraphQLRequest(String query, Object... parameters) {
