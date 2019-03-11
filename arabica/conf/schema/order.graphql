@@ -14,9 +14,11 @@ type OrderEntry {
 
 type OrderQuery {
     read(id: Long!): OrderEntry!
-    list(orderId: Long!, statuses: [Int]!): [OrderEntry!]!
+    list(organizationId: Long!, statuses: [Int]!): [OrderEntry!]!
 }
 
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
+    updateStatus(orderId: Long!, status: Int!): OrderEntry!
+    cancelOrder(orderId: Long!): OrderEntry!
 }
