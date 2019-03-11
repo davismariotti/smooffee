@@ -39,7 +39,7 @@ public class QLTest {
         input.setFirstName("Test");
         input.setLastName("User");
 
-        assertEquals("{email: \\\"test@test.com\\\", firstname: \\\"Test\\\", lastname: \\\"User\\\"}", QL.prepare(input));
+        assertEquals("{email: \\\"test@test.com\\\", firstName: \\\"Test\\\", lastName: \\\"User\\\"}", QL.prepare(input));
     }
 
     @Test
