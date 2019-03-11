@@ -15,10 +15,12 @@ type UserEntry {
 }
 
 type UserQuery {
-    read(id: String!): UserEntry
+    read(id: String!): UserEntry!
+    list(organizationId: Long!): [UserEntry]!
 }
 
 type UserMutation {
     create(organizationId: Long!, userInput: UserInput!): UserEntry!
     update(userId: String!, userInput: UserInput!): UserEntry!
+    updateRole(userId: String!, role: String!): UserEntry!
 }

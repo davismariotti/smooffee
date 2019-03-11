@@ -41,6 +41,7 @@ public class Permission {
     public static final int THIS_ORGANIZATION_REPORTS_READ      = 305;
     public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE  = 306;
     public static final int THIS_ORGANIZATION_PRODUCTS_READ     = 307;
+    public static final int THIS_ORGANIZATION_USERS_READ        = 308;
 
 
     // ALL OTHER PERMISSIONS
@@ -70,6 +71,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_SETTINGS_WRITE);
             add(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+            add(Permission.THIS_ORGANIZATION_USERS_READ);
         }});
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
@@ -104,6 +106,59 @@ public class Permission {
         }});
     }};
 
+    public static boolean checkUserPermission(User user, int permission, AuthorizationContext context) {
+        // Get role
+        Role userRole = user.getRole();
+
+        List<Integer> userPermissions = permissionAssignments.get(userRole);
+        if (userPermissions.contains(Permission.NONE)) return false;
+        if (userPermissions.contains(Permission.ALL)) return true; // User can access anything, only sysadmin
+
+        // THIS_USER
+        if (permission >= 100 && permission <= 199) {
+            if (context == null) return false; // Context needed
+
+            if (userPermissions.contains(permission)) {
+                // Check if the context user matches the calling user
+                if (user.equals(context.getUser())) return true; // Access granted
+            }
+
+            // Otherwise check if the user has the corresponding OTHER_USER permission
+            else if (userPermissions.contains(permission + 100)) {
+                // Check if the context user's organization matches the calling user's organization
+                User contextUser = context.getUser();
+                if (contextUser != null && user.getOrganization().equals(contextUser.getOrganization())) return true; // Access granted
+            }
+        }
+        // OTHER_USER
+        else if (permission >= 200 && permission <= 299) {
+            if (context == null) return false; // Context needed
+
+            if (userPermissions.contains(permission)) {
+                // Check if the context user's organization matches the calling user's organization
+                User contextUser = context.getUser();
+                if (contextUser != null && user.getOrganization().equals(contextUser.getOrganization())) return true; // Access granted
+            }
+        }
+        // THIS_ORGANIZATION and all others (normal permissions
+        else if (permission >= 300 && permission <= 399) {
+            if (context == null) return false; // Context needed
+
+            if (userPermissions.contains(permission)) {
+                // Check if the context organization matches the calling user's organization
+                Organization contextOrganization = context.getOrganization();
+                if (user.getOrganization().equals(contextOrganization)) return true; // Access granted
+            }
+        }
+        // All other permissions that don't rely on context
+        else {
+            if (userPermissions.contains(permission)) return true; // Access granted
+        }
+
+        // Deny access if userPermissions doesn't contain permission or context is invalid for operation
+        return false;
+    }
+
     public static void check(int permission) {
         check(permission, null);
     }
@@ -113,60 +168,10 @@ public class Permission {
 
         // Get uid
         User user = User.findByFirebaseUid(ThreadStorage.get().uid);
-        if (user == null) {
-            throw new AccessDeniedException();
-        }
-        // Get role
-        Role userRole = user.getRole();
+        if (user == null) throw new AccessDeniedException();
 
-        List<Integer> userPermissions = permissionAssignments.get(userRole);
-        if (userPermissions.contains(Permission.NONE)) throw new AccessDeniedException();
-        if (userPermissions.contains(Permission.ALL)) return; // User can access anything
-//        if (!userPermissions.contains(permission)) throw new AccessDeniedException();
-
-        // THIS_USER
-        if (permission >= 100 && permission <= 199) {
-            if (context == null) throw new AccessDeniedException(); // Context needed
-
-            if (userPermissions.contains(permission)) {
-                // Check if the context user matches the calling user
-                if (user.getFirebaseUserId().equals(context.getFirebaseUid())) return; // Access granted
-            }
-
-            // Otherwise check if the user has the corresponding OTHER_USER permission
-            else if (userPermissions.contains(permission + 100)) {
-                // Check if the context user's organization matches the calling user's organization
-                User contextUser = User.findByFirebaseUid(context.getFirebaseUid());
-                if (contextUser == null || !user.getOrganization().equals(contextUser.getOrganization())) return; // Access granted
-            }
-        }
-        // OTHER_USER
-        else if (permission >= 200 && permission <= 299) {
-            if (context == null) throw new AccessDeniedException(); // Context needed
-
-            if (userPermissions.contains(permission)) {
-                // Check if the context user's organization matches the calling user's organization
-                User contextUser = User.findByFirebaseUid(context.getFirebaseUid());
-                if (contextUser == null || !user.getOrganization().equals(contextUser.getOrganization())) return; // Access granted
-            }
-        }
-        // THIS_ORGANIZATION and all others (normal permissions
-        else if (permission >= 300 && permission <= 399) {
-            if (context == null) throw new AccessDeniedException(); // Context needed
-
-            if (userPermissions.contains(permission)) {
-                // Check if the context organization matches the calling user's organization
-                Organization contextOrganization = Organization.find.byId(context.getOrganizationId());
-                if (!user.getOrganization().equals(contextOrganization)) return; // Access granted
-            }
-        }
-        // All other permissions that don't rely on context
-        else {
-            if (userPermissions.contains(permission)) return; // Access granted
-        }
-
-        // Deny access if userPermissions doesn't contain permission or context is invalid for operation
-        throw new AccessDeniedException();
+        boolean result = checkUserPermission(user, permission, context);
+        if (!result) throw new AccessDeniedException();
     }
 
     public static void ignore() {

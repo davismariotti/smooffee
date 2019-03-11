@@ -1,28 +1,30 @@
 package services.authorization;
 
+import models.Organization;
+import models.User;
+
 public class AuthorizationContext {
 
-    private Long organizationId;
-    private String firebaseUid;
+    private Organization organization;
+    private User user;
 
-    public AuthorizationContext(Long organizationId, String firebaseUid) {
-        this.organizationId = organizationId;
-        this.firebaseUid = firebaseUid;
+    public AuthorizationContext(Organization organization, User user) {
+        this.organization = organization;
+        this.user = user;
+    }
+    public AuthorizationContext(User user) {
+        this.user = user;
     }
 
-    public AuthorizationContext(Long organizationId) {
-        this.organizationId = organizationId;
+    public AuthorizationContext(Organization organization) {
+        this.organization = organization;
     }
 
-    public AuthorizationContext(String firebaseUid) {
-        this.firebaseUid = firebaseUid;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public Long getOrganizationId() {
-        return organizationId;
-    }
-
-    public String getFirebaseUid() {
-        return firebaseUid;
+    public User getUser() {
+        return user;
     }
 }

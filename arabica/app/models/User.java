@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,10 +37,6 @@ public class User extends BaseModel {
     private String firebaseUserId;
     @NotNull
     private Integer balance;
-
-    public static User findByFirebaseUid(String firebaseUserId) {
-        return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
-    }
 
     public Integer getBalance() {
         return balance;
@@ -115,5 +112,16 @@ public class User extends BaseModel {
     public User setEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    public static User findByFirebaseUid(String firebaseUserId) {
+        return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
+    }
+
+    public static List<User> findByOrganizationId(Long organizationId, List<Integer> statuses) {
+        return find.query().where()
+                .eq("organization_id", organizationId)
+                .in("status", statuses)
+                .findList();
     }
 }

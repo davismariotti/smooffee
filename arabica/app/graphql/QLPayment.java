@@ -2,6 +2,7 @@ package graphql;
 
 import actions.PaymentActions;
 import models.Payment;
+import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
@@ -12,14 +13,16 @@ public class QLPayment {
             Payment payment = Payment.find.byId(id);
             if (payment == null) throw new QLException("Payment not found.");
             
-            Permission.check(Permission.THIS_USER_INFO_READ); // TODO Decide if this is the correct permission
+            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(payment.getUser())); // TODO Decide if this is the correct permission
             return new PaymentEntry(payment);
         }
     }
 
     public static class Mutation {
         public PaymentEntry create(String userId, PaymentInput paymentInput) {
-            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(userId)); // TODO Decide if this is the correct permission
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(user)); // TODO Decide if this is the correct permission
 
             if (paymentInput.getType().equals("card")) {
                 return new PaymentEntry(PaymentActions.makeCardPayment(userId, paymentInput.getAmount(), paymentInput.getCardId()));

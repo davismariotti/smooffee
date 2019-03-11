@@ -1,6 +1,8 @@
 package graphql;
 
 import actions.UserActions;
+import models.BaseModel;
+import models.Organization;
 import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
@@ -8,21 +10,37 @@ import services.authorization.Role;
 import utilities.QLException;
 import utilities.ThreadStorage;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class QLUser {
     public static class Query {
         public UserEntry read(String id) {
-            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(id));
-            // Lookup user by firebase token
             User user = User.findByFirebaseUid(id);
             if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(user));
 
             return new UserEntry(user);
+        }
+
+        public List<UserEntry> list(Long organizationId) {
+            Organization organization = Organization.find.byId(organizationId);
+            if (organization == null) throw new QLException("Organization not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_USERS_READ, new AuthorizationContext(organization));
+
+            List<User> users = User.findByOrganizationId(organizationId, Collections.singletonList(BaseModel.ACTIVE));
+
+            return users.stream().map(UserEntry::new).collect(Collectors.toList());
         }
     }
 
     public static class Mutation {
         public UserEntry create(Long organizationId, UserInput userInput) {
+            Organization organization = Organization.find.byId(organizationId);
+            if (organization == null) throw new QLException("Organization not found.");
             Permission.ignore();
+
             String uid = ThreadStorage.get().uid;
             User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
             if (user == null) {
@@ -32,16 +50,19 @@ public class QLUser {
         }
 
         public UserEntry update(String userId, UserInput userInput) {
-            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(userId));
-            User user = UserActions.updateUser(userId, userInput);
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(user));
+
+            user = UserActions.updateUser(userId, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
 
-        public UserEntry promote(String userId, String role) {
+        public UserEntry updateRole(String userId, String role) {
             User user = User.findByFirebaseUid(userId);
             if (user == null) throw new QLException("User not found.");
 
-            Permission.check(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE, new AuthorizationContext(user.getOrganization().getId()));
+            Permission.check(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE, new AuthorizationContext(user.getOrganization()));
 
             // TODO use int values of role
             if (role.equals(Role.SYSADMIN.getName()) || role.equals(Role.ANONYMOUS.getName())) throw new Permission.AccessDeniedException(); // Can't make a user a sysadmin

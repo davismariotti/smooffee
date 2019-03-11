@@ -4,16 +4,19 @@ type ProductEntry {
     name: String!
     description: String!
     price: Int!
+    status: Int!
 }
 
 input ProductInput {
     name: String!
     description: String!
     price: Int!
+    status: Int!
 }
 
 type ProductQuery {
-    read(id: Long!): ProductEntry
+    read(id: Long!): ProductEntry!
+    list(organizationId: Long!) [ProductEntry!]!
 }
 
 type ProductMutation {
