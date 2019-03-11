@@ -36,3 +36,4 @@ $RECYCLE.BIN/
 venv
 
 npm-debug.log
+manifest.yml
