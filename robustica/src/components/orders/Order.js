@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { ListItem, ListItemText, Typography, Button } from '@material-ui/core';
+import '../../css/index.css';
 class Order extends Component {
   constructor(props) {
     super(props);
@@ -17,14 +18,23 @@ class Order extends Component {
   }
 
   render() {
+    const { item, user, notes, location } = this.props;
+
     return (
-      <div>
-        {this.props.item}
-        {this.props.user}
-        {this.props.location}
-        <button onClick={this.edit}>Edit</button>
-        <button onClick={this.fulfill}>Fulfill</button>
-      </div>
+      <ListItem className="order">
+        <ListItemText
+          primary={item}
+          secondary={
+            <React.Fragment>
+              <Typography color="textPrimary">{user}</Typography>
+              <Typography color="textSecondary">{notes}</Typography>
+              {location}
+              <Button onClick={this.edit}>Edit</Button>
+              <Button onClick={this.fulfill}>Fulfill</Button>
+            </React.Fragment>
+          }
+        />
+      </ListItem>
     );
   }
 }

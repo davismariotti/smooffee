@@ -1,7 +1,3 @@
-.home {
-  padding: 5px;
-}
-
 .centerSquare {
   display: block;
   width: 400px;
@@ -14,4 +10,16 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   padding: 10px;
+}
+.orderList {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: scroll;
+  max-height: fit-content;
+}
+.order {
+  display: inline;
 }

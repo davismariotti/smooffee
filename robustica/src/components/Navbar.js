@@ -15,6 +15,8 @@ import history from '../utils/robusticaHistory';
 import firebaseApp from '../services/AuthService';
 import { AUTH_TOKEN } from '../constants';
 import '../css/index.css';
+import UserInfo from './UserInfo';
+import Options from './options';
 
 class Navbar extends Component {
   constructor(props) {
@@ -76,8 +78,7 @@ class Navbar extends Component {
             open={Boolean(leftMenu)}
             onClose={this.handleLeftClose}
           >
-            <MenuItem>Option1</MenuItem>
-            <MenuItem>Option2</MenuItem>
+            <Options />
           </Menu>
           <Typography variant="h4" color="inherit">
             Smooffee
@@ -95,7 +96,7 @@ class Navbar extends Component {
             open={Boolean(rightMenu)}
             onClose={this.handleRightClose}
           >
-            <MenuItem>Profile</MenuItem>
+            <UserInfo />
             <MenuItem>My account</MenuItem>
             <MenuItem>Logout</MenuItem>
           </Menu>
