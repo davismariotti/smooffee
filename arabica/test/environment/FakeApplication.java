@@ -53,6 +53,10 @@ public class FakeApplication {
         Helpers.stop(app);
     }
 
+    public static Result routeRequest(Http.RequestBuilder request) {
+        return route(app, request);
+    }
+
     public static Result routeGraphQLRequest(String query, Object... parameters) {
         String requestText = String.format("{ \"query\": \"%s\" }", query);
         Http.RequestBuilder request = new Http.RequestBuilder()

@@ -12,6 +12,7 @@ import utilities.ArabicaLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,10 +25,14 @@ public class AuthenticationService {
     public static void setup(ApplicationLifecycle lifecycle) {
         if (!mock) {
             try {
-                FileInputStream serviceAccount = new FileInputStream(ConfigFactory.load().getString("firebase.conf.location"));
+                InputStream is = Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResourceAsStream(
+                                ConfigFactory.load().getString("firebase.conf.location")
+                        );
 
                 FirebaseOptions options = new FirebaseOptions.Builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .setCredentials(GoogleCredentials.fromStream(is))
                         .setDatabaseUrl("https://smooffee.firebaseio.com")
                         .build();
 

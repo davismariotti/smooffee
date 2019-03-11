@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import isEmail from 'validator/lib/isEmail';
+import React, { Component } from 'react'
+import isEmail from 'validator/lib/isEmail'
 import {
   Button,
   Paper,
@@ -7,77 +7,77 @@ import {
   FormControl,
   Input,
   InputLabel
-} from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import firebaseApp from '../../services/AuthService';
-import '../../css/index.css';
+} from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import firebaseApp from '../../services/AuthService'
+import '../../css/index.css'
 
-import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants';
-import history from '../../utils/robusticaHistory';
-import { GoogleSignIn } from './GoogleSignIn';
-import { FacebookSignIn } from './FacebookSignIn';
+import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants'
+import history from '../../utils/robusticaHistory'
+import { GoogleSignIn } from './GoogleSignIn'
+import { FacebookSignIn } from './FacebookSignIn'
 
 class Login extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       email: '',
       password: '',
       updateClientCallback: props.updateClientCallback
-    };
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.pushToHome = this.pushToHome.bind(this);
+    }
+    this.handleEmailChange = this.handleEmailChange.bind(this)
+    this.handlePassChange = this.handlePassChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.pushToHome = this.pushToHome.bind(this)
   }
 
   handleEmailChange(e) {
     this.setState({
       email: e.target.value
-    });
+    })
   }
 
   handlePassChange(e) {
     this.setState({
       password: e.target.value
-    });
+    })
   }
 
   pushToHome() {
-    history.push('/home');
+    history.push('/home')
   }
 
   handleSubmit(e) {
-    const { email, password } = this.state;
-    e.preventDefault();
+    const { email, password } = this.state
+    e.preventDefault()
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(result => {
-          const { updateClientCallback } = this.state;
+          const { updateClientCallback } = this.state
           firebaseApp
             .auth()
             .currentUser.getToken()
             .then(token => {
-              localStorage.setItem(AUTH_TOKEN, token);
-              localStorage.setItem(LOGGED_USER_ID, result.user.uid);
-              history.push('/home');
-              updateClientCallback();
-            });
+              localStorage.setItem(AUTH_TOKEN, token)
+              localStorage.setItem(LOGGED_USER_ID, result.user.uid)
+              history.push('/home')
+              updateClientCallback()
+            })
         })
         .catch(error => {
           // Handle Errors here.
-          const errorMessage = error.message;
-          alert(`errorMessage: ${errorMessage}`);
-        });
+          const errorMessage = error.message
+          alert(`errorMessage: ${errorMessage}`)
+        })
     } else {
-      alert('Email Address is not valid');
+      alert('Email Address is not valid')
     }
   }
 
   render() {
-    const { email, password, updateClientCallback } = this.state;
+    const { email, password, updateClientCallback } = this.state
     // const pushToHome = this.pushToHome
     return (
       <main>
@@ -130,8 +130,8 @@ class Login extends Component {
           </p>
         </Paper>
       </main>
-    );
+    )
   }
 }
 
-export default Login;
+export default Login

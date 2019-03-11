@@ -1,32 +1,31 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import { Route, Switch } from 'react-router-dom';
-import firebaseApp, { AuthService } from '../services/AuthService';
-import 'firebase/auth';
-import { AUTH_TOKEN, LOGGED_USER_ID } from '../constants';
-import Home from './Home';
-import SignupContinued from './auth/SignupContinued';
-import Login from './auth/Login';
-import Recover from './auth/Recover';
-import Signup from './auth/Signup';
-import Navbar from './Navbar';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Route, Switch } from 'react-router-dom'
+import firebaseApp from '../services/AuthService'
+import 'firebase/auth'
+import { AUTH_TOKEN, LOGGED_USER_ID } from '../constants'
+import Home from './Home'
+import SignupContinued from './auth/SignupContinued'
+import Login from './auth/Login'
+import Recover from './auth/Recover'
+import Signup from './auth/Signup'
+import Navbar from './Navbar'
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loggedin: false,
       updateClientCallback: props.updateClientCallback
-    };
+    }
   }
 
   componentWillMount() {
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('AUTH STATE CHANGED', user);
+        console.log('AUTH STATE CHANGED', user)
         // If logged in...
-        this.setState({ loggedin: true });
+        this.setState({ loggedin: true })
         user.getToken().then(result => {
           localStorage.setItem(AUTH_TOKEN, result);
           localStorage.setItem(LOGGED_USER_ID, user.uid);

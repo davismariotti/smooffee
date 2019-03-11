@@ -15,6 +15,13 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseModel extends Model {
 
+    public static final int NOT_AVAILABLE = -3;
+    public static final int DELETED = -2;
+    public static final int CANCELLED = -1;
+    public static final int ACTIVE = 1;
+    public static final int IN_PROGRESS = 2;
+    public static final int COMPLETED = 3;
+
     @Id
     private Long id;
 
@@ -35,8 +42,10 @@ public class BaseModel extends Model {
         return id;
     }
 
-    public void setId(Long id) {
+    @SuppressWarnings("unchecked")
+    public <T extends BaseModel> T setId(Long id) {
         this.id = id;
+        return (T)this;
     }
 
     public Date getCreatedAt() {
@@ -60,12 +69,14 @@ public class BaseModel extends Model {
         this.updatedAt = updatedAt;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    @SuppressWarnings("unchecked")
+    public <T extends BaseModel> T setStatus(int status) {
         this.status = status;
+        return (T)this;
     }
 
     @Override

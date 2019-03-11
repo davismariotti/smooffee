@@ -9,12 +9,16 @@ type OrderEntry {
     location: String!
     notes: String
     product: ProductEntry!
+    status: Int!
 }
 
 type OrderQuery {
     read(id: Long!): OrderEntry!
+    list(organizationId: Long!, statuses: [Int]!): [OrderEntry!]!
 }
 
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
+    updateStatus(orderId: Long!, status: Int!): OrderEntry!
+    cancelOrder(orderId: Long!): OrderEntry!
 }

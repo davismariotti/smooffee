@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { ListItem, ListItemText, Typography, Button } from '@material-ui/core';
-import '../../css/index.css';
+import React, { Component } from 'react'
+import { ListItem, ListItemText, Typography, Button } from '@material-ui/core'
+import '../../css/index.css'
+
 class Order extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     // TODO create fullfil and edit buttons(need to bind them to DB)
-    this.fulfill = this.fulfill.bind(this);
-    this.edit = this.edit.bind(this);
+    this.fulfill = this.fulfill.bind(this)
+    this.edit = this.edit.bind(this)
   }
 
   fulfill() {
@@ -18,7 +19,7 @@ class Order extends Component {
   }
 
   render() {
-    const { item, user, notes, location } = this.props;
+    const { item, user, notes, location } = this.props
 
     return (
       <ListItem className="order">
@@ -35,8 +36,8 @@ class Order extends Component {
           }
         />
       </ListItem>
-    );
+    )
   }
 }
 
-export default Order;
+export default Order

@@ -1,6 +1,7 @@
 package actions;
 
 import models.Organization;
+import utilities.QLException;
 
 public class OrganizationActions {
 
@@ -14,10 +15,8 @@ public class OrganizationActions {
 
     public static Organization updateOrganization(Long organizationId, String name) {
         Organization organization = Organization.find.byId(organizationId);
-        if (organization == null) {
-            // TODO
-            return null;
-        }
+        if (organization == null) throw new QLException("Organization not found");
+
         organization.setName(name);
         organization.save();
         return organization;
@@ -25,9 +24,8 @@ public class OrganizationActions {
 
     public static boolean deleteOrganization(Long id) {
         Organization organization = Organization.find.byId(id);
-        if (organization == null) {
-            return false;
-        }
+        if (organization == null) throw new QLException("Organization not found");
+
         organization.deprecate();
         organization.save();
         return true;

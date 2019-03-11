@@ -1,5 +1,6 @@
 name := """arabica"""
 organization := "com.davismariotti"
+maintainer := "davismariotti@gmail.com"
 
 version := "1.0-SNAPSHOT"
 
@@ -22,3 +23,5 @@ libraryDependencies += "com.h2database" % "h2" % "1.4.198"
 libraryDependencies ++= Seq(evolutions, jdbc)
 
 crossPaths := false
+
+unmanagedResourceDirectories in Compile += baseDirectory.value / "resources"

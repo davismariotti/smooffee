@@ -3,6 +3,7 @@ package actions;
 import graphql.QLUser;
 import models.Organization;
 import models.User;
+import services.authorization.Role;
 import utilities.QLException;
 
 public class UserActions {
@@ -15,6 +16,7 @@ public class UserActions {
                     .setLastname(lastname)
                     .setEmail(email)
                     .setFirebaseUserId(fireBaseUserId)
+                    .setRole(Role.CUSTOMER.getValue())
                     .setBalance(0);
 
             Organization org = Organization.find.byId(organizationId);
@@ -29,8 +31,8 @@ public class UserActions {
     public static User updateUser(String uid, QLUser.UserInput input) {
         User user = User.findByFirebaseUid(uid);
         if (user == null) throw new QLException("User not found");
-        user = user.setFirstname(input.getFirstname())
-                .setLastname(input.getLastname())
+        user = user.setFirstname(input.getFirstName())
+                .setLastname(input.getLastName())
                 .setEmail(input.getEmail()) // TODO Allow?
                 .store();
         return user;

@@ -9,7 +9,6 @@ input OrganizationInput {
 }
 
 type OrganizationQuery {
-    current: OrganizationEntry
     read(id: Long!): OrganizationEntry
 }
 

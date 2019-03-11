@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Typography, List } from '@material-ui/core';
-import Order from './orders/Order';
-import '../css/index.css';
+import React, { Component } from 'react'
+import { Typography, List } from '@material-ui/core'
+import Order from './orders/Order'
+import '../css/index.css'
 
 class Home extends Component {
   render() {
@@ -39,8 +39,8 @@ class Home extends Component {
           <Order item="Frappacino" user="Davis" location="EJ 210" />
         </List>
       </div>
-    );
+    )
   }
 }
 
-export default Home;
+export default Home

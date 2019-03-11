@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -62,6 +63,11 @@ public class Product extends BaseModel {
         return this;
     }
 
-
+    public static List<Product> findProductsByOrganizationId(Long organizationId, List<Integer> statuses) {
+        return find.query().where()
+                .eq("organization_id", organizationId)
+                .in("status", statuses)
+                .findList();
+    }
 
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   Button,
   Paper,
@@ -6,26 +6,26 @@ import {
   FormControl,
   Input,
   InputLabel
-} from '@material-ui/core';
-import * as firebase from 'firebase';
-import { Link } from 'react-router-dom';
+} from '@material-ui/core'
+import * as firebase from 'firebase'
+import { Link } from 'react-router-dom'
 
 class Recover extends Component {
   constructor(props) {
-    super(props);
-    this.state = { email: '' };
+    super(props)
+    this.state = { email: '' }
     //
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleEmailChange(e) {
-    this.setState({ email: e.target.value });
+    this.setState({ email: e.target.value })
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-    const email = this.state.email.trim();
+    e.preventDefault()
+    const email = this.state.email.trim()
 
     firebase
       .auth()
@@ -33,12 +33,12 @@ class Recover extends Component {
       .then(
         () => {
           // Email sent.
-          alert(`Please check your email ${email} for instructions. `);
+          alert(`Please check your email ${email} for instructions. `)
         },
         () => {
-          alert('Sorry an error has occured, Please try again');
+          alert('Sorry an error has occured, Please try again')
         }
-      );
+      )
   }
 
   render() {
@@ -68,8 +68,8 @@ class Recover extends Component {
           <Link to="/signup"> Sign Up</Link>
         </Paper>
       </main>
-    );
+    )
   }
 }
 
-export default Recover;
+export default Recover

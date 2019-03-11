@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Paper, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { EmailPasswordSignUp } from './EmailPasswordSignUp';
-import { GoogleSignIn } from './GoogleSignIn';
-import { FacebookSignIn } from './FacebookSignIn';
-import history from '../../utils/robusticaHistory';
-import '../../css/index.css';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Paper, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import { EmailPasswordSignUp } from './EmailPasswordSignUp'
+import { GoogleSignIn } from './GoogleSignIn'
+import { FacebookSignIn } from './FacebookSignIn'
+import history from '../../utils/robusticaHistory'
+import '../../css/index.css'
 
 class Signup extends Component {
   constructor(props) {
-    console.log('props1', props);
-    super(props);
+    console.log('props1', props)
+    super(props)
     this.state = {
       updateClientCallback: props.updateClientCallback
-    };
+    }
   }
 
   static pushToContinued() {
-    history.push('/signupcontinued');
+    history.push('/signupcontinued')
   }
 
   render() {
-    const { updateClientCallback } = this.state;
+    const { updateClientCallback } = this.state
     return (
       <main>
         <Paper className="centerSquare">
@@ -43,12 +43,12 @@ class Signup extends Component {
           </p>
         </Paper>
       </main>
-    );
+    )
   }
 }
 
 Signup.propTypes = {
   updateClientCallback: PropTypes.func.isRequired
-};
+}
 
-export default Signup;
+export default Signup
