@@ -31,8 +31,8 @@ public class UserActions {
     public static User updateUser(String uid, QLUser.UserInput input) {
         User user = User.findByFirebaseUid(uid);
         if (user == null) throw new QLException("User not found");
-        user = user.setFirstname(input.getFirstname())
-                .setLastname(input.getLastname())
+        user = user.setFirstname(input.getFirstName())
+                .setLastname(input.getLastName())
                 .setEmail(input.getEmail()) // TODO Allow?
                 .store();
         return user;

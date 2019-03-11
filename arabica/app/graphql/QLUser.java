@@ -76,7 +76,7 @@ public class QLUser {
         String lastName;
         String email;
 
-        public String getFirstname() {
+        public String getFirstName() {
             return firstName;
         }
 
@@ -84,7 +84,7 @@ public class QLUser {
             this.firstName = firstName;
         }
 
-        public String getLastname() {
+        public String getLastName() {
             return lastName;
         }
 

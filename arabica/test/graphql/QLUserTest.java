@@ -2,6 +2,7 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
+import helpers.QL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,18 @@ public class QLUserTest {
     @Test
     public void createUser() {
         FakeApplication.authToken.push("test2@test.com");
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { user { create(organizationId: %d, userInput: { firstName: \\\"User\\\", lastName: \\\"2\\\", email: \\\"test2@test.com\\\"}) { id firstName lastName email organizationId } } }", Setup.defaultOrganization.getId()));
+
+        QLUser.UserInput input = new QLUser.UserInput();
+        input.setFirstName("User");
+        input.setLastName("2");
+        input.setEmail("test2@test.com");
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId } } }",
+                Setup.defaultOrganization.getId(),
+                QL.prepare(input)
+        ));
+
         assertEquals(OK, result.status());
         QLUser.UserEntry user = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
         assertNotNull(user.getId());
@@ -45,7 +57,16 @@ public class QLUserTest {
     public void updateUser() {
         FakeApplication.authToken.push("test2@test.com");
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { user { create(organizationId: %d, userInput: { firstName: \\\"User\\\", lastName: \\\"2\\\", email: \\\"test2@test.com\\\"}) { id firstName lastName email organizationId } } }", Setup.defaultOrganization.getId()));
+        QLUser.UserInput input = new QLUser.UserInput();
+        input.setFirstName("User");
+        input.setLastName("2");
+        input.setEmail("test2@test.com");
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId } } }",
+                Setup.defaultOrganization.getId(),
+                QL.prepare(input)
+        ));
         assertEquals(OK, result.status());
         QLUser.UserEntry user = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
         assertNotNull(user.getId());
@@ -54,7 +75,15 @@ public class QLUserTest {
         assertEquals(Setup.defaultOrganization.getId(), user.getOrganizationId());
         assertEquals("test2@test.com", user.getEmail());
 
-        result = FakeApplication.routeGraphQLRequest(String.format("mutation { user { update(userId: \\\"%s\\\", userInput: { firstName: \\\"Usen\\\", lastName: \\\"3\\\", email: \\\"test2@test.com\\\"}) { id firstName lastName email organizationId } } }", user.getId()));
+        input.setFirstName("Usen");
+        input.setLastName("3");
+        input.setEmail("test2@test.com");
+
+        result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { user { update(userId: %s, userInput: %s) { id firstName lastName email organizationId } } }",
+                QL.prepare(user.getId()),
+                QL.prepare(input)
+        ));
         assertEquals(OK, result.status());
         user = FakeApplication.graphQLResultToObject(result, "user/update", QLUser.UserEntry.class);
         assertNotNull(user.getId());
