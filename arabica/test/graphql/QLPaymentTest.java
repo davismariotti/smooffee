@@ -2,6 +2,7 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
+import helpers.QL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,15 @@ public class QLPaymentTest {
 
     @Test
     public void createPaymentCashTest() {
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { payment { create(userId: \\\"%s\\\", paymentInput: { type: \\\"cash\\\", amount: 600 }) { id amount type user { id balance } } } }", Setup.defaultSysadmin.getFirebaseUserId()));
+        QLPayment.PaymentInput input = new QLPayment.PaymentInput();
+        input.setAmount(600);
+        input.setType("cash");
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(input)
+        ));
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());

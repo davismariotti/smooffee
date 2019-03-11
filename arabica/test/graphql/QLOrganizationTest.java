@@ -2,6 +2,7 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
+import helpers.QL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,13 @@ public class QLOrganizationTest {
 
     @Test
     public void createOrganization() {
-        Result result = FakeApplication.routeGraphQLRequest("mutation { organization { create(input: { name: \\\"Next Organization\\\"}) { id name } } }");
+        QLOrganization.OrganiationInput input = new QLOrganization.OrganiationInput();
+        input.setName("Next Organization");
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { organization { create(input: %s) { id name } } }",
+                QL.prepare(input)
+        ));
         assertEquals(OK, result.status());
         QLOrganization.OrganizationEntry organization = FakeApplication.graphQLResultToObject(result, "organization/create", QLOrganization.OrganizationEntry.class);
         assertEquals("Next Organization", organization.getName());

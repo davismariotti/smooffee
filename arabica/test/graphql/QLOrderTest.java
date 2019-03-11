@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import environment.FakeApplication;
 import environment.Setup;
+import helpers.QL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,18 +36,27 @@ public class QLOrderTest {
 
     @Test
     public void createOrderTest() {
+        QLPayment.PaymentInput paymentInput = new QLPayment.PaymentInput();
+        paymentInput.setAmount(Setup.defaultProduct.getPrice());
+        paymentInput.setType("cash");
+
         // Add funds to user
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { payment { create(userId: \\\"%s\\\", paymentInput: { type: \\\"cash\\\", amount: %d }) { id amount }} }",
-                Setup.defaultSysadmin.getFirebaseUserId(),
-                Setup.defaultProduct.getPrice()
+                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount }} }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(paymentInput)
         ));
         assertEquals(OK, result.status());
 
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setLocation("HUB");
+        orderInput.setNotes("Notes");
+        orderInput.setProductId(Setup.defaultProduct.getId());
+
         result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: \\\"%s\\\", orderInput: { location: \\\"HUB\\\", notes: \\\"Notes\\\", productId: %d }) { id location notes product { id } } } }",
-                Setup.defaultSysadmin.getFirebaseUserId(),
-                Setup.defaultProduct.getId()
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes product { id } } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(orderInput)
         ));
         assertEquals(OK, result.status());
 
@@ -60,8 +70,8 @@ public class QLOrderTest {
 
         // Make sure funds were deducted
         result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { user { read(id: \\\"%s\\\") { id balance } } }",
-                Setup.defaultSysadmin.getFirebaseUserId()
+                "query { user { read(id: %s) { id balance } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId())
 
         ));
         assertEquals(OK, result.status());
@@ -73,10 +83,15 @@ public class QLOrderTest {
 
     @Test
     public void createOrderInsufficientFunds() {
+        QLOrder.OrderInput input = new QLOrder.OrderInput();
+        input.setLocation("HUB");
+        input.setNotes("Notes");
+        input.setProductId(Setup.defaultProduct.getId());
+
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: \\\"%s\\\", orderInput: { location: \\\"HUB\\\", notes: \\\"Notes\\\", productId: %d }) { id location notes product { id } } } }",
-                Setup.defaultSysadmin.getFirebaseUserId(),
-                Setup.defaultProduct.getId()
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes product { id } } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(input)
         ));
         assertEquals(OK, result.status());
 

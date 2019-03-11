@@ -11,15 +11,9 @@ import java.util.stream.Collectors;
 
 public class QLOrganization {
     public static class Query {
-        public OrganizationEntry current() {
-            Permission.check(Permission.THIS_ORGANIZATION);
-            Organization organization = User.findByFirebaseUid(ThreadStorage.get().uid).getOrganization();
-
-            return new OrganizationEntry(organization);
-        }
 
         public OrganizationEntry read(Long id) {
-            Permission.check(Permission.THIS_ORGANIZATION);
+            Permission.check(Permission.THIS_ORGANIZATION_READ);
             // Lookup user by firebase token
             Organization organization = Organization.find.byId(id);
             if (organization == null) {
@@ -31,7 +25,7 @@ public class QLOrganization {
 
     public static class Mutation {
         public OrganizationEntry create(OrganiationInput input) {
-            Permission.check(Permission.ALL);
+            Permission.check(Permission.ORGANIZATION_CREATE);
             return new OrganizationEntry(OrganizationActions.createOrganization(input.getName()));
         }
     }
@@ -63,16 +57,8 @@ public class QLOrganization {
             return id;
         }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
-
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
 
         public List<QLProduct.ProductEntry> getProducts() {

@@ -2,6 +2,7 @@ package graphql;
 
 import environment.FakeApplication;
 import environment.Setup;
+import helpers.QL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +46,14 @@ public class QLProductTest {
         assertEquals(OK, result.status());
         QLProduct.ProductEntry entry = FakeApplication.graphQLResultToObject(result, "product/create", QLProduct.ProductEntry.class);
         Long productId = entry.getId();
-        result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(id: %d, productInput: { name: \\\"Macchiato\\\", description: \\\"Very nice\\\", price: 625 }) { id organizationId name description price } } }", entry.getId()));
+
+        QLProduct.ProductInput input = new QLProduct.ProductInput();
+        input.setName("Macchiato");
+        input.setDescription("Very nice");
+        input.setPrice(625);
+        input.setStatus(1);
+
+        result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(id: %d, productInput: %s) { id organizationId name description price } } }", entry.getId(), QL.prepare(input)));
         entry = FakeApplication.graphQLResultToObject(result, "product/update", QLProduct.ProductEntry.class);
         assertEquals("Macchiato", entry.getName());
         assertEquals("Very nice", entry.getDescription());
@@ -56,6 +64,16 @@ public class QLProductTest {
     }
 
     public Result createProduct() {
-        return FakeApplication.routeGraphQLRequest(String.format("mutation { product { create(organizationId: %d, productInput: { name: \\\"Latte\\\", description: \\\"Very yummy\\\", price: 500 }) { id organizationId name description price } } }", Setup.defaultOrganization.getId()));
+        QLProduct.ProductInput input = new QLProduct.ProductInput();
+        input.setName("Latte");
+        input.setDescription("Very yummy");
+        input.setPrice(500);
+        input.setStatus(1);
+
+        return FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price } } }",
+                Setup.defaultOrganization.getId(),
+                QL.prepare(input)
+        ));
     }
 }
