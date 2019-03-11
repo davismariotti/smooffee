@@ -5,10 +5,12 @@ import {
   AppBar,
   IconButton,
   Typography,
-  Button,
-  Toolbar
+  Toolbar,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import Face from '@material-ui/icons/Face';
 import history from '../utils/robusticaHistory';
 import firebaseApp from '../services/AuthService';
 import { AUTH_TOKEN } from '../constants';
@@ -25,6 +27,19 @@ class Navbar extends Component {
     this.signout = this.signout.bind(this);
     this.classes = props;
   }
+
+  handleRightMenuClick = event => {
+    this.setState({ rightMenu: event.currentTarget });
+  };
+  handleLeftMenuClick = event => {
+    this.setState({ leftMenu: event.currentTarget });
+  };
+  handleLeftClose = () => {
+    this.setState({ leftMenu: null });
+  };
+  handleRightClose = () => {
+    this.setState({ rightMenu: null });
+  };
 
   signout() {
     firebaseApp
@@ -45,18 +60,45 @@ class Navbar extends Component {
   render() {
     let viewableNavBar;
     const { loggedin } = this.state;
-    if (loggedin) {
+    const { leftMenu } = this.state;
+    const { rightMenu } = this.state;
+
+    if (!loggedin) {
       viewableNavBar = (
-        <Toolbar>
-          <IconButton className="navBar" color="inherit">
+        <Toolbar className="navBar">
+          <IconButton color="inherit" onClick={this.handleLeftMenuClick}>
             <MenuIcon />
           </IconButton>
+
+          <Menu
+            id="simple-menu"
+            anchorEl={leftMenu}
+            open={Boolean(leftMenu)}
+            onClose={this.handleLeftClose}
+          >
+            <MenuItem>Option1</MenuItem>
+            <MenuItem>Option2</MenuItem>
+          </Menu>
           <Typography variant="h4" color="inherit">
             Smooffee
           </Typography>
-          <Button className="navSignOut" onClick={this.signout} color="inherit">
-            Sign Out
-          </Button>
+          <IconButton
+            align="right"
+            color="inherit"
+            onClick={this.handleRightMenuClick}
+          >
+            <Face />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={rightMenu}
+            open={Boolean(rightMenu)}
+            onClose={this.handleRightClose}
+          >
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>My account</MenuItem>
+            <MenuItem>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       );
     } else {

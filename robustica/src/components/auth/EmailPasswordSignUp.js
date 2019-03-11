@@ -1,13 +1,6 @@
 import isEmail from 'validator/lib/isEmail';
 import React, { Component } from 'react';
-import {
-  Button,
-  Paper,
-  Typography,
-  FormControl,
-  Input,
-  InputLabel
-} from '@material-ui/core';
+import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import firebaseApp from '../../services/AuthService';
 import { AUTH_TOKEN } from '../../constants';

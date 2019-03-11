@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase';
 import isEmail from 'validator/lib/isEmail';
 import {
   Button,
@@ -11,48 +10,61 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import firebaseApp from '../../services/AuthService';
-import { AUTH_TOKEN } from '../../constants';
 import '../../css/index.css';
+
+import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants';
+import history from '../../utils/robusticaHistory';
+import { GoogleSignIn } from './GoogleSignIn';
+import { FacebookSignIn } from './FacebookSignIn';
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
-    //
+    this.state = {
+      email: '',
+      password: '',
+      updateClientCallback: props.updateClientCallback
+    };
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  postLoginRedirect() {
-    firebaseApp
-      .auth()
-      .currentUser.getToken()
-      .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token);
-        // browserHistory.push('/home');
-        window.location.reload();
-      });
+    this.pushToHome = this.pushToHome.bind(this);
   }
 
   handleEmailChange(e) {
-    this.setState({ email: e.target.value });
+    this.setState({
+      email: e.target.value
+    });
   }
 
   handlePassChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({
+      password: e.target.value
+    });
+  }
+
+  pushToHome() {
+    history.push('/home');
   }
 
   handleSubmit(e) {
+    const { email, password } = this.state;
     e.preventDefault();
-    const email = this.state.email.trim();
-    const password = this.state.password.trim();
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          this.postLoginRedirect();
+        .then(result => {
+          const { updateClientCallback } = this.state;
+          firebaseApp
+            .auth()
+            .currentUser.getToken()
+            .then(token => {
+              localStorage.setItem(AUTH_TOKEN, token);
+              localStorage.setItem(LOGGED_USER_ID, result.user.uid);
+              history.push('/home');
+              updateClientCallback();
+            });
         })
         .catch(error => {
           // Handle Errors here.
@@ -64,39 +76,9 @@ class Login extends Component {
     }
   }
 
-  handleFacebook(e) {
-    e.preventDefault();
-    const provider = new firebase.auth.FacebookAuthProvider();
-    firebaseApp
-      .auth()
-      .signInWithPopup(provider)
-      .then(() => {
-        console.log('Facebook login success');
-        this.postLoginRedirect();
-      })
-      .catch(error => {
-        const errorMessage = error.message;
-        alert(`Facebook sign in error: ${errorMessage}`);
-      });
-  }
-
-  handleGoogle(e) {
-    e.preventDefault();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebaseApp
-      .auth()
-      .signInWithPopup(provider)
-      .then(() => {
-        console.log('Google login success');
-        this.postLoginRedirect();
-      })
-      .catch(error => {
-        const errorMessage = error.message;
-        alert(`Google sign in error: ${errorMessage}`);
-      });
-  }
-
   render() {
+    const { email, password, updateClientCallback } = this.state;
+    // const pushToHome = this.pushToHome
     return (
       <main>
         <Paper className="centerSquare">
@@ -104,8 +86,14 @@ class Login extends Component {
             Login Screen
           </Typography>
           <div align="center">
-            <Button onClick={this.handleFacebook}>Sign in with Facebook</Button>
-            <Button onClick={this.handleGoogle}>Sign in with Google</Button>
+            <FacebookSignIn
+              callback={this.pushToHome}
+              updateClientCallback={updateClientCallback}
+            />
+            <GoogleSignIn
+              callback={this.pushToHome}
+              updateClientCallback={updateClientCallback}
+            />
           </div>
           <form onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
