@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
 import firebaseApp from '../../services/AuthService'
-import {AUTH_TOKEN, LOGGED_USER_ID} from '../../constants'
+import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants'
 
 export class FacebookSignIn extends Component {
   constructor(props) {
@@ -21,29 +22,27 @@ export class FacebookSignIn extends Component {
     firebaseApp
       .auth()
       .signInWithPopup(provider)
-      .then((result) => {
+      .then(result => {
         console.log('Facebook login success')
-        const {updateClientCallback} = this.state
+        const { updateClientCallback } = this.state
         localStorage.setItem(LOGGED_USER_ID, result.user.uid)
-        firebaseApp.auth().currentUser.getToken().then((token) => {
-          localStorage.setItem(AUTH_TOKEN, token)
-          callback()
-          updateClientCallback()
-        })
+        firebaseApp
+          .auth()
+          .currentUser.getToken()
+          .then(token => {
+            localStorage.setItem(AUTH_TOKEN, token)
+            callback()
+            updateClientCallback()
+          })
       })
-      .catch((error) => {
+      .catch(error => {
         const errorMessage = error.message
-        alert(`Facebook sign in error: ${ errorMessage }`)
+        alert(`Facebook sign in error: ${errorMessage}`)
       })
   }
 
   render() {
-    return (
-      <button type="submit" className="btn btn-block btn-social btn-facebook" onClick={this.handleFacebook}>
-        <span className="fa fa-facebook"/>
-        Sign in with Facebook
-      </button>
-    )
+    return <Button onClick={this.handleFacebook}>Sign in with Facebook</Button>
   }
 }
 

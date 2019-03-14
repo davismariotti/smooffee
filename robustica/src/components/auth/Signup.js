@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Link} from 'react-router-dom'
+import { Paper, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import { EmailPasswordSignUp } from './EmailPasswordSignUp'
 import { GoogleSignIn } from './GoogleSignIn'
 import { FacebookSignIn } from './FacebookSignIn'
 import history from '../../utils/robusticaHistory'
+import '../../css/index.css'
 
 class Signup extends Component {
   constructor(props) {
@@ -22,22 +24,25 @@ class Signup extends Component {
   render() {
     const { updateClientCallback } = this.state
     return (
-      <div className="Signup text-center">
-        <h1>Sign up</h1>
-        <div className="col-md-4"/>
-
-        <div className="form-group col-md-4">
-          <FacebookSignIn callback={Signup.pushToContinued}/>
-          <GoogleSignIn callback={Signup.pushToContinued}/>
-          <br/>
-          <p className="text-center">------------- Or -------------</p>
-          <EmailPasswordSignUp updateClientCallback={updateClientCallback} callback={Signup.pushToContinued}/>
-          <br/>
+      <main>
+        <Paper className="centerSquare">
+          <Typography component="h6" variant="h5" align="center">
+            Create New Account
+          </Typography>
+          <div align="center">
+            <FacebookSignIn callback={Signup.pushToContinued} />
+            <GoogleSignIn callback={Signup.pushToContinued} />
+          </div>
+          <EmailPasswordSignUp
+            updateClientCallback={updateClientCallback}
+            callback={Signup.pushToContinued}
+          />
+          <br />
           <p>
             Already Signed up? <Link to="/login">Log In</Link>
           </p>
-        </div>
-      </div>
+        </Paper>
+      </main>
     )
   }
 }

@@ -2,50 +2,54 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import firebaseApp from '../services/AuthService'
-import {LOGGED_USER_ID} from '../constants'
+import { LOGGED_USER_ID } from '../constants'
 
 const USER_READ_QUERY = gql`
   query UserRead($userId: String!) {
-      user {
-        read(id: $userId) {
-          id
-          firstName
-          lastName
-          email
-          balance
-          organizationId
-        }
+    user {
+      read(id: $userId) {
+        id
+        firstName
+        lastName
+        email
+        balance
+        organizationId
       }
+    }
   }
 `
+////TODO update organization id dynamically
+// function SchoolName(props) {
+//   return props.id
+//    switch (props.id) {
+//      case 0:
+//        return <p>Testing Organization</p>
+//      case 3:
+//        return <p>Northwest Christian High School</p>
+//      default:
+//        return <p>Organization Unknown!</p>
+//    }
+// }
 
 export default class UserInfo extends Component {
-
   render() {
     return (
-      <Query query={USER_READ_QUERY} variables={{ userId: localStorage.getItem(LOGGED_USER_ID) }}>
+      <Query
+        query={USER_READ_QUERY}
+        variables={{ userId: localStorage.getItem(LOGGED_USER_ID) }}
+      >
         {({ loading, error, data }) => {
-          if (loading) return <div>Loading...</div>
+          if (loading) return <div>Loading User Info...</div>
           if (error) return <div>Error :(</div>
 
           const user = data.user.read
           return (
-            <div className="userInfo">
+            <div>
               <p>
-                First Name: {user.firstName}
+                {user.firstName} {user.lastName}
               </p>
-              <p>
-                Last name: {user.lastName}
-              </p>
-              <p>
-                Email: {user.email}
-              </p>
-              <p>
-                Balance: {user.balance}
-              </p>
-              <p>
-                Organization Id: {user.organizationId}
-              </p>
+              <p>{user.email}</p>
+              <p>Account Balance: {user.balance}</p>
             </div>
           )
         }}
