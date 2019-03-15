@@ -1,29 +1,21 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import isEmail from 'validator/lib/isEmail'
-import {
-  Button,
-  Paper,
-  Typography,
-  FormControl,
-  Input,
-  InputLabel
-} from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import {Button, FormControl, Input, InputLabel, Paper, Typography} from '@material-ui/core'
+import {Link} from 'react-router-dom'
+import * as PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
-
-import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
-import history from '../../utils/robusticaHistory'
-import { GoogleSignIn } from './GoogleSignIn'
-import { FacebookSignIn } from './FacebookSignIn'
+import {AUTH_TOKEN, LOGGED_IN_USER_ID} from '../../constants'
+import history from '../../utils/history'
+import {GoogleSignIn} from './GoogleSignIn'
+import {FacebookSignIn} from './FacebookSignIn'
 
 class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
       email: '',
-      password: '',
-      updateClientCallback: props.updateClientCallback
+      password: ''
     }
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
@@ -48,14 +40,14 @@ class Login extends Component {
   }
 
   handleSubmit(e) {
-    const { email, password } = this.state
+    const {email, password} = this.state
     e.preventDefault()
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(result => {
-          const { updateClientCallback } = this.state
+          const {updateClientCallback} = this.state
           firebaseApp
             .auth()
             .currentUser.getToken()
@@ -77,8 +69,8 @@ class Login extends Component {
   }
 
   render() {
-    const { email, password, updateClientCallback } = this.state
-    // const pushToHome = this.pushToHome
+    const {email, password} = this.state
+    const {updateClientCallback} = this.props
     return (
       <main>
         <Paper className="centerSquare">
@@ -102,7 +94,7 @@ class Login extends Component {
                 type="email"
                 name="email"
                 autoComplete="email"
-                value={this.state.email}
+                value={email}
                 onChange={this.handleEmailChange}
                 autoFocus
               />
@@ -114,7 +106,7 @@ class Login extends Component {
                 name="password"
                 id="password"
                 autoComplete="current-password"
-                value={this.state.password}
+                value={password}
                 onChange={this.handlePassChange}
               />
             </FormControl>
@@ -131,6 +123,15 @@ class Login extends Component {
         </Paper>
       </main>
     )
+  }
+}
+
+Login.propTypes = {
+  updateClientCallback: PropTypes.func
+}
+
+Login.defaultProps = {
+  updateClientCallback: () => {
   }
 }
 

@@ -8,15 +8,11 @@ import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 export class GoogleSignIn extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      callback: props.callback,
-      updateClientCallback: props.updateClientCallback
-    }
     this.handleGoogle = this.handleGoogle.bind(this)
   }
 
   handleGoogle(e) {
-    const { callback } = this.state
+    const { callback } = this.props
     e.preventDefault()
     const provider = new firebase.auth.GoogleAuthProvider()
     firebaseApp
@@ -24,7 +20,7 @@ export class GoogleSignIn extends Component {
       .signInWithPopup(provider)
       .then(result => {
         console.log('Google login success')
-        const { updateClientCallback } = this.state
+        const { updateClientCallback } = this.props
         localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
         firebaseApp
           .auth()
@@ -46,7 +42,11 @@ export class GoogleSignIn extends Component {
   }
 }
 
+GoogleSignIn.defaultProps = {
+  updateClientCallback: () => {}
+}
+
 GoogleSignIn.propTypes = {
   callback: PropTypes.func.isRequired,
-  updateClientCallback: PropTypes.func.isRequired
+  updateClientCallback: PropTypes.func
 }

@@ -7,13 +7,10 @@ import { AUTH_TOKEN } from '../../constants'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
-    console.log('props', props)
     super(props)
     this.state = {
       email: '',
-      password: '',
-      updateClientCallback: props.updateClientCallback,
-      callback: props.callback
+      password: ''
     }
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
@@ -21,7 +18,7 @@ export class EmailPasswordSignUp extends Component {
   }
 
   handleSubmit(e) {
-    const { callback } = this.state
+    const { callback } = this.props
     e.preventDefault()
     const { email, password } = this.state
     if (isEmail(email)) {
@@ -29,7 +26,7 @@ export class EmailPasswordSignUp extends Component {
         .auth()
         .createUserWithEmailAndPassword(email.trim(), password.trim())
         .then(() => {
-          const { updateClientCallback } = this.state
+          const { updateClientCallback } = this.props
           firebaseApp
             .auth()
             .currentUser.getToken()

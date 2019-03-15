@@ -8,23 +8,19 @@ import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 export class FacebookSignIn extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      callback: props.callback,
-      updateClientCallback: props.updateClientCallback
-    }
     this.handleFacebook = this.handleFacebook.bind(this)
   }
 
   handleFacebook(e) {
     e.preventDefault()
     const provider = new firebase.auth.FacebookAuthProvider()
-    const { callback } = this.state
+    const { callback } = this.props
     firebaseApp
       .auth()
       .signInWithPopup(provider)
       .then(result => {
         console.log('Facebook login success')
-        const { updateClientCallback } = this.state
+        const { updateClientCallback } = this.props
         localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
         firebaseApp
           .auth()
@@ -46,7 +42,11 @@ export class FacebookSignIn extends Component {
   }
 }
 
+FacebookSignIn.defaultProps = {
+  updateClientCallback: () => {}
+}
+
 FacebookSignIn.propTypes = {
   callback: PropTypes.func.isRequired,
-  updateClientCallback: PropTypes.func.isRequired
+  updateClientCallback: PropTypes.func
 }

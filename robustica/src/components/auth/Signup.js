@@ -5,24 +5,21 @@ import { Link } from 'react-router-dom'
 import { EmailPasswordSignUp } from './EmailPasswordSignUp'
 import { GoogleSignIn } from './GoogleSignIn'
 import { FacebookSignIn } from './FacebookSignIn'
-import history from '../../utils/robusticaHistory'
+import history from '../../utils/history'
 import '../../css/index.css'
 
 class Signup extends Component {
   constructor(props) {
-    console.log('props1', props)
     super(props)
-    this.state = {
-      updateClientCallback: props.updateClientCallback
-    }
+    this.pushToContinued = this.pushToContinued.bind(this)
   }
 
-  static pushToContinued() {
+  pushToContinued() {
     history.push('/signupcontinued')
   }
 
   render() {
-    const { updateClientCallback } = this.state
+    const { updateClientCallback } = this.props
     return (
       <main>
         <Paper className="centerSquare">
@@ -30,12 +27,12 @@ class Signup extends Component {
             Create New Account
           </Typography>
           <div align="center">
-            <FacebookSignIn callback={Signup.pushToContinued} />
-            <GoogleSignIn callback={Signup.pushToContinued} />
+            <FacebookSignIn callback={this.pushToContinued} updateClientCallback={updateClientCallback}/>
+            <GoogleSignIn callback={this.pushToContinued} updateClientCallback={updateClientCallback}/>
           </div>
           <EmailPasswordSignUp
             updateClientCallback={updateClientCallback}
-            callback={Signup.pushToContinued}
+            callback={this.pushToContinued}
           />
           <br />
           <p>

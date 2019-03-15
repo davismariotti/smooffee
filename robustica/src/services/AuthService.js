@@ -1,5 +1,5 @@
 import * as firebase from 'firebase'
-import history from '../utils/robusticaHistory'
+import history from '../utils/history'
 import {AUTH_TOKEN, LOGGED_IN_USER_ID} from '../constants'
 
 const config = {

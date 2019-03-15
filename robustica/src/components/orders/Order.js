@@ -24,14 +24,6 @@ class Order extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      item: props.item,
-      user: props.user,
-      notes: props.notes,
-      location: props.location,
-      classes: props.classes
-    }
-
     // TODO create fullfil and edit buttons(need to bind them to DB)
     this.fulfill = this.fulfill.bind(this)
     this.edit = this.edit.bind(this)
@@ -46,7 +38,7 @@ class Order extends Component {
   }
 
   render() {
-    const {item, user, classes} = this.state
+    const {item, user, location, notes, classes} = this.props
 
     return (
       <GridListTile className={classes.gridTile}>
@@ -57,6 +49,12 @@ class Order extends Component {
             </Typography>
             <Typography component="p">
               {user}
+            </Typography>
+            <Typography component="p">
+              {location}
+            </Typography>
+            <Typography component="p">
+              {notes}
             </Typography>
           </CardContent>
           <CardActions>
