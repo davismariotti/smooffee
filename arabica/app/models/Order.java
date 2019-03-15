@@ -20,6 +20,7 @@ public class Order extends BaseModel {
     private User user;
 
     @NotNull
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
 
     @NotNull
@@ -31,32 +32,36 @@ public class Order extends BaseModel {
         return user;
     }
 
-    public void setUser(User user) {
+    public Order setUser(User user) {
         this.user = user;
+        return this;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public Order setProduct(Product product) {
         this.product = product;
+        return this;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public Order setLocation(String location) {
         this.location = location;
+        return this;
     }
 
     public String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
+    public Order setNotes(String notes) {
         this.notes = notes;
+        return this;
     }
 
     public static List<Order> findByOrganizationId(Long organizationId) {
@@ -67,7 +72,7 @@ public class Order extends BaseModel {
 
     public static List<Order> findByOrganizationId(Long organizationId, List<Integer> statuses) {
         return find.query().where()
-                .eq("organization_id", organizationId)
+                .eq("user.organization.id", organizationId)
                 .in("status", statuses)
                 .findList();
     }

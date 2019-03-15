@@ -1,5 +1,6 @@
 package actions;
 
+import models.BaseModel;
 import models.Order;
 import models.Product;
 import models.User;
@@ -20,12 +21,13 @@ public class OrderActions {
 
         user.setBalance(balance - product.getPrice());
 
-        Order order = new Order();
-        order.setProduct(product);
-        order.setUser(user);
-        order.setLocation(location);
-        order.setNotes(notes);
-        order.save();
+        Order order = new Order()
+                .setProduct(product)
+                .setUser(user)
+                .setLocation(location)
+                .setNotes(notes)
+                .setStatus(BaseModel.ACTIVE)
+                .store();
 
         user.save();
 

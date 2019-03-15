@@ -3,8 +3,10 @@ import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {Button, FormControl, Input, InputLabel, Typography} from '@material-ui/core'
-import {Mutation} from 'react-apollo'
+import {Mutation, Query} from 'react-apollo'
 import {gql} from 'apollo-boost'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 import {LOGGED_IN_USER_ID} from '../../constants'
 
 const styles = theme => ({
@@ -38,6 +40,19 @@ const CreateOrderMutation = gql`
   }
 `
 
+const ListProductsQuery = gql`
+  query ListProducts($organizationId: Long!) {
+    product {
+      list(organizationId: $organizationId) {
+        id
+        price
+        description
+        name
+      }
+    }
+  }
+`
+
 function getModalStyle() {
   return {
     top: '50%',
@@ -50,7 +65,6 @@ class CreateOrderModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open: true,
       product: '',
       name: '',
       location: '',
@@ -64,7 +78,6 @@ class CreateOrderModal extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    console.log('hi')
   }
 
   handleProductChange(e) {
@@ -92,94 +105,98 @@ class CreateOrderModal extends Component {
   }
 
   render() {
-    const {open, product, name, notes, location} = this.state
-    const {classes} = this.props
+    const {product, name, notes, location} = this.state
+    const {classes, open, onSubmit} = this.props
     return (
       <div>
-        <Modal open={open}>
-          <div style={getModalStyle()} className={classes.paper}>
-
-            <Mutation mutation={CreateOrderMutation}>
-              {(createOrder) => (
-                <form onSubmit={e => {
-                  e.preventDefault()
-                  const orderInput = {
-                    location,
-                    notes,
-                    productId: 3
-                  }
-
-                  createOrder({
-                    variables: {
-                      orderInput,
-                      userId: localStorage.getItem(LOGGED_IN_USER_ID)
-                    }
-                  }).then(() => {
-                    this.setState({
-                      open: false,
-                      name: '',
-                      product: '',
-                      location: '',
-                      notes: ''
-                    })
-                  })
-                }}>
-                  <Typography variant="headline">
-                    Create Order
-                  </Typography>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="product">Product Name</InputLabel>
-                    <Input
-                      type="product"
-                      name="product"
-                      autoComplete="product"
-                      value={product}
-                      onChange={this.handleProductChange}
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="name">Name</InputLabel>
-                    <Input
-                      type="name"
-                      name="name"
-                      autoComplete="name"
-                      value={name}
-                      onChange={this.handleNameChange}
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="name">Location</InputLabel>
-                    <Input
-                      type="location"
-                      name="location"
-                      autoComplete="location"
-                      value={location}
-                      onChange={this.handleLocationChange}
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="name">Notes</InputLabel>
-                    <Input
-                      type="notes"
-                      name="notes"
-                      autoComplete="notes"
-                      value={notes}
-                      onChange={this.handleNotesChange}
-                      autoFocus
-                    />
-                  </FormControl>
-
-                  <Button type="submit" fullWidth variant="contained">
-                    Submit
-                  </Button>
-                </form>
-              )}
-            </Mutation>
-          </div>
-        </Modal>
+        <Query query={ListProductsQuery} variables={{organizationId: 3}}>
+          {({loading, error, data}) => {
+            if (loading) return 'Loading'
+            if (error) return 'Error'
+            return (
+              <Modal open={open}>
+                <div style={getModalStyle()} className={classes.paper}>
+                  <Mutation mutation={CreateOrderMutation}>
+                    {(createOrder) => (
+                      <form onSubmit={e => {
+                        e.preventDefault()
+                        const orderInput = {
+                          location,
+                          notes,
+                          productId: product
+                        }
+                        createOrder({
+                          variables: {
+                            orderInput,
+                            userId: localStorage.getItem(LOGGED_IN_USER_ID)
+                          }
+                        }).then(() => {
+                          this.setState({
+                            name: '',
+                            product: '',
+                            location: '',
+                            notes: ''
+                          })
+                          onSubmit()
+                        })
+                      }}>
+                        <Typography variant="headline">
+                          Create Order
+                        </Typography>
+                        <FormControl required fullWidth>
+                          <InputLabel htmlFor="product-simple">Product</InputLabel>
+                          <Select value={product} onChange={this.handleProductChange} inputProps={{name: 'product', id: 'product-simple'}}>
+                            {
+                              data.product.list.map(productItem => {
+                                return <MenuItem key={productItem.id} value={productItem.id}>{productItem.name}</MenuItem>
+                              })
+                            }
+                          </Select>
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="name">Name</InputLabel>
+                          <Input
+                            type="name"
+                            name="name"
+                            autoComplete="name"
+                            value={name}
+                            onChange={this.handleNameChange}
+                            autoFocus
+                          />
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="name">Location</InputLabel>
+                          <Input
+                            type="location"
+                            name="location"
+                            autoComplete="location"
+                            value={location}
+                            onChange={this.handleLocationChange}
+                            autoFocus
+                          />
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="name">Notes</InputLabel>
+                          <Input
+                            type="notes"
+                            name="notes"
+                            autoComplete="notes"
+                            value={notes}
+                            onChange={this.handleNotesChange}
+                            autoFocus
+                          />
+                        </FormControl>
+                        <Button type="submit" fullWidth variant="contained">
+                          Submit
+                        </Button>
+                      </form>
+                    )}
+                  </Mutation>
+                </div>
+              </Modal>
+            )
+          }}
+        </Query>
       </div>
     )
   }
@@ -187,7 +204,12 @@ class CreateOrderModal extends Component {
 
 CreateOrderModal.propTypes = {
   open: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func,
   classes: PropTypes.object.isRequired,
+}
+
+CreateOrderModal.defaultProps = {
+  onSubmit: () => {}
 }
 
 export default withStyles(styles)(CreateOrderModal)

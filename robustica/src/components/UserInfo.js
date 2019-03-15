@@ -18,18 +18,6 @@ const USER_READ_QUERY = gql`
     }
   }
 `
-////TODO update organization id dynamically
-// function SchoolName(props) {
-//   return props.id
-//    switch (props.id) {
-//      case 0:
-//        return <p>Testing Organization</p>
-//      case 3:
-//        return <p>Northwest Christian High School</p>
-//      default:
-//        return <p>Organization Unknown!</p>
-//    }
-// }
 
 export default class UserInfo extends Component {
   render() {
