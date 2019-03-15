@@ -1,7 +1,21 @@
-import React, { Component } from 'react'
-import { Typography, List } from '@material-ui/core'
+import React, {Component} from 'react'
+import {GridList, Typography} from '@material-ui/core'
 import Order from './orders/Order'
 import '../css/index.css'
+
+const names = ['Davis', 'Tom', 'Tersa']
+const items = ['Strawberry Smoothie', 'Latte', 'Frappuccino']
+const locations = ['EJ308', 'RB209']
+
+const orders = Array.from(Array(40).keys())
+  .map(() => {
+    return {
+      item: items[Math.floor(Math.random()*items.length)],
+      location: locations[Math.floor(Math.random()*locations.length)],
+      user: names[Math.floor(Math.random()*names.length)],
+      notes: ''
+    }
+  })
 
 class Home extends Component {
   render() {
@@ -10,34 +24,11 @@ class Home extends Component {
         <Typography variant="h3" color="inherit">
           Current Orders
         </Typography>
-        <List>
-          <Order
-            item="Latte"
-            user="Tom"
-            location="EJ 210"
-            notes="Lots of whip cream please!!!"
-          />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-          <Order item="Latte" user="Tom" location="EJ 210" />
-          <Order item="Stawberry Smoothie" user="Tersa" location="EJ 210" />
-          <Order item="Frappacino" user="Davis" location="EJ 210" />
-        </List>
+        <GridList cols={3} padding={10}>
+          {orders.map(item => {
+            return <Order item={item.item} user={item.user} location={item.location} notes={item.notes}/>
+          })}
+        </GridList>
       </div>
     )
   }
