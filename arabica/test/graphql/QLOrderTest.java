@@ -51,10 +51,11 @@ public class QLOrderTest {
         QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
+        orderInput.setRecipient("Davis Mariotti");
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes product { id } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(orderInput)
         ));
@@ -65,6 +66,7 @@ public class QLOrderTest {
         assertNotNull(entry.getId());
         assertEquals("Notes", entry.getNotes());
         assertEquals("HUB", entry.getLocation());
+        assertEquals("Davis Mariotti", entry.getRecipient());
         assertNotNull(entry.getProduct());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
 
@@ -86,6 +88,7 @@ public class QLOrderTest {
         QLOrder.OrderInput input = new QLOrder.OrderInput();
         input.setLocation("HUB");
         input.setNotes("Notes");
+        input.setRecipient("Davis Mariotti");
         input.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(

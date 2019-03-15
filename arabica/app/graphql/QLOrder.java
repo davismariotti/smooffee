@@ -106,6 +106,10 @@ public class QLOrder {
             return location;
         }
 
+        public String getRecipient() {
+            return recipient;
+        }
+
         public String getNotes() {
             return notes;
         }

@@ -36,7 +36,15 @@ public class GraphQLController extends Controller {
         }
         String uid;
 
-        ArabicaLogger.logger.debug("[REQ-" + count +"] - " + query.query.replace("\n", "").replace("\t", "") + " " + query.variables.toString());
+
+        String log = String.format(
+                "[REQ-%d] - %s%s",
+                count,
+                query.query.replace("\n", "").replace("\t", ""),
+                query.variables != null ? query.variables : ""
+        );
+
+        ArabicaLogger.logger.debug(log);
 
         if (!query.query.trim().startsWith("query IntrospectionQuery {") && !query.query.startsWith("query { ping }")) {
             // Get firebase token
