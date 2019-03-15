@@ -24,6 +24,9 @@ public class Order extends BaseModel {
     private Product product;
 
     @NotNull
+    private String recipient;
+
+    @NotNull
     private String location;
 
     private String notes;
@@ -61,6 +64,15 @@ public class Order extends BaseModel {
 
     public Order setNotes(String notes) {
         this.notes = notes;
+        return this;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public Order setRecipient(String recipient) {
+        this.recipient = recipient;
         return this;
     }
 

@@ -1,35 +1,25 @@
 import * as firebase from 'firebase'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, {Component} from 'react'
+import * as PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import firebaseApp from '../../services/AuthService'
-import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 
-export class GoogleSignIn extends Component {
+class GoogleSignIn extends Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.handleGoogle = this.handleGoogle.bind(this)
   }
 
   handleGoogle(e) {
-    const { callback } = this.props
+    const {callback} = this.props
     e.preventDefault()
-    const provider = new firebase.auth.GoogleAuthProvider()
     firebaseApp
       .auth()
-      .signInWithPopup(provider)
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(result => {
         console.log('Google login success')
-        const { updateClientCallback } = this.props
-        localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
-        firebaseApp
-          .auth()
-          .currentUser.getToken()
-          .then(token => {
-            localStorage.setItem(AUTH_TOKEN, token)
-            callback()
-            updateClientCallback()
-          })
+        callback(result.user)
       })
       .catch(error => {
         const errorMessage = error.message
@@ -42,11 +32,8 @@ export class GoogleSignIn extends Component {
   }
 }
 
-GoogleSignIn.defaultProps = {
-  updateClientCallback: () => {}
+GoogleSignIn.propTypes = {
+  callback: PropTypes.func.isRequired
 }
 
-GoogleSignIn.propTypes = {
-  callback: PropTypes.func.isRequired,
-  updateClientCallback: PropTypes.func
-}
+export default GoogleSignIn

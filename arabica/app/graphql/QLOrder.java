@@ -40,7 +40,7 @@ public class QLOrder {
             if (user == null) throw new QLException("User not found.");
             Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(user));
 
-            return new OrderEntry(OrderActions.createOrder(userId, orderInput.getProductId(), orderInput.getLocation(), orderInput.getNotes()));
+            return new OrderEntry(OrderActions.createOrder(userId, orderInput.getProductId(), orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
         }
 
         public OrderEntry updateStatus(Long orderId, int status) {
@@ -82,6 +82,7 @@ public class QLOrder {
         private String location;
         private String notes;
         private Integer status;
+        private String recipient;
         private QLProduct.ProductEntry product;
 
         public OrderEntry(Order order) {
@@ -90,6 +91,7 @@ public class QLOrder {
             this.notes = order.getNotes();
             this.product = new QLProduct.ProductEntry(order.getProduct());
             this.status = order.getStatus();
+            this.recipient = order.getRecipient();
         }
 
         public Long getId() {
@@ -118,6 +120,8 @@ public class QLOrder {
         private String notes;
         private Long productId;
 
+        private String recipient;
+
         public String getLocation() {
             return location;
         }
@@ -140,6 +144,14 @@ public class QLOrder {
 
         public void setProductId(Long productId) {
             this.productId = productId;
+        }
+
+        public String getRecipient() {
+            return recipient;
+        }
+
+        public void setRecipient(String recipient) {
+            this.recipient = recipient;
         }
     }
 }

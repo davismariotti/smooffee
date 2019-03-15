@@ -1,25 +1,35 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Paper, Typography } from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import { EmailPasswordSignUp } from './EmailPasswordSignUp'
-import { GoogleSignIn } from './GoogleSignIn'
-import { FacebookSignIn } from './FacebookSignIn'
+import React, {Component} from 'react'
+import * as PropTypes from 'prop-types'
+import {Paper, Typography} from '@material-ui/core'
+import {Link} from 'react-router-dom'
+import {EmailPasswordSignUp} from './EmailPasswordSignUp'
+import GoogleSignIn from './GoogleSignIn'
+import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
 import '../../css/index.css'
+import {AUTH_TOKEN, USER_ID} from '../../constants'
+import firebaseApp from '../../services/AuthService'
 
 class Signup extends Component {
   constructor(props) {
     super(props)
-    this.pushToContinued = this.pushToContinued.bind(this)
+    this.signupCallback = this.signupCallback.bind(this)
   }
 
-  pushToContinued() {
-    history.push('/signupcontinued')
+  signupCallback(user) {
+    const {updateClientCallback} = this.props
+    localStorage.setItem(USER_ID, user.uid)
+    firebaseApp
+      .auth()
+      .currentUser.getToken()
+      .then(token => {
+        localStorage.setItem(AUTH_TOKEN, token)
+        updateClientCallback()
+        history.push('/signupcontinued')
+      })
   }
 
   render() {
-    const { updateClientCallback } = this.props
     return (
       <main>
         <Paper className="centerSquare">
@@ -27,14 +37,11 @@ class Signup extends Component {
             Create New Account
           </Typography>
           <div align="center">
-            <FacebookSignIn callback={this.pushToContinued} updateClientCallback={updateClientCallback}/>
-            <GoogleSignIn callback={this.pushToContinued} updateClientCallback={updateClientCallback}/>
+            <FacebookSignIn callback={this.signupCallback}/>
+            <GoogleSignIn callback={this.signupCallback}/>
           </div>
-          <EmailPasswordSignUp
-            updateClientCallback={updateClientCallback}
-            callback={this.pushToContinued}
-          />
-          <br />
+          <EmailPasswordSignUp callback={this.signupCallback}/>
+          <br/>
           <p>
             Already Signed up? <Link to="/login">Log In</Link>
           </p>

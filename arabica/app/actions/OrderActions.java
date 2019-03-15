@@ -8,7 +8,7 @@ import utilities.QLException;
 
 public class OrderActions {
 
-    public static Order createOrder(String userId, Long productId, String location, String notes) {
+    public static Order createOrder(String userId, Long productId, String location, String notes, String recipient) {
         User user = User.findByFirebaseUid(userId);
         Product product = Product.find.byId(productId);
 
@@ -26,6 +26,7 @@ public class OrderActions {
                 .setUser(user)
                 .setLocation(location)
                 .setNotes(notes)
+                .setRecipient(recipient)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
 

@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Face from '@material-ui/icons/Face'
-import history from '../utils/history'
-import firebaseApp from '../services/AuthService'
-import {AUTH_TOKEN} from '../constants'
 import '../css/index.css'
 import UserInfo from './UserInfo'
 import Options from './options'
@@ -13,6 +10,11 @@ import Options from './options'
 class Navbar extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      leftMenu: null,
+      rightMenu: null
+    }
 
     this.classes = props
   }

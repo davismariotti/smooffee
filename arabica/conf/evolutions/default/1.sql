@@ -29,6 +29,7 @@ create table orders (
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
   product_id                    bigint not null,
+  recipient                     varchar(255) not null,
   location                      varchar(255) not null,
   notes                         varchar(255),
   created_at                    timestamptz not null,

@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import {Button, GridList, Typography} from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
-import {Query} from 'react-apollo'
+import {Query, withApollo} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import Order from './orders/Order'
 import '../css/index.css'
 import CreateOrderModal from './orders/CreateOrderModal'
+import {ORGANIZATION_ID} from '../constants'
 
 const LIST_ORDERS_QUERY = gql`
   query ListOrders($organizationId: Long!, $statuses: [Int]!) {
@@ -19,6 +20,18 @@ const LIST_ORDERS_QUERY = gql`
           name
         }
         status
+        recipient
+      }
+    }
+  }
+`
+
+const READ_USER_INFO = gql`
+  query ReadCurrentUser {
+    user {
+      currentUser {
+        id
+        organizationId
       }
     }
   }
@@ -34,9 +47,16 @@ const styles = {
 class Home extends Component {
   constructor(props) {
     super(props)
+    const {client} = this.props
     this.state = {
       showModal: false
     }
+    client.query({query: READ_USER_INFO}).then(({error, data}) => {
+      if (error) {
+        return // TODO
+      }
+      localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+    })
     this.showModal = this.showModal.bind(this)
     this.handleCreateOrderSubmit = this.handleCreateOrderSubmit.bind(this)
   }
@@ -58,7 +78,7 @@ class Home extends Component {
     const {showModal} = this.state
     return (
       <div className="orderList">
-        <Query query={LIST_ORDERS_QUERY} variables={{organizationId: 3, statuses: [1]}}>
+        <Query query={LIST_ORDERS_QUERY} variables={{organizationId: localStorage.getItem(ORGANIZATION_ID), statuses: [1]}}>
           {({loading, error, data}) => {
             if (loading) return 'Loading'
             if (error) return 'Error'
@@ -73,7 +93,7 @@ class Home extends Component {
                 </Button>
                 <GridList cols={3} padding={10}>
                   {data.order.list.map(order => {
-                    return <Order item={order.product.name} user="test" location={order.location} notes={order.notes}/>
+                    return <Order key={order.id} item={order.product.name} user={order.recipient} location={order.location} notes={order.notes}/>
                   })}
                 </GridList>
               </div>
@@ -86,7 +106,8 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  client: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Home)
+export default withStyles(styles)(withApollo(Home))

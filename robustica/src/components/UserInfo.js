@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Query} from 'react-apollo'
 import {gql} from 'apollo-boost'
-import {LOGGED_IN_USER_ID} from '../constants'
+import {USER_ID} from '../constants'
 
 const USER_READ_QUERY = gql`
   query UserRead($userId: String!) {
@@ -21,7 +21,7 @@ const USER_READ_QUERY = gql`
 export default class UserInfo extends Component {
   render() {
     return (
-      <Query query={USER_READ_QUERY} variables={{userId: localStorage.getItem(LOGGED_IN_USER_ID)}}>
+      <Query query={USER_READ_QUERY} variables={{userId: localStorage.getItem(USER_ID)}}>
         {({loading, error, data}) => {
           if (loading) return <div>Loading User Info...</div>
           if (error) return <div>Error :(</div>

@@ -7,7 +7,7 @@ import {Mutation, Query} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
-import {LOGGED_IN_USER_ID} from '../../constants'
+import {USER_ID} from '../../constants'
 
 const styles = theme => ({
   paper: {
@@ -123,12 +123,13 @@ class CreateOrderModal extends Component {
                         const orderInput = {
                           location,
                           notes,
-                          productId: product
+                          productId: product,
+                          recipient: name
                         }
                         createOrder({
                           variables: {
                             orderInput,
-                            userId: localStorage.getItem(LOGGED_IN_USER_ID)
+                            userId: localStorage.getItem(USER_ID)
                           }
                         }).then(() => {
                           this.setState({
@@ -205,7 +206,7 @@ class CreateOrderModal extends Component {
 CreateOrderModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 }
 
 CreateOrderModal.defaultProps = {

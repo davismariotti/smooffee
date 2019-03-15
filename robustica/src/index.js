@@ -41,7 +41,6 @@ class RootComponent extends Component {
         cache: new InMemoryCache()
       })
     })
-    const { client, token } = this.state
   }
 
   render() {

@@ -16,6 +16,14 @@ import java.util.stream.Collectors;
 
 public class QLUser {
     public static class Query {
+        public UserEntry currentUser() {
+            User user = User.findByFirebaseUid(ThreadStorage.get().uid);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(user));
+
+            return new UserEntry(user);
+        }
+
         public UserEntry read(String id) {
             User user = User.findByFirebaseUid(id);
             if (user == null) throw new QLException("User not found.");

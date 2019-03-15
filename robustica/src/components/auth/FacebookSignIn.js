@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Button from '@material-ui/core/Button'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import * as firebase from 'firebase'
 import firebaseApp from '../../services/AuthService'
-import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 
-export class FacebookSignIn extends Component {
+class FacebookSignIn extends Component {
   constructor(props) {
     super(props)
     this.handleFacebook = this.handleFacebook.bind(this)
@@ -13,23 +12,13 @@ export class FacebookSignIn extends Component {
 
   handleFacebook(e) {
     e.preventDefault()
-    const provider = new firebase.auth.FacebookAuthProvider()
-    const { callback } = this.props
+    const {callback} = this.props
     firebaseApp
       .auth()
-      .signInWithPopup(provider)
+      .signInWithPopup(new firebase.auth.FacebookAuthProvider())
       .then(result => {
         console.log('Facebook login success')
-        const { updateClientCallback } = this.props
-        localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
-        firebaseApp
-          .auth()
-          .currentUser.getToken()
-          .then(token => {
-            localStorage.setItem(AUTH_TOKEN, token)
-            callback()
-            updateClientCallback()
-          })
+        callback(result.user)
       })
       .catch(error => {
         const errorMessage = error.message
@@ -42,11 +31,8 @@ export class FacebookSignIn extends Component {
   }
 }
 
-FacebookSignIn.defaultProps = {
-  updateClientCallback: () => {}
+FacebookSignIn.propTypes = {
+  callback: PropTypes.func.isRequired
 }
 
-FacebookSignIn.propTypes = {
-  callback: PropTypes.func.isRequired,
-  updateClientCallback: PropTypes.func
-}
+export default FacebookSignIn

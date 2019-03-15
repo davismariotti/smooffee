@@ -5,10 +5,10 @@ import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
-import {AUTH_TOKEN, LOGGED_IN_USER_ID} from '../../constants'
+import {AUTH_TOKEN, USER_ID} from '../../constants'
+import GoogleSignIn from './GoogleSignIn'
+import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
-import {GoogleSignIn} from './GoogleSignIn'
-import {FacebookSignIn} from './FacebookSignIn'
 
 class Login extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Login extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.pushToHome = this.pushToHome.bind(this)
+    this.loginCallback = this.loginCallback.bind(this)
   }
 
   handleEmailChange(e) {
@@ -35,8 +35,17 @@ class Login extends Component {
     })
   }
 
-  pushToHome() {
-    history.push('/home')
+  loginCallback(user) {
+    const {updateClientCallback} = this.props
+    localStorage.setItem(USER_ID, user.uid)
+    firebaseApp
+      .auth()
+      .currentUser.getToken()
+      .then(token => {
+        localStorage.setItem(AUTH_TOKEN, token)
+        updateClientCallback()
+        history.push('/home')
+      })
   }
 
   handleSubmit(e) {
@@ -47,16 +56,7 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(result => {
-          const {updateClientCallback} = this.state
-          firebaseApp
-            .auth()
-            .currentUser.getToken()
-            .then(token => {
-              localStorage.setItem(AUTH_TOKEN, token)
-              localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
-              history.push('/home')
-              updateClientCallback()
-            })
+          this.loginCallback(result.user)
         })
         .catch(error => {
           // Handle Errors here.
@@ -70,7 +70,6 @@ class Login extends Component {
 
   render() {
     const {email, password} = this.state
-    const {updateClientCallback} = this.props
     return (
       <main>
         <Paper className="centerSquare">
@@ -78,37 +77,17 @@ class Login extends Component {
             Login Screen
           </Typography>
           <div align="center">
-            <FacebookSignIn
-              callback={this.pushToHome}
-              updateClientCallback={updateClientCallback}
-            />
-            <GoogleSignIn
-              callback={this.pushToHome}
-              updateClientCallback={updateClientCallback}
-            />
+            <FacebookSignIn callback={this.loginCallback}/>
+            <GoogleSignIn callback={this.loginCallback}/>
           </div>
           <form onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input
-                type="email"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={this.handleEmailChange}
-                autoFocus
-              />
+              <Input type="email" name="email" autoComplete="email" value={email} onChange={this.handleEmailChange} autoFocus/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={this.handlePassChange}
-              />
+              <Input type="password" name="password" id="password" autoComplete="current-password" value={password} onChange={this.handlePassChange}/>
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
               Submit
