@@ -15,6 +15,7 @@ module.exports = {
     'Blob': true,
     'navigator': true
   },
+  'parser': 'babel-eslint',
   'parserOptions': {
     'ecmaFeatures': {
       'jsx': true

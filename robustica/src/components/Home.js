@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {GridList, Typography} from '@material-ui/core'
+import {Button, GridList, Typography} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import * as PropTypes from 'prop-types'
 import Order from './orders/Order'
 import '../css/index.css'
+import CreateOrderModal from './orders/CreateOrderModal'
 
 const names = ['Davis', 'Tom', 'Tersa']
 const items = ['Strawberry Smoothie', 'Latte', 'Frappuccino']
@@ -27,13 +28,36 @@ const styles = {
 }
 
 class Home extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      showModal: false
+    }
+    this.showModal = this.showModal.bind(this)
+  }
+
+  showModal = () => {
+    console.log('hi')
+    this.setState({ showModal: true });
+  }
+
+  hideModal = () => {
+    this.setState({ showModal: false });
+  }
+
   render() {
     const {classes} = this.props
+    const {showModal} = this.state
     return (
       <div className="orderList">
+        <CreateOrderModal open={showModal}/>
         <Typography className={classes.title} variant="h3" color="inherit">
           Current Orders
         </Typography>
+        <Button onClick={this.showModal}>
+          Click me
+        </Button>
         <GridList cols={3} padding={10}>
           {orders.map(item => {
             return <Order item={item.item} user={item.user} location={item.location} notes={item.notes}/>
