@@ -1,2 +1,2 @@
 export const AUTH_TOKEN = 'AUTH_TOKEN'
-export const LOGGED_USER_ID = 'LOGGED_USER_ID'
+export const LOGGED_IN_USER_ID = 'LOGGED_IN_USER_ID'

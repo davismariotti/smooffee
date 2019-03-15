@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import firebaseApp from '../services/AuthService'
-import { LOGGED_USER_ID } from '../constants'
+import { LOGGED_IN_USER_ID } from '../constants'
 
 const USER_READ_QUERY = gql`
   query UserRead($userId: String!) {
@@ -36,7 +36,7 @@ export default class UserInfo extends Component {
     return (
       <Query
         query={USER_READ_QUERY}
-        variables={{ userId: localStorage.getItem(LOGGED_USER_ID) }}
+        variables={{ userId: localStorage.getItem(LOGGED_IN_USER_ID) }}
       >
         {({ loading, error, data }) => {
           if (loading) return <div>Loading User Info...</div>

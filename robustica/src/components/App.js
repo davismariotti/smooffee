@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import { AUTH_TOKEN, LOGGED_USER_ID } from '../constants'
+import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../constants'
 import Home from './Home'
 import SignupContinued from './auth/SignupContinued'
 import Login from './auth/Login'
@@ -28,7 +28,7 @@ class App extends Component {
         this.setState({ loggedin: true })
         user.getToken().then(result => {
           localStorage.setItem(AUTH_TOKEN, result);
-          localStorage.setItem(LOGGED_USER_ID, user.uid);
+          localStorage.setItem(LOGGED_IN_USER_ID, user.uid);
         });
       } else {
         // If not logged in...

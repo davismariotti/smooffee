@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
 import history from '../utils/robusticaHistory'
-import {AUTH_TOKEN, LOGGED_USER_ID} from '../constants'
+import {AUTH_TOKEN, LOGGED_IN_USER_ID} from '../constants'
 
 const config = {
   apiKey: 'AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY',
@@ -21,7 +21,7 @@ export class AuthService {
       .then(
         () => {
           localStorage.setItem(AUTH_TOKEN, '')
-          localStorage.setItem(LOGGED_USER_ID, '')
+          localStorage.setItem(LOGGED_IN_USER_ID, '')
           console.log('sign out succesful')
           history.push('/')
         },

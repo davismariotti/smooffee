@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
 
-import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants'
+import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 import history from '../../utils/robusticaHistory'
 import { GoogleSignIn } from './GoogleSignIn'
 import { FacebookSignIn } from './FacebookSignIn'
@@ -61,7 +61,7 @@ class Login extends Component {
             .currentUser.getToken()
             .then(token => {
               localStorage.setItem(AUTH_TOKEN, token)
-              localStorage.setItem(LOGGED_USER_ID, result.user.uid)
+              localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
               history.push('/home')
               updateClientCallback()
             })

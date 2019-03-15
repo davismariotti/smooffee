@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
 import firebaseApp from '../../services/AuthService'
-import { AUTH_TOKEN, LOGGED_USER_ID } from '../../constants'
+import { AUTH_TOKEN, LOGGED_IN_USER_ID } from '../../constants'
 
 export class FacebookSignIn extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ export class FacebookSignIn extends Component {
       .then(result => {
         console.log('Facebook login success')
         const { updateClientCallback } = this.state
-        localStorage.setItem(LOGGED_USER_ID, result.user.uid)
+        localStorage.setItem(LOGGED_IN_USER_ID, result.user.uid)
         firebaseApp
           .auth()
           .currentUser.getToken()

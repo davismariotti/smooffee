@@ -5,8 +5,7 @@ import {withStyles} from '@material-ui/core/styles'
 import {Button, FormControl, Input, InputLabel, Typography} from '@material-ui/core'
 import {Mutation} from 'react-apollo'
 import {gql} from 'apollo-boost'
-import firebaseApp from '../../services/AuthService'
-import history from '../../utils/robusticaHistory'
+import {LOGGED_IN_USER_ID} from '../../constants'
 
 const styles = theme => ({
   paper: {
@@ -101,7 +100,7 @@ class CreateOrderModal extends Component {
           <div style={getModalStyle()} className={classes.paper}>
 
             <Mutation mutation={CreateOrderMutation}>
-              {(createOrder, {data}) => (
+              {(createOrder) => (
                 <form onSubmit={e => {
                   e.preventDefault()
                   const orderInput = {
@@ -113,7 +112,7 @@ class CreateOrderModal extends Component {
                   createOrder({
                     variables: {
                       orderInput,
-                      userId: '76GqSI6ohMaBGAiDRvGOqgb6tp03'
+                      userId: localStorage.getItem(LOGGED_IN_USER_ID)
                     }
                   }).then(() => {
                     this.setState({
