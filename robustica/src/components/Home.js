@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {GridList, Typography} from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles';
+import * as PropTypes from 'prop-types'
 import Order from './orders/Order'
 import '../css/index.css'
 
@@ -17,11 +19,19 @@ const orders = Array.from(Array(40).keys())
     }
   })
 
+const styles = {
+  title: {
+    marginTop: '10px',
+    marginBottom: '10px'
+  }
+}
+
 class Home extends Component {
   render() {
+    const {classes} = this.props
     return (
       <div className="orderList">
-        <Typography variant="h3" color="inherit">
+        <Typography className={classes.title} variant="h3" color="inherit">
           Current Orders
         </Typography>
         <GridList cols={3} padding={10}>
@@ -34,4 +44,9 @@ class Home extends Component {
   }
 }
 
-export default Home
+
+Home.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(Home)

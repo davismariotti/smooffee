@@ -9,10 +9,14 @@ import CardActions from '@material-ui/core/CardActions'
 const styles = {
   card: {
     width: 200,
-    height: 200
+    height: 200,
+    margin: '10px'
   },
   media: {
     height: 140,
+  },
+  gridTile: {
+    padding: '3px',
   }
 }
 
@@ -42,10 +46,10 @@ class Order extends Component {
   }
 
   render() {
-    const {item, user, notes, location, classes} = this.state
+    const {item, user, classes} = this.state
 
     return (
-      <GridListTile>
+      <GridListTile className={classes.gridTile}>
         <Card className={classes.card}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h3">
@@ -75,6 +79,10 @@ Order.propTypes = {
   notes: PropTypes.string,
   location: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired
+}
+
+Order.defaultProps = {
+  notes: ''
 }
 
 export default withStyles(styles)(Order)
