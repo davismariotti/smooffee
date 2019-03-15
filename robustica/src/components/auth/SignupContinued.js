@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Mutation} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
-import history from '../../utils/robusticaHistory'
+import history from '../../utils/history'
 
 const SignUpMutation = gql`
     mutation CreateUser($userInput: UserInput!) {
@@ -27,7 +27,7 @@ class SignupContinued extends Component {
     return (
       <div>
         <Mutation mutation={SignUpMutation}>
-          {(signup, {data}) => (
+          {(signup) => (
             <div>
               <form
                 onSubmit={e => {

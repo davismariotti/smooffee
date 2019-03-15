@@ -1,19 +1,15 @@
 import isEmail from 'validator/lib/isEmail'
-import React, { Component } from 'react'
-import { Button, FormControl, Input, InputLabel } from '@material-ui/core'
-import PropTypes from 'prop-types'
+import React, {Component} from 'react'
+import {Button, FormControl, Input, InputLabel} from '@material-ui/core'
+import * as PropTypes from 'prop-types'
 import firebaseApp from '../../services/AuthService'
-import { AUTH_TOKEN } from '../../constants'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
-    console.log('props', props)
     super(props)
     this.state = {
       email: '',
-      password: '',
-      updateClientCallback: props.updateClientCallback,
-      callback: props.callback
+      password: ''
     }
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handlePassChange = this.handlePassChange.bind(this)
@@ -21,26 +17,17 @@ export class EmailPasswordSignUp extends Component {
   }
 
   handleSubmit(e) {
-    const { callback } = this.state
+    const {callback} = this.props
     e.preventDefault()
-    const { email, password } = this.state
+    const {email, password} = this.state
     if (isEmail(email)) {
       firebaseApp
         .auth()
         .createUserWithEmailAndPassword(email.trim(), password.trim())
-        .then(() => {
-          const { updateClientCallback } = this.state
-          firebaseApp
-            .auth()
-            .currentUser.getToken()
-            .then(token => {
-              localStorage.setItem(AUTH_TOKEN, token)
-              callback()
-              updateClientCallback()
-            })
+        .then((result) => {
+          callback(result)
         })
         .catch(error => {
-          // Handle Errors here.
           const errorMessage = error.message
           alert(`errorMessage: ${errorMessage}`)
         })
@@ -50,15 +37,15 @@ export class EmailPasswordSignUp extends Component {
   }
 
   handleEmailChange(e) {
-    this.setState({ email: e.target.value })
+    this.setState({email: e.target.value})
   }
 
   handlePassChange(e) {
-    this.setState({ password: e.target.value })
+    this.setState({password: e.target.value})
   }
 
   render() {
-    const { email, password } = this.state
+    const {email, password} = this.state
     return (
       <form onSubmit={this.handleSubmit}>
         <FormControl margin="normal" required fullWidth>
@@ -92,6 +79,5 @@ export class EmailPasswordSignUp extends Component {
 }
 
 EmailPasswordSignUp.propTypes = {
-  updateClientCallback: PropTypes.func.isRequired,
   callback: PropTypes.func.isRequired
 }

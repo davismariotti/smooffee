@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo'
 import { Router } from 'react-router-dom'
 import App from './components/App'
 import { AUTH_TOKEN } from './constants'
-import history from './utils/robusticaHistory'
+import history from './utils/history'
 import 'typeface-roboto'
 
 class RootComponent extends Component {
@@ -41,7 +41,6 @@ class RootComponent extends Component {
         cache: new InMemoryCache()
       })
     })
-    const { client, token } = this.state
   }
 
   render() {

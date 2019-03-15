@@ -1,10 +1,29 @@
-import React, { Component } from 'react'
-import { ListItem, ListItemText, Typography, Button } from '@material-ui/core'
+import React, {Component} from 'react'
+import {Card, CardContent, GridListTile, Typography} from '@material-ui/core'
 import '../../css/index.css'
+import * as PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button'
+import CardActions from '@material-ui/core/CardActions'
+
+const styles = {
+  card: {
+    width: 200,
+    height: 200,
+    margin: '10px'
+  },
+  media: {
+    height: 140,
+  },
+  gridTile: {
+    padding: '3px',
+  }
+}
 
 class Order extends Component {
   constructor(props) {
     super(props)
+
     // TODO create fullfil and edit buttons(need to bind them to DB)
     this.fulfill = this.fulfill.bind(this)
     this.edit = this.edit.bind(this)
@@ -19,25 +38,49 @@ class Order extends Component {
   }
 
   render() {
-    const { item, user, notes, location } = this.props
+    const {item, user, location, notes, classes} = this.props
 
     return (
-      <ListItem className="order">
-        <ListItemText
-          primary={item}
-          secondary={
-            <React.Fragment>
-              <Typography color="textPrimary">{user}</Typography>
-              <Typography color="textSecondary">{notes}</Typography>
+      <GridListTile className={classes.gridTile}>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h3">
+              {item}
+            </Typography>
+            <Typography component="p">
+              {user}
+            </Typography>
+            <Typography component="p">
               {location}
-              <Button onClick={this.edit}>Edit</Button>
-              <Button onClick={this.fulfill}>Fulfill</Button>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
+            </Typography>
+            <Typography component="p">
+              {notes}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" color="primary">
+              Edit
+            </Button>
+            <Button size="small" color="primary">
+              In Progress
+            </Button>
+          </CardActions>
+        </Card>
+      </GridListTile>
     )
   }
 }
 
-export default Order
+Order.propTypes = {
+  item: PropTypes.string.isRequired,
+  user: PropTypes.string.isRequired,
+  notes: PropTypes.string,
+  location: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired
+}
+
+Order.defaultProps = {
+  notes: ''
+}
+
+export default withStyles(styles)(Order)

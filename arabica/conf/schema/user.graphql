@@ -15,6 +15,7 @@ type UserEntry {
 }
 
 type UserQuery {
+    currentUser: UserEntry!
     read(id: String!): UserEntry!
     list(organizationId: Long!): [UserEntry]!
 }

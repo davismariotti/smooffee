@@ -1,2 +1,3 @@
 export const AUTH_TOKEN = 'AUTH_TOKEN'
-export const LOGGED_USER_ID = 'LOGGED_USER_ID'
+export const USER_ID = 'USER_ID'
+export const ORGANIZATION_ID = 'ORGANIZATION_ID'

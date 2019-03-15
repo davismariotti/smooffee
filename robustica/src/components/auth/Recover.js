@@ -13,8 +13,10 @@ import { Link } from 'react-router-dom'
 class Recover extends Component {
   constructor(props) {
     super(props)
-    this.state = { email: '' }
-    //
+    this.state = {
+      email: ''
+    }
+
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -25,15 +27,16 @@ class Recover extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    const email = this.state.email.trim()
+
+    const {email} = this.state
 
     firebase
       .auth()
-      .sendPasswordResetEmail(email)
+      .sendPasswordResetEmail(email.trim())
       .then(
         () => {
           // Email sent.
-          alert(`Please check your email ${email} for instructions. `)
+          alert(`Please check your email ${email.trim()} for instructions. `)
         },
         () => {
           alert('Sorry an error has occured, Please try again')
@@ -42,6 +45,7 @@ class Recover extends Component {
   }
 
   render() {
+    const {email} = this.state
     return (
       <main>
         <Paper className="centerSquare">
@@ -55,7 +59,7 @@ class Recover extends Component {
                 type="email"
                 name="email"
                 autoComplete="email"
-                value={this.state.email}
+                value={email}
                 onChange={this.handleEmailChange}
                 autoFocus
               />

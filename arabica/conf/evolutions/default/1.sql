@@ -28,6 +28,8 @@ create table orders (
   deprecated_at                 timestamptz,
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
+  product_id                    bigint not null,
+  recipient                     varchar(255) not null,
   location                      varchar(255) not null,
   notes                         varchar(255),
   created_at                    timestamptz not null,
@@ -105,6 +107,9 @@ alter table card add constraint fk_card_user_id foreign key (user_id) references
 create index ix_orders_user_id on orders (user_id);
 alter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
 
+create index ix_orders_product_id on orders (product_id);
+alter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
+
 create index ix_payment_user_id on payment (user_id);
 alter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
 
@@ -128,6 +133,9 @@ drop index if exists ix_card_user_id;
 
 alter table if exists orders drop constraint if exists fk_orders_user_id;
 drop index if exists ix_orders_user_id;
+
+alter table if exists orders drop constraint if exists fk_orders_product_id;
+drop index if exists ix_orders_product_id;
 
 alter table if exists payment drop constraint if exists fk_payment_user_id;
 drop index if exists ix_payment_user_id;

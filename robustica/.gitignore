@@ -15,3 +15,4 @@ public/
 .firebase/
 .firebaserc
 firebase.json
+yarn.lock
