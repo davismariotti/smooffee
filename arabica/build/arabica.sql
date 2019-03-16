@@ -39,12 +39,12 @@ SET default_with_oids = false;
 
 CREATE TABLE public.card (
     id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    deprecated_at timestamp without time zone,
-    status integer DEFAULT 0,
-    token character varying NOT NULL,
-    user_id integer NOT NULL
+    deprecated_at timestamp with time zone,
+    status integer DEFAULT 0 NOT NULL,
+    user_id bigint NOT NULL,
+    token character varying(255),
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -55,7 +55,6 @@ ALTER TABLE public.card OWNER TO davis;
 --
 
 CREATE SEQUENCE public.card_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -77,13 +76,11 @@ ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 --
 
 CREATE TABLE public.cardrefund (
-    id integer NOT NULL,
-    created_at timestamp without time zone DEFAULT '2019-03-03 17:42:29.029802'::timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone DEFAULT '2019-03-03 17:42:29.029802'::timestamp without time zone NOT NULL,
-    deprecated_at timestamp without time zone,
+    id bigint NOT NULL,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    card_id bigint NOT NULL,
-    payment_id bigint NOT NULL
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -94,7 +91,6 @@ ALTER TABLE public.cardrefund OWNER TO davis;
 --
 
 CREATE SEQUENCE public.cardrefund_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -117,25 +113,25 @@ ALTER SEQUENCE public.cardrefund_id_seq OWNED BY public.cardrefund.id;
 
 CREATE TABLE public.orders (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    user_id integer NOT NULL,
-    product_id integer NOT NULL,
-    location character varying NOT NULL,
-    notes character varying
+    user_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    recipient character varying(255) NOT NULL,
+    location character varying(255) NOT NULL,
+    notes character varying(255),
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
 ALTER TABLE public.orders OWNER TO davis;
 
 --
--- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
 --
 
-CREATE SEQUENCE public.order_id_seq
-    AS integer
+CREATE SEQUENCE public.orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -143,13 +139,13 @@ CREATE SEQUENCE public.order_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.order_id_seq OWNER TO davis;
+ALTER TABLE public.orders_id_seq OWNER TO davis;
 
 --
--- Name: order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
 --
 
-ALTER SEQUENCE public.order_id_seq OWNED BY public.orders.id;
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
 
 
 --
@@ -158,11 +154,11 @@ ALTER SEQUENCE public.order_id_seq OWNED BY public.orders.id;
 
 CREATE TABLE public.organization (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    name character varying
+    name character varying(255),
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -173,7 +169,6 @@ ALTER TABLE public.organization OWNER TO davis;
 --
 
 CREATE SEQUENCE public.organization_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -196,14 +191,14 @@ ALTER SEQUENCE public.organization_id_seq OWNED BY public.organization.id;
 
 CREATE TABLE public.payment (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    user_id integer NOT NULL,
-    type character varying NOT NULL,
     amount integer NOT NULL,
-    card_id integer
+    user_id bigint NOT NULL,
+    card_id bigint,
+    type character varying(255) NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -214,7 +209,6 @@ ALTER TABLE public.payment OWNER TO davis;
 --
 
 CREATE SEQUENCE public.payment_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -232,19 +226,36 @@ ALTER SEQUENCE public.payment_id_seq OWNED BY public.payment.id;
 
 
 --
+-- Name: play_evolutions; Type: TABLE; Schema: public; Owner: davis
+--
+
+CREATE TABLE public.play_evolutions (
+    id integer NOT NULL,
+    hash character varying(255) NOT NULL,
+    applied_at timestamp without time zone NOT NULL,
+    apply_script text,
+    revert_script text,
+    state character varying(255),
+    last_problem text
+);
+
+
+ALTER TABLE public.play_evolutions OWNER TO davis;
+
+--
 -- Name: product; Type: TABLE; Schema: public; Owner: davis
 --
 
 CREATE TABLE public.product (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    organization_id integer NOT NULL,
-    name character varying NOT NULL,
-    description character varying,
-    price integer NOT NULL
+    name character varying(255) NOT NULL,
+    price integer NOT NULL,
+    description character varying(255),
+    organization_id bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -255,7 +266,6 @@ ALTER TABLE public.product OWNER TO davis;
 --
 
 CREATE SEQUENCE public.product_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -278,13 +288,12 @@ ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 CREATE TABLE public.refund (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    user_id integer NOT NULL,
-    order_id integer NOT NULL,
-    amount integer NOT NULL
+    amount integer NOT NULL,
+    user_id bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
@@ -295,7 +304,6 @@ ALTER TABLE public.refund OWNER TO davis;
 --
 
 CREATE SEQUENCE public.refund_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -318,29 +326,28 @@ ALTER SEQUENCE public.refund_id_seq OWNED BY public.refund.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    deprecated_at timestamp without time zone,
+    deprecated_at timestamp with time zone,
     status integer DEFAULT 0 NOT NULL,
-    organization_id integer NOT NULL,
-    firstname character varying NOT NULL,
-    lastname character varying NOT NULL,
-    firebase_user_id character varying NOT NULL,
-    last_logged_in timestamp without time zone,
+    firstname character varying(255) NOT NULL,
+    lastname character varying(255) NOT NULL,
+    organization_id bigint NOT NULL,
+    email character varying(255) NOT NULL,
+    last_logged_in timestamp with time zone,
     role integer NOT NULL,
-    email character varying NOT NULL,
-    balance integer DEFAULT 0 NOT NULL
+    firebase_user_id character varying(255),
+    balance integer NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL
 );
 
 
 ALTER TABLE public.users OWNER TO davis;
 
 --
--- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
 --
 
-CREATE SEQUENCE public.user_id_seq
-    AS integer
+CREATE SEQUENCE public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -348,13 +355,13 @@ CREATE SEQUENCE public.user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_id_seq OWNER TO davis;
+ALTER TABLE public.users_id_seq OWNER TO davis;
 
 --
--- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
 --
 
-ALTER SEQUENCE public.user_id_seq OWNED BY public.users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
@@ -375,7 +382,7 @@ ALTER TABLE ONLY public.cardrefund ALTER COLUMN id SET DEFAULT nextval('public.c
 -- Name: orders id; Type: DEFAULT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.order_id_seq'::regclass);
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
 
 
 --
@@ -410,14 +417,14 @@ ALTER TABLE ONLY public.refund ALTER COLUMN id SET DEFAULT nextval('public.refun
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
 -- Data for Name: card; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user_id) FROM stdin;
+COPY public.card (id, deprecated_at, status, user_id, token, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -425,7 +432,7 @@ COPY public.card (id, created_at, updated_at, deprecated_at, status, token, user
 -- Data for Name: cardrefund; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.cardrefund (id, created_at, updated_at, deprecated_at, status, card_id, payment_id) FROM stdin;
+COPY public.cardrefund (id, deprecated_at, status, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -433,7 +440,10 @@ COPY public.cardrefund (id, created_at, updated_at, deprecated_at, status, card_
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.orders (id, created_at, updated_at, deprecated_at, status, user_id, product_id, location, notes) FROM stdin;
+COPY public.orders (id, deprecated_at, status, user_id, product_id, recipient, location, notes, created_at, updated_at) FROM stdin;
+3	\N	1	1	2	Tom Dale	EJ308	Little bit of cream	2019-03-15 14:37:12.983-07	2019-03-15 14:37:12.983-07
+1	\N	1	1	3	Davis Mariotti	EJ308		2019-03-15 12:40:08.425-07	2019-03-15 12:40:08.425-07
+2	\N	1	1	1	Davis Mariotti	EJ308		2019-03-15 12:40:18.246-07	2019-03-15 12:40:18.246-07
 \.
 
 
@@ -441,8 +451,10 @@ COPY public.orders (id, created_at, updated_at, deprecated_at, status, user_id, 
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.organization (id, created_at, updated_at, deprecated_at, status, name) FROM stdin;
-3	2019-02-22 00:52:18.773749	2019-02-22 00:52:18.773749	\N	0	Test Org
+COPY public.organization (id, deprecated_at, status, name, created_at, updated_at) FROM stdin;
+1	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
+2	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
+3	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
 \.
 
 
@@ -450,7 +462,16 @@ COPY public.organization (id, created_at, updated_at, deprecated_at, status, nam
 -- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.payment (id, created_at, updated_at, deprecated_at, status, user_id, type, amount, card_id) FROM stdin;
+COPY public.payment (id, deprecated_at, status, amount, user_id, card_id, type, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: play_evolutions; Type: TABLE DATA; Schema: public; Owner: davis
+--
+
+COPY public.play_evolutions (id, hash, applied_at, apply_script, revert_script, state, last_problem) FROM stdin;
+1	24d9bf646b0c035eaed319468eea39ad8f0467ee	2019-03-15 10:57:21.227	create table card (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\ntoken                         varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_card primary key (id)\n);\n\ncreate table cardrefund (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_cardrefund primary key (id)\n);\n\ncreate table orders (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\nproduct_id                    bigint not null,\nrecipient                     varchar(255) not null,\nlocation                      varchar(255) not null,\nnotes                         varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_orders primary key (id)\n);\n\ncreate table organization (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_organization primary key (id)\n);\n\ncreate table payment (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncard_id                       bigint,\ntype                          varchar(255) not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_payment primary key (id)\n);\n\ncreate table product (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255) not null,\nprice                         integer not null,\ndescription                   varchar(255),\norganization_id               bigint not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_product primary key (id)\n);\n\ncreate table refund (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_refund primary key (id)\n);\n\ncreate table users (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nfirstname                     varchar(255) not null,\nlastname                      varchar(255) not null,\norganization_id               bigint not null,\nemail                         varchar(255) not null,\nlast_logged_in                timestamptz,\nrole                          integer not null,\nfirebase_user_id              varchar(255),\nbalance                       integer not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_users primary key (id)\n);\n\ncreate index ix_card_user_id on card (user_id);\nalter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_user_id on orders (user_id);\nalter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_product_id on orders (product_id);\nalter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;\n\ncreate index ix_payment_user_id on payment (user_id);\nalter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_payment_card_id on payment (card_id);\nalter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;\n\ncreate index ix_product_organization_id on product (organization_id);\nalter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_refund_user_id on refund (user_id);\nalter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_users_organization_id on users (organization_id);\nalter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;	alter table if exists card drop constraint if exists fk_card_user_id;\ndrop index if exists ix_card_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_user_id;\ndrop index if exists ix_orders_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_product_id;\ndrop index if exists ix_orders_product_id;\n\nalter table if exists payment drop constraint if exists fk_payment_user_id;\ndrop index if exists ix_payment_user_id;\n\nalter table if exists payment drop constraint if exists fk_payment_card_id;\ndrop index if exists ix_payment_card_id;\n\nalter table if exists product drop constraint if exists fk_product_organization_id;\ndrop index if exists ix_product_organization_id;\n\nalter table if exists refund drop constraint if exists fk_refund_user_id;\ndrop index if exists ix_refund_user_id;\n\nalter table if exists users drop constraint if exists fk_users_organization_id;\ndrop index if exists ix_users_organization_id;\n\ndrop table if exists card cascade;\n\ndrop table if exists cardrefund cascade;\n\ndrop table if exists orders cascade;\n\ndrop table if exists organization cascade;\n\ndrop table if exists payment cascade;\n\ndrop table if exists product cascade;\n\ndrop table if exists refund cascade;\n\ndrop table if exists users cascade;	applied	
 \.
 
 
@@ -458,7 +479,10 @@ COPY public.payment (id, created_at, updated_at, deprecated_at, status, user_id,
 -- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.product (id, created_at, updated_at, deprecated_at, status, organization_id, name, description, price) FROM stdin;
+COPY public.product (id, deprecated_at, status, name, price, description, organization_id, created_at, updated_at) FROM stdin;
+1	\N	1	Latte	600	latte	3	2019-03-15 11:36:53.207539-07	2019-03-15 11:36:53.207539-07
+2	\N	1	Drip Coffee	250	Drip drip drip	3	2019-03-15 17:13:28.017118-07	2019-03-15 17:13:28.017118-07
+3	\N	1	Cappuccino	450	Frothy	3	2019-03-15 17:14:13.021665-07	2019-03-15 17:14:13.021665-07
 \.
 
 
@@ -466,7 +490,7 @@ COPY public.product (id, created_at, updated_at, deprecated_at, status, organiza
 -- Data for Name: refund; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.refund (id, created_at, updated_at, deprecated_at, status, user_id, order_id, amount) FROM stdin;
+COPY public.refund (id, deprecated_at, status, amount, user_id, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -474,8 +498,10 @@ COPY public.refund (id, created_at, updated_at, deprecated_at, status, user_id, 
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.users (id, created_at, updated_at, deprecated_at, status, organization_id, firstname, lastname, firebase_user_id, last_logged_in, role, email, balance) FROM stdin;
-5	2019-03-04 21:56:04.264	2019-03-04 21:56:04.264	\N	0	3	Davis	Mariotti	76GqSI6ohMaBGAiDRvGOqgb6tp03	\N	0	davismariotti@gmail.com	0
+COPY public.users (id, deprecated_at, status, firstname, lastname, organization_id, email, last_logged_in, role, firebase_user_id, balance, created_at, updated_at) FROM stdin;
+1	\N	1	Davis	Mariotti	3	davismariotti@gmail.com	\N	0	76GqSI6ohMaBGAiDRvGOqgb6tp03	98200	2019-03-15 11:37:49.888-07	2019-03-15 14:37:12.984-07
+2	\N	1	Tom	Dale	3	tom.k.dale@gmail.com	\N	0	5uR1C21Z6hQI4aCrewu3TFfzmLB2	100000	2019-03-15 17:11:56.577988-07	2019-03-15 17:11:56.577988-07
+6	\N	1	Tersa	Almaw	3	tersaalmaw@gmail.com	\N	0	0h3WAUBDBOMtG1Onrg8zQjbBlzM2	100000	2019-03-15 17:12:40.347689-07	2019-03-15 17:12:40.347689-07
 \.
 
 
@@ -494,17 +520,17 @@ SELECT pg_catalog.setval('public.cardrefund_id_seq', 1, false);
 
 
 --
--- Name: order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.order_id_seq', 1, false);
+SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
 
 
 --
 -- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.organization_id_seq', 12, true);
+SELECT pg_catalog.setval('public.organization_id_seq', 1, true);
 
 
 --
@@ -518,7 +544,7 @@ SELECT pg_catalog.setval('public.payment_id_seq', 1, false);
 -- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.product_id_seq', 1, false);
+SELECT pg_catalog.setval('public.product_id_seq', 3, true);
 
 
 --
@@ -529,169 +555,202 @@ SELECT pg_catalog.setval('public.refund_id_seq', 1, false);
 
 
 --
--- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 5, true);
+SELECT pg_catalog.setval('public.users_id_seq', 6, true);
 
 
 --
--- Name: card card_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: card pk_card; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.card
-    ADD CONSTRAINT card_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_card PRIMARY KEY (id);
 
 
 --
--- Name: cardrefund cardrefund_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: cardrefund pk_cardrefund; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.cardrefund
-    ADD CONSTRAINT cardrefund_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_cardrefund PRIMARY KEY (id);
 
 
 --
--- Name: orders order_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: orders pk_orders; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT order_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_orders PRIMARY KEY (id);
 
 
 --
--- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: organization pk_organization; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.organization
-    ADD CONSTRAINT organization_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_organization PRIMARY KEY (id);
 
 
 --
--- Name: payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: payment pk_payment; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.payment
-    ADD CONSTRAINT payment_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_payment PRIMARY KEY (id);
 
 
 --
--- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: product pk_product; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.product
-    ADD CONSTRAINT product_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_product PRIMARY KEY (id);
 
 
 --
--- Name: refund refund_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: refund pk_refund; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.refund
-    ADD CONSTRAINT refund_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_refund PRIMARY KEY (id);
 
 
 --
--- Name: users user_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: users pk_users; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT pk_users PRIMARY KEY (id);
 
 
 --
--- Name: user_firebase_token; Type: INDEX; Schema: public; Owner: davis
+-- Name: play_evolutions play_evolutions_pkey; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
-CREATE UNIQUE INDEX user_firebase_token ON public.users USING btree (firebase_user_id);
+ALTER TABLE ONLY public.play_evolutions
+    ADD CONSTRAINT play_evolutions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: card card_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: ix_card_user_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_card_user_id ON public.card USING btree (user_id);
+
+
+--
+-- Name: ix_orders_product_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_orders_product_id ON public.orders USING btree (product_id);
+
+
+--
+-- Name: ix_orders_user_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_orders_user_id ON public.orders USING btree (user_id);
+
+
+--
+-- Name: ix_payment_card_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_payment_card_id ON public.payment USING btree (card_id);
+
+
+--
+-- Name: ix_payment_user_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_payment_user_id ON public.payment USING btree (user_id);
+
+
+--
+-- Name: ix_product_organization_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_product_organization_id ON public.product USING btree (organization_id);
+
+
+--
+-- Name: ix_refund_user_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_refund_user_id ON public.refund USING btree (user_id);
+
+
+--
+-- Name: ix_users_organization_id; Type: INDEX; Schema: public; Owner: davis
+--
+
+CREATE INDEX ix_users_organization_id ON public.users USING btree (organization_id);
+
+
+--
+-- Name: card fk_card_user_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.card
-    ADD CONSTRAINT card_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_card_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: cardrefund cardrefund_card_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
---
-
-ALTER TABLE ONLY public.cardrefund
-    ADD CONSTRAINT cardrefund_card_id_fkey FOREIGN KEY (card_id) REFERENCES public.card(id);
-
-
---
--- Name: cardrefund cardrefund_payment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
---
-
-ALTER TABLE ONLY public.cardrefund
-    ADD CONSTRAINT cardrefund_payment_id_fkey FOREIGN KEY (payment_id) REFERENCES public.payment(id);
-
-
---
--- Name: orders order_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: orders fk_orders_product_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT order_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.product(id);
+    ADD CONSTRAINT fk_orders_product_id FOREIGN KEY (product_id) REFERENCES public.product(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: orders order_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: orders fk_orders_user_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT order_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_orders_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: payment payment_card_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
---
-
-ALTER TABLE ONLY public.payment
-    ADD CONSTRAINT payment_card_id_fkey FOREIGN KEY (card_id) REFERENCES public.card(id);
-
-
---
--- Name: payment payment_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: payment fk_payment_card_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.payment
-    ADD CONSTRAINT payment_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_payment_card_id FOREIGN KEY (card_id) REFERENCES public.card(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: product product_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: payment fk_payment_user_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.payment
+    ADD CONSTRAINT fk_payment_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: product fk_product_organization_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.product
-    ADD CONSTRAINT product_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+    ADD CONSTRAINT fk_product_organization_id FOREIGN KEY (organization_id) REFERENCES public.organization(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: refund refund_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
---
-
-ALTER TABLE ONLY public.refund
-    ADD CONSTRAINT refund_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(id);
-
-
---
--- Name: refund refund_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: refund fk_refund_user_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.refund
-    ADD CONSTRAINT refund_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_refund_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
--- Name: users user_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+-- Name: users fk_users_organization_id; Type: FK CONSTRAINT; Schema: public; Owner: davis
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT user_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organization(id);
+    ADD CONSTRAINT fk_users_organization_id FOREIGN KEY (organization_id) REFERENCES public.organization(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
