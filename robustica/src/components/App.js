@@ -10,6 +10,7 @@ import Login from './auth/Login'
 import Recover from './auth/Recover'
 import Signup from './auth/Signup'
 import Navbar from './Navbar'
+import OrganizationSettings from './organizationsettings/OrganizationSettings'
 
 class App extends Component {
   constructor(props) {
@@ -75,6 +76,7 @@ class App extends Component {
           <Route path="/signupcontinued" component={SignupContinued} />
           <Route path="/recover" component={Recover} />
           <Route path="/home" component={Home} />
+          <Route path="/settings" component={OrganizationSettings} />
         </Switch>
       </div>
     );
