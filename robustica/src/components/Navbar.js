@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import * as PropTypes from 'prop-types'
-import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core'
+import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Face from '@material-ui/icons/Face'
-import { AuthService } from '../services/AuthService'
+import {AuthService} from '../services/AuthService'
 import history from '../utils/history'
 import '../css/index.css'
 import UserInfo from './UserInfo'
@@ -14,57 +14,68 @@ class Navbar extends Component {
     super(props)
 
     this.state = {
+      leftMenuShow: false,
+      rightMenuShow: false,
       leftMenu: null,
-      rightMenu: null
+      rightMenu: null,
     }
 
     this.classes = props
   }
 
   handleRightMenuClick = event => {
-    this.setState({ rightMenu: event.currentTarget })
+    this.setState({
+      rightMenu: event.currentTarget,
+      rightMenuShow: true
+    })
   }
 
   handleLeftMenuClick = event => {
-    this.setState({ leftMenu: event.currentTarget })
+    this.setState({
+      leftMenu: event.currentTarget,
+      leftMenuShow: true
+    })
   }
 
   handleLeftClose = () => {
-    this.setState({ leftMenu: null })
+    this.setState({leftMenuShow: false})
   }
 
   handleRightClose = () => {
-    this.setState({ rightMenu: null })
+    this.setState({rightMenuShow: false})
   }
 
   handleLogout = () => {
     AuthService.signout()
     this.loggedin = false
+    this.setState({
+      rightMenuShow: false
+    })
     history.push('/login')
   }
 
   render() {
-    const { loggedin } = this.props
-    const { leftMenu, rightMenu } = this.state
+    const {loggedin} = this.props
+    const {leftMenu, rightMenu, leftMenuShow, rightMenuShow} = this.state
 
     let viewableNavBar
     if (loggedin) {
       viewableNavBar = (
         <Toolbar className="navBar">
           <IconButton color="inherit" onClick={this.handleLeftMenuClick}>
-            <MenuIcon />
+            <MenuIcon/>
           </IconButton>
-          <Menu id="simple-menu" anchorEl={leftMenu} open={Boolean(leftMenu)} onClose={this.handleLeftClose}>
-            <Options />
+          <Menu id="simple-menu" anchorEl={leftMenu} open={leftMenuShow} onClose={this.handleLeftClose}>
+            <Options/>
           </Menu>
           <Typography variant="h4" color="inherit">
             Smooffee
           </Typography>
           <IconButton align="right" color="inherit" onClick={this.handleRightMenuClick}>
-            <Face />
+            <Face/>
           </IconButton>
-          <Menu id="simple-menu" anchorEl={rightMenu} open={Boolean(rightMenu)} onClose={this.handleRightClose}>
-            <UserInfo />
+          <Menu id="simple-menu" anchorEl={rightMenu} open={rightMenuShow} onClose={this.handleRightClose}>
+            <UserInfo/>
             <MenuItem>My account</MenuItem>
             <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
           </Menu>
