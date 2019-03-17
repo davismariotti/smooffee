@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import * as PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import { AUTH_TOKEN, USER_ID } from '../constants'
+import {AUTH_TOKEN, USER_ID} from '../constants'
 import Home from './Home'
 import SignupContinued from './auth/SignupContinued'
 import Login from './auth/Login'
@@ -26,24 +26,24 @@ class App extends Component {
       if (user) {
         console.log('AUTH STATE CHANGED', user)
         // If logged in...
-        this.setState({ loggedin: true })
+        this.setState({loggedin: true})
         user.getToken().then(result => {
-          localStorage.setItem(AUTH_TOKEN, result);
-          localStorage.setItem(USER_ID, user.uid);
-        });
+          localStorage.setItem(AUTH_TOKEN, result)
+          localStorage.setItem(USER_ID, user.uid)
+        })
       } else {
         // If not logged in...
-        this.setState({ loggedin: false });
+        this.setState({loggedin: false})
       }
-    });
+    })
   }
 
   render() {
-    const { updateClientCallback, loggedin } = this.state;
+    const {updateClientCallback, loggedin} = this.state
     return (
       <div className="home">
-        <Navbar loggedin={loggedin} />
-        <br />
+        <Navbar loggedin={loggedin}/>
+        <br/>
         <Switch>
           <Route
             exact
@@ -55,36 +55,30 @@ class App extends Component {
               />
             )}
           />
-          <Route
-            path="/login"
-            render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
-            )}
-          />
-          <Route
-            path="/signup"
-            render={routeProps => (
-              <Signup
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
-            )}
-          />
-          <Route path="/signupcontinued" component={SignupContinued} />
-          <Route path="/recover" component={Recover} />
-          <Route path="/home" component={Home} />
-          <Route path="/settings" component={OrganizationSettings} />
+          <Route path="/login" render={routeProps => (
+            <Login
+              {...routeProps}
+              updateClientCallback={updateClientCallback}
+            />
+          )}/>
+          <Route path="/signup" render={routeProps => (
+            <Signup
+              {...routeProps}
+              updateClientCallback={updateClientCallback}
+            />
+          )}/>
+          <Route path="/signupcontinued" component={SignupContinued}/>
+          <Route path="/recover" component={Recover}/>
+          <Route path="/home" component={Home}/>
+          <Route path="/settings" component={OrganizationSettings}/>
         </Switch>
       </div>
-    );
+    )
   }
 }
 
 App.propTypes = {
   updateClientCallback: PropTypes.func.isRequired
-};
+}
 
-export default App;
+export default App
