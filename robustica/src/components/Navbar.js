@@ -1,8 +1,10 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import * as PropTypes from 'prop-types'
-import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core'
+import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Face from '@material-ui/icons/Face'
+import { AuthService } from '../services/AuthService'
+import history from '../utils/history'
 import '../css/index.css'
 import UserInfo from './UserInfo'
 import Options from './options'
@@ -20,45 +22,51 @@ class Navbar extends Component {
   }
 
   handleRightMenuClick = event => {
-    this.setState({rightMenu: event.currentTarget})
+    this.setState({ rightMenu: event.currentTarget })
   }
 
   handleLeftMenuClick = event => {
-    this.setState({leftMenu: event.currentTarget})
+    this.setState({ leftMenu: event.currentTarget })
   }
 
   handleLeftClose = () => {
-    this.setState({leftMenu: null})
+    this.setState({ leftMenu: null })
   }
 
   handleRightClose = () => {
-    this.setState({rightMenu: null})
+    this.setState({ rightMenu: null })
+  }
+
+  handleLogout = () => {
+    AuthService.signout()
+    this.loggedin = false
+    history.push('/login')
   }
 
   render() {
-    const {loggedin} = this.props
-    const {leftMenu, rightMenu} = this.state
+    const { loggedin } = this.props
+    const { leftMenu, rightMenu } = this.state
 
     let viewableNavBar
-    if (!loggedin) {
+    if (loggedin) {
       viewableNavBar = (
         <Toolbar className="navBar">
           <IconButton color="inherit" onClick={this.handleLeftMenuClick}>
-            <MenuIcon/>
+            <MenuIcon />
           </IconButton>
           <Menu id="simple-menu" anchorEl={leftMenu} open={Boolean(leftMenu)} onClose={this.handleLeftClose}>
-            <Options/>
+            <Options />
           </Menu>
           <Typography variant="h4" color="inherit">
             Smooffee
           </Typography>
           <IconButton align="right" color="inherit" onClick={this.handleRightMenuClick}>
-            <Face/>
+            <Face />
           </IconButton>
           <Menu id="simple-menu" anchorEl={rightMenu} open={Boolean(rightMenu)} onClose={this.handleRightClose}>
-            <UserInfo/>
+            <UserInfo />
             <MenuItem>My account</MenuItem>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       )
