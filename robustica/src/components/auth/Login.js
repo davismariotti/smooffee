@@ -3,12 +3,25 @@ import isEmail from 'validator/lib/isEmail'
 import {Button, FormControl, Input, InputLabel, Paper, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
+import {withApollo} from 'react-apollo'
+import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
-import {AUTH_TOKEN, USER_ID} from '../../constants'
+import {ORGANIZATION_ID, USER_ID} from '../../constants'
 import GoogleSignIn from './GoogleSignIn'
 import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
+
+const READ_USER_INFO = gql`
+  query ReadCurrentUser {
+    user {
+      currentUser {
+        id
+        organizationId
+      }
+    }
+  }
+`
 
 class Login extends Component {
   constructor(props) {
@@ -36,14 +49,21 @@ class Login extends Component {
   }
 
   loginCallback(user) {
-    const {updateClientCallback} = this.props
+    const {updateClientCallback, client} = this.props
     localStorage.setItem(USER_ID, user.uid)
     firebaseApp
       .auth()
       .currentUser.getToken()
       .then(token => {
         updateClientCallback(token).then(() => {
-          history.push('/home')
+          client.query({query: READ_USER_INFO}).then(({error, data}) => {
+            if (error) {
+              // TODO
+            } else {
+              localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+              history.push('/home')
+            }
+          })
         })
       })
   }
@@ -106,7 +126,8 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  updateClientCallback: PropTypes.func
+  updateClientCallback: PropTypes.func,
+  client: PropTypes.object.isRequired
 }
 
 Login.defaultProps = {
@@ -114,4 +135,4 @@ Login.defaultProps = {
   }
 }
 
-export default Login
+export default withApollo(Login)

@@ -1,23 +1,12 @@
-import React, { Component } from 'react'
-import { render } from 'react-dom'
-import {ApolloClient, gql, HttpLink, InMemoryCache} from 'apollo-boost'
-import { ApolloProvider } from 'react-apollo'
-import { Router } from 'react-router-dom'
+import React, {Component} from 'react'
+import {render} from 'react-dom'
+import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
+import {ApolloProvider} from 'react-apollo'
+import {Router} from 'react-router-dom'
 import App from './components/App'
-import {AUTH_TOKEN, ORGANIZATION_ID} from './constants'
+import {AUTH_TOKEN} from './constants'
 import history from './utils/history'
 import 'typeface-roboto'
-
-const READ_USER_INFO = gql`
-  query ReadCurrentUser {
-    user {
-      currentUser {
-        id
-        organizationId
-      }
-    }
-  }
-`
 
 class RootComponent extends Component {
   constructor(props) {
@@ -40,7 +29,7 @@ class RootComponent extends Component {
 
   updateApolloClient(authToken) {
     localStorage.setItem(AUTH_TOKEN, authToken)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.setState({
         token: authToken,
         client: new ApolloClient({
@@ -53,28 +42,21 @@ class RootComponent extends Component {
           cache: new InMemoryCache()
         })
       }, () => {
-        const {client} = this.state
-        client.query({query: READ_USER_INFO}).then(({error, data}) => {
-          if (error) {
-            reject(error)
-          }
-          localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-          resolve()
-        })
+        resolve()
       })
     })
   }
 
   render() {
-    const { client } = this.state
+    const {client} = this.state
     return (
       <ApolloProvider client={client}>
         <Router history={history}>
-          <App updateClientCallback={this.updateApolloClient} />
+          <App updateClientCallback={this.updateApolloClient}/>
         </Router>
       </ApolloProvider>
     )
   }
 }
 
-render(<RootComponent />, document.getElementById('root'))
+render(<RootComponent/>, document.getElementById('root'))

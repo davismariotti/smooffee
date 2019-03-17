@@ -3,6 +3,7 @@ import {Mutation} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
 import history from '../../utils/history'
+import {ORGANIZATION_ID} from '../../constants'
 
 const SignUpMutation = gql`
     mutation CreateUser($userInput: UserInput!) {
@@ -26,7 +27,11 @@ class SignupContinued extends Component {
     let lastname
     return (
       <div>
-        <Mutation mutation={SignUpMutation}>
+        <Mutation mutation={SignUpMutation} onCompleted={({user}) => {
+          console.log('user', user)
+          localStorage.setItem(ORGANIZATION_ID, user.create.organizationId)
+          history.push('/home')
+        }}>
           {(signup) => (
             <div>
               <form
@@ -43,8 +48,6 @@ class SignupContinued extends Component {
                     variables: {
                       userInput
                     }
-                  }).then(() => {
-                    history.push('/home')
                   })
                   firstname.value = ''
                   lastname.value = ''
