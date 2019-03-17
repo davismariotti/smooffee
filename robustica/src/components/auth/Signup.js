@@ -7,7 +7,7 @@ import GoogleSignIn from './GoogleSignIn'
 import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
 import '../../css/index.css'
-import {AUTH_TOKEN, USER_ID} from '../../constants'
+import {USER_ID} from '../../constants'
 import firebaseApp from '../../services/AuthService'
 
 class Signup extends Component {
@@ -23,9 +23,9 @@ class Signup extends Component {
       .auth()
       .currentUser.getToken()
       .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token)
-        updateClientCallback()
-        history.push('/signupcontinued')
+        updateClientCallback(token).then(() => {
+          history.push('/signupcontinued')
+        })
       })
   }
 
