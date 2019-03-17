@@ -23,9 +23,9 @@ class Signup extends Component {
       .auth()
       .currentUser.getToken()
       .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token)
-        updateClientCallback()
-        history.push('/signupcontinued')
+        updateClientCallback(token).then(() => {
+          history.push('/signupcontinued')
+        })
       })
   }
 

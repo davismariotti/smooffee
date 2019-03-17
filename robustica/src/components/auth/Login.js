@@ -42,9 +42,9 @@ class Login extends Component {
       .auth()
       .currentUser.getToken()
       .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token)
-        updateClientCallback()
-        history.push('/home')
+        updateClientCallback(token).then(() => {
+          history.push('/home')
+        })
       })
   }
 
