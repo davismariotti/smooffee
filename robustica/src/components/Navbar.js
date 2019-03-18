@@ -16,23 +16,19 @@ class Navbar extends Component {
     this.state = {
       leftMenuShow: false,
       rightMenuShow: false,
-      leftMenu: null,
-      rightMenu: null,
     }
 
     this.classes = props
   }
 
-  handleRightMenuClick = event => {
+  handleRightMenuClick = () => {
     this.setState({
-      rightMenu: event.currentTarget,
       rightMenuShow: true
     })
   }
 
-  handleLeftMenuClick = event => {
+  handleLeftMenuClick = () => {
     this.setState({
-      leftMenu: event.currentTarget,
       leftMenuShow: true
     })
   }
@@ -56,41 +52,39 @@ class Navbar extends Component {
 
   render() {
     const {loggedin} = this.props
-    const {leftMenu, rightMenu, leftMenuShow, rightMenuShow} = this.state
+    const {leftMenuShow, rightMenuShow} = this.state
 
-    let viewableNavBar
-    if (loggedin) {
-      viewableNavBar = (
-        <Toolbar className="navBar">
-          <IconButton color="inherit" onClick={this.handleLeftMenuClick}>
-            <MenuIcon/>
-          </IconButton>
-          <Menu id="simple-menu" anchorEl={leftMenu} open={leftMenuShow} onClose={this.handleLeftClose}>
-            <Options/>
-          </Menu>
-          <Typography variant="h4" color="inherit">
-            Smooffee
-          </Typography>
-          <IconButton align="right" color="inherit" onClick={this.handleRightMenuClick}>
-            <Face/>
-          </IconButton>
-          <Menu id="simple-menu" anchorEl={rightMenu} open={rightMenuShow} onClose={this.handleRightClose}>
-            <UserInfo/>
-            <MenuItem>My account</MenuItem>
-            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-          </Menu>
-        </Toolbar>
-      )
-    } else {
-      viewableNavBar = (
-        <Toolbar>
-          <Typography variant="h4" color="inherit">
-            Smooffee
-          </Typography>
-        </Toolbar>
-      )
-    }
-    return <AppBar position="static">{viewableNavBar}</AppBar>
+    return <AppBar position="static">
+      {(() => {
+       if (loggedin) {
+         return         <Toolbar className="navBar">
+           <IconButton color="inherit" buttonRef={node => {this.leftMenuEl = node}} onClick={this.handleLeftMenuClick}>
+             <MenuIcon/>
+           </IconButton>
+           <Menu id="simple-menu" anchorEl={this.leftMenuEl} open={leftMenuShow} onClose={this.handleLeftClose}>
+             <Options/>
+           </Menu>
+           <Typography variant="h4" color="inherit">
+             Smooffee
+           </Typography>
+           <IconButton align="right" color="inherit" buttonRef={node=> {this.rightMenuEl = node}} onClick={this.handleRightMenuClick}>
+             <Face/>
+           </IconButton>
+           <Menu id="simple-menu" anchorEl={this.rightMenuEl} open={rightMenuShow} onClose={this.handleRightClose}>
+             <UserInfo/>
+             <MenuItem>My account</MenuItem>
+             <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+           </Menu>
+         </Toolbar>
+       } else {
+         return <Toolbar>
+           <Typography variant="h4" color="inherit">
+             Smooffee
+           </Typography>
+         </Toolbar>
+       }
+      })()}
+    </AppBar>
   }
 }
 
