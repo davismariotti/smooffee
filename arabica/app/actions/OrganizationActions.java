@@ -1,16 +1,16 @@
 package actions;
 
+import models.BaseModel;
 import models.Organization;
 import utilities.QLException;
 
 public class OrganizationActions {
 
     public static Organization createOrganization(String name) {
-        Organization organization = new Organization();
-        organization.setName(name);
-        organization.save();
-        organization.refresh();
-        return organization;
+        return new Organization()
+            .setName(name)
+            .setStatus(BaseModel.ACTIVE)
+            .store();
     }
 
     public static Organization updateOrganization(Long organizationId, String name) {
@@ -27,7 +27,6 @@ public class OrganizationActions {
         if (organization == null) throw new QLException("Organization not found");
 
         organization.deprecate();
-        organization.save();
         return true;
     }
 }

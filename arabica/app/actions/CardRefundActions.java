@@ -1,6 +1,6 @@
 package actions;
 
-
+import models.BaseModel;
 import models.Card;
 import models.CardRefund;
 import models.Payment;
@@ -18,6 +18,7 @@ public class CardRefundActions {
         CardRefund cardRefund = new CardRefund()
                 .setCard(card)
                 .setPayment(payment)
+                .setStatus(BaseModel.ACTIVE)
                 .store();
 
         // TODO Stripe Refund card

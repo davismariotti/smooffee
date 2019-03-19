@@ -1,9 +1,6 @@
 package actions;
 
-import models.Card;
-import models.Payment;
-import models.Refund;
-import models.User;
+import models.*;
 import utilities.QLException;
 
 public class PaymentActions {
@@ -16,6 +13,7 @@ public class PaymentActions {
                 .setAmount(amount)
                 .setUser(user)
                 .setType("cash")
+                .setStatus(BaseModel.ACTIVE)
                 .store();
 
         UserActions.addToBalance(userId, amount);
@@ -36,10 +34,10 @@ public class PaymentActions {
                 .setUser(user)
                 .setType("card")
                 .setCard(card)
+                .setStatus(BaseModel.ACTIVE)
                 .store();
 
         UserActions.addToBalance(userId, amount);
-        payment.refresh();
 
         return payment;
     }
@@ -47,7 +45,6 @@ public class PaymentActions {
     public static Refund refundPayment(Long paymentId) {
         Payment payment = Payment.find.byId(paymentId);
         if (payment == null) throw new QLException("Payment not found");
-        User user = payment.getUser();
 
         CardRefundActions.createCardRefund(payment.getCard().getId(), paymentId);
 

@@ -46,6 +46,7 @@ public class Permission {
 
     // ALL OTHER PERMISSIONS
     public static final int ORGANIZATION_CREATE = 400;
+    public static final int ORGANIZATION_LIST = 401;
 
     private static final Map<Role, List<Integer>> permissionAssignments = new HashMap<Role, List<Integer>>() {{
         put(Role.SYSADMIN, new ArrayList<Integer>() {{
@@ -72,6 +73,8 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_USERS_READ);
+
+            add(Permission.ORGANIZATION_LIST);
         }});
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
@@ -89,6 +92,8 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+
+            add(Permission.ORGANIZATION_LIST);
         }});
         put(Role.CUSTOMER, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
@@ -100,6 +105,8 @@ public class Permission {
 
             add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+
+            add(Permission.ORGANIZATION_LIST);
         }});
         put(Role.ANONYMOUS, new ArrayList<Integer>() {{
             add(Permission.NONE);

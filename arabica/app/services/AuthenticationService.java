@@ -51,10 +51,7 @@ public class AuthenticationService {
 
     public static String getUidFromToken(String firebaseAuthToken) throws FirebaseAuthException {
         if (!mock) {
-            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken);
-
-            ArabicaLogger.logger.debug("Decoded uid - {}", decodedToken.getUid());
-            return decodedToken.getUid();
+            return FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken).getUid();
         } else {
             if (mockMap.containsKey(firebaseAuthToken)) return mockMap.get(firebaseAuthToken);
             else throw new FirebaseAuthException("MAPDOESNOTCONTAIN", "Firebase mock map does not contain token");
