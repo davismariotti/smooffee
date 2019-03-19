@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import * as PropTypes from 'prop-types'
-import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core'
+import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Face from '@material-ui/icons/Face'
-import { AuthService } from '../services/AuthService'
+import {AuthService} from '../services/AuthService'
 import history from '../utils/history'
 import '../css/index.css'
 import UserInfo from './UserInfo'
@@ -14,72 +14,77 @@ class Navbar extends Component {
     super(props)
 
     this.state = {
-      leftMenu: null,
-      rightMenu: null
+      leftMenuShow: false,
+      rightMenuShow: false,
     }
 
     this.classes = props
   }
 
-  handleRightMenuClick = event => {
-    this.setState({ rightMenu: event.currentTarget })
+  handleRightMenuClick = () => {
+    this.setState({
+      rightMenuShow: true
+    })
   }
 
-  handleLeftMenuClick = event => {
-    this.setState({ leftMenu: event.currentTarget })
+  handleLeftMenuClick = () => {
+    this.setState({
+      leftMenuShow: true
+    })
   }
 
   handleLeftClose = () => {
-    this.setState({ leftMenu: null })
+    this.setState({leftMenuShow: false})
   }
 
   handleRightClose = () => {
-    this.setState({ rightMenu: null })
+    this.setState({rightMenuShow: false})
   }
 
   handleLogout = () => {
     AuthService.signout()
     this.loggedin = false
+    this.setState({
+      rightMenuShow: false
+    })
     history.push('/login')
   }
 
   render() {
-    const { loggedin } = this.props
-    const { leftMenu, rightMenu } = this.state
+    const {loggedin} = this.props
+    const {leftMenuShow, rightMenuShow} = this.state
 
-    let viewableNavBar
-    if (loggedin) {
-      viewableNavBar = (
-        <Toolbar className="navBar">
-          <IconButton color="inherit" onClick={this.handleLeftMenuClick}>
-            <MenuIcon />
-          </IconButton>
-          <Menu id="simple-menu" anchorEl={leftMenu} open={Boolean(leftMenu)} onClose={this.handleLeftClose}>
-            <Options />
-          </Menu>
-          <Typography variant="h4" color="inherit">
-            Smooffee
-          </Typography>
-          <IconButton align="right" color="inherit" onClick={this.handleRightMenuClick}>
-            <Face />
-          </IconButton>
-          <Menu id="simple-menu" anchorEl={rightMenu} open={Boolean(rightMenu)} onClose={this.handleRightClose}>
-            <UserInfo />
-            <MenuItem>My account</MenuItem>
-            <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
-          </Menu>
-        </Toolbar>
-      )
-    } else {
-      viewableNavBar = (
-        <Toolbar>
-          <Typography variant="h4" color="inherit">
-            Smooffee
-          </Typography>
-        </Toolbar>
-      )
-    }
-    return <AppBar position="static">{viewableNavBar}</AppBar>
+    return <AppBar position="static">
+      {(() => {
+       if (loggedin) {
+         return         <Toolbar className="navBar">
+           <IconButton color="inherit" buttonRef={node => {this.leftMenuEl = node}} onClick={this.handleLeftMenuClick}>
+             <MenuIcon/>
+           </IconButton>
+           <Menu id="simple-menu" anchorEl={this.leftMenuEl} open={leftMenuShow} onClose={this.handleLeftClose}>
+             <Options/>
+           </Menu>
+           <Typography variant="h4" color="inherit">
+             Smooffee
+           </Typography>
+           <IconButton align="right" color="inherit" buttonRef={node=> {this.rightMenuEl = node}} onClick={this.handleRightMenuClick}>
+             <Face/>
+           </IconButton>
+           <Menu id="simple-menu" anchorEl={this.rightMenuEl} open={rightMenuShow} onClose={this.handleRightClose}>
+             <UserInfo/>
+             <MenuItem>My account</MenuItem>
+             <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+           </Menu>
+         </Toolbar>
+       } else {
+         return <Toolbar>
+           <Typography variant="h4" color="inherit">
+             Smooffee
+           </Typography>
+         </Toolbar>
+       }
+      })()}
+    </AppBar>
   }
 }
 

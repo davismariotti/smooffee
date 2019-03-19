@@ -1,5 +1,6 @@
 package actions;
 
+import models.BaseModel;
 import models.Order;
 import models.Refund;
 import models.User;
@@ -14,6 +15,7 @@ public class RefundActions {
                 .setAmount(order.getProduct().getPrice()) // TODO Think about discounts and actual paid price??
                 .setOrder(order)
                 .setUser(order.getUser())
+                .setStatus(BaseModel.ACTIVE)
                 .store();
 
         User user = order.getUser();

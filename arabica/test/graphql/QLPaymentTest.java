@@ -3,9 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import play.mvc.Result;
 import services.AuthenticationService;
 
@@ -14,23 +12,57 @@ import static play.mvc.Http.Status.OK;
 
 public class QLPaymentTest {
 
-    @Before
-    public void setup() {
+    private static Long paymentId;
+
+    @BeforeClass
+    public static void setup() {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
-        AuthenticationService.mockMap.put("test2@test.com", "test2@test.com");
+        createPaymentCashTest();
     }
 
-    @After
-    public void teardown() {
+    @AfterClass
+    public static void teardown() {
         FakeApplication.stop();
     }
 
+    public static void createPaymentCashTest() {
+        QLPayment.PaymentEntry paymentEntry = createPaymentCash(600);
+        paymentId = paymentEntry.getId();
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "query { user { read(id: %s) { id balance } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId())
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/read", QLUser.UserEntry.class);
+        assertNotNull(entry);
+        assertEquals(600, entry.getBalance().intValue());
+    }
+
     @Test
-    public void createPaymentCashTest() {
+    public void readPaymentTest() {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "query { payment { read(id: %d) { id amount type user { id balance } } } }",
+                paymentId
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+        QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/read", QLPayment.PaymentEntry.class);
+        assertEquals(paymentId, entry.getId());
+        assertEquals(600, entry.getAmount().intValue());
+        assertEquals("cash", entry.getType());
+        assertNotNull(entry.getUser());
+        assertEquals(Setup.defaultSysadmin.getFirebaseUserId(), entry.getUser().getId());
+    }
+
+
+    public static QLPayment.PaymentEntry createPaymentCash(int amount) {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
-        input.setAmount(600);
+        input.setAmount(amount);
         input.setType("cash");
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
@@ -38,13 +70,15 @@ public class QLPaymentTest {
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(input)
         ));
+        assertNotNull(result);
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());
-        assertEquals(600, entry.getAmount().intValue());
+        assertEquals(amount, entry.getAmount().intValue());
         assertEquals("cash", entry.getType());
         assertNotNull(entry.getUser());
         assertEquals(Setup.defaultSysadmin.getFirebaseUserId(), entry.getUser().getId());
-        assertEquals(600, entry.getUser().getBalance().intValue());
+
+        return entry;
     }
 }

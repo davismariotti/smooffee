@@ -16,24 +16,33 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loggedin: false,
+      loggedin: localStorage.getItem(USER_ID) !== '',
       updateClientCallback: props.updateClientCallback
     }
   }
 
   componentWillMount() {
+    const {updateClientCallback} = this.props
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         console.log('AUTH STATE CHANGED', user)
         // If logged in...
-        this.setState({loggedin: true})
+        this.setState({
+          loggedin: true
+        })
         user.getToken().then(result => {
+          const pastToken = localStorage.getItem(AUTH_TOKEN)
           localStorage.setItem(AUTH_TOKEN, result)
           localStorage.setItem(USER_ID, user.uid)
+          if (pastToken !== result) {
+            updateClientCallback(result)
+          }
         })
       } else {
         // If not logged in...
-        this.setState({loggedin: false})
+        this.setState({
+          loggedin: false
+        })
       }
     })
   }
@@ -55,18 +64,24 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/login" render={routeProps => (
-            <Login
-              {...routeProps}
-              updateClientCallback={updateClientCallback}
-            />
-          )}/>
-          <Route path="/signup" render={routeProps => (
-            <Signup
-              {...routeProps}
-              updateClientCallback={updateClientCallback}
-            />
-          )}/>
+          <Route
+            path="/login"
+            render={routeProps => (
+              <Login
+                {...routeProps}
+                updateClientCallback={updateClientCallback}
+              />
+            )}
+          />
+          <Route
+            path="/signup"
+            render={routeProps => (
+              <Signup
+                {...routeProps}
+                updateClientCallback={updateClientCallback}
+              />
+            )}
+          />
           <Route path="/signupcontinued" component={SignupContinued}/>
           <Route path="/recover" component={Recover}/>
           <Route path="/home" component={Home}/>
