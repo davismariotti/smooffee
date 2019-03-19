@@ -10,6 +10,7 @@ input OrganizationInput {
 
 type OrganizationQuery {
     read(id: Long!): OrganizationEntry
+    list: [OrganizationEntry]!
 }
 
 type OrganizationMutation {

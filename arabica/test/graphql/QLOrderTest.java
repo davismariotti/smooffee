@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import models.BaseModel;
+import org.junit.*;
 import play.mvc.Result;
 
 import java.io.IOException;
@@ -21,32 +19,25 @@ import static play.test.Helpers.contentAsString;
 
 public class QLOrderTest {
 
-    @Before
-    public void setup() {
+    private static Long orderId;
+
+    @BeforeClass
+    public static void setup() {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
         Setup.createDefaultProduct();
+
+        createOrderTest();
     }
 
-    @After
-    public void teardown() {
+    @AfterClass
+    public static void teardown() {
         FakeApplication.stop();
     }
 
-    @Test
-    public void createOrderTest() {
-        QLPayment.PaymentInput paymentInput = new QLPayment.PaymentInput();
-        paymentInput.setAmount(Setup.defaultProduct.getPrice());
-        paymentInput.setType("cash");
-
-        // Add funds to user
-        Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount }} }",
-                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
-                QL.prepare(paymentInput)
-        ));
-        assertEquals(OK, result.status());
+    public static void createOrderTest() {
+        QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice());
 
         QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
         orderInput.setLocation("HUB");
@@ -54,16 +45,19 @@ public class QLOrderTest {
         orderInput.setRecipient("Davis Mariotti");
         orderInput.setProductId(Setup.defaultProduct.getId());
 
-        result = FakeApplication.routeGraphQLRequest(String.format(
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(orderInput)
         ));
+        assertNotNull(result);
         assertEquals(OK, result.status());
 
         QLOrder.OrderEntry entry = FakeApplication.graphQLResultToObject(result, "order/create", QLOrder.OrderEntry.class);
         assertNotNull(entry);
         assertNotNull(entry.getId());
+        orderId = entry.getId();
+
         assertEquals("Notes", entry.getNotes());
         assertEquals("HUB", entry.getLocation());
         assertEquals("Davis Mariotti", entry.getRecipient());
@@ -76,6 +70,7 @@ public class QLOrderTest {
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId())
 
         ));
+        assertNotNull(result);
         assertEquals(OK, result.status());
         QLUser.UserEntry userEntry = FakeApplication.graphQLResultToObject(result, "user/read", QLUser.UserEntry.class);
         assertNotNull(userEntry);
@@ -96,9 +91,8 @@ public class QLOrderTest {
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(input)
         ));
-        assertEquals(OK, result.status());
-
         assertNotNull(result);
+        assertEquals(OK, result.status());
 
         try {
             JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
@@ -109,5 +103,63 @@ public class QLOrderTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void readOrderTest() {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "query { order { read(id: %d) { id location notes product { id } status recipient } } }",
+                orderId
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+        QLOrder.OrderEntry entry = FakeApplication.graphQLResultToObject(result, "order/read", QLOrder.OrderEntry.class);
+        assertNotNull(entry);
+        assertEquals(orderId, entry.getId());
+        assertEquals("HUB", entry.getLocation());
+        assertEquals("Notes", entry.getNotes());
+        assertEquals("Davis Mariotti", entry.getRecipient());
+        assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
+        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+    }
+
+    @Test
+    public void listOrdersTest() {
+        QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice());
+
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setLocation("EJ308");
+        orderInput.setNotes("Other notes");
+        orderInput.setRecipient("Tom Dale");
+        orderInput.setProductId(Setup.defaultProduct.getId());
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(orderInput)
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        result = FakeApplication.routeGraphQLRequest(String.format(
+                "query { order { list(organizationId: %d, statuses: %s) { id location notes product { id } status recipient } } }",
+                Setup.defaultOrganization.getId(),
+                QL.prepare(new Integer[]{1})
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLOrder.OrderEntry[] entries = FakeApplication.graphQLResultToObject(result, "order/list", QLOrder.OrderEntry[].class);
+        assertNotNull(entries);
+        assertEquals(2, entries.length);
+        assertEquals(orderId, entries[0].getId());
+        assertEquals("HUB", entries[0].getLocation());
+        assertEquals("Notes", entries[0].getNotes());
+        assertEquals("Davis Mariotti", entries[0].getRecipient());
+
+        assertEquals("EJ308", entries[1].getLocation());
+        assertEquals("Other notes", entries[1].getNotes());
+        assertEquals("Tom Dale", entries[1].getRecipient());
+
     }
 }

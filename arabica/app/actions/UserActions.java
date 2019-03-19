@@ -1,6 +1,7 @@
 package actions;
 
 import graphql.QLUser;
+import models.BaseModel;
 import models.Organization;
 import models.User;
 import services.authorization.Role;
@@ -17,10 +18,11 @@ public class UserActions {
                     .setEmail(email)
                     .setFirebaseUserId(fireBaseUserId)
                     .setRole(Role.CUSTOMER.getValue())
-                    .setBalance(0);
+                    .setBalance(0)
+                    .setStatus(BaseModel.ACTIVE);
 
-            Organization org = Organization.find.byId(organizationId);
-            newUser.setOrganization(org);
+            Organization organization = Organization.find.byId(organizationId);
+            newUser.setOrganization(organization);
             newUser.save();
             return newUser;
         } else {

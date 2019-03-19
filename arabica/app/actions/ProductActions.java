@@ -35,7 +35,6 @@ public class ProductActions {
             return false;
         }
         product.deprecate();
-        product.save();
         return true;
     }
 }

@@ -3,8 +3,8 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
 import services.AuthenticationService;
@@ -15,83 +15,89 @@ import static play.mvc.Http.Status.OK;
 
 public class QLUserTest {
 
-    @Before
-    public void setup() {
+    private static final String uid = "test2@test.com";
+
+    @BeforeClass
+    public static void setup() {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
-        AuthenticationService.mockMap.put("test2@test.com", "test2@test.com");
+        AuthenticationService.mockMap.put(uid, uid);
+        createUserTest();
+        readUserTest();
     }
 
-    @After
-    public void teardown() {
+    @AfterClass
+    public static void teardown() {
         FakeApplication.stop();
     }
 
-    @Test
-    public void createUser() {
-        FakeApplication.authToken.push("test2@test.com");
+    public static void createUserTest() {
+        FakeApplication.authToken.push(uid);
 
         QLUser.UserInput input = new QLUser.UserInput();
         input.setFirstName("User");
         input.setLastName("2");
-        input.setEmail("test2@test.com");
+        input.setEmail(uid);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId } } }",
                 Setup.defaultOrganization.getId(),
                 QL.prepare(input)
         ));
-
+        assertNotNull(result);
         assertEquals(OK, result.status());
-        QLUser.UserEntry user = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
-        assertNotNull(user.getId());
-        assertEquals("User", user.getFirstname());
-        assertEquals("2", user.getLastname());
-        assertEquals(Setup.defaultOrganization.getId(), user.getOrganizationId());
-        assertEquals("test2@test.com", user.getEmail());
+
+        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
+        assertNotNull(entry);
+        assertEquals(uid, entry.getId());
+        assertEquals("User", entry.getFirstname());
+        assertEquals("2", entry.getLastname());
+        assertEquals(Setup.defaultOrganization.getId(), entry.getOrganizationId());
+        assertEquals(uid, entry.getEmail());
         FakeApplication.authToken.pop();
     }
 
     @Test
     public void updateUser() {
-        FakeApplication.authToken.push("test2@test.com");
-
         QLUser.UserInput input = new QLUser.UserInput();
-        input.setFirstName("User");
-        input.setLastName("2");
-        input.setEmail("test2@test.com");
-
-        Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId } } }",
-                Setup.defaultOrganization.getId(),
-                QL.prepare(input)
-        ));
-        assertEquals(OK, result.status());
-        QLUser.UserEntry user = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
-        assertNotNull(user.getId());
-        assertEquals("User", user.getFirstname());
-        assertEquals("2", user.getLastname());
-        assertEquals(Setup.defaultOrganization.getId(), user.getOrganizationId());
-        assertEquals("test2@test.com", user.getEmail());
-
         input.setFirstName("Usen");
         input.setLastName("3");
-        input.setEmail("test2@test.com");
+        input.setEmail(uid);
 
-        result = FakeApplication.routeGraphQLRequest(String.format(
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { user { update(userId: %s, userInput: %s) { id firstName lastName email organizationId } } }",
-                QL.prepare(user.getId()),
+                QL.prepare(uid),
                 QL.prepare(input)
         ));
+        assertNotNull(result);
         assertEquals(OK, result.status());
-        user = FakeApplication.graphQLResultToObject(result, "user/update", QLUser.UserEntry.class);
-        assertNotNull(user.getId());
-        assertEquals("Usen", user.getFirstname());
-        assertEquals("3", user.getLastname());
-        assertEquals(Setup.defaultOrganization.getId(), user.getOrganizationId());
-        assertEquals("test2@test.com", user.getEmail());
+
+        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/update", QLUser.UserEntry.class);
+        assertNotNull(entry);
+        assertEquals(uid, entry.getId());
+        assertEquals("Usen", entry.getFirstname());
+        assertEquals("3", entry.getLastname());
+        assertEquals(Setup.defaultOrganization.getId(), entry.getOrganizationId());
+        assertEquals("test2@test.com", entry.getEmail());
 
         FakeApplication.authToken.pop();
+    }
+
+    public static void readUserTest() {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "query { user { read(id: %s) { id firstName lastName email balance } } }",
+                QL.prepare(uid)
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/read", QLUser.UserEntry.class);
+        assertNotNull(entry);
+        assertEquals(0, entry.getBalance().intValue());
+        assertEquals(uid, entry.getId());
+        assertEquals(uid, entry.getEmail());
+        assertEquals("User", entry.getFirstname());
+        assertEquals("2", entry.getLastname());
     }
 }

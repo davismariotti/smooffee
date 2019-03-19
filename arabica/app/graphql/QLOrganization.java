@@ -2,9 +2,7 @@ package graphql;
 
 import actions.OrganizationActions;
 import models.Organization;
-import models.User;
 import services.authorization.Permission;
-import utilities.ThreadStorage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +18,14 @@ public class QLOrganization {
                 return null;
             }
             return new OrganizationEntry(organization);
+        }
+
+        public List<OrganizationEntry> list() {
+            Permission.check(Permission.ORGANIZATION_LIST);
+
+            List<Organization> organizations = Organization.find.all(); // TODO except deprecated
+
+            return organizations.stream().map(OrganizationEntry::new).collect(Collectors.toList());
         }
     }
 
