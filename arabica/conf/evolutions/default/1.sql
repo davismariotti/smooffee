@@ -1,103 +1,101 @@
-# --- Created by Ebean DDL
-# To stop Ebean DDL generation, remove this comment and start using Evolutions
-
 # --- !Ups
 
 create table card (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
   token                         varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_card primary key (id)
 );
 
 create table cardrefund (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_cardrefund primary key (id)
 );
 
 create table orders (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   user_id                       bigint not null,
   product_id                    bigint not null,
   recipient                     varchar(255) not null,
   location                      varchar(255) not null,
   notes                         varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_orders primary key (id)
 );
 
 create table organization (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   name                          varchar(255),
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  api_key                       varchar(255),
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_organization primary key (id)
 );
 
 create table payment (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   amount                        integer not null,
   user_id                       bigint not null,
   card_id                       bigint,
   type                          varchar(255) not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_payment primary key (id)
 );
 
 create table product (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   name                          varchar(255) not null,
   price                         integer not null,
   description                   varchar(255),
   organization_id               bigint not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_product primary key (id)
 );
 
 create table refund (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   amount                        integer not null,
   user_id                       bigint not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_refund primary key (id)
 );
 
 create table users (
   id                            bigserial not null,
-  deprecated_at                 timestamptz,
+  deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   firstname                     varchar(255) not null,
   lastname                      varchar(255) not null,
   organization_id               bigint not null,
   email                         varchar(255) not null,
-  last_logged_in                timestamptz,
+  last_logged_in                timestamp,
   role                          integer not null,
   firebase_user_id              varchar(255),
   balance                       integer not null,
-  created_at                    timestamptz not null,
-  updated_at                    timestamptz not null,
+  created_at                    timestamp not null,
+  updated_at                    timestamp not null,
   constraint pk_users primary key (id)
 );
 
