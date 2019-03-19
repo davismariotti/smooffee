@@ -114,10 +114,11 @@ class CreateOrderModal extends Component {
             if (loading) return 'Loading'
             if (error) return 'Error'
             return (
-              <Modal open={open}>
+              <Modal open={open} onClose={onSubmit}>
                 <div style={getModalStyle()} className={classes.paper}>
                   <Mutation mutation={CreateOrderMutation}>
                     {(createOrder) => (
+                      
                       <form onSubmit={e => {
                         e.preventDefault()
                         const orderInput = {
@@ -176,7 +177,7 @@ class CreateOrderModal extends Component {
                             autoFocus
                           />
                         </FormControl>
-                        <FormControl margin="normal" required fullWidth>
+                        <FormControl margin="normal" fullWidth>
                           <InputLabel htmlFor="name">Notes</InputLabel>
                           <Input
                             type="notes"
