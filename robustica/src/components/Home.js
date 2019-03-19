@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Button, GridList, Typography} from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
-import {Query, withApollo} from 'react-apollo'
+import {Query} from 'react-apollo'
 import {gql} from 'apollo-boost'
 import Order from './orders/Order'
 import '../css/index.css'
@@ -26,17 +26,6 @@ const LIST_ORDERS_QUERY = gql`
   }
 `
 
-const READ_USER_INFO = gql`
-  query ReadCurrentUser {
-    user {
-      currentUser {
-        id
-        organizationId
-      }
-    }
-  }
-`
-
 const styles = {
   title: {
     marginTop: '10px',
@@ -47,16 +36,9 @@ const styles = {
 class Home extends Component {
   constructor(props) {
     super(props)
-    const {client} = this.props
     this.state = {
       showModal: false
     }
-    client.query({query: READ_USER_INFO}).then(({error, data}) => {
-      if (error) {
-        return // TODO
-      }
-      localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-    })
     this.showModal = this.showModal.bind(this)
     this.handleCreateOrderSubmit = this.handleCreateOrderSubmit.bind(this)
   }
@@ -106,8 +88,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired,
-  client: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(withApollo(Home))
+export default withStyles(styles)(Home)
