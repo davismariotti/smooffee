@@ -39,12 +39,12 @@ SET default_with_oids = false;
 
 CREATE TABLE public.card (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     user_id bigint NOT NULL,
     token character varying(255),
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -77,10 +77,10 @@ ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 
 CREATE TABLE public.cardrefund (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -113,15 +113,15 @@ ALTER SEQUENCE public.cardrefund_id_seq OWNED BY public.cardrefund.id;
 
 CREATE TABLE public.orders (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     user_id bigint NOT NULL,
     product_id bigint NOT NULL,
     recipient character varying(255) NOT NULL,
     location character varying(255) NOT NULL,
     notes character varying(255),
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -154,11 +154,12 @@ ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
 
 CREATE TABLE public.organization (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     name character varying(255),
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    api_key character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -191,14 +192,14 @@ ALTER SEQUENCE public.organization_id_seq OWNED BY public.organization.id;
 
 CREATE TABLE public.payment (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     amount integer NOT NULL,
     user_id bigint NOT NULL,
     card_id bigint,
     type character varying(255) NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -248,14 +249,14 @@ ALTER TABLE public.play_evolutions OWNER TO davis;
 
 CREATE TABLE public.product (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     name character varying(255) NOT NULL,
     price integer NOT NULL,
     description character varying(255),
     organization_id bigint NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -288,12 +289,12 @@ ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 CREATE TABLE public.refund (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     amount integer NOT NULL,
     user_id bigint NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -326,18 +327,18 @@ ALTER SEQUENCE public.refund_id_seq OWNED BY public.refund.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    deprecated_at timestamp with time zone,
+    deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     firstname character varying(255) NOT NULL,
     lastname character varying(255) NOT NULL,
     organization_id bigint NOT NULL,
     email character varying(255) NOT NULL,
-    last_logged_in timestamp with time zone,
+    last_logged_in timestamp without time zone,
     role integer NOT NULL,
     firebase_user_id character varying(255),
     balance integer NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -441,9 +442,9 @@ COPY public.cardrefund (id, deprecated_at, status, created_at, updated_at) FROM 
 --
 
 COPY public.orders (id, deprecated_at, status, user_id, product_id, recipient, location, notes, created_at, updated_at) FROM stdin;
-3	\N	1	1	2	Tom Dale	EJ308	Little bit of cream	2019-03-15 14:37:12.983-07	2019-03-15 14:37:12.983-07
-1	\N	1	1	3	Davis Mariotti	EJ308		2019-03-15 12:40:08.425-07	2019-03-15 12:40:08.425-07
-2	\N	1	1	1	Davis Mariotti	EJ308		2019-03-15 12:40:18.246-07	2019-03-15 12:40:18.246-07
+1	\N	1	1	3	Davis Mariotti	EJ308		2019-03-15 12:40:08.425	2019-03-15 12:40:08.425
+2	\N	1	1	1	Davis Mariotti	EJ308		2019-03-15 12:40:18.246	2019-03-15 12:40:18.246
+3	\N	1	1	2	Tom Dale	EJ308	Little bit of cream	2019-03-15 14:37:12.983	2019-03-15 14:37:12.983
 \.
 
 
@@ -451,10 +452,10 @@ COPY public.orders (id, deprecated_at, status, user_id, product_id, recipient, l
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.organization (id, deprecated_at, status, name, created_at, updated_at) FROM stdin;
-1	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
-2	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
-3	\N	1	Davis Org	2019-03-15 11:36:21.11116-07	2019-03-15 11:36:21.11116-07
+COPY public.organization (id, deprecated_at, status, name, api_key, created_at, updated_at) FROM stdin;
+1	\N	1	Test Org	\N	2019-03-18 22:44:25.766703	2019-03-18 22:44:25.766703
+2	\N	1	Test Org	\N	2019-03-18 22:44:25.766703	2019-03-18 22:44:25.766703
+3	\N	1	Test Org	\N	2019-03-18 22:44:25.766703	2019-03-18 22:44:25.766703
 \.
 
 
@@ -471,7 +472,7 @@ COPY public.payment (id, deprecated_at, status, amount, user_id, card_id, type, 
 --
 
 COPY public.play_evolutions (id, hash, applied_at, apply_script, revert_script, state, last_problem) FROM stdin;
-1	24d9bf646b0c035eaed319468eea39ad8f0467ee	2019-03-15 10:57:21.227	create table card (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\ntoken                         varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_card primary key (id)\n);\n\ncreate table cardrefund (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_cardrefund primary key (id)\n);\n\ncreate table orders (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\nproduct_id                    bigint not null,\nrecipient                     varchar(255) not null,\nlocation                      varchar(255) not null,\nnotes                         varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_orders primary key (id)\n);\n\ncreate table organization (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255),\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_organization primary key (id)\n);\n\ncreate table payment (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncard_id                       bigint,\ntype                          varchar(255) not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_payment primary key (id)\n);\n\ncreate table product (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255) not null,\nprice                         integer not null,\ndescription                   varchar(255),\norganization_id               bigint not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_product primary key (id)\n);\n\ncreate table refund (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_refund primary key (id)\n);\n\ncreate table users (\nid                            bigserial not null,\ndeprecated_at                 timestamptz,\nstatus                        INTEGER DEFAULT 0 not null,\nfirstname                     varchar(255) not null,\nlastname                      varchar(255) not null,\norganization_id               bigint not null,\nemail                         varchar(255) not null,\nlast_logged_in                timestamptz,\nrole                          integer not null,\nfirebase_user_id              varchar(255),\nbalance                       integer not null,\ncreated_at                    timestamptz not null,\nupdated_at                    timestamptz not null,\nconstraint pk_users primary key (id)\n);\n\ncreate index ix_card_user_id on card (user_id);\nalter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_user_id on orders (user_id);\nalter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_product_id on orders (product_id);\nalter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;\n\ncreate index ix_payment_user_id on payment (user_id);\nalter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_payment_card_id on payment (card_id);\nalter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;\n\ncreate index ix_product_organization_id on product (organization_id);\nalter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_refund_user_id on refund (user_id);\nalter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_users_organization_id on users (organization_id);\nalter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;	alter table if exists card drop constraint if exists fk_card_user_id;\ndrop index if exists ix_card_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_user_id;\ndrop index if exists ix_orders_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_product_id;\ndrop index if exists ix_orders_product_id;\n\nalter table if exists payment drop constraint if exists fk_payment_user_id;\ndrop index if exists ix_payment_user_id;\n\nalter table if exists payment drop constraint if exists fk_payment_card_id;\ndrop index if exists ix_payment_card_id;\n\nalter table if exists product drop constraint if exists fk_product_organization_id;\ndrop index if exists ix_product_organization_id;\n\nalter table if exists refund drop constraint if exists fk_refund_user_id;\ndrop index if exists ix_refund_user_id;\n\nalter table if exists users drop constraint if exists fk_users_organization_id;\ndrop index if exists ix_users_organization_id;\n\ndrop table if exists card cascade;\n\ndrop table if exists cardrefund cascade;\n\ndrop table if exists orders cascade;\n\ndrop table if exists organization cascade;\n\ndrop table if exists payment cascade;\n\ndrop table if exists product cascade;\n\ndrop table if exists refund cascade;\n\ndrop table if exists users cascade;	applied	
+1	f05100661c79e8b3390791ab19d1a242a3fbe666	2019-03-18 22:44:07.823	create table card (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\ntoken                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_card primary key (id)\n);\n\ncreate table cardrefund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_cardrefund primary key (id)\n);\n\ncreate table orders (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\nproduct_id                    bigint not null,\nrecipient                     varchar(255) not null,\nlocation                      varchar(255) not null,\nnotes                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_orders primary key (id)\n);\n\ncreate table organization (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255),\napi_key                       varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_organization primary key (id)\n);\n\ncreate table payment (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncard_id                       bigint,\ntype                          varchar(255) not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_payment primary key (id)\n);\n\ncreate table product (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255) not null,\nprice                         integer not null,\ndescription                   varchar(255),\norganization_id               bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_product primary key (id)\n);\n\ncreate table refund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_refund primary key (id)\n);\n\ncreate table users (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nfirstname                     varchar(255) not null,\nlastname                      varchar(255) not null,\norganization_id               bigint not null,\nemail                         varchar(255) not null,\nlast_logged_in                timestamp,\nrole                          integer not null,\nfirebase_user_id              varchar(255),\nbalance                       integer not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_users primary key (id)\n);\n\ncreate index ix_card_user_id on card (user_id);\nalter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_user_id on orders (user_id);\nalter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_product_id on orders (product_id);\nalter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;\n\ncreate index ix_payment_user_id on payment (user_id);\nalter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_payment_card_id on payment (card_id);\nalter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;\n\ncreate index ix_product_organization_id on product (organization_id);\nalter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_refund_user_id on refund (user_id);\nalter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_users_organization_id on users (organization_id);\nalter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;	alter table if exists card drop constraint if exists fk_card_user_id;\ndrop index if exists ix_card_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_user_id;\ndrop index if exists ix_orders_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_product_id;\ndrop index if exists ix_orders_product_id;\n\nalter table if exists payment drop constraint if exists fk_payment_user_id;\ndrop index if exists ix_payment_user_id;\n\nalter table if exists payment drop constraint if exists fk_payment_card_id;\ndrop index if exists ix_payment_card_id;\n\nalter table if exists product drop constraint if exists fk_product_organization_id;\ndrop index if exists ix_product_organization_id;\n\nalter table if exists refund drop constraint if exists fk_refund_user_id;\ndrop index if exists ix_refund_user_id;\n\nalter table if exists users drop constraint if exists fk_users_organization_id;\ndrop index if exists ix_users_organization_id;\n\ndrop table if exists card cascade;\n\ndrop table if exists cardrefund cascade;\n\ndrop table if exists orders cascade;\n\ndrop table if exists organization cascade;\n\ndrop table if exists payment cascade;\n\ndrop table if exists product cascade;\n\ndrop table if exists refund cascade;\n\ndrop table if exists users cascade;	applied	
 \.
 
 
@@ -480,9 +481,9 @@ COPY public.play_evolutions (id, hash, applied_at, apply_script, revert_script, 
 --
 
 COPY public.product (id, deprecated_at, status, name, price, description, organization_id, created_at, updated_at) FROM stdin;
-1	\N	1	Latte	600	latte	3	2019-03-15 11:36:53.207539-07	2019-03-15 11:36:53.207539-07
-2	\N	1	Drip Coffee	250	Drip drip drip	3	2019-03-15 17:13:28.017118-07	2019-03-15 17:13:28.017118-07
-3	\N	1	Cappuccino	450	Frothy	3	2019-03-15 17:14:13.021665-07	2019-03-15 17:14:13.021665-07
+1	\N	1	Latte	600	latte	3	2019-03-15 11:36:53.207539	2019-03-15 11:36:53.207539
+2	\N	1	Drip Coffee	250	Drip drip drip	3	2019-03-15 17:13:28.017118	2019-03-15 17:13:28.017118
+3	\N	1	Cappuccino	450	Frothy	3	2019-03-15 17:14:13.021665	2019-03-15 17:14:13.021665
 \.
 
 
@@ -499,9 +500,9 @@ COPY public.refund (id, deprecated_at, status, amount, user_id, created_at, upda
 --
 
 COPY public.users (id, deprecated_at, status, firstname, lastname, organization_id, email, last_logged_in, role, firebase_user_id, balance, created_at, updated_at) FROM stdin;
-1	\N	1	Davis	Mariotti	3	davismariotti@gmail.com	\N	0	76GqSI6ohMaBGAiDRvGOqgb6tp03	98200	2019-03-15 11:37:49.888-07	2019-03-15 14:37:12.984-07
-2	\N	1	Tom	Dale	3	tom.k.dale@gmail.com	\N	0	5uR1C21Z6hQI4aCrewu3TFfzmLB2	100000	2019-03-15 17:11:56.577988-07	2019-03-15 17:11:56.577988-07
-6	\N	1	Tersa	Almaw	3	tersaalmaw@gmail.com	\N	0	0h3WAUBDBOMtG1Onrg8zQjbBlzM2	100000	2019-03-15 17:12:40.347689-07	2019-03-15 17:12:40.347689-07
+1	\N	1	Davis	Mariotti	3	davismariotti@gmail.com	\N	0	76GqSI6ohMaBGAiDRvGOqgb6tp03	98200	2019-03-15 11:37:49.888	2019-03-15 14:37:12.984
+2	\N	1	Tom	Dale	3	tom.k.dale@gmail.com	\N	0	5uR1C21Z6hQI4aCrewu3TFfzmLB2	100000	2019-03-15 17:11:56.577988	2019-03-15 17:11:56.577988
+6	\N	1	Tersa	Almaw	3	tersaalmaw@gmail.com	\N	0	0h3WAUBDBOMtG1Onrg8zQjbBlzM2	100000	2019-03-15 17:12:40.347689	2019-03-15 17:12:40.347689
 \.
 
 
@@ -523,7 +524,7 @@ SELECT pg_catalog.setval('public.cardrefund_id_seq', 1, false);
 -- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.orders_id_seq', 3, true);
+SELECT pg_catalog.setval('public.orders_id_seq', 1, false);
 
 
 --
@@ -544,7 +545,7 @@ SELECT pg_catalog.setval('public.payment_id_seq', 1, false);
 -- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.product_id_seq', 3, true);
+SELECT pg_catalog.setval('public.product_id_seq', 1, false);
 
 
 --
@@ -558,7 +559,7 @@ SELECT pg_catalog.setval('public.refund_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davis
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 6, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
