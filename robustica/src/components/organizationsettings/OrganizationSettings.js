@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import {ORGANIZATION_ID} from '../../constants'
 import {listProductsQuery} from '../../graphql/productQueries'
+import EditProductModal from './EditProductModal';
 
 const styles = {
   organizationSettings: {
@@ -61,6 +62,7 @@ class OrganizationSettings extends Component {
 
     return (
       <div>
+        <EditProductModal open currentProduct={{ name: 'Test', description: 'Test', price: 0, status: 1}}/>
         <Paper className={classes.paper} elevation={1}>
           <Typography variant="h5" component="h3">
             Products
