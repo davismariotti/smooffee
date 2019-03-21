@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
-import {gql} from 'apollo-boost'
-import {Query} from 'react-apollo'
+import {compose, graphql} from 'react-apollo'
 import MoreVert from '@material-ui/icons/Menu'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -14,6 +13,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import {ORGANIZATION_ID} from '../../constants'
+import {listProductsQuery} from '../../graphql/productQueries'
 
 const styles = {
   organizationSettings: {
@@ -25,19 +25,6 @@ const styles = {
     padding: '10px'
   }
 }
-
-const ListProductsQuery = gql`
-  query ListProducts($organizationId: Long!) {
-    product {
-      list(organizationId: $organizationId) {
-        id
-        price
-        description
-        name
-      }
-    }
-  }
-`
 
 class OrganizationSettings extends Component {
   constructor(props) {
@@ -69,59 +56,70 @@ class OrganizationSettings extends Component {
   }
 
   render() {
-    const {classes} = this.props
+    const {classes, listProductsQueryResult} = this.props
     const {open} = this.state
+
     return (
       <div>
         <Paper className={classes.paper} elevation={1}>
           <Typography variant="h5" component="h3">
             Products
           </Typography>
-          <Query query={ListProductsQuery} variables={{organizationId: localStorage.getItem(ORGANIZATION_ID)}}>
-            {({loading, error, data}) => {
-              if (loading) return 'Loading'
-              if (error) return 'Error'
-              return (
-                <div>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="left">Name</TableCell>
-                        <TableCell align="right">Price</TableCell>
-                        <TableCell align="right">Description</TableCell>
-                        <TableCell align="right">Options</TableCell>
+          <div>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="right">Price</TableCell>
+                  <TableCell align="right">Description</TableCell>
+                  <TableCell align="right">Options</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(() => {
+                  if (listProductsQueryResult.loading) return (
+                    <TableRow>
+                      <TableCell>Loading</TableCell>
+                    </TableRow>
+                  )
+                  if (listProductsQueryResult.error) return (
+                    <TableRow>
+                      <TableCell>Error</TableCell>
+                    </TableRow>
+                  )
+                  return listProductsQueryResult.product.list.map(productItem => {
+                    return (
+                      <TableRow key={productItem.id}>
+                        <TableCell align="left">
+                          {productItem.name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {`$${productItem.price / 100}`}
+                        </TableCell>
+                        <TableCell align="right">
+                          {productItem.description}
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button onClick={() => {
+                            this.handleOptionMenuClick(productItem.id)
+                          }} buttonRef={node => {
+                            this.anchorEls[productItem.id] = node
+                          }}>
+                            <MoreVert/>
+                          </Button>
+                          <Menu id="menu" open={open[productItem.id] || false} anchorEl={this.anchorEls[productItem.id]} onClose={() => {
+                            this.handleOptionClose(productItem.id)
+                          }}>
+                            <MenuItem>Edit</MenuItem>
+                          </Menu>
+                        </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.product.list.map(productItem => {
-                        return (
-                          <TableRow key={productItem.id}>
-                            <TableCell align="left">
-                              {productItem.name}
-                            </TableCell>
-                            <TableCell align="right">
-                              {`$${productItem.price / 100}`}
-                            </TableCell>
-                            <TableCell align="right">
-                              {productItem.description}
-                            </TableCell>
-                            <TableCell align="right">
-                              <Button onClick={() => {this.handleOptionMenuClick(productItem.id)}} buttonRef={node => {this.anchorEls[productItem.id] = node}}>
-                                <MoreVert/>
-                              </Button>
-                              <Menu id="menu" open={open[productItem.id] || false} anchorEl={this.anchorEls[productItem.id]} onClose={() => {this.handleOptionClose(productItem.id)}}>
-                                <MenuItem>Edit</MenuItem>
-                              </Menu>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              )
-            }}
-          </Query>
+                    )
+                  })
+                })()}
+              </TableBody>
+            </Table>
+          </div>
         </Paper>
       </div>
     )
@@ -129,7 +127,24 @@ class OrganizationSettings extends Component {
 }
 
 OrganizationSettings.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  listProductsQueryResult: PropTypes.object
 }
 
-export default withStyles(styles)(OrganizationSettings)
+OrganizationSettings.defaultProps = {
+  listProductsQueryResult: {}
+}
+
+export default compose(
+  withStyles(styles),
+  graphql(listProductsQuery, {
+    name: 'listProductsQueryResult',
+    options: () => {
+      return {
+        variables: {
+          organizationId: localStorage.getItem(ORGANIZATION_ID)
+        }
+      }
+    }
+  })
+)(OrganizationSettings)
