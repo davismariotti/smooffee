@@ -1,11 +1,13 @@
 type OrganizationEntry {
     id: Long!
+    status: Int!
     name: String!
     products: [ProductEntry!]!
 }
 
 input OrganizationInput {
     name: String!
+    status: Int!
 }
 
 type OrganizationQuery {

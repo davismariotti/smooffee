@@ -77,29 +77,18 @@ public class QLOrder {
         }
     }
 
-    public static class OrderEntry {
-        private Long id;
+    public static class OrderEntry extends QLEntry {
         private String location;
         private String notes;
-        private Integer status;
         private String recipient;
         private QLProduct.ProductEntry product;
 
         public OrderEntry(Order order) {
-            this.id = order.getId();
+            super(order);
             this.location = order.getLocation();
             this.notes = order.getNotes();
             this.product = new QLProduct.ProductEntry(order.getProduct());
-            this.status = order.getStatus();
             this.recipient = order.getRecipient();
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public Integer getStatus() {
-            return status;
         }
 
         public String getLocation() {
@@ -119,11 +108,10 @@ public class QLOrder {
         }
     }
 
-    public static class OrderInput {
+    public static class OrderInput extends QLInput {
         private String location;
         private String notes;
         private Long productId;
-
         private String recipient;
 
         public String getLocation() {

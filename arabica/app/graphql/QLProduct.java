@@ -51,11 +51,10 @@ public class QLProduct {
         }
     }
 
-    public static class ProductInput {
+    public static class ProductInput extends QLInput {
         private String name;
         private String description;
         private Integer price;
-        private Integer status;
 
         public String getDescription() {
             return description;
@@ -80,31 +79,20 @@ public class QLProduct {
         public void setName(String name) {
             this.name = name;
         }
-
-        public Integer getStatus() {
-            return status;
-        }
-
-        public void setStatus(Integer status) {
-            this.status = status;
-        }
     }
 
-    public static class ProductEntry {
-        private Long id;
+    public static class ProductEntry extends QLEntry {
         private Long organizationId;
         private String name;
         private String description;
         private Integer price;
-        private Integer status;
 
         public ProductEntry(Product product) {
-            this.id = product.getId();
+            super(product);
             this.name = product.getName();
             this.organizationId = product.getOrganization().getId();
             this.description = product.getDescription();
             this.price = product.getPrice();
-            this.status = product.getStatus();
         }
 
         public Long getOrganizationId() {
@@ -119,16 +107,8 @@ public class QLProduct {
             return price;
         }
 
-        public Long getId() {
-            return id;
-        }
-
         public String getName() {
             return name;
-        }
-
-        public Integer getStatus() {
-            return status;
         }
     }
 }

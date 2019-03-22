@@ -40,6 +40,7 @@ public class QLOrderTest {
         QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice());
 
         QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
@@ -84,6 +85,7 @@ public class QLOrderTest {
         input.setLocation("HUB");
         input.setNotes("Notes");
         input.setRecipient("Davis Mariotti");
+        input.setStatus(BaseModel.ACTIVE);
         input.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
@@ -131,6 +133,7 @@ public class QLOrderTest {
         orderInput.setLocation("EJ308");
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
+        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
