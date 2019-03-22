@@ -36,6 +36,8 @@ class Home extends Component {
     this.setState({
       showModal: false
     })
+    const {listOrdersQueryResult} = this.props
+    listOrdersQueryResult.refetch()
   }
 
   render() {

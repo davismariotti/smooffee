@@ -8,6 +8,7 @@ query ListOrders($organizationId: Long!, $statuses: [Int]!) {
       notes
       location
       product {
+        id
         name
       }
       status
