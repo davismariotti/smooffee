@@ -25,6 +25,7 @@ public class QLOrderTest {
     public static void setup() {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
+        Setup.createDefaultDeliveryPeriod();
         Setup.createDefaultSysadmin();
         Setup.createDefaultProduct();
 
@@ -44,10 +45,11 @@ public class QLOrderTest {
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
+        orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } deliveryPeriod { id } } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(orderInput)
         ));
@@ -63,7 +65,9 @@ public class QLOrderTest {
         assertEquals("HUB", entry.getLocation());
         assertEquals("Davis Mariotti", entry.getRecipient());
         assertNotNull(entry.getProduct());
+        assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
+        assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
 
         // Make sure funds were deducted
         result = FakeApplication.routeGraphQLRequest(String.format(
@@ -81,17 +85,18 @@ public class QLOrderTest {
 
     @Test
     public void createOrderInsufficientFunds() {
-        QLOrder.OrderInput input = new QLOrder.OrderInput();
-        input.setLocation("HUB");
-        input.setNotes("Notes");
-        input.setRecipient("Davis Mariotti");
-        input.setStatus(BaseModel.ACTIVE);
-        input.setProductId(Setup.defaultProduct.getId());
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setLocation("HUB");
+        orderInput.setNotes("Notes");
+        orderInput.setRecipient("Davis Mariotti");
+        orderInput.setStatus(BaseModel.ACTIVE);
+        orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
+        orderInput.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { order { create(userId: %s, orderInput: %s) { id location notes product { id } } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
-                QL.prepare(input)
+                QL.prepare(orderInput)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
@@ -110,7 +115,7 @@ public class QLOrderTest {
     @Test
     public void readOrderTest() {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { read(id: %d) { id location notes product { id } status recipient } } }",
+                "query { order { read(id: %d) { id location notes product { id } deliveryPeriod { id classPeriod } status recipient } } }",
                 orderId
         ));
         assertNotNull(result);
@@ -121,7 +126,10 @@ public class QLOrderTest {
         assertEquals("HUB", entry.getLocation());
         assertEquals("Notes", entry.getNotes());
         assertEquals("Davis Mariotti", entry.getRecipient());
+        assertNotNull(entry.getProduct());
+        assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
+        assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
         assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
     }
 
@@ -133,6 +141,7 @@ public class QLOrderTest {
         orderInput.setLocation("EJ308");
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
+        orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 

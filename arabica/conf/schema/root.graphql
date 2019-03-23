@@ -5,6 +5,7 @@ type Query {
     product: ProductQuery!
     order: OrderQuery!
     payment: PaymentQuery!
+    deliveryPeriod: DeliveryPeriodQuery!
 }
 
 type Mutation {
@@ -13,4 +14,5 @@ type Mutation {
     product: ProductMutation!
     order: OrderMutation!
     payment: PaymentMutation!
+    deliveryPeriod: DeliveryPeriodMutation!
 }

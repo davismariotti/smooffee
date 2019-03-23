@@ -40,7 +40,7 @@ public class QLOrder {
             if (user == null) throw new QLException("User not found.");
             Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(user));
 
-            return new OrderEntry(OrderActions.createOrder(userId, orderInput.getProductId(), orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
+            return new OrderEntry(OrderActions.createOrder(userId, orderInput.getDeliveryPeriodId(), orderInput.getProductId(), orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
         }
 
         public OrderEntry updateStatus(Long orderId, int status) {
@@ -82,6 +82,7 @@ public class QLOrder {
         private String notes;
         private String recipient;
         private QLProduct.ProductEntry product;
+        private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
 
         public OrderEntry(Order order) {
             super(order);
@@ -89,6 +90,7 @@ public class QLOrder {
             this.notes = order.getNotes();
             this.product = new QLProduct.ProductEntry(order.getProduct());
             this.recipient = order.getRecipient();
+            this.deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
         }
 
         public String getLocation() {
@@ -106,6 +108,10 @@ public class QLOrder {
         public QLProduct.ProductEntry getProduct() {
             return product;
         }
+
+        public QLDeliveryPeriod.DeliveryPeriodEntry getDeliveryPeriod() {
+            return deliveryPeriod;
+        }
     }
 
     public static class OrderInput extends QLInput {
@@ -113,6 +119,7 @@ public class QLOrder {
         private String notes;
         private Long productId;
         private String recipient;
+        private Long deliveryPeriodId;
 
         public String getLocation() {
             return location;
@@ -144,6 +151,14 @@ public class QLOrder {
 
         public void setRecipient(String recipient) {
             this.recipient = recipient;
+        }
+
+        public Long getDeliveryPeriodId() {
+            return deliveryPeriodId;
+        }
+
+        public void setDeliveryPeriodId(Long deliveryPeriodId) {
+            this.deliveryPeriodId = deliveryPeriodId;
         }
     }
 }

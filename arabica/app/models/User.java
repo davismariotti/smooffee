@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.UserFinder;
 import services.authorization.Role;
 
 import javax.persistence.CascadeType;
@@ -123,5 +123,12 @@ public class User extends BaseModel {
                 .eq("organization_id", organizationId)
                 .in("status", statuses)
                 .findList();
+    }
+
+
+    public static class UserFinder extends Finder<Long, User> {
+        public UserFinder() {
+            super(User.class);
+        }
     }
 }

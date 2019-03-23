@@ -28,6 +28,10 @@ public class MainGraphQLResolver {
         public QLPayment.Query payment() {
             return new QLPayment.Query();
         }
+
+        public QLDeliveryPeriod.Query deliveryPeriod() {
+            return new QLDeliveryPeriod.Query();
+        }
     }
 
     public static class Mutation implements GraphQLMutationResolver {
@@ -49,6 +53,10 @@ public class MainGraphQLResolver {
 
         public QLPayment.Mutation payment() {
             return new QLPayment.Mutation();
+        }
+
+        public QLDeliveryPeriod.Mutation deliveryPeriod() {
+            return new QLDeliveryPeriod.Mutation();
         }
     }
 }

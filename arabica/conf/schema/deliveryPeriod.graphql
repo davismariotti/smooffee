@@ -1,0 +1,20 @@
+input DeliveryPeriodInput {
+    classPeriod: Int!
+    status: Int!
+}
+
+type DeliveryPeriodEntry {
+    id: Long!
+    status: Int!
+    classPeriod: Int!
+}
+
+type DeliveryPeriodQuery {
+    read(id: Long!): DeliveryPeriodEntry!
+    list(organizationId: Long!, statuses: [Int]!): [DeliveryPeriodEntry!]!
+}
+
+type DeliveryPeriodMutation {
+    create(organizationId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
+    update(deliveryPeriodId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
+}

@@ -33,15 +33,16 @@ public class Permission {
     public static final int OTHER_USER_ORDER_WRITE  = THIS_USER_ORDER_WRITE + 100;
 
     // THIS ORGANIZATION
-    public static final int THIS_ORGANIZATION_READ              = 300;
-    public static final int THIS_ORGANIZATION_ORDERS_READ       = 301;
-    public static final int THIS_ORGANIZATION_ORDERS_WRITE      = 302;
-    public static final int THIS_ORGANIZATION_SETTINGS_READ     = 303;
-    public static final int THIS_ORGANIZATION_SETTINGS_WRITE    = 304;
-    public static final int THIS_ORGANIZATION_REPORTS_READ      = 305;
-    public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE  = 306;
-    public static final int THIS_ORGANIZATION_PRODUCTS_READ     = 307;
-    public static final int THIS_ORGANIZATION_USERS_READ        = 308;
+    public static final int THIS_ORGANIZATION_READ                  = 300;
+    public static final int THIS_ORGANIZATION_ORDERS_READ           = 301;
+    public static final int THIS_ORGANIZATION_ORDERS_WRITE          = 302;
+    public static final int THIS_ORGANIZATION_SETTINGS_READ         = 303;
+    public static final int THIS_ORGANIZATION_SETTINGS_WRITE        = 304;
+    public static final int THIS_ORGANIZATION_REPORTS_READ          = 305;
+    public static final int THIS_ORGANIZATION_CHANGE_USER_ROLE      = 306;
+    public static final int THIS_ORGANIZATION_PRODUCTS_READ         = 307;
+    public static final int THIS_ORGANIZATION_USERS_READ            = 308;
+    public static final int THIS_ORGANIZATION_DELIVERY_PERIODS_READ = 309;
 
 
     // ALL OTHER PERMISSIONS
@@ -73,6 +74,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_CHANGE_USER_ROLE);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_USERS_READ);
+            add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -92,6 +94,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+            add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -105,6 +108,7 @@ public class Permission {
 
             add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+            add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
 
             add(Permission.ORGANIZATION_LIST);
         }});

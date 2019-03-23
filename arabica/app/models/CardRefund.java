@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.CardRefundFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -34,6 +34,13 @@ public class CardRefund extends BaseModel {
     public CardRefund setPayment(Payment payment) {
         this.payment = payment;
         return this;
+    }
+
+
+    public static class CardRefundFinder extends Finder<Long, CardRefund> {
+        public CardRefundFinder() {
+            super(CardRefund.class);
+        }
     }
 
 }
