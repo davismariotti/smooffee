@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.RefundFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -51,5 +51,10 @@ public class Refund extends BaseModel {
         return this;
     }
 
+    public static class RefundFinder extends Finder<Long, Refund> {
+        public RefundFinder() {
+            super(Refund.class);
+        }
+    }
 
 }

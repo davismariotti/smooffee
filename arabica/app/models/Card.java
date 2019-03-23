@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.CardFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,6 +34,13 @@ public class Card extends BaseModel {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+
+    public static class CardFinder extends Finder<Long, Card> {
+        public CardFinder() {
+            super(Card.class);
+        }
     }
 
 }

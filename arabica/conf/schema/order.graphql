@@ -1,9 +1,10 @@
 input OrderInput {
-    location: String!
+    location: String
     notes: String
-    productId: Long!
-    recipient: String!
-    status: Int!
+    productId: Long
+    recipient: String
+    status: Int
+    deliveryPeriodId: Long
 }
 
 type OrderEntry {
@@ -13,6 +14,7 @@ type OrderEntry {
     notes: String
     product: ProductEntry!
     recipient: String!
+    deliveryPeriod: DeliveryPeriodEntry!
 }
 
 type OrderQuery {

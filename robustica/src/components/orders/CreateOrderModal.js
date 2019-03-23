@@ -92,7 +92,8 @@ class CreateOrderModal extends Component {
                     location,
                     notes,
                     productId: product,
-                    recipient: name
+                    recipient: name,
+                    deliveryPeriodId: 0 // TODO
                   }
                   createOrder({
                     variables: {

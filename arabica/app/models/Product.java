@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.ProductFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -68,6 +68,12 @@ public class Product extends BaseModel {
                 .eq("organization_id", organizationId)
                 .in("status", statuses)
                 .findList();
+    }
+
+    public static class ProductFinder extends Finder<Long, Product> {
+        public ProductFinder() {
+            super(Product.class);
+        }
     }
 
 }

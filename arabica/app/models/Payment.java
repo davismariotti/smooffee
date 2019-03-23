@@ -1,7 +1,7 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
-import models.finders.PaymentFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -61,5 +61,11 @@ public class Payment extends BaseModel {
     public Payment setType(String type) {
         this.type = type;
         return this;
+    }
+
+    public static class PaymentFinder extends Finder<Long, Payment> {
+        public PaymentFinder() {
+            super(Payment.class);
+        }
     }
 }

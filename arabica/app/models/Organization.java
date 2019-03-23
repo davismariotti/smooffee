@@ -1,6 +1,6 @@
 package models;
 
-import models.finders.OrganizationFinder;
+import io.ebean.Finder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -40,5 +40,12 @@ public class Organization extends BaseModel {
     public Organization setApiKey(String apiKey) {
         this.apiKey = apiKey;
         return this;
+    }
+
+
+    public static class OrganizationFinder extends Finder<Long, Organization> {
+        public OrganizationFinder() {
+            super(Organization.class);
+        }
     }
 }

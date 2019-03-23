@@ -1,8 +1,8 @@
 input UserInput {
-    firstName: String!
-    lastName: String!
-    email: String!
-    status: Int!
+    firstName: String
+    lastName: String
+    email: String
+    status: Int
 }
 
 type UserEntry {
