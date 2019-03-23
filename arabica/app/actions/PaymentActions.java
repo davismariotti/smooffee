@@ -1,5 +1,6 @@
 package actions;
 
+import business.StripeAPI;
 import models.*;
 import utilities.QLException;
 
@@ -34,9 +35,11 @@ public class PaymentActions {
                 .setUser(user)
                 .setType("card")
                 .setCard(card)
-                .setStatus(BaseModel.ACTIVE)
-                .store();
+                .setStatus(BaseModel.ACTIVE);
 
+        StripeAPI.chargeCard(user.getOrganization(), card, payment);
+
+        payment.save();
         UserActions.addToBalance(userId, amount);
 
         return payment;
