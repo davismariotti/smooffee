@@ -4,10 +4,11 @@ import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cardrefund")
+@Table(name = "card_refund")
 public class CardRefund extends BaseModel {
 
     public static final CardRefundFinder find = new CardRefundFinder();
@@ -16,7 +17,11 @@ public class CardRefund extends BaseModel {
     private Card card;
 
     @NotNull
+    @OneToOne
     private Payment payment;
+
+    @NotNull
+    private String stripeRefundId;
 
     public Card getCard() {
         return card;
@@ -36,6 +41,14 @@ public class CardRefund extends BaseModel {
         return this;
     }
 
+    public String getStripeRefundId() {
+        return stripeRefundId;
+    }
+
+    public CardRefund setStripeRefundId(String stripeRefundId) {
+        this.stripeRefundId = stripeRefundId;
+        return this;
+    }
 
     public static class CardRefundFinder extends Finder<Long, CardRefund> {
         public CardRefundFinder() {

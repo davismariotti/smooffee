@@ -72,19 +72,21 @@ ALTER SEQUENCE public.card_id_seq OWNED BY public.card.id;
 
 
 --
--- Name: cardrefund; Type: TABLE; Schema: public; Owner: davis
+-- Name: card_refund; Type: TABLE; Schema: public; Owner: davis
 --
 
-CREATE TABLE public.cardrefund (
+CREATE TABLE public.card_refund (
     id bigint NOT NULL,
     deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    stripe_refund_id character varying(255) NOT NULL,
+    payment_id bigint NOT NULL
 );
 
 
-ALTER TABLE public.cardrefund OWNER TO davis;
+ALTER TABLE public.card_refund OWNER TO davis;
 
 --
 -- Name: cardrefund_id_seq; Type: SEQUENCE; Schema: public; Owner: davis
@@ -104,7 +106,7 @@ ALTER TABLE public.cardrefund_id_seq OWNER TO davis;
 -- Name: cardrefund_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: davis
 --
 
-ALTER SEQUENCE public.cardrefund_id_seq OWNED BY public.cardrefund.id;
+ALTER SEQUENCE public.cardrefund_id_seq OWNED BY public.card_refund.id;
 
 
 --
@@ -239,7 +241,8 @@ CREATE TABLE public.payment (
     card_id bigint,
     type character varying(255) NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    stripe_charge_id character varying(255)
 );
 
 
@@ -413,10 +416,10 @@ ALTER TABLE ONLY public.card ALTER COLUMN id SET DEFAULT nextval('public.card_id
 
 
 --
--- Name: cardrefund id; Type: DEFAULT; Schema: public; Owner: davis
+-- Name: card_refund id; Type: DEFAULT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public.cardrefund ALTER COLUMN id SET DEFAULT nextval('public.cardrefund_id_seq'::regclass);
+ALTER TABLE ONLY public.card_refund ALTER COLUMN id SET DEFAULT nextval('public.cardrefund_id_seq'::regclass);
 
 
 --
@@ -477,10 +480,10 @@ COPY public.card (id, deprecated_at, status, user_id, token, created_at, updated
 
 
 --
--- Data for Name: cardrefund; Type: TABLE DATA; Schema: public; Owner: davis
+-- Data for Name: card_refund; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.cardrefund (id, deprecated_at, status, created_at, updated_at) FROM stdin;
+COPY public.card_refund (id, deprecated_at, status, created_at, updated_at, stripe_refund_id, payment_id) FROM stdin;
 \.
 
 
@@ -519,7 +522,7 @@ COPY public.organization (id, deprecated_at, status, name, api_key, created_at, 
 -- Data for Name: payment; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.payment (id, deprecated_at, status, amount, user_id, card_id, type, created_at, updated_at) FROM stdin;
+COPY public.payment (id, deprecated_at, status, amount, user_id, card_id, type, created_at, updated_at, stripe_charge_id) FROM stdin;
 \.
 
 
@@ -528,7 +531,7 @@ COPY public.payment (id, deprecated_at, status, amount, user_id, card_id, type, 
 --
 
 COPY public.play_evolutions (id, hash, applied_at, apply_script, revert_script, state, last_problem) FROM stdin;
-1	cf1bc0648d910118fe029c2b78ef7561ddc93342	2019-03-22 21:58:59.486	create table card (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\ntoken                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_card primary key (id)\n);\n\ncreate table cardrefund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_cardrefund primary key (id)\n);\n\ncreate table delivery_period (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nclass_period                  integer,\norganization_id               bigint,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_delivery_period primary key (id)\n);\n\ncreate table orders (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\nproduct_id                    bigint not null,\nrecipient                     varchar(255) not null,\nlocation                      varchar(255) not null,\nnotes                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\ndelivery_period_id            bigint not null,\nconstraint pk_orders primary key (id)\n);\n\ncreate table organization (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255),\napi_key                       varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_organization primary key (id)\n);\n\ncreate table payment (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncard_id                       bigint,\ntype                          varchar(255) not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_payment primary key (id)\n);\n\ncreate table product (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255) not null,\nprice                         integer not null,\ndescription                   varchar(255),\norganization_id               bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_product primary key (id)\n);\n\ncreate table refund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_refund primary key (id)\n);\n\ncreate table users (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nfirstname                     varchar(255) not null,\nlastname                      varchar(255) not null,\norganization_id               bigint not null,\nemail                         varchar(255) not null,\nlast_logged_in                timestamp,\nrole                          integer not null,\nfirebase_user_id              varchar(255),\nbalance                       integer not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_users primary key (id)\n);\n\ncreate index ix_card_user_id on card (user_id);\nalter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_delivery_period_organization_id on delivery_period (organization_id);\nalter table delivery_period add constraint fk_delivery_period_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_orders_user_id on orders (user_id);\nalter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_product_id on orders (product_id);\nalter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;\n\ncreate index ix_orders_delivery_period_id on orders(delivery_period_id);\nalter table orders add constraint fk_orders_delivery_period_id foreign key (delivery_period_id) references delivery_period (id) on delete restrict on update restrict;\n\ncreate index ix_payment_user_id on payment (user_id);\nalter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_payment_card_id on payment (card_id);\nalter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;\n\ncreate index ix_product_organization_id on product (organization_id);\nalter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_refund_user_id on refund (user_id);\nalter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_users_organization_id on users (organization_id);\nalter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;	alter table if exists card drop constraint if exists fk_card_user_id;\ndrop index if exists ix_card_user_id;\n\nalter table if exists delivery_period drop constraint if exists fk_delivery_period_organization_id;\ndrop index if exists ix_delivery_period_organization_id;\n\nalter table if exists orders drop constraint if exists fk_orders_user_id;\ndrop index if exists ix_orders_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_product_id;\ndrop index if exists ix_orders_product_id;\n\nalter table if exists orders drop constraint if exists fk_orders_delivery_period_id;\ndrop index if exists ix_orders_delivery_period_id;\n\nalter table if exists payment drop constraint if exists fk_payment_user_id;\ndrop index if exists ix_payment_user_id;\n\nalter table if exists payment drop constraint if exists fk_payment_card_id;\ndrop index if exists ix_payment_card_id;\n\nalter table if exists product drop constraint if exists fk_product_organization_id;\ndrop index if exists ix_product_organization_id;\n\nalter table if exists refund drop constraint if exists fk_refund_user_id;\ndrop index if exists ix_refund_user_id;\n\nalter table if exists users drop constraint if exists fk_users_organization_id;\ndrop index if exists ix_users_organization_id;\n\ndrop table if exists card cascade;\n\ndrop table if exists cardrefund cascade;\n\ndrop table if exists delivery_period cascade;\n\ndrop table if exists orders cascade;\n\ndrop table if exists organization cascade;\n\ndrop table if exists payment cascade;\n\ndrop table if exists product cascade;\n\ndrop table if exists refund cascade;\n\ndrop table if exists users cascade;	applied	
+1	bc8e995cbbf6059cfe94d60124bd4455f2b8ea7b	2019-03-23 01:05:16.485	create table card (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\ntoken                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_card primary key (id)\n);\n\ncreate table card_refund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nstripe_refund_id              varchar(255),\nconstraint pk_card_refund primary key (id)\n);\n\ncreate table delivery_period (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nclass_period                  integer,\norganization_id               bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_delivery_period primary key (id)\n);\n\ncreate table orders (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nuser_id                       bigint not null,\nproduct_id                    bigint not null,\nrecipient                     varchar(255) not null,\nlocation                      varchar(255) not null,\nnotes                         varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\ndelivery_period_id            bigint not null,\nconstraint pk_orders primary key (id)\n);\n\ncreate table organization (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255),\napi_key                       varchar(255),\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_organization primary key (id)\n);\n\ncreate table payment (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncard_id                       bigint,\ntype                          varchar(255) not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nstripe_charge_id              varchar(255),\ncard_refund_id                bigint,\nconstraint pk_payment primary key (id)\n);\n\ncreate table product (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nname                          varchar(255) not null,\nprice                         integer not null,\ndescription                   varchar(255),\norganization_id               bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_product primary key (id)\n);\n\ncreate table refund (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\namount                        integer not null,\nuser_id                       bigint not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_refund primary key (id)\n);\n\ncreate table users (\nid                            bigserial not null,\ndeprecated_at                 timestamp,\nstatus                        INTEGER DEFAULT 0 not null,\nfirstname                     varchar(255) not null,\nlastname                      varchar(255) not null,\norganization_id               bigint not null,\nemail                         varchar(255) not null,\nlast_logged_in                timestamp,\nrole                          integer not null,\nfirebase_user_id              varchar(255),\nbalance                       integer not null,\ncreated_at                    timestamp not null,\nupdated_at                    timestamp not null,\nconstraint pk_users primary key (id)\n);\n\ncreate index ix_card_user_id on card (user_id);\nalter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_delivery_period_organization_id on delivery_period (organization_id);\nalter table delivery_period add constraint fk_delivery_period_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_orders_user_id on orders (user_id);\nalter table orders add constraint fk_orders_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_orders_product_id on orders (product_id);\nalter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;\n\ncreate index ix_orders_delivery_period_id on orders(delivery_period_id);\nalter table orders add constraint fk_orders_delivery_period_id foreign key (delivery_period_id) references delivery_period (id) on delete restrict on update restrict;\n\ncreate index ix_payment_user_id on payment (user_id);\nalter table payment add constraint fk_payment_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_payment_card_id on payment (card_id);\nalter table payment add constraint fk_payment_card_id foreign key (card_id) references card (id) on delete restrict on update restrict;\n\ncreate index ix_product_organization_id on product (organization_id);\nalter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_refund_user_id on refund (user_id);\nalter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;\n\ncreate index ix_users_organization_id on users (organization_id);\nalter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;\n\ncreate index ix_card_refund_payment_id on card_refund (payment_id);\nalter table card_refund add constraint fk_card_refund_payment_id foreign key (payment_id) references payment (id) on delete restrict on update restrict;	alter table if exists card drop constraint if exists fk_card_user_id;\ndrop index if exists ix_card_user_id;\n\nalter table if exists delivery_period drop constraint if exists fk_delivery_period_organization_id;\ndrop index if exists ix_delivery_period_organization_id;\n\nalter table if exists orders drop constraint if exists fk_orders_user_id;\ndrop index if exists ix_orders_user_id;\n\nalter table if exists orders drop constraint if exists fk_orders_product_id;\ndrop index if exists ix_orders_product_id;\n\nalter table if exists orders drop constraint if exists fk_orders_delivery_period_id;\ndrop index if exists ix_orders_delivery_period_id;\n\nalter table if exists payment drop constraint if exists fk_payment_user_id;\ndrop index if exists ix_payment_user_id;\n\nalter table if exists payment drop constraint if exists fk_payment_card_id;\ndrop index if exists ix_payment_card_id;\n\nalter table if exists product drop constraint if exists fk_product_organization_id;\ndrop index if exists ix_product_organization_id;\n\nalter table if exists refund drop constraint if exists fk_refund_user_id;\ndrop index if exists ix_refund_user_id;\n\nalter table if exists users drop constraint if exists fk_users_organization_id;\ndrop index if exists ix_users_organization_id;\n\ndrop table if exists card cascade;\n\ndrop table if exists card_refund cascade;\n\ndrop table if exists delivery_period cascade;\n\ndrop table if exists orders cascade;\n\ndrop table if exists organization cascade;\n\ndrop table if exists payment cascade;\n\ndrop table if exists product cascade;\n\ndrop table if exists refund cascade;\n\ndrop table if exists users cascade;	applied	
 \.
 
 
@@ -642,10 +645,10 @@ ALTER TABLE ONLY public.card
 
 
 --
--- Name: cardrefund pk_cardrefund; Type: CONSTRAINT; Schema: public; Owner: davis
+-- Name: card_refund pk_cardrefund; Type: CONSTRAINT; Schema: public; Owner: davis
 --
 
-ALTER TABLE ONLY public.cardrefund
+ALTER TABLE ONLY public.card_refund
     ADD CONSTRAINT pk_cardrefund PRIMARY KEY (id);
 
 
@@ -759,6 +762,14 @@ CREATE INDEX ix_refund_user_id ON public.refund USING btree (user_id);
 --
 
 CREATE INDEX ix_users_organization_id ON public.users USING btree (organization_id);
+
+
+--
+-- Name: card_refund card_refund_payment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.card_refund
+    ADD CONSTRAINT card_refund_payment_id_fkey FOREIGN KEY (payment_id) REFERENCES public.payment(id);
 
 
 --

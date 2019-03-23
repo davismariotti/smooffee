@@ -1,7 +1,12 @@
 package actions;
 
 import business.StripeAPI;
-import models.*;
+import com.stripe.model.Charge;
+import com.stripe.model.Refund;
+import models.BaseModel;
+import models.Card;
+import models.Payment;
+import models.User;
 import utilities.QLException;
 
 public class PaymentActions {
@@ -37,7 +42,8 @@ public class PaymentActions {
                 .setCard(card)
                 .setStatus(BaseModel.ACTIVE);
 
-        StripeAPI.chargeCard(user.getOrganization(), card, payment);
+        Charge charge = StripeAPI.chargeCard(user.getOrganization(), card, payment);
+        payment.setStripeChargeId(charge.getId()); // TODO handle errors
 
         payment.save();
         UserActions.addToBalance(userId, amount);
@@ -45,12 +51,18 @@ public class PaymentActions {
         return payment;
     }
 
-    public static Refund refundPayment(Long paymentId) {
+    public static Payment refundPayment(Long paymentId) {
         Payment payment = Payment.find.byId(paymentId);
         if (payment == null) throw new QLException("Payment not found");
 
-        CardRefundActions.createCardRefund(payment.getCard().getId(), paymentId);
-
-        return null;
+        if (payment.getType().equals("cash")) {
+            return payment.setStatus(BaseModel.REFUNDED).store();
+        } else if (payment.getType().equals("card")) {
+            Refund refund = StripeAPI.makeRefund(payment);
+            payment.setCardRefund(CardRefundActions.createCardRefund(payment, refund)).save();
+            return payment;
+        } else {
+            return null;
+        }
     }
 }

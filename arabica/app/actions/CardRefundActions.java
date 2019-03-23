@@ -1,29 +1,26 @@
 package actions;
 
+import com.stripe.model.Refund;
 import models.BaseModel;
-import models.Card;
 import models.CardRefund;
 import models.Payment;
-import utilities.QLException;
 
 public class CardRefundActions {
 
-    public static CardRefund createCardRefund(Long cardId, Long paymentId) {
-        Card card = Card.find.byId(cardId);
-        Payment payment = Payment.find.byId(paymentId);
-
-        if (card == null) throw new QLException("Card not found");
-        if (payment == null) throw new QLException("Payment not found");
-
+    public static CardRefund createCardRefund(Payment payment, Refund stripeRefund) {
+        // TODO null checks
         CardRefund cardRefund = new CardRefund()
-                .setCard(card)
+                .setCard(payment.getCard())
+                .setStripeRefundId(stripeRefund.getId())
                 .setPayment(payment)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
 
+        payment.setCardRefund(cardRefund).save();
+
         // TODO Stripe Refund card
         // TODO Check user balance
-        UserActions.removeFromBalance(payment.getUser().getFirebaseUserId(), payment.getAmount());
+        UserActions.removeFromBalance(payment.getUser().getFirebaseUserId(), payment.getAmount()); // TODO Allow free refund
 
         return cardRefund;
     }

@@ -11,13 +11,16 @@ create table card (
   constraint pk_card primary key (id)
 );
 
-create table cardrefund (
+create table card_refund (
   id                            bigserial not null,
   deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
+  payment_id                    bigint not null,
+  stripe_refund_id              varchar(255) not null,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
-  constraint pk_cardrefund primary key (id)
+  constraint uq_card_refund_payment_id unique (payment_id),
+  constraint pk_card_refund primary key (id)
 );
 
 create table delivery_period (
@@ -25,7 +28,7 @@ create table delivery_period (
   deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   class_period                  integer,
-  organization_id               bigint not null,
+  organization_id               bigint,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_delivery_period primary key (id)
@@ -39,10 +42,10 @@ create table orders (
   product_id                    bigint not null,
   recipient                     varchar(255) not null,
   location                      varchar(255) not null,
+  delivery_period_id            bigint not null,
   notes                         varchar(255),
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
-  delivery_period_id            bigint not null,
   constraint pk_orders primary key (id)
 );
 
@@ -65,6 +68,7 @@ create table payment (
   user_id                       bigint not null,
   card_id                       bigint,
   type                          varchar(255) not null,
+  stripe_charge_id              varchar(255),
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_payment primary key (id)
@@ -114,6 +118,8 @@ create table users (
 create index ix_card_user_id on card (user_id);
 alter table card add constraint fk_card_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
 
+alter table card_refund add constraint fk_card_refund_payment_id foreign key (payment_id) references payment (id) on delete restrict on update restrict;
+
 create index ix_delivery_period_organization_id on delivery_period (organization_id);
 alter table delivery_period add constraint fk_delivery_period_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;
 
@@ -123,7 +129,7 @@ alter table orders add constraint fk_orders_user_id foreign key (user_id) refere
 create index ix_orders_product_id on orders (product_id);
 alter table orders add constraint fk_orders_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
 
-create index ix_orders_delivery_period_id on orders(delivery_period_id);
+create index ix_orders_delivery_period_id on orders (delivery_period_id);
 alter table orders add constraint fk_orders_delivery_period_id foreign key (delivery_period_id) references delivery_period (id) on delete restrict on update restrict;
 
 create index ix_payment_user_id on payment (user_id);
@@ -146,6 +152,8 @@ alter table users add constraint fk_users_organization_id foreign key (organizat
 
 alter table if exists card drop constraint if exists fk_card_user_id;
 drop index if exists ix_card_user_id;
+
+alter table if exists card_refund drop constraint if exists fk_card_refund_payment_id;
 
 alter table if exists delivery_period drop constraint if exists fk_delivery_period_organization_id;
 drop index if exists ix_delivery_period_organization_id;
@@ -176,7 +184,7 @@ drop index if exists ix_users_organization_id;
 
 drop table if exists card cascade;
 
-drop table if exists cardrefund cascade;
+drop table if exists card_refund cascade;
 
 drop table if exists delivery_period cascade;
 
@@ -191,3 +199,4 @@ drop table if exists product cascade;
 drop table if exists refund cascade;
 
 drop table if exists users cascade;
+

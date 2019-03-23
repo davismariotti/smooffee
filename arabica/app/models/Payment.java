@@ -3,10 +3,7 @@ package models;
 import io.ebean.Finder;
 import io.ebean.annotation.NotNull;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "payment")
@@ -26,6 +23,11 @@ public class Payment extends BaseModel {
 
     @NotNull
     private String type;
+
+    private String stripeChargeId;
+
+    @OneToOne(mappedBy = "payment")
+    private CardRefund cardRefund;
 
     public int getAmount() {
         return amount;
@@ -60,6 +62,25 @@ public class Payment extends BaseModel {
 
     public Payment setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public String getStripeChargeId() {
+        return stripeChargeId;
+    }
+
+    public Payment setStripeChargeId(String stripeChargeId) {
+        this.stripeChargeId = stripeChargeId;
+        return this;
+    }
+
+
+    public CardRefund getCardRefund() {
+        return cardRefund;
+    }
+
+    public Payment setCardRefund(CardRefund cardRefund) {
+        this.cardRefund = cardRefund;
         return this;
     }
 
