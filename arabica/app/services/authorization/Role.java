@@ -7,8 +7,9 @@ public enum Role {
     ANONYMOUS("anonymous", -1),
     SYSADMIN("sysadmin", 0),
     ADMIN("admin", 1),
-    EMPLOYEE("employee", 2),
-    CUSTOMER("customer", 3);
+    SUPERVISOR("supervisor", 2),
+    EMPLOYEE("employee", 3),
+    CUSTOMER("customer", 4);
 
     private static final Map<Integer, Role> intToTypeMap = new HashMap<>();
 
