@@ -1,25 +1,9 @@
 import React, {Component} from 'react'
 import {Mutation} from 'react-apollo'
-import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
 import history from '../../utils/history'
 import {ORGANIZATION_ID} from '../../constants'
-
-const SignUpMutation = gql`
-    mutation CreateUser($userInput: UserInput!) {
-      user {
-        create(organizationId: 3, userInput: $userInput) {
-          id
-          firstName
-          lastName
-          email
-          organizationId
-          balance
-        }
-      }
-    }
-`
-
+import {signUpMutation} from '../../graphql/userQueries'
 
 class SignupContinued extends Component {
   render() {
@@ -27,7 +11,7 @@ class SignupContinued extends Component {
     let lastname
     return (
       <div>
-        <Mutation mutation={SignUpMutation} onCompleted={({user}) => {
+        <Mutation mutation={signUpMutation} onCompleted={({user}) => {
           console.log('user', user)
           localStorage.setItem(ORGANIZATION_ID, user.create.organizationId)
           history.push('/home')

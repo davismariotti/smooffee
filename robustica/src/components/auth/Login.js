@@ -4,24 +4,13 @@ import {Button, FormControl, Input, InputLabel, Paper, Typography} from '@materi
 import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import {withApollo} from 'react-apollo'
-import {gql} from 'apollo-boost'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
 import {ORGANIZATION_ID, USER_ID} from '../../constants'
 import GoogleSignIn from './GoogleSignIn'
 import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
-
-const READ_USER_INFO = gql`
-  query ReadCurrentUser {
-    user {
-      currentUser {
-        id
-        organizationId
-      }
-    }
-  }
-`
+import {readCurrentUserQuery} from '../../graphql/userQueries'
 
 class Login extends Component {
   constructor(props) {
@@ -56,7 +45,7 @@ class Login extends Component {
       .currentUser.getToken()
       .then(token => {
         updateClientCallback(token).then(() => {
-          client.query({query: READ_USER_INFO}).then(({error, data}) => {
+          client.query({query: readCurrentUserQuery}).then(({error, data}) => {
             if (error) {
               // TODO
             } else {
