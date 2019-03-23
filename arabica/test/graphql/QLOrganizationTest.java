@@ -29,21 +29,30 @@ public class QLOrganizationTest {
     }
 
     public static void createOrganizationTest() {
-        QLOrganization.OrganizationInput input = new QLOrganization.OrganizationInput();
-        input.setStatus(BaseModel.ACTIVE);
-        input.setName("Next Organization");
+        QLOrganization.OrganizationEntry entry = createOrganization("Next Organization");
+        organizationId = entry.getId();
+    }
 
+    @Test
+    public void updateOrganizationTest() {
+        QLOrganization.OrganizationEntry orgEntry = createOrganization("Org");
+        assertEquals("Org", orgEntry.getName());
+
+        QLOrganization.OrganizationInput input = new QLOrganization.OrganizationInput();
+        input.setName("Org2");
+        input.setStatus(BaseModel.DELETED);
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { organization { create(input: %s) { id name } } }",
+                "mutation { organization { update(organizationId: %d, organizationInput: %s) { id name status } } }",
+                orgEntry.getId(),
                 QL.prepare(input)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
 
-        QLOrganization.OrganizationEntry entry = FakeApplication.graphQLResultToObject(result, "organization/create", QLOrganization.OrganizationEntry.class);
-        assertEquals("Next Organization", entry.getName());
-        assertNotNull(entry.getId());
-        organizationId = entry.getId();
+        QLOrganization.OrganizationEntry entry = FakeApplication.graphQLResultToObject(result, "organization/update", QLOrganization.OrganizationEntry.class);
+        assertNotNull(entry);
+        assertEquals("Org2", entry.getName());
+        assertEquals(BaseModel.DELETED, entry.getStatus().intValue());
     }
 
     @Test
@@ -76,4 +85,22 @@ public class QLOrganizationTest {
         assertEquals("Next Organization", entries[1].getName());
         assertEquals(organizationId, entries[1].getId());
     }
-}
+
+    public static QLOrganization.OrganizationEntry createOrganization(String name) {
+        QLOrganization.OrganizationInput input = new QLOrganization.OrganizationInput();
+        input.setName(name);
+
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { organization { create(input: %s) { id name status } } }",
+                QL.prepare(input)
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLOrganization.OrganizationEntry entry = FakeApplication.graphQLResultToObject(result, "organization/create", QLOrganization.OrganizationEntry.class);
+        assertEquals(name, entry.getName());
+        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertNotNull(entry.getId());
+        return entry;
+    }
+ }

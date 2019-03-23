@@ -18,9 +18,7 @@ public class QLOrganization {
             Permission.check(Permission.THIS_ORGANIZATION_READ);
             // Lookup user by firebase token
             Organization organization = Organization.find.byId(id);
-            if (organization == null) {
-                return null;
-            }
+            if (organization == null) throw new QLException("Organization not found.");
             return new OrganizationEntry(organization);
         }
 
@@ -47,8 +45,7 @@ public class QLOrganization {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
-
-            return new OrganizationEntry(OrganizationActions.updateOrganization(organizationId, input.getName()));
+            return new OrganizationEntry(OrganizationActions.updateOrganization(organization, input.getName(), input.getStatus()));
         }
     }
 

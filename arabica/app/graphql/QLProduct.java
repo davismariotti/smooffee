@@ -39,9 +39,10 @@ public class QLProduct {
         public ProductEntry create(Long organizationId, ProductInput productInput) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
+
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
 
-            return new ProductEntry(ProductActions.createProduct(organizationId, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
+            return new ProductEntry(ProductActions.createProduct(organization, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
         }
 
         public ProductEntry update(Long productId, ProductInput productInput) {
@@ -49,7 +50,7 @@ public class QLProduct {
             if (product == null) throw new QLException("Product not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
 
-            return new ProductEntry(ProductActions.updateProduct(productId, productInput.getName(), productInput.getDescription(), productInput.getPrice(), productInput.getStatus()));
+            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice(), productInput.getStatus()));
         }
 
         public ProductEntry updateStatus(Long orderId, int status) {

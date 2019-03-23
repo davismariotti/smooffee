@@ -12,9 +12,9 @@ query ReadOrganization($organizationId: Long!) {
 `
 
 export const editOrganizationMutation = gql`
-mutation EditOrganization($organizationId: Long!, $input: OrganizationInput!) {
+mutation EditOrganization($organizationId: Long!, $organizationInput: OrganizationInput!) {
   organization {
-    update(organizationId: $organizationId, input: $input) {
+    update(organizationId: $organizationId, organizationInput: $input) {
       id
     }
   }
