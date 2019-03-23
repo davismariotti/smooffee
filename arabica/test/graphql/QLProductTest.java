@@ -62,7 +62,7 @@ public class QLProductTest {
         input.setPrice(625);
         input.setStatus(1);
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(id: %d, productInput: %s) { id organizationId name description price } } }", productId, QL.prepare(input)));
+        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(productId: %d, productInput: %s) { id organizationId name description price } } }", productId, QL.prepare(input)));
         assertEquals(OK, result.status());
         QLProduct.ProductEntry entry = FakeApplication.graphQLResultToObject(result, "product/update", QLProduct.ProductEntry.class);
         assertEquals("Macchiato", entry.getName());

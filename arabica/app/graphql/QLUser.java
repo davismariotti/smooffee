@@ -10,7 +10,6 @@ import services.authorization.Role;
 import utilities.QLException;
 import utilities.ThreadStorage;
 
-import javax.persistence.OneToMany;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +50,7 @@ public class QLUser {
             Permission.ignore();
 
             String uid = ThreadStorage.get().uid;
-            User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
+            User user = UserActions.createUser(organization, uid, userInput.getFirstName(), userInput.getLastName(), userInput.getEmail());
             if (user == null) {
                 return null; // TODO what if user exists?
             }
@@ -63,7 +62,7 @@ public class QLUser {
             if (user == null) throw new QLException("User not found.");
             Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(user));
 
-            user = UserActions.updateUser(userId, userInput);
+            user = UserActions.updateUser(user, userInput);
             return (user == null) ? null : new UserEntry(user);
         }
 

@@ -57,9 +57,9 @@ public class BaseModel extends Model {
         return deprecatedAt;
     }
 
-    public void deprecate() {
+    public <T extends BaseModel> T deprecate() {
         this.deprecatedAt = Timestamp.from(Instant.now());
-        this.save();
+        return this.store();
     }
 
     public Date getUpdatedAt() {

@@ -2,10 +2,7 @@ package graphql;
 
 import actions.OrderActions;
 import actions.RefundActions;
-import models.BaseModel;
-import models.Order;
-import models.Organization;
-import models.User;
+import models.*;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
@@ -37,10 +34,15 @@ public class QLOrder {
     public static class Mutation {
         public OrderEntry create(String userId, OrderInput orderInput) {
             User user = User.findByFirebaseUid(userId);
+            DeliveryPeriod deliveryPeriod = DeliveryPeriod.find.byId(orderInput.deliveryPeriodId);
+            Product product = Product.find.byId(orderInput.getProductId());
             if (user == null) throw new QLException("User not found.");
+            if (deliveryPeriod == null) throw new QLException("Delivery Period not found");
+            if (product == null) throw new QLException("Product not found");
+
             Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(user));
 
-            return new OrderEntry(OrderActions.createOrder(userId, orderInput.getDeliveryPeriodId(), orderInput.getProductId(), orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
+            return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
         }
 
         public OrderEntry updateStatus(Long orderId, int status) {
@@ -71,7 +73,7 @@ public class QLOrder {
             order.setStatus(BaseModel.CANCELLED).deprecate();
 
             // Refund order
-            RefundActions.createRefund(orderId);
+            RefundActions.createRefund(order);
 
             return new OrderEntry(order);
         }

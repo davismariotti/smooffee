@@ -40,7 +40,7 @@ public class QLDeliveryPeriod {
 
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
 
-            return new DeliveryPeriodEntry(DeliveryPeriodActions.createDeliveryPeriod(organizationId, deliveryPeriodInput.getClassPeriod()));
+            return new DeliveryPeriodEntry(DeliveryPeriodActions.createDeliveryPeriod(organization, deliveryPeriodInput.getClassPeriod()));
         }
 
         public DeliveryPeriodEntry update(Long deliveryPeriodId, DeliveryPeriodInput deliveryPeriodInput) {
@@ -49,7 +49,7 @@ public class QLDeliveryPeriod {
 
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(deliveryPeriod.getOrganization()));
 
-            return new DeliveryPeriodEntry(DeliveryPeriodActions.updateDeliveryPeriod(deliveryPeriodId, deliveryPeriodInput.getClassPeriod(), deliveryPeriodInput.getStatus()));
+            return new DeliveryPeriodEntry(DeliveryPeriodActions.updateDeliveryPeriod(deliveryPeriod, deliveryPeriodInput.getClassPeriod(), deliveryPeriodInput.getStatus()));
         }
     }
 

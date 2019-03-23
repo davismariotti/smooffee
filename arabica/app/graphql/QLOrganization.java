@@ -2,7 +2,9 @@ package graphql;
 
 import actions.OrganizationActions;
 import models.Organization;
+import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
+import utilities.QLException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,9 +16,7 @@ public class QLOrganization {
             Permission.check(Permission.THIS_ORGANIZATION_READ);
             // Lookup user by firebase token
             Organization organization = Organization.find.byId(id);
-            if (organization == null) {
-                return null;
-            }
+            if (organization == null) throw new QLException("Organization not found.");
             return new OrganizationEntry(organization);
         }
 
@@ -30,13 +30,21 @@ public class QLOrganization {
     }
 
     public static class Mutation {
-        public OrganizationEntry create(OrganiationInput input) {
+        public OrganizationEntry create(OrganizationInput input) {
             Permission.check(Permission.ORGANIZATION_CREATE);
             return new OrganizationEntry(OrganizationActions.createOrganization(input.getName()));
         }
+
+        public OrganizationEntry update(Long organizationId, OrganizationInput input) {
+            Organization organization = Organization.find.byId(organizationId);
+            if (organization == null) throw new QLException("Organization not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
+
+            return new OrganizationEntry(OrganizationActions.updateOrganization(organization, input.getName(), input.getStatus()));
+        }
     }
 
-    public static class OrganiationInput extends QLInput {
+    public static class OrganizationInput extends QLInput {
         private String name;
 
         public String getName() {
