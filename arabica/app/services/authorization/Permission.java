@@ -78,6 +78,27 @@ public class Permission {
 
             add(Permission.ORGANIZATION_LIST);
         }});
+        put(Role.SUPERVISOR, new ArrayList<Integer>() {{
+            add(Permission.THIS_USER_INFO_READ);
+            add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_ORDER_READ);
+            add(Permission.THIS_USER_ORDER_WRITE);
+            add(Permission.THIS_USER_CARD_READ);
+            add(Permission.THIS_USER_CARD_WRITE);
+
+            add(Permission.OTHER_USER_INFO_READ);
+            add(Permission.OTHER_USER_ORDER_READ);
+            add(Permission.OTHER_USER_ORDER_WRITE);
+
+            add(Permission.THIS_ORGANIZATION_READ);
+            add(Permission.THIS_ORGANIZATION_ORDERS_READ);
+            add(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
+            add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
+            add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
+            add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+
+            add(Permission.ORGANIZATION_LIST);
+        }});
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
@@ -91,8 +112,8 @@ public class Permission {
 
             add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_ORDERS_READ);
-            add(Permission.THIS_ORGANIZATION_ORDERS_WRITE); // TODO ?
-            add(Permission.THIS_ORGANIZATION_SETTINGS_READ); // TODO ?
+            add(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
+            add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
 
