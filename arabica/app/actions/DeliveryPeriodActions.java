@@ -13,6 +13,7 @@ public class DeliveryPeriodActions {
 
         return new DeliveryPeriod()
                 .setClassPeriod(classPeriod)
+                .setOrganization(organization)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
     }

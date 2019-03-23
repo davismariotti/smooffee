@@ -25,7 +25,7 @@ create table delivery_period (
   deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   class_period                  integer,
-  organization_id               bigint,
+  organization_id               bigint not null,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_delivery_period primary key (id)
