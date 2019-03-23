@@ -6,8 +6,8 @@ type OrganizationEntry {
 }
 
 input OrganizationInput {
-    name: String!
-    status: Int!
+    name: String
+    status: Int
 }
 
 type OrganizationQuery {

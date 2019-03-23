@@ -1,6 +1,6 @@
 input DeliveryPeriodInput {
-    classPeriod: Int!
-    status: Int!
+    classPeriod: Int
+    status: Int
 }
 
 type DeliveryPeriodEntry {

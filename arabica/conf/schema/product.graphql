@@ -8,10 +8,10 @@ type ProductEntry {
 }
 
 input ProductInput {
-    name: String!
-    description: String!
-    price: Int!
-    status: Int!
+    name: String
+    description: String
+    price: Int
+    status: Int
 }
 
 type ProductQuery {

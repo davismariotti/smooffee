@@ -1,8 +1,8 @@
 input PaymentInput {
-    type: String!
-    amount: Int!
+    type: String
+    amount: Int
     cardId: Long
-    status: Int!
+    status: Int
 }
 
 type PaymentEntry {
