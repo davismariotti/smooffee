@@ -1,10 +1,10 @@
 type ProductEntry {
     id: Long!
+    status: Int!
     organizationId: Long!
     name: String!
     description: String!
     price: Int!
-    status: Int!
 }
 
 input ProductInput {

@@ -3,6 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
+import models.BaseModel;
 import org.junit.*;
 import play.mvc.Result;
 
@@ -29,6 +30,7 @@ public class QLOrganizationTest {
 
     public static void createOrganizationTest() {
         QLOrganization.OrganiationInput input = new QLOrganization.OrganiationInput();
+        input.setStatus(BaseModel.ACTIVE);
         input.setName("Next Organization");
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(

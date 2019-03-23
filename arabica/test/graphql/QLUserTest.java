@@ -3,6 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
+import models.BaseModel;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,6 +37,7 @@ public class QLUserTest {
         FakeApplication.authToken.push(uid);
 
         QLUser.UserInput input = new QLUser.UserInput();
+        input.setStatus(BaseModel.ACTIVE);
         input.setFirstName("User");
         input.setLastName("2");
         input.setEmail(uid);
@@ -61,6 +63,7 @@ public class QLUserTest {
     @Test
     public void updateUser() {
         QLUser.UserInput input = new QLUser.UserInput();
+        input.setStatus(BaseModel.ACTIVE);
         input.setFirstName("Usen");
         input.setLastName("3");
         input.setEmail(uid);

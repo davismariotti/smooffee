@@ -3,6 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
+import models.BaseModel;
 import org.junit.*;
 import play.mvc.Result;
 import services.AuthenticationService;
@@ -33,6 +34,7 @@ public class QLProductTest {
         input.setName("Latte");
         input.setDescription("Very yummy");
         input.setPrice(500);
+        input.setStatus(BaseModel.ACTIVE);
         input.setStatus(1);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
@@ -54,6 +56,7 @@ public class QLProductTest {
     @Test
     public void updateProductTest() {
         QLProduct.ProductInput input = new QLProduct.ProductInput();
+        input.setStatus(BaseModel.ACTIVE);
         input.setName("Macchiato");
         input.setDescription("Very nice");
         input.setPrice(625);

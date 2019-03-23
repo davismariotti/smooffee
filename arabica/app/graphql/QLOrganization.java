@@ -36,7 +36,7 @@ public class QLOrganization {
         }
     }
 
-    public static class OrganiationInput {
+    public static class OrganiationInput extends QLInput {
         private String name;
 
         public String getName() {
@@ -48,19 +48,14 @@ public class QLOrganization {
         }
     }
 
-    public static class OrganizationEntry {
-        private Long id;
+    public static class OrganizationEntry extends QLEntry {
         private String name;
         private Organization organization;
 
         public OrganizationEntry(Organization organization) {
-            this.id = organization.getId();
+            super(organization);
             this.name = organization.getName();
             this.organization = organization;
-        }
-
-        public Long getId() {
-            return id;
         }
 
         public String getName() {

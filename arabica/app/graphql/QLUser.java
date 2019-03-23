@@ -10,6 +10,7 @@ import services.authorization.Role;
 import utilities.QLException;
 import utilities.ThreadStorage;
 
+import javax.persistence.OneToMany;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,6 +84,7 @@ public class QLUser {
         String firstName;
         String lastName;
         String email;
+        Integer status;
 
         public String getFirstName() {
             return firstName;
@@ -107,6 +109,14 @@ public class QLUser {
         public void setEmail(String email) {
             this.email = email;
         }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
     }
 
     public static class UserEntry {
@@ -117,6 +127,7 @@ public class QLUser {
         private Long organizationId;
         private Integer balance;
         private String role;
+        private Integer status;
 
         public UserEntry(User user) {
             this.id = user.getFirebaseUserId();
@@ -126,6 +137,7 @@ public class QLUser {
             this.organizationId = user.getOrganization().getId();
             this.balance = user.getBalance();
             this.role = user.getRole().getName();
+            this.status = user.getStatus();
         }
 
         public Integer getBalance() {
@@ -154,6 +166,10 @@ public class QLUser {
 
         public String getRole() {
             return role;
+        }
+
+        public Integer getStatus() {
+            return status;
         }
     }
 }
