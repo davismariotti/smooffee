@@ -3,14 +3,15 @@ input OrderInput {
     notes: String
     productId: Long!
     recipient: String!
+    status: Int!
 }
 
 type OrderEntry {
     id: Long!
+    status: Int!
     location: String!
     notes: String
     product: ProductEntry!
-    status: Int!
     recipient: String!
 }
 

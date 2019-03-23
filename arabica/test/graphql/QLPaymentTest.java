@@ -3,11 +3,14 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import org.junit.*;
+import models.BaseModel;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import play.mvc.Result;
-import services.AuthenticationService;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static play.mvc.Http.Status.OK;
 
 public class QLPaymentTest {
@@ -62,6 +65,7 @@ public class QLPaymentTest {
 
     public static QLPayment.PaymentEntry createPaymentCash(int amount) {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
+        input.setStatus(BaseModel.ACTIVE);
         input.setAmount(amount);
         input.setType("cash");
 

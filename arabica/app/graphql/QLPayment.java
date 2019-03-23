@@ -33,7 +33,7 @@ public class QLPayment {
         }
     }
 
-    public static class PaymentInput {
+    public static class PaymentInput extends QLInput {
         private String type;
         private Integer amount;
         private Long cardId;
@@ -63,15 +63,14 @@ public class QLPayment {
         }
     }
 
-    public static class PaymentEntry {
-        private Long id;
+    public static class PaymentEntry extends QLEntry {
         private Integer amount;
         private Long cardId;
         private String type;
         private QLUser.UserEntry user;
 
         public PaymentEntry(Payment payment) {
-            this.id = payment.getId();
+            super(payment);
             this.amount = payment.getAmount();
             this.type = payment.getType();
             if (payment.getCard() != null) this.cardId = payment.getCard().getId();
@@ -84,10 +83,6 @@ public class QLPayment {
 
         public QLUser.UserEntry getUser() {
             return user;
-        }
-
-        public Long getId() {
-            return id;
         }
 
         public Long getCardId() {

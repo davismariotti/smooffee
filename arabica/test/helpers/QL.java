@@ -1,13 +1,11 @@
 package helpers;
 
+import graphql.QLInput;
 import jdk.nashorn.internal.ir.ObjectNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class QL {
@@ -46,6 +44,10 @@ public class QL {
                 Class clazz = obj.getClass();
                 Method[] methodsArray = clazz.getDeclaredMethods();
                 List<Method> methods = Arrays.stream(methodsArray).sorted(Comparator.comparing(Method::getName)).collect(Collectors.toList());
+
+                if (clazz.getSuperclass() == QLInput.class) {
+                    methods.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredMethods()));
+                }
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("{");

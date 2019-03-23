@@ -2,10 +2,12 @@ input PaymentInput {
     type: String!
     amount: Int!
     cardId: Long
+    status: Int!
 }
 
 type PaymentEntry {
     id: Long!
+    status: Int!
     amount: Int!
     cardId: Long
     user: UserEntry!
