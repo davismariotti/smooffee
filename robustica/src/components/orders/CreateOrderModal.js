@@ -6,9 +6,11 @@ import {Button, FormControl, Input, InputLabel, Typography} from '@material-ui/c
 import {compose, graphql, Mutation} from 'react-apollo'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
+import {connect} from 'react-redux'
 import {ORGANIZATION_ID, USER_ID} from '../../constants'
 import {createOrderMutation} from '../../graphql/orderQueries'
 import {listProductsQuery} from '../../graphql/productQueries'
+import {closeHomeCreateOrderModal} from '../../actions/homeActions'
 
 const styles = theme => ({
   paper: {
@@ -74,18 +76,17 @@ class CreateOrderModal extends Component {
 
   render() {
     const {product, name, notes, location} = this.state
-    const {classes, open, onSubmit, listProductsQueryResult} = this.props
+    const {classes, open, listProductsQueryResult, closeModal} = this.props
 
     if (listProductsQueryResult.loading) return <div>Loading</div>
     if (listProductsQueryResult.error) return <div>Error</div>
 
     return (
         <div>
-        <Modal open={open} onClose={onSubmit}>
+        <Modal open={open} onClose={closeModal}>
           <div style={getModalStyle()} className={classes.paper}>
             <Mutation mutation={createOrderMutation}>
               {(createOrder) => (
-
                 <form onSubmit={e => {
                   e.preventDefault()
                   const orderInput = {
@@ -107,7 +108,7 @@ class CreateOrderModal extends Component {
                       location: '',
                       notes: ''
                     })
-                    onSubmit()
+                    closeModal()
                   })
                 }}>
                   <Typography variant="headline">
@@ -171,17 +172,23 @@ class CreateOrderModal extends Component {
 
 CreateOrderModal.propTypes = {
   open: PropTypes.bool.isRequired,
-  onSubmit: PropTypes.func,
   classes: PropTypes.object.isRequired,
-  listProductsQueryResult: PropTypes.object
+  listProductsQueryResult: PropTypes.object,
+  closeModal: PropTypes.func.isRequired
 }
 
 CreateOrderModal.defaultProps = {
-  onSubmit: () => {},
   listProductsQueryResult: {}
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    closeModal: () => dispatch(closeHomeCreateOrderModal())
+  };
+}
+
 export default compose(
+  connect(null, mapDispatchToProps),
   withStyles(styles),
   graphql(listProductsQuery, {
     name: 'listProductsQueryResult',

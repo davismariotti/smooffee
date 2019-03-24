@@ -3,10 +3,12 @@ import {render} from 'react-dom'
 import {ApolloClient, HttpLink, InMemoryCache} from 'apollo-boost'
 import {ApolloProvider} from 'react-apollo'
 import {Router} from 'react-router-dom'
+import {Provider} from 'react-redux'
 import App from './components/App'
 import {AUTH_TOKEN} from './constants'
 import history from './utils/history'
 import 'typeface-roboto'
+import store from './store'
 
 class RootComponent extends Component {
   constructor(props) {
@@ -50,11 +52,13 @@ class RootComponent extends Component {
   render() {
     const {client} = this.state
     return (
-      <ApolloProvider client={client}>
-        <Router history={history}>
-          <App updateClientCallback={this.updateApolloClient}/>
-        </Router>
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Router history={history}>
+            <App updateClientCallback={this.updateApolloClient}/>
+          </Router>
+        </ApolloProvider>
+      </Provider>
     )
   }
 }

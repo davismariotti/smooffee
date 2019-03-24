@@ -41,6 +41,7 @@ module.exports = {
     'class-methods-use-this': 0,
     'import/order': 1,
     'import/prefer-default-export': 0,
-    'no-else-return': 0
+    'no-else-return': 0,
+    'no-underscore-dangle': 0
   }
 };
