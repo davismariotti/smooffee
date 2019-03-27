@@ -7,10 +7,10 @@ import {compose, graphql, Mutation} from 'react-apollo'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import {connect} from 'react-redux'
-import {ORGANIZATION_ID, USER_ID} from '../../constants'
-import {createOrderMutation} from '../../graphql/orderQueries'
-import {listProductsQuery} from '../../graphql/productQueries'
-import {closeHomeCreateOrderModal} from '../../actions/homeActions'
+import {ORGANIZATION_ID, USER_ID} from '../../../constants'
+import {createOrderMutation} from '../../../graphql/orderQueries'
+import {listProductsQuery} from '../../../graphql/productQueries'
+import {closeHomeCreateOrderModal} from '../../../actions/homeActions'
 
 const styles = theme => ({
   paper: {

@@ -7,12 +7,6 @@ import firebaseApp from '../../services/AuthService'
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      email: '',
-      password: ''
-    }
-    this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handlePassChange = this.handlePassChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -36,16 +30,7 @@ export class EmailPasswordSignUp extends Component {
     }
   }
 
-  handleEmailChange(e) {
-    this.setState({email: e.target.value})
-  }
-
-  handlePassChange(e) {
-    this.setState({password: e.target.value})
-  }
-
   render() {
-    const {email, password} = this.state
     return (
       <form onSubmit={this.handleSubmit}>
         <FormControl margin="normal" required fullWidth>
@@ -54,8 +39,6 @@ export class EmailPasswordSignUp extends Component {
             type="email"
             name="email"
             autoComplete="email"
-            value={email}
-            onChange={this.handleEmailChange}
             autoFocus
           />
         </FormControl>
@@ -65,8 +48,6 @@ export class EmailPasswordSignUp extends Component {
             type="password"
             name="password"
             id="password"
-            autoComplete="current-password"
-            value={password}
             onChange={this.handlePassChange}
           />
         </FormControl>

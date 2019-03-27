@@ -5,11 +5,11 @@ import * as PropTypes from 'prop-types'
 import {compose, graphql} from 'react-apollo'
 import {connect} from 'react-redux'
 import Order from './orders/Order'
-import '../css/index.css'
+import '../../css/index.css'
 import CreateOrderModal from './orders/CreateOrderModal'
-import {ORGANIZATION_ID} from '../constants'
-import {listOrdersQuery} from '../graphql/orderQueries'
-import {openHomeCreateOrderModal} from '../actions/homeActions'
+import {ORGANIZATION_ID} from '../../constants'
+import {listOrdersQuery} from '../../graphql/orderQueries'
+import {openHomeCreateOrderModal} from '../../actions/homeActions'
 
 const styles = {
   title: {

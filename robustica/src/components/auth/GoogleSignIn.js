@@ -7,7 +7,6 @@ import firebaseApp from '../../services/AuthService'
 class GoogleSignIn extends Component {
   constructor(props) {
     super(props)
-    console.log(props)
     this.handleGoogle = this.handleGoogle.bind(this)
   }
 

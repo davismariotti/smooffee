@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import * as PropTypes from 'prop-types'
 import {Paper, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import {EmailPasswordSignUp} from './EmailPasswordSignUp'
@@ -17,15 +16,12 @@ class Signup extends Component {
   }
 
   signupCallback(user) {
-    const {updateClientCallback} = this.props
     localStorage.setItem(USER_ID, user.uid)
     firebaseApp
       .auth()
       .currentUser.getToken()
       .then(token => {
-        updateClientCallback(token).then(() => {
-          history.push('/signupcontinued')
-        })
+        history.push('/signupcontinued')
       })
   }
 
@@ -51,8 +47,6 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {
-  updateClientCallback: PropTypes.func.isRequired
-}
+Signup.propTypes = {}
 
 export default Signup
