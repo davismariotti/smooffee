@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {compose, graphql} from 'react-apollo'
 import {connect} from 'react-redux'
-import { createProductMutation} from '../../graphql/productQueries';
+import {createProductMutation, editProductMutation} from '../../graphql/productQueries'
 import OrganizationSettingsActions from './actions'
 import EditProductForm from './EditProductForm'
 import {ORGANIZATION_ID} from '../../constants'
@@ -32,27 +32,45 @@ class EditProductModal extends Component {
   render() {
     const {
       classes,
-      onSubmit,
       createProductMutate,
+      editProductMutate,
       editProduct,
       closeCreateProductModal,
-      createProductModalOpen
+      createProductModalOpen,
+      currentProduct
     } = this.props
 
     const submit = values => {
-      createProductMutate({
-        variables: {
-          productInput: values,
-          organizationId: localStorage.getItem(ORGANIZATION_ID)
-        }
-      }).then(() => {
-        closeCreateProductModal()
-      })
+      const productInput = {
+        price: values.price,
+        description: values.description,
+        name: values.name,
+        status: values.status
+      }
+      if (editProduct) {
+        editProductMutate({
+          variables: {
+            productInput,
+            productId: currentProduct.id
+          }
+        }).then(() => {
+          closeCreateProductModal()
+        })
+      } else {
+        createProductMutate({
+          variables: {
+            productInput: values,
+            organizationId: localStorage.getItem(ORGANIZATION_ID)
+          }
+        }).then(() => {
+          closeCreateProductModal()
+        })
+      }
     }
 
     return (
         <div>
-        <Modal open={createProductModalOpen} onClose={onSubmit}>
+        <Modal open={createProductModalOpen} onClose={closeCreateProductModal}>
           <div style={getModalStyle()} className={classes.paper}>
             <EditProductForm editProduct={editProduct} onSubmit={submit}/>
           </div>
@@ -63,30 +81,30 @@ class EditProductModal extends Component {
 }
 
 EditProductModal.propTypes = {
-  onSubmit: PropTypes.func,
   classes: PropTypes.object.isRequired,
-  createProductMutate: PropTypes.func,
+  currentProduct: PropTypes.object,
+  createProductMutate: PropTypes.func.isRequired,
+  editProductMutate: PropTypes.func.isRequired,
   editProduct: PropTypes.bool.isRequired,
   closeCreateProductModal: PropTypes.func.isRequired,
   createProductModalOpen: PropTypes.bool.isRequired
 }
 
 EditProductModal.defaultProps = {
-  onSubmit: () => {},
-  createProductMutate: () => {}
+  currentProduct: null
 }
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
     createProductModalOpen: organizationSettings.createProductModalOpen,
-    currentProduct: organizationSettings.editProductObject,
+    currentProduct: {...organizationSettings.editProductObject && organizationSettings.editProductObject.product || null},
     editProduct: organizationSettings.editProduct
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal())
+    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
   }
 }
 
@@ -96,7 +114,7 @@ export default compose(
   graphql(createProductMutation, {
     name: 'createProductMutate'
   }),
-  graphql(createProductMutation, { // TODO
+  graphql(editProductMutation, {
     name: 'editProductMutate'
   })
 )(EditProductModal)

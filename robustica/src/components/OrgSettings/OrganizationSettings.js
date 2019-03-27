@@ -29,50 +29,41 @@ const styles = {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openCreateProductModal: () => dispatch(OrganizationSettingsActions.openCreateProductModal()),
+    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
+    openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product)),
+    openMoreVertMenu: (row) => dispatch(OrganizationSettingsActions.openMoreVertMenu(row)),
+    closeMoreVertMenu: () => dispatch(OrganizationSettingsActions.closeMoreVertMenu())
+  }
+}
+
 class OrganizationSettings extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      open: [],
-    }
-
-    this.anchorEls = []
-
-    this.classes = props
-  }
-
-  handleOptionMenuClick = id => {
-    const {open} = this.state
-    open[id] = true
-    this.setState({
-      open
-    })
-  }
-
-  handleOptionClose = id => {
-    const {open} = this.state
-    open[id] = false
-    this.setState({
-      open
-    })
-  }
-
   render() {
     const {
       classes,
       listProductsQueryResult,
-      openEditProductModal
+      openEditProductModal,
+      openCreateProductModal,
+      openMenu,
+      openMoreVertMenu,
+      closeMoreVertMenu
     } = this.props
-    const {open} = this.state
 
     return (
       <div>
+        <Menu id="menu" open={openMenu != null} anchorEl={openMenu && openMenu.anchorEl || null} onClose={closeMoreVertMenu}>
+          <MenuItem>
+            <Button onClick={() => {openEditProductModal(openMenu.productItem)}}>Edit</Button>
+          </MenuItem>
+        </Menu>
         <EditProductModal/>
         <Paper className={classes.paper} elevation={1}>
           <Typography variant="h5" component="h3">
             Products
           </Typography>
+          <Button onClick={openCreateProductModal}>Create Product</Button>
           <div>
             <Table className={classes.table}>
               <TableHead>
@@ -108,20 +99,13 @@ class OrganizationSettings extends Component {
                           {productItem.description}
                         </TableCell>
                         <TableCell align="right">
-                          <Button onClick={() => {
-                            this.handleOptionMenuClick(productItem.id)
-                          }} buttonRef={node => {
-                            this.anchorEls[productItem.id] = node
-                          }}>
+                          <Button onClick={(e) => {
+                            openMoreVertMenu({
+                            anchorEl: e.target,
+                            productItem
+                          })}}>
                             <MoreVert/>
                           </Button>
-                          <Menu id="menu" open={open[productItem.id] || false} anchorEl={this.anchorEls[productItem.id]} onClose={() => {
-                            this.handleOptionClose(productItem.id)
-                          }}>
-                            <MenuItem>
-                              <Button onClick={() => {openEditProductModal(productItem)}}>Edit</Button>
-                            </MenuItem>
-                          </Menu>
                         </TableCell>
                       </TableRow>
                     )
@@ -141,24 +125,25 @@ OrganizationSettings.propTypes = {
   listProductsQueryResult: PropTypes.object,
   openCreateProductModal: PropTypes.func.isRequired,
   openEditProductModal: PropTypes.func.isRequired,
-  closeCreateProductModal: PropTypes.func.isRequired
+  closeCreateProductModal: PropTypes.func.isRequired,
+  openMoreVertMenu: PropTypes.func.isRequired,
+  closeMoreVertMenu: PropTypes.func.isRequired,
+  openMenu: PropTypes.object
 }
 
 OrganizationSettings.defaultProps = {
-  listProductsQueryResult: {}
+  listProductsQueryResult: {},
+  openMenu: null
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = ({organizationSettings}) => {
   return {
-    openCreateProductModal: () => dispatch(OrganizationSettingsActions.openCreateProductModal()),
-    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
-    openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product))
+    openMenu: organizationSettings.openMenu
   }
 }
 
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   graphql(listProductsQuery, {
     name: 'listProductsQueryResult',

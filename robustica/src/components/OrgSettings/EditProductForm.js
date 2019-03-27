@@ -7,6 +7,11 @@ import * as PropTypes from 'prop-types'
 import {TextField} from 'redux-form-material-ui'
 
 class EditProductForm extends React.Component {
+
+  componentDidMount() {
+    this.props.initialize(this.props.initialValues); // here add this line to initialize the form
+  }
+
   render() {
     const {editProduct, handleSubmit} = this.props
     return (
@@ -33,17 +38,12 @@ EditProductForm.propTypes = {
   editProduct: PropTypes.bool.isRequired
 }
 
-const mapStateToProps = ({organizationSettings}) => {
-  return {
-    initialValues: organizationSettings.editProductObject,
-    enableReinitialize: true,
-  }
-}
-
 export default compose(
   reduxForm({
     form: 'editProductForm'
   }),
-  connect(
-    mapStateToProps,
-  ))(EditProductForm)
+  connect(state => ({
+    enableReinitialize: true,
+    initialValues: state.organizationSettings.editProductObject && state.organizationSettings.editProductObject.product || null
+  }))
+)(EditProductForm)
