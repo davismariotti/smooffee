@@ -3,11 +3,13 @@ import {Button, GridList, Typography} from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
 import {compose, graphql} from 'react-apollo'
+import {connect} from 'react-redux'
 import Order from './orders/Order'
-import '../css/index.css'
+import '../../css/index.css'
 import CreateOrderModal from './orders/CreateOrderModal'
-import {ORGANIZATION_ID} from '../constants'
-import {listOrdersQuery} from '../graphql/orderQueries'
+import {ORGANIZATION_ID} from '../../constants'
+import {listOrdersQuery} from '../../graphql/orderQueries'
+import {openHomeCreateOrderModal} from '../../actions/homeActions'
 
 const styles = {
   title: {
@@ -17,32 +19,9 @@ const styles = {
 }
 
 class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showModal: false
-    }
-    this.showModal = this.showModal.bind(this)
-    this.handleCreateOrderSubmit = this.handleCreateOrderSubmit.bind(this)
-  }
-
-  showModal() {
-    this.setState({
-      showModal: true
-    })
-  }
-
-  handleCreateOrderSubmit() {
-    this.setState({
-      showModal: false
-    })
-    const {listOrdersQueryResult} = this.props
-    listOrdersQueryResult.refetch()
-  }
 
   render() {
-    const {classes, listOrdersQueryResult} = this.props
-    const {showModal} = this.state
+    const {classes, listOrdersQueryResult, showModal, openModal} = this.props
 
     if (listOrdersQueryResult.loading) return <div>Loading</div>
     if (listOrdersQueryResult.error) return <div>Error</div>
@@ -50,11 +29,11 @@ class Home extends Component {
     return (
       <div className="orderList">
         <div>
-          <CreateOrderModal open={showModal} onSubmit={this.handleCreateOrderSubmit}/>
+          <CreateOrderModal open={showModal}/>
           <Typography className={classes.title} variant="h3" color="inherit">
             Current Orders
           </Typography>
-          <Button onClick={this.showModal}>
+          <Button onClick={openModal}>
             Create Order
           </Button>
           <GridList cols={3} padding={10}>
@@ -70,14 +49,29 @@ class Home extends Component {
 
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
-  listOrdersQueryResult: PropTypes.object
+  listOrdersQueryResult: PropTypes.object,
+  showModal: PropTypes.bool.isRequired,
+  openModal: PropTypes.func.isRequired,
 }
 
 Home.defaultProps = {
   listOrdersQueryResult: {}
 }
 
+const mapStateToProps = state => {
+  return {
+    showModal: state.home.createOrderModalOpen
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    openModal: () => dispatch(openHomeCreateOrderModal())
+  }
+}
+
 export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   graphql(listOrdersQuery, {
     name: 'listOrdersQueryResult',

@@ -6,7 +6,7 @@ import * as PropTypes from 'prop-types'
 import {withApollo} from 'react-apollo'
 import firebaseApp from '../../services/AuthService'
 import '../../css/index.css'
-import {ORGANIZATION_ID, USER_ID} from '../../constants'
+import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../constants'
 import GoogleSignIn from './GoogleSignIn'
 import FacebookSignIn from './FacebookSignIn'
 import history from '../../utils/history'
@@ -15,44 +15,25 @@ import {readCurrentUserQuery} from '../../graphql/userQueries'
 class Login extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      email: '',
-      password: ''
-    }
-    this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handlePassChange = this.handlePassChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.loginCallback = this.loginCallback.bind(this)
   }
 
-  handleEmailChange(e) {
-    this.setState({
-      email: e.target.value
-    })
-  }
-
-  handlePassChange(e) {
-    this.setState({
-      password: e.target.value
-    })
-  }
-
   loginCallback(user) {
-    const {updateClientCallback, client} = this.props
+    const {client} = this.props
     localStorage.setItem(USER_ID, user.uid)
     firebaseApp
       .auth()
       .currentUser.getToken()
       .then(token => {
-        updateClientCallback(token).then(() => {
-          client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-            if (error) {
-              // TODO
-            } else {
-              localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-              history.push('/home')
-            }
-          })
+        localStorage.setItem(AUTH_TOKEN, token)
+        client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+          if (error) {
+            // TODO
+          } else {
+            localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+            history.push('/home')
+          }
         })
       })
   }
@@ -78,7 +59,6 @@ class Login extends Component {
   }
 
   render() {
-    const {email, password} = this.state
     return (
       <main>
         <Paper className="centerSquare">
@@ -92,11 +72,11 @@ class Login extends Component {
           <form onSubmit={this.handleSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input type="email" name="email" autoComplete="email" value={email} onChange={this.handleEmailChange} autoFocus/>
+              <Input type="email" name="email" autoComplete="email" autoFocus/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input type="password" name="password" id="password" autoComplete="current-password" value={password} onChange={this.handlePassChange}/>
+              <Input type="password" name="password" id="password" autoComplete="current-password"/>
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
               Submit
@@ -115,13 +95,9 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  updateClientCallback: PropTypes.func,
   client: PropTypes.object.isRequired
 }
 
-Login.defaultProps = {
-  updateClientCallback: () => {
-  }
-}
+Login.defaultProps = {}
 
 export default withApollo(Login)

@@ -10,19 +10,17 @@ import Login from './auth/Login'
 import Recover from './auth/Recover'
 import Signup from './auth/Signup'
 import Navbar from './Navbar'
-import OrganizationSettings from './organizationsettings/OrganizationSettings'
+import OrganizationSettings from './OrgSettings/OrganizationSettings'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loggedin: localStorage.getItem(USER_ID) !== '',
-      updateClientCallback: props.updateClientCallback
+      loggedin: localStorage.getItem(USER_ID) !== ''
     }
   }
 
   componentWillMount() {
-    const {updateClientCallback} = this.props
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         console.log('AUTH STATE CHANGED', user)
@@ -31,12 +29,8 @@ class App extends Component {
           loggedin: true
         })
         user.getToken().then(result => {
-          const pastToken = localStorage.getItem(AUTH_TOKEN)
           localStorage.setItem(AUTH_TOKEN, result)
           localStorage.setItem(USER_ID, user.uid)
-          if (pastToken !== result) {
-            updateClientCallback(result)
-          }
         })
       } else {
         // If not logged in...
@@ -67,19 +61,13 @@ class App extends Component {
           <Route
             path="/login"
             render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
+              <Login {...routeProps}/>
             )}
           />
           <Route
             path="/signup"
             render={routeProps => (
-              <Signup
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
+              <Signup {...routeProps}/>
             )}
           />
           <Route path="/signupcontinued" component={SignupContinued}/>
@@ -93,7 +81,6 @@ class App extends Component {
 }
 
 App.propTypes = {
-  updateClientCallback: PropTypes.func.isRequired
 }
 
 export default App

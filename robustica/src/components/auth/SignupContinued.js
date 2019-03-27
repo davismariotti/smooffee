@@ -12,7 +12,6 @@ class SignupContinued extends Component {
     return (
       <div>
         <Mutation mutation={signUpMutation} onCompleted={({user}) => {
-          console.log('user', user)
           localStorage.setItem(ORGANIZATION_ID, user.create.organizationId)
           history.push('/home')
         }}>
