@@ -35,6 +35,7 @@ module.exports = {
     'react/prefer-stateless-function': 0,
     'react/no-unused-state': 1,
     'react/forbid-prop-types': 0,
+    'react/no-unused-prop-types': 0,
     'quotes': [2, 'single', 'avoid-escape'],
     'no-unused-vars': 1,
     'no-console': 0,
@@ -42,6 +43,7 @@ module.exports = {
     'import/order': 1,
     'import/prefer-default-export': 0,
     'no-else-return': 0,
-    'no-underscore-dangle': 0
+    'no-underscore-dangle': 0,
+    'lines-between-class-members': 0
   }
 };

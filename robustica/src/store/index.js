@@ -1,8 +1,11 @@
 import {combineReducers, createStore} from 'redux'
+import { reducer as formReducer } from 'redux-form'
 import homeReducer from '../components/Home/reducer'
+import organizationSettingsReducer from '../components/OrgSettings/reducer'
 
 const reducerList = [
-  homeReducer
+  homeReducer,
+  organizationSettingsReducer
 ]
 
 function reducers() {
@@ -31,7 +34,10 @@ function initialState() {
 
 export default function createNewStore() {
   return createStore(
-    combineReducers(reducers()),
+    combineReducers({
+      ...reducers(),
+      form: formReducer
+    }),
     initialState(),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )

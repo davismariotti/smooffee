@@ -67,7 +67,7 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return {
     openModal: () => dispatch(openHomeCreateOrderModal())
-  };
+  }
 }
 
 export default compose(

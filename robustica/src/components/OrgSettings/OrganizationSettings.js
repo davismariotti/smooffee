@@ -14,7 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import {ORGANIZATION_ID} from '../../constants'
 import {listProductsQuery} from '../../graphql/productQueries'
-import EditProductModal from './EditProductModal';
+import EditProductModal from './EditProductModal'
+import {connect} from 'react-redux'
+import OrganizationSettingsActions from './actions'
 
 const styles = {
   organizationSettings: {
@@ -57,12 +59,16 @@ class OrganizationSettings extends Component {
   }
 
   render() {
-    const {classes, listProductsQueryResult} = this.props
+    const {
+      classes,
+      listProductsQueryResult,
+      openEditProductModal
+    } = this.props
     const {open} = this.state
 
     return (
       <div>
-        <EditProductModal open currentProduct={{ name: 'Test', description: 'Test', price: 0, status: 1}}/>
+        <EditProductModal/>
         <Paper className={classes.paper} elevation={1}>
           <Typography variant="h5" component="h3">
             Products
@@ -112,7 +118,9 @@ class OrganizationSettings extends Component {
                           <Menu id="menu" open={open[productItem.id] || false} anchorEl={this.anchorEls[productItem.id]} onClose={() => {
                             this.handleOptionClose(productItem.id)
                           }}>
-                            <MenuItem>Edit</MenuItem>
+                            <MenuItem>
+                              <Button onClick={() => {openEditProductModal(productItem)}}>Edit</Button>
+                            </MenuItem>
                           </Menu>
                         </TableCell>
                       </TableRow>
@@ -130,14 +138,27 @@ class OrganizationSettings extends Component {
 
 OrganizationSettings.propTypes = {
   classes: PropTypes.object.isRequired,
-  listProductsQueryResult: PropTypes.object
+  listProductsQueryResult: PropTypes.object,
+  openCreateProductModal: PropTypes.func.isRequired,
+  openEditProductModal: PropTypes.func.isRequired,
+  closeCreateProductModal: PropTypes.func.isRequired
 }
 
 OrganizationSettings.defaultProps = {
   listProductsQueryResult: {}
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openCreateProductModal: () => dispatch(OrganizationSettingsActions.openCreateProductModal()),
+    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
+    openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product))
+  }
+}
+
+
 export default compose(
+  connect(null, mapDispatchToProps),
   withStyles(styles),
   graphql(listProductsQuery, {
     name: 'listProductsQueryResult',

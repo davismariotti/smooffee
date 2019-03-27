@@ -2,13 +2,12 @@ import React, {Component} from 'react'
 import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
-import {Button, FormControl, Input, InputLabel, Typography} from '@material-ui/core'
-import {compose, graphql, Mutation} from 'react-apollo'
-import MenuItem from '@material-ui/core/MenuItem'
-import Select from '@material-ui/core/Select'
-import {ORGANIZATION_ID, USER_ID} from '../../constants'
-import {createOrderMutation} from '../../graphql/orderQueries'
-import { createProductMutation, listProductsQuery } from '../../graphql/productQueries';
+import {compose, graphql} from 'react-apollo'
+import {connect} from 'react-redux'
+import { createProductMutation} from '../../graphql/productQueries';
+import OrganizationSettingsActions from './actions'
+import EditProductForm from './EditProductForm'
+import {ORGANIZATION_ID} from '../../constants'
 
 const styles = theme => ({
   paper: {
@@ -30,131 +29,32 @@ function getModalStyle() {
 }
 
 class EditProductModal extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: this.props.currentProduct.name,
-      description: '',
-      price: 0,
-      status: 0
-    }
-    this.handleNameChange = this.handleNameChange.bind(this)
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
-    this.handlePriceChange = this.handlePriceChange.bind(this)
-    this.handleStatusChange = this.handleStatusChange.bind(this)
-  }
-
-  handleSubmit(e) {
-    e.preventDefault()
-  }
-
-  handleNameChange(e) {
-    this.setState({
-      name: e.target.value
-    })
-  }
-
-  handleDescriptionChange(e) {
-    this.setState({
-      description: e.target.value
-    })
-  }
-
-  handlePriceChange(e) {
-    this.setState({
-      price: e.target.value
-    })
-  }
-
-  handleStatusChange(e) {
-    this.setState({
-      status: e.target.value
-    })
-  }
-
   render() {
-    const {name, description, price, status} = this.state
-    const {classes, open, onSubmit, createProductMutate} = this.props
+    const {
+      classes,
+      onSubmit,
+      createProductMutate,
+      editProduct,
+      closeCreateProductModal,
+      createProductModalOpen
+    } = this.props
+
+    const submit = values => {
+      createProductMutate({
+        variables: {
+          productInput: values,
+          organizationId: localStorage.getItem(ORGANIZATION_ID)
+        }
+      }).then(() => {
+        closeCreateProductModal()
+      })
+    }
 
     return (
         <div>
-        <Modal open={open} onClose={onSubmit}>
+        <Modal open={createProductModalOpen} onClose={onSubmit}>
           <div style={getModalStyle()} className={classes.paper}>
-            <form onSubmit={e => {
-              e.preventDefault()
-              const productInput = {
-                name,
-                description,
-                price,
-                status
-              }
-              createProductMutate({
-                variables: {
-                  productInput,
-                  organizationId: localStorage.getItem(ORGANIZATION_ID)
-
-                }
-              }).then(() => {
-                this.setState({
-                  name: '',
-                  description: '',
-                  price: 0,
-                  status: 0
-                })
-                onSubmit()
-              })
-            }}>
-              <Typography variant="headline">
-                Edit Product
-              </Typography>
-              <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="name">Name</InputLabel>
-                <Input
-                  type="name"
-                  name="name"
-                  autoComplete="name"
-                  value={name}
-                  onChange={this.handleNameChange}
-                  autoFocus
-                />
-              </FormControl>
-              <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="description">Description</InputLabel>
-                <Input
-                  type="description"
-                  name="description"
-                  autoComplete="location"
-                  value={description}
-                  onChange={this.handleDescriptionChange}
-                  autoFocus
-                />
-              </FormControl>
-              <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="price">Price</InputLabel>
-                <Input
-                  type="price"
-                  name="price"
-                  autoComplete="price"
-                  value={price}
-                  onChange={this.handlePriceChange}
-                  autoFocus
-                />
-              </FormControl>
-              <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="status">Status</InputLabel>
-                <Input
-                  type="status"
-                  name="status"
-                  value={status}
-                  autoComplete="status"
-                  onChange={this.handleStatusChange}
-                  autoFocus
-                />
-              </FormControl>
-              <Button type="submit" fullWidth variant="contained">
-                Submit
-              </Button>
-            </form>
+            <EditProductForm editProduct={editProduct} onSubmit={submit}/>
           </div>
         </Modal>
       </div>
@@ -163,26 +63,40 @@ class EditProductModal extends Component {
 }
 
 EditProductModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  currentProduct: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    status: PropTypes.number.isRequired
-  }).isRequired,
   onSubmit: PropTypes.func,
   classes: PropTypes.object.isRequired,
-  createProductMutate: PropTypes.object
+  createProductMutate: PropTypes.func,
+  editProduct: PropTypes.bool.isRequired,
+  closeCreateProductModal: PropTypes.func.isRequired,
+  createProductModalOpen: PropTypes.bool.isRequired
 }
 
 EditProductModal.defaultProps = {
   onSubmit: () => {},
-  createProductMutate: {}
+  createProductMutate: () => {}
+}
+
+const mapStateToProps = ({organizationSettings}) => {
+  return {
+    createProductModalOpen: organizationSettings.createProductModalOpen,
+    currentProduct: organizationSettings.editProductObject,
+    editProduct: organizationSettings.editProduct
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal())
+  }
 }
 
 export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   graphql(createProductMutation, {
     name: 'createProductMutate'
+  }),
+  graphql(createProductMutation, { // TODO
+    name: 'editProductMutate'
   })
 )(EditProductModal)
