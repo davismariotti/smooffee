@@ -2,7 +2,7 @@ import isEmail from 'validator/lib/isEmail'
 import React, {Component} from 'react'
 import {Button, FormControl, Input, InputLabel} from '@material-ui/core'
 import * as PropTypes from 'prop-types'
-import firebaseApp from '../../services/AuthService'
+import firebaseApp from '../../../services/AuthService'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {

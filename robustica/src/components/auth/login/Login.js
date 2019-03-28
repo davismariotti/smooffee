@@ -4,13 +4,13 @@ import {Button, FormControl, Input, InputLabel, Paper, Typography} from '@materi
 import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import {withApollo} from 'react-apollo'
-import firebaseApp from '../../services/AuthService'
-import '../../css/index.css'
-import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../constants'
-import GoogleSignIn from './GoogleSignIn'
-import FacebookSignIn from './FacebookSignIn'
-import history from '../../utils/history'
-import {readCurrentUserQuery} from '../../graphql/userQueries'
+import firebaseApp from '../../../services/AuthService'
+import '../../../css/index.css'
+import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../../constants'
+import GoogleSignIn from '../components/GoogleSignIn'
+import FacebookSignIn from '../components/FacebookSignIn'
+import history from '../../../utils/history'
+import {readCurrentUserQuery} from '../../../graphql/userQueries'
 
 class Login extends Component {
   constructor(props) {

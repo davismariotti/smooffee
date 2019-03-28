@@ -7,7 +7,7 @@ import App from './components/App'
 import history from './utils/history'
 import 'typeface-roboto'
 import createApolloClient from './services/apollo'
-import createNewStore from './store'
+import createNewStore from './services/store'
 
 const client = createApolloClient()
 const store = createNewStore()

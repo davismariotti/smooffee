@@ -2,12 +2,12 @@ import React, {Component} from 'react'
 import {Paper, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import {EmailPasswordSignUp} from './EmailPasswordSignUp'
-import GoogleSignIn from './GoogleSignIn'
-import FacebookSignIn from './FacebookSignIn'
-import history from '../../utils/history'
-import '../../css/index.css'
-import {USER_ID} from '../../constants'
-import firebaseApp from '../../services/AuthService'
+import GoogleSignIn from '../components/GoogleSignIn'
+import FacebookSignIn from '../components/FacebookSignIn'
+import history from '../../../utils/history'
+import '../../../css/index.css'
+import {USER_ID} from '../../../constants'
+import firebaseApp from '../../../services/AuthService'
 
 class Signup extends Component {
   constructor(props) {

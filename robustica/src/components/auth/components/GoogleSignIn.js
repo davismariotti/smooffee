@@ -2,7 +2,7 @@ import * as firebase from 'firebase'
 import React, {Component} from 'react'
 import * as PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
-import firebaseApp from '../../services/AuthService'
+import firebaseApp from '../../../services/AuthService'
 
 class GoogleSignIn extends Component {
   constructor(props) {
