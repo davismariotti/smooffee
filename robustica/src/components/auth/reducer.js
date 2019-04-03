@@ -3,7 +3,7 @@ import AuthActions from './actions'
 
 const initialState = Immutable({
   loggedIn: false,
-  loginError: null
+  authError: null
 })
 
 export default {
@@ -11,17 +11,19 @@ export default {
     initialState,
     reducer(state = initialState, action) {
       switch (action.type) {
+        case AuthActions.SIGN_UP_SUCCESS:
         case AuthActions.SIGN_IN_SUCCESS:
           return {
             ...state,
             loggedIn: true,
-            loginError: null
+            authError: null
           }
+        case AuthActions.SIGN_UP_ERROR:
         case AuthActions.SIGN_IN_ERROR:
           return {
             ...state,
             loggedIn: false,
-            loginError: action.payload.error
+            authError: action.payload.error
           }
         default:
           return {

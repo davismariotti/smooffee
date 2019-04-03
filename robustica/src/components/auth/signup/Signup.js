@@ -1,12 +1,16 @@
 import React, {Component} from 'react'
 import {Paper, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
-import {EmailPasswordSignUp} from './EmailPasswordSignUp'
+import * as PropTypes from 'prop-types'
+import {Alert} from 'reactstrap'
+import {connect} from 'react-redux'
+
+import EmailPasswordSignUp from './EmailPasswordSignUp'
 import GoogleSignIn from '../components/GoogleSignIn'
 import FacebookSignIn from '../components/FacebookSignIn'
 import history from '../../../utils/history'
 import '../../../css/index.css'
-import {USER_ID} from '../../../constants'
+import {AUTH_TOKEN, USER_ID} from '../../../constants'
 import firebaseApp from '../../../services/AuthService'
 
 class Signup extends Component {
@@ -21,11 +25,14 @@ class Signup extends Component {
       .auth()
       .currentUser.getToken()
       .then(token => {
+        localStorage.setItem(AUTH_TOKEN, token)
         history.push('/signupcontinued')
       })
   }
 
   render() {
+    const {authError} = this.props
+
     return (
       <main>
         <Paper className="centerSquare">
@@ -36,8 +43,9 @@ class Signup extends Component {
             <FacebookSignIn callback={this.signupCallback}/>
             <GoogleSignIn callback={this.signupCallback}/>
           </div>
-          <EmailPasswordSignUp callback={this.signupCallback}/>
+          <EmailPasswordSignUp />
           <br/>
+          <Alert hidden={!authError} color="danger">{authError}</Alert>
           <p>
             Already Signed up? <Link to="/login">Log In</Link>
           </p>
@@ -47,6 +55,14 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {}
+Signup.propTypes = {
+  authError: PropTypes.string
+}
 
-export default Signup
+const mapStateToProps = ({auth}) => {
+  return {
+    authError: auth.authError
+  }
+}
+
+export default connect(mapStateToProps)(Signup)

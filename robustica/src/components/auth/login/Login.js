@@ -4,16 +4,20 @@ import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import {withApollo} from 'react-apollo'
 import {Field, propTypes, reduxForm} from 'redux-form'
-import {bindActionCreators, compose} from 'redux'
+import {compose} from 'redux'
 import {TextField} from 'redux-form-material-ui'
 import {connect} from 'react-redux'
 import {Alert} from 'reactstrap'
 import {withStyles} from '@material-ui/core/styles'
+import * as firebaseApp from 'firebase'
 
 import '../../../css/index.css'
 import GoogleSignIn from '../components/GoogleSignIn'
 import FacebookSignIn from '../components/FacebookSignIn'
 import AuthMiddleware from '../AuthMiddleware'
+import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../../constants'
+import {readCurrentUserQuery} from '../../../graphql/userQueries'
+import history from '../../../utils/history'
 
 const styles = {
   loginSubmit: {
@@ -28,26 +32,26 @@ class Login extends Component {
   }
 
   loginCallback(user) {
-  //   const {client} = this.props
-  //   localStorage.setItem(USER_ID, user.uid)
-  //   firebaseApp
-  //     .auth()
-  //     .currentUser.getToken()
-  //     .then(token => {
-  //       localStorage.setItem(AUTH_TOKEN, token)
-  //       client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-  //         if (error) {
-  //           // TODO
-  //         } else {
-  //           localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-  //           history.push('/home')
-  //         }
-  //       })
-  //     })
+    const {client} = this.props
+    localStorage.setItem(USER_ID, user.uid)
+    firebaseApp
+      .auth()
+      .currentUser.getToken()
+      .then(token => {
+        localStorage.setItem(AUTH_TOKEN, token)
+        client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+          if (error) {
+            // TODO
+          } else {
+            localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+            history.push('/home')
+          }
+        })
+      })
   }
 
   render() {
-    const {handleSubmit, loginError, classes, signInWithEmailAndPassword} = this.props
+    const {handleSubmit, authError, classes, signInWithEmailAndPassword} = this.props
 
     const submit = ({email, password}) => {
       console.log('test')
@@ -72,7 +76,7 @@ class Login extends Component {
             </Button>
           </form>
           <br/>
-          <Alert hidden={!loginError} color="danger">{loginError}</Alert>
+          <Alert hidden={!authError} color="danger">{authError}</Alert>
           <p>Forgot Password <Link to="/recover"> Click Here</Link></p>
           <p>Not Signed up yet? <Link to="/signup"> Sign Up</Link></p>
         </Paper>
@@ -85,12 +89,12 @@ Login.propTypes = {
   ...propTypes,
   client: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  loginError: PropTypes.string
+  authError: PropTypes.string
 }
 
 const mapStateToProps = ({auth}) => {
   return {
-    loginError: auth.loginError
+    authError: auth.authError
   }
 }
 

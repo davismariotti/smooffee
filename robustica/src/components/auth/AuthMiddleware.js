@@ -8,6 +8,32 @@ import {client} from '../../services/apollo'
 import AuthActions from './actions'
 
 export default class AuthMiddleware {
+  static createUserWithEmailAndPassword(email, password) {
+    return dispatch => {
+      if (isEmail(email)) {
+        firebaseApp
+          .auth()
+          .createUserWithEmailAndPassword(email.trim(), password.trim())
+          .then((result) => {
+            localStorage.setItem(USER_ID, result.uid)
+            firebaseApp
+              .auth()
+              .currentUser.getToken()
+              .then(token => {
+                localStorage.setItem(AUTH_TOKEN, token)
+                dispatch(AuthActions.signUpSuccess())
+                history.push('/signupcontinued')
+              })
+          })
+          .catch(error => {
+            dispatch(AuthActions.signUpError(error.message))
+          })
+      } else {
+        dispatch(AuthActions.signUpError('Email Address in not valid'))
+      }
+    }
+  }
+
   static signInWithEmailAndPassword(email, password) {
     return dispatch => {
       if (isEmail(email)) {
