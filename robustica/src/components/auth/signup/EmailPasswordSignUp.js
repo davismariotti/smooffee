@@ -1,18 +1,20 @@
 import isEmail from 'validator/lib/isEmail'
 import React, {Component} from 'react'
-import {Button, FormControl, Input, InputLabel} from '@material-ui/core'
+import {Button} from '@material-ui/core'
 import * as PropTypes from 'prop-types'
+import {Field, propTypes, reduxForm} from 'redux-form'
+import {TextField} from 'redux-form-material-ui'
 import firebaseApp from '../../../services/AuthService'
 
 export class EmailPasswordSignUp extends Component {
   constructor(props) {
     super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleValues = this.handleValues.bind(this)
   }
 
-  handleSubmit(e) {
+  handleValues = values => {
+    console.log(values)
     const {callback} = this.props
-    e.preventDefault()
     const {email, password} = this.state
     if (isEmail(email)) {
       firebaseApp
@@ -31,26 +33,12 @@ export class EmailPasswordSignUp extends Component {
   }
 
   render() {
+    const {handleSubmit} = this.props
+    console.log('this.props', this.props)
     return (
-      <form onSubmit={this.handleSubmit}>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="email">Email Address</InputLabel>
-          <Input
-            type="email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-        </FormControl>
-        <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input
-            type="password"
-            name="password"
-            id="password"
-            onChange={this.handlePassChange}
-          />
-        </FormControl>
+      <form onSubmit={handleSubmit(this.handleValues)}>
+        <Field fullWidth name="email" component={TextField} label="Email Address"/>
+        <Field fullWidth name="password" component={TextField} label="Password"/>
         <Button type="submit" fullWidth variant="contained">
           Submit
         </Button>
@@ -60,5 +48,10 @@ export class EmailPasswordSignUp extends Component {
 }
 
 EmailPasswordSignUp.propTypes = {
+  ...propTypes,
   callback: PropTypes.func.isRequired
 }
+
+export default reduxForm({
+  form: 'emailPasswordSignUpForm'
+})(EmailPasswordSignUp)

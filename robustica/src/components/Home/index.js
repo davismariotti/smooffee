@@ -9,7 +9,7 @@ import '../../css/index.css'
 import CreateOrderModal from './orders/CreateOrderModal'
 import {ORGANIZATION_ID} from '../../constants'
 import {listOrdersQuery} from '../../graphql/orderQueries'
-import {openHomeCreateOrderModal} from '../../actions/homeActions'
+import HomeActions from './actions'
 
 const styles = {
   title: {
@@ -66,7 +66,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    openModal: () => dispatch(openHomeCreateOrderModal())
+    openModal: () => dispatch(HomeActions.openCreateOrderModal())
   }
 }
 

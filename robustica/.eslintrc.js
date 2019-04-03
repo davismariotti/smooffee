@@ -36,6 +36,7 @@ module.exports = {
     'react/no-unused-state': 1,
     'react/forbid-prop-types': 0,
     'react/no-unused-prop-types': 0,
+    'react/require-default-props': 0,
     'quotes': [2, 'single', 'avoid-escape'],
     'no-unused-vars': 1,
     'no-console': 0,

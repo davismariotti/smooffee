@@ -12,10 +12,10 @@ import Paper from '@material-ui/core/Paper'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
+import {connect} from 'react-redux'
 import {ORGANIZATION_ID} from '../../constants'
 import {listProductsQuery} from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
-import {connect} from 'react-redux'
 import OrganizationSettingsActions from './actions'
 
 const styles = {
@@ -53,7 +53,7 @@ class OrganizationSettings extends Component {
 
     return (
       <div>
-        <Menu id="menu" open={openMenu != null} anchorEl={openMenu && openMenu.anchorEl || null} onClose={closeMoreVertMenu}>
+        <Menu id="menu" open={openMenu != null} anchorEl={(openMenu && openMenu.anchorEl) || null} onClose={closeMoreVertMenu}>
           <MenuItem>
             <Button onClick={() => {openEditProductModal(openMenu.productItem)}}>Edit</Button>
           </MenuItem>

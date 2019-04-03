@@ -1,64 +1,59 @@
 import React, {Component} from 'react'
-import isEmail from 'validator/lib/isEmail'
-import {Button, FormControl, Input, InputLabel, Paper, Typography} from '@material-ui/core'
+import {Button, Paper, Typography} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import {withApollo} from 'react-apollo'
-import firebaseApp from '../../../services/AuthService'
+import {Field, propTypes, reduxForm} from 'redux-form'
+import {bindActionCreators, compose} from 'redux'
+import {TextField} from 'redux-form-material-ui'
+import {connect} from 'react-redux'
+import {Alert} from 'reactstrap'
+import {withStyles} from '@material-ui/core/styles'
+
 import '../../../css/index.css'
-import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../../constants'
 import GoogleSignIn from '../components/GoogleSignIn'
 import FacebookSignIn from '../components/FacebookSignIn'
-import history from '../../../utils/history'
-import {readCurrentUserQuery} from '../../../graphql/userQueries'
+import AuthMiddleware from '../AuthMiddleware'
+
+const styles = {
+  loginSubmit: {
+    marginTop: '20px'
+  }
+}
 
 class Login extends Component {
   constructor(props) {
     super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
     this.loginCallback = this.loginCallback.bind(this)
   }
 
   loginCallback(user) {
-    const {client} = this.props
-    localStorage.setItem(USER_ID, user.uid)
-    firebaseApp
-      .auth()
-      .currentUser.getToken()
-      .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token)
-        client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-          if (error) {
-            // TODO
-          } else {
-            localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-            history.push('/home')
-          }
-        })
-      })
-  }
-
-  handleSubmit(e) {
-    const {email, password} = this.state
-    e.preventDefault()
-    if (isEmail(email)) {
-      firebaseApp
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(result => {
-          this.loginCallback(result.user)
-        })
-        .catch(error => {
-          // Handle Errors here.
-          const errorMessage = error.message
-          alert(`errorMessage: ${errorMessage}`)
-        })
-    } else {
-      alert('Email Address is not valid')
-    }
+  //   const {client} = this.props
+  //   localStorage.setItem(USER_ID, user.uid)
+  //   firebaseApp
+  //     .auth()
+  //     .currentUser.getToken()
+  //     .then(token => {
+  //       localStorage.setItem(AUTH_TOKEN, token)
+  //       client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+  //         if (error) {
+  //           // TODO
+  //         } else {
+  //           localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+  //           history.push('/home')
+  //         }
+  //       })
+  //     })
   }
 
   render() {
+    const {handleSubmit, loginError, classes, signInWithEmailAndPassword} = this.props
+
+    const submit = ({email, password}) => {
+      console.log('test')
+      signInWithEmailAndPassword(email, password)
+    }
+
     return (
       <main>
         <Paper className="centerSquare">
@@ -69,25 +64,17 @@ class Login extends Component {
             <FacebookSignIn callback={this.loginCallback}/>
             <GoogleSignIn callback={this.loginCallback}/>
           </div>
-          <form onSubmit={this.handleSubmit}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input type="email" name="email" autoComplete="email" autoFocus/>
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input type="password" name="password" id="password" autoComplete="current-password"/>
-            </FormControl>
-            <Button type="submit" fullWidth variant="contained">
+          <form onSubmit={handleSubmit(submit)}>
+            <Field fullWidth name="email" type="email" component={TextField} label="Email"/>
+            <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
+            <Button type="submit" fullWidth variant="contained" className={classes.loginSubmit}>
               Submit
             </Button>
           </form>
-          <p>
-            Forgot Password<Link to="/recover"> Click Here</Link>
-          </p>
-          <p>
-            Not Signed up yet? <Link to="/signup"> Sign Up</Link>
-          </p>
+          <br/>
+          <Alert hidden={!loginError} color="danger">{loginError}</Alert>
+          <p>Forgot Password <Link to="/recover"> Click Here</Link></p>
+          <p>Not Signed up yet? <Link to="/signup"> Sign Up</Link></p>
         </Paper>
       </main>
     )
@@ -95,9 +82,29 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  client: PropTypes.object.isRequired
+  ...propTypes,
+  client: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  loginError: PropTypes.string
 }
 
-Login.defaultProps = {}
+const mapStateToProps = ({auth}) => {
+  return {
+    loginError: auth.loginError
+  }
+}
 
-export default withApollo(Login)
+const mapDispatchToProps = dispatch => {
+  return {
+    signInWithEmailAndPassword: (email, password) => AuthMiddleware.signInWithEmailAndPassword(email, password)(dispatch)
+  }
+}
+
+export default compose(
+  reduxForm({
+    form: 'login'
+  }),
+  connect(mapStateToProps, mapDispatchToProps),
+  withApollo,
+  withStyles(styles)
+)(Login)

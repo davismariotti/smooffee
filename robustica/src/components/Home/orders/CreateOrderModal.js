@@ -10,7 +10,7 @@ import {connect} from 'react-redux'
 import {ORGANIZATION_ID, USER_ID} from '../../../constants'
 import {createOrderMutation} from '../../../graphql/orderQueries'
 import {listProductsQuery} from '../../../graphql/productQueries'
-import {closeHomeCreateOrderModal} from '../../../actions/homeActions'
+import HomeActions from '../actions'
 
 const styles = theme => ({
   paper: {
@@ -183,7 +183,7 @@ CreateOrderModal.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    closeModal: () => dispatch(closeHomeCreateOrderModal())
+    closeModal: () => dispatch(HomeActions.closeCreateOrderModal())
   };
 }
 

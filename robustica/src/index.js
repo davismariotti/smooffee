@@ -6,10 +6,10 @@ import {Provider} from 'react-redux'
 import App from './components/App'
 import history from './utils/history'
 import 'typeface-roboto'
-import createApolloClient from './services/apollo'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {client} from './services/apollo'
 import createNewStore from './services/store'
 
-const client = createApolloClient()
 const store = createNewStore()
 
 class RootComponent extends Component {

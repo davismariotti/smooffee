@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import * as PropTypes from 'prop-types'
 import {Route, Switch} from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
