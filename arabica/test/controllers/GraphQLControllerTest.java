@@ -8,7 +8,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import static org.junit.Assert.assertEquals;
-import static play.mvc.Http.Status.FORBIDDEN;
+import static play.mvc.Http.Status.UNAUTHORIZED;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.route;
@@ -39,7 +39,7 @@ public class GraphQLControllerTest {
                 .uri("/graphql")
                 .bodyText(requestText);
         Result result =  route(FakeApplication.app, request);
-        assertEquals(FORBIDDEN, result.status());
+        assertEquals(UNAUTHORIZED, result.status());
     }
 
     @Test
@@ -51,6 +51,6 @@ public class GraphQLControllerTest {
                 .header("Authorization", "Bearer undefined")
                 .bodyText(requestText);
         Result result =  route(FakeApplication.app, request);
-        assertEquals(FORBIDDEN, result.status());
+        assertEquals(UNAUTHORIZED, result.status());
     }
 }

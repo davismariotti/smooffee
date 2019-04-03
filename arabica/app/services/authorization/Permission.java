@@ -200,10 +200,10 @@ public class Permission {
 
         // Get uid
         User user = User.findByFirebaseUid(ThreadStorage.get().uid);
-        if (user == null) throw new AccessDeniedException();
+        if (user == null) throw new AccessDeniedException("User is null");
 
         boolean result = checkUserPermission(user, permission, context);
-        if (!result) throw new AccessDeniedException();
+        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d", permission));
     }
 
     public static void ignore() {
@@ -211,6 +211,13 @@ public class Permission {
     }
 
     public static class AccessDeniedException extends RuntimeException {
+        public AccessDeniedException() {
+            super();
+        }
+
+        public AccessDeniedException(String message) {
+            super(message);
+        }
     }
 
 }
