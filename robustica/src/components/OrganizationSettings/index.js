@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import * as PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import {compose, graphql} from 'react-apollo'
+import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql } from 'react-apollo'
 import MoreVert from '@material-ui/icons/Menu'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import {TableBody, Typography} from '@material-ui/core'
+import { TableBody, Typography } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-import {ORGANIZATION_ID} from '../../constants'
-import {listProductsQuery} from '../../graphql/productQueries'
+import { connect } from 'react-redux'
+import { ORGANIZATION_ID } from '../../constants'
+import { listProductsQuery } from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
-import {connect} from 'react-redux'
 import OrganizationSettingsActions from './actions'
 
 const styles = {
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-class OrganizationSettings extends Component {
+class Index extends Component {
   render() {
     const {
       classes,
@@ -53,9 +53,11 @@ class OrganizationSettings extends Component {
 
     return (
       <div>
-        <Menu id="menu" open={openMenu != null} anchorEl={openMenu && openMenu.anchorEl || null} onClose={closeMoreVertMenu}>
+        <Menu id="menu" open={openMenu != null} anchorEl={(openMenu && openMenu.anchorEl) || null} onClose={closeMoreVertMenu}>
           <MenuItem>
-            <Button onClick={() => {openEditProductModal(openMenu.productItem)}}>Edit</Button>
+            <Button onClick={() => {
+              openEditProductModal(openMenu.productItem)
+            }}>Edit</Button>
           </MenuItem>
         </Menu>
         <EditProductModal/>
@@ -101,9 +103,10 @@ class OrganizationSettings extends Component {
                         <TableCell align="right">
                           <Button onClick={(e) => {
                             openMoreVertMenu({
-                            anchorEl: e.target,
-                            productItem
-                          })}}>
+                              anchorEl: e.target,
+                              productItem
+                            })
+                          }}>
                             <MoreVert/>
                           </Button>
                         </TableCell>
@@ -120,7 +123,7 @@ class OrganizationSettings extends Component {
   }
 }
 
-OrganizationSettings.propTypes = {
+Index.propTypes = {
   classes: PropTypes.object.isRequired,
   listProductsQueryResult: PropTypes.object,
   openCreateProductModal: PropTypes.func.isRequired,
@@ -131,7 +134,7 @@ OrganizationSettings.propTypes = {
   openMenu: PropTypes.object
 }
 
-OrganizationSettings.defaultProps = {
+Index.defaultProps = {
   listProductsQueryResult: {},
   openMenu: null
 }
@@ -155,4 +158,4 @@ export default compose(
       }
     }
   })
-)(OrganizationSettings)
+)(Index)

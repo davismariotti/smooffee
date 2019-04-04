@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import {Button, FormControl, Input, InputLabel, Typography} from '@material-ui/core'
-import {compose, graphql, Mutation} from 'react-apollo'
+import { withStyles } from '@material-ui/core/styles'
+import { Button, FormControl, Input, InputLabel, Typography } from '@material-ui/core'
+import { compose, graphql, Mutation } from 'react-apollo'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
-import {connect} from 'react-redux'
-import {ORGANIZATION_ID, USER_ID} from '../../../constants'
-import {createOrderMutation} from '../../../graphql/orderQueries'
-import {listProductsQuery} from '../../../graphql/productQueries'
-import {closeHomeCreateOrderModal} from '../../../actions/homeActions'
+import { connect } from 'react-redux'
+import { ORGANIZATION_ID, USER_ID } from '../../../constants'
+import { createOrderMutation } from '../../../graphql/orderQueries'
+import { listProductsQuery } from '../../../graphql/productQueries'
+import HomeActions from '../actions'
 
 const styles = theme => ({
   paper: {
@@ -82,7 +82,7 @@ class CreateOrderModal extends Component {
     if (listProductsQueryResult.error) return <div>Error</div>
 
     return (
-        <div>
+      <div>
         <Modal open={open} onClose={closeModal}>
           <div style={getModalStyle()} className={classes.paper}>
             <Mutation mutation={createOrderMutation}>
@@ -183,8 +183,8 @@ CreateOrderModal.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    closeModal: () => dispatch(closeHomeCreateOrderModal())
-  };
+    closeModal: () => dispatch(HomeActions.closeCreateOrderModal())
+  }
 }
 
 export default compose(

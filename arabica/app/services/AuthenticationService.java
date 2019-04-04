@@ -54,7 +54,7 @@ public class AuthenticationService {
             return FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken).getUid();
         } else {
             if (mockMap.containsKey(firebaseAuthToken)) return mockMap.get(firebaseAuthToken);
-            else throw new FirebaseAuthException("MAPDOESNOTCONTAIN", "Firebase mock map does not contain token");
+            else throw new FirebaseAuthException("MOCKMAPDOESNOTCONTAIN", "Firebase mock map does not contain token");
         }
     }
 }

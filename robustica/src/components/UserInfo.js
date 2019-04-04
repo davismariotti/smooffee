@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import * as PropTypes from 'prop-types'
-import {compose, graphql} from 'react-apollo'
-import {USER_ID} from '../constants'
-import {readUserQuery} from '../graphql/userQueries'
+import { compose, graphql } from 'react-apollo'
+import { USER_ID } from '../constants'
+import { readUserQuery } from '../graphql/userQueries'
 
 class UserInfo extends Component {
   render() {

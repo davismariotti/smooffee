@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Button from '@material-ui/core/Button'
 import * as PropTypes from 'prop-types'
 import * as firebase from 'firebase'
-import firebaseApp from '../../services/AuthService'
+import firebaseApp from '../../../services/AuthService'
 
 class FacebookSignIn extends Component {
   constructor(props) {
