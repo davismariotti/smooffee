@@ -1,8 +1,8 @@
 import {combineReducers, createStore} from 'redux'
 import { reducer as formReducer } from 'redux-form'
 import homeReducer from '../components/Home/reducer'
-import organizationSettingsReducer from '../components/OrgSettings/reducer'
-import authReducer from '../components/auth/reducer'
+import organizationSettingsReducer from '../components/OrganizationSettings/reducer'
+import authReducer from '../components/Auth/reducer'
 
 const reducerList = [
   homeReducer,

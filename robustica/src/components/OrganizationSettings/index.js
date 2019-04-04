@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-class OrganizationSettings extends Component {
+class Index extends Component {
   render() {
     const {
       classes,
@@ -120,7 +120,7 @@ class OrganizationSettings extends Component {
   }
 }
 
-OrganizationSettings.propTypes = {
+Index.propTypes = {
   classes: PropTypes.object.isRequired,
   listProductsQueryResult: PropTypes.object,
   openCreateProductModal: PropTypes.func.isRequired,
@@ -131,7 +131,7 @@ OrganizationSettings.propTypes = {
   openMenu: PropTypes.object
 }
 
-OrganizationSettings.defaultProps = {
+Index.defaultProps = {
   listProductsQueryResult: {},
   openMenu: null
 }
@@ -155,4 +155,4 @@ export default compose(
       }
     }
   })
-)(OrganizationSettings)
+)(Index)
