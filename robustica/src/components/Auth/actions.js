@@ -1,8 +1,8 @@
 export default class AuthActions {
-  static SIGN_IN_SUCCESS  = 'SIGN_IN_SUCCESS'
+  static SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS'
   static SIGN_IN_ERROR = 'SIGN_IN_ERROR'
 
-  static SIGN_UP_SUCCESS  = 'SIGN_UP_SUCCESS'
+  static SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
   static SIGN_UP_ERROR = 'SIGN_UP_ERROR'
 
   static RECOVER_SUCESSS = 'RECOVER_SUCESSS'

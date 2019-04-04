@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
 import history from '../utils/history'
-import {AUTH_TOKEN, USER_ID} from '../constants'
+import { AUTH_TOKEN, USER_ID } from '../constants'
 
 const config = {
   apiKey: 'AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY',

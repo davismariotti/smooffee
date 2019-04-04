@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from 'redux'
+import { combineReducers, createStore } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 import homeReducer from '../components/Home/reducer'
 import organizationSettingsReducer from '../components/OrganizationSettings/reducer'

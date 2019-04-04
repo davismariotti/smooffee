@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import {compose, graphql} from 'react-apollo'
-import {connect} from 'react-redux'
-import {createProductMutation, editProductMutation} from '../../graphql/productQueries'
+import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql } from 'react-apollo'
+import { connect } from 'react-redux'
+import { createProductMutation, editProductMutation } from '../../graphql/productQueries'
 import OrganizationSettingsActions from './actions'
 import EditProductForm from './EditProductForm'
-import {ORGANIZATION_ID} from '../../constants'
+import { ORGANIZATION_ID } from '../../constants'
 
 const styles = theme => ({
   paper: {
@@ -69,7 +69,7 @@ class EditProductModal extends Component {
     }
 
     return (
-        <div>
+      <div>
         <Modal open={createProductModalOpen} onClose={closeCreateProductModal}>
           <div style={getModalStyle()} className={classes.paper}>
             <EditProductForm editProduct={editProduct} onSubmit={submit}/>

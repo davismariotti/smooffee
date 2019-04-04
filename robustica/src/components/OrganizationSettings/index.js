@@ -1,20 +1,20 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import * as PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import {compose, graphql} from 'react-apollo'
+import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql } from 'react-apollo'
 import MoreVert from '@material-ui/icons/Menu'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import {TableBody, Typography} from '@material-ui/core'
+import { TableBody, Typography } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-import {connect} from 'react-redux'
-import {ORGANIZATION_ID} from '../../constants'
-import {listProductsQuery} from '../../graphql/productQueries'
+import { connect } from 'react-redux'
+import { ORGANIZATION_ID } from '../../constants'
+import { listProductsQuery } from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
 import OrganizationSettingsActions from './actions'
 
@@ -55,7 +55,9 @@ class Index extends Component {
       <div>
         <Menu id="menu" open={openMenu != null} anchorEl={(openMenu && openMenu.anchorEl) || null} onClose={closeMoreVertMenu}>
           <MenuItem>
-            <Button onClick={() => {openEditProductModal(openMenu.productItem)}}>Edit</Button>
+            <Button onClick={() => {
+              openEditProductModal(openMenu.productItem)
+            }}>Edit</Button>
           </MenuItem>
         </Menu>
         <EditProductModal/>
@@ -101,9 +103,10 @@ class Index extends Component {
                         <TableCell align="right">
                           <Button onClick={(e) => {
                             openMoreVertMenu({
-                            anchorEl: e.target,
-                            productItem
-                          })}}>
+                              anchorEl: e.target,
+                              productItem
+                            })
+                          }}>
                             <MoreVert/>
                           </Button>
                         </TableCell>

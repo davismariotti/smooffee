@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
-import {Paper, Typography} from '@material-ui/core'
-import {Link} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Paper, Typography } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 import * as PropTypes from 'prop-types'
-import {Alert} from 'reactstrap'
-import {connect} from 'react-redux'
+import { Alert } from 'reactstrap'
+import { connect } from 'react-redux'
 
 import EmailPasswordSignUp from './EmailPasswordSignUp'
 import GoogleSignIn from '../components/GoogleSignIn'
 import FacebookSignIn from '../components/FacebookSignIn'
 import history from '../../../utils/history'
 import '../../../css/index.css'
-import {AUTH_TOKEN, USER_ID} from '../../../constants'
+import { AUTH_TOKEN, USER_ID } from '../../../constants'
 import firebaseApp from '../../../services/AuthService'
 
 class Signup extends Component {
@@ -43,7 +43,7 @@ class Signup extends Component {
             <FacebookSignIn callback={this.signupCallback}/>
             <GoogleSignIn callback={this.signupCallback}/>
           </div>
-          <EmailPasswordSignUp />
+          <EmailPasswordSignUp/>
           <br/>
           <Alert hidden={!authError} color="danger">{authError}</Alert>
           <p>

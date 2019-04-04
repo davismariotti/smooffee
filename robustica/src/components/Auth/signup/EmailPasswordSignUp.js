@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import {Button} from '@material-ui/core'
-import {Field, propTypes, reduxForm} from 'redux-form'
-import {TextField} from 'redux-form-material-ui'
-import {compose} from 'redux'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { Button } from '@material-ui/core'
+import { Field, propTypes, reduxForm } from 'redux-form'
+import { TextField } from 'redux-form-material-ui'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 
 import AuthMiddleware from '../AuthMiddleware'
 
