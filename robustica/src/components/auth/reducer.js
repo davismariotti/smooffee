@@ -3,7 +3,8 @@ import AuthActions from './actions'
 
 const initialState = Immutable({
   loggedIn: false,
-  authError: null
+  authError: null,
+  recoverResponse: null
 })
 
 export default {
@@ -24,6 +25,11 @@ export default {
             ...state,
             loggedIn: false,
             authError: action.payload.error
+          }
+        case AuthActions.RECOVER_SUCESSS:
+          return {
+            ...state,
+            recoverResponse: action.payload
           }
         default:
           return {

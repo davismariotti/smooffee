@@ -18,6 +18,7 @@ import AuthMiddleware from '../AuthMiddleware'
 import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../../constants'
 import {readCurrentUserQuery} from '../../../graphql/userQueries'
 import history from '../../../utils/history'
+import {StyledFormRow} from '../../styles'
 
 const styles = {
   loginSubmit: {
@@ -69,11 +70,15 @@ class Login extends Component {
             <GoogleSignIn callback={this.loginCallback}/>
           </div>
           <form onSubmit={handleSubmit(submit)}>
-            <Field fullWidth name="email" type="email" component={TextField} label="Email"/>
-            <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
-            <Button type="submit" fullWidth variant="contained" className={classes.loginSubmit}>
-              Submit
-            </Button>
+            <StyledFormRow>
+              <Field fullWidth name="email" type="email" autoComplete="email" component={TextField} label="Email"/>
+            </StyledFormRow>
+            <StyledFormRow>
+              <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
+            </StyledFormRow>
+            <StyledFormRow>
+              <Button type="submit" fullWidth variant="contained" className={classes.loginSubmit}>Submit</Button>
+            </StyledFormRow>
           </form>
           <br/>
           <Alert hidden={!authError} color="danger">{authError}</Alert>

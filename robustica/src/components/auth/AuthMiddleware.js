@@ -60,4 +60,18 @@ export default class AuthMiddleware {
       }
     }
   }
+
+  static recoverWithEmail(email) {
+    return dispatch => {
+      firebaseApp.auth().sendPasswordResetEmail(email.trim())
+        .then(
+          () => {
+            dispatch(AuthActions.recoverSuccess(`Please check your email ${email.trim()} for instructions.`))
+          },
+          () => {
+            dispatch(AuthActions.recoverError('Sorry an error has occured, Please try again.'))
+          }
+        )
+    }
+  }
 }

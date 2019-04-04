@@ -5,6 +5,9 @@ export default class AuthActions {
   static SIGN_UP_SUCCESS  = 'SIGN_UP_SUCCESS'
   static SIGN_UP_ERROR = 'SIGN_UP_ERROR'
 
+  static RECOVER_SUCESSS = 'RECOVER_SUCESSS'
+  static RECOVER_ERROR = 'RECOVER_ERROR'
+
   static signInSuccess() {
     return {
       type: AuthActions.SIGN_IN_SUCCESS
@@ -31,6 +34,26 @@ export default class AuthActions {
       type: AuthActions.SIGN_UP_ERROR,
       payload: {
         error
+      }
+    }
+  }
+
+  static recoverSuccess(message) {
+    return {
+      type: AuthActions.RECOVER_SUCESSS,
+      payload: {
+        message,
+        color: 'success'
+      }
+    }
+  }
+
+  static recoverError(message) {
+    return {
+      type: AuthActions.RECOVER_ERROR,
+      payload: {
+        message,
+        color: 'danger'
       }
     }
   }
