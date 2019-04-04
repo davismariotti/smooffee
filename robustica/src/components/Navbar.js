@@ -71,7 +71,6 @@ class Navbar extends Component {
              <Face/>
            </IconButton>
            <Menu id="simple-menu" anchorEl={this.rightMenuEl} open={rightMenuShow} onClose={this.handleRightClose}>
-             <UserInfo/>
              <MenuItem>My account</MenuItem>
              <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
            </Menu>

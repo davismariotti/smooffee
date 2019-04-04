@@ -6,7 +6,7 @@ import {TextField} from 'redux-form-material-ui'
 import {Alert} from 'reactstrap'
 import * as PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {CenterDiv, StyledFormRow} from '../../styles'
+import {MainCenterDiv, StyledFormRow} from '../../styles'
 
 import AuthMiddleware from '../AuthMiddleware'
 
@@ -21,7 +21,7 @@ class Recover extends Component {
 
     return (
       <main>
-        <CenterDiv>
+        <MainCenterDiv>
           <Paper className="centerSquare">
             <Typography component="h6" variant="h5" align="center">
               Forgot password
@@ -36,7 +36,7 @@ class Recover extends Component {
               <Button type="submit" fullWidth variant="contained">Submit</Button>
             </form>
           </Paper>
-        </CenterDiv>
+        </MainCenterDiv>
       </main>
     )
   }

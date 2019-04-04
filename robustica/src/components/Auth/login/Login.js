@@ -18,7 +18,7 @@ import AuthMiddleware from '../AuthMiddleware'
 import {AUTH_TOKEN, ORGANIZATION_ID, USER_ID} from '../../../constants'
 import {readCurrentUserQuery} from '../../../graphql/userQueries'
 import history from '../../../utils/history'
-import {StyledFormRow} from '../../styles'
+import {MainCenterDiv, StyledFormRow} from '../../styles'
 
 const styles = {
   loginSubmit: {
@@ -61,30 +61,32 @@ class Login extends Component {
 
     return (
       <main>
-        <Paper className="centerSquare">
-          <Typography component="h6" variant="h5" align="center">
-            Login Screen
-          </Typography>
-          <div align="center">
-            <FacebookSignIn callback={this.loginCallback}/>
-            <GoogleSignIn callback={this.loginCallback}/>
-          </div>
-          <form onSubmit={handleSubmit(submit)}>
-            <StyledFormRow>
-              <Field fullWidth name="email" type="email" autoComplete="email" component={TextField} label="Email"/>
-            </StyledFormRow>
-            <StyledFormRow>
-              <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
-            </StyledFormRow>
-            <StyledFormRow>
-              <Button type="submit" fullWidth variant="contained" className={classes.loginSubmit}>Submit</Button>
-            </StyledFormRow>
-          </form>
-          <br/>
-          <Alert hidden={!authError} color="danger">{authError}</Alert>
-          <p>Forgot Password <Link to="/recover"> Click Here</Link></p>
-          <p>Not Signed up yet? <Link to="/signup"> Sign Up</Link></p>
-        </Paper>
+        <MainCenterDiv>
+          <Paper className="centerSquare">
+            <Typography component="h6" variant="h5" align="center">
+              Login Screen
+            </Typography>
+            <div align="center">
+              <FacebookSignIn callback={this.loginCallback}/>
+              <GoogleSignIn callback={this.loginCallback}/>
+            </div>
+            <form onSubmit={handleSubmit(submit)}>
+              <StyledFormRow>
+                <Field fullWidth name="email" type="email" autoComplete="email" component={TextField} label="Email"/>
+              </StyledFormRow>
+              <StyledFormRow>
+                <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
+              </StyledFormRow>
+              <StyledFormRow>
+                <Button type="submit" fullWidth variant="contained" className={classes.loginSubmit}>Submit</Button>
+              </StyledFormRow>
+            </form>
+            <br/>
+            <Alert hidden={!authError} color="danger">{authError}</Alert>
+            <p>Forgot Password <Link to="/recover"> Click Here</Link></p>
+            <p>Not Signed up yet? <Link to="/signup"> Sign Up</Link></p>
+          </Paper>
+        </MainCenterDiv>
       </main>
     )
   }
