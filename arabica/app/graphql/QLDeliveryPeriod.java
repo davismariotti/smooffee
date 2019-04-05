@@ -30,7 +30,7 @@ public class QLDeliveryPeriod {
 
             List<DeliveryPeriod> deliveryPeriods = DeliveryPeriod.findWithParamters(parameters)
                     .where()
-                    .eq("organization_id", organizationId)
+                    .eq("organization.id", organizationId)
                     .findList();
 
             return deliveryPeriods.stream().map(DeliveryPeriodEntry::new).collect(Collectors.toList());

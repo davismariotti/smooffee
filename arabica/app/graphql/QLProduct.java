@@ -28,7 +28,7 @@ public class QLProduct {
 
             List<Product> products = Product.findWithParameters(parameters)
                     .where()
-                    .eq("organization_id", organizationId)
+                    .eq("organization.id", organizationId)
                     .findList();
 
             return products.stream().map(ProductEntry::new).collect(Collectors.toList());
