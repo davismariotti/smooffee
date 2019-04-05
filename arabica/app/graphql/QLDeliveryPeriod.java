@@ -6,6 +6,7 @@ import models.*;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
+import utilities.QLFinder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,12 +23,15 @@ public class QLDeliveryPeriod {
             return new DeliveryPeriodEntry(deliveryPeriod);
         }
 
-        public List<DeliveryPeriodEntry> list(Long organizationId, List<Integer> statuses) {
+        public List<DeliveryPeriodEntry> list(Long organizationId, QLFinder parameters) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ, new AuthorizationContext(organization));
 
-            List<DeliveryPeriod> deliveryPeriods = DeliveryPeriod.findDeliveryPeriodsByOrganizationId(organizationId, statuses);
+            List<DeliveryPeriod> deliveryPeriods = DeliveryPeriod.findWithParamters(parameters)
+                    .where()
+                    .eq("organization_id", organizationId)
+                    .findList();
 
             return deliveryPeriods.stream().map(DeliveryPeriodEntry::new).collect(Collectors.toList());
         }

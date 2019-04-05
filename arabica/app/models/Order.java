@@ -93,14 +93,7 @@ public class Order extends BaseModel {
 
     public static List<Order> findByOrganizationId(Long organizationId) {
         return find.query().where()
-                .eq("organization_id", organizationId)
-                .findList();
-    }
-
-    public static List<Order> findByOrganizationId(Long organizationId, List<Integer> statuses) {
-        return find.query().where()
                 .eq("user.organization.id", organizationId)
-                .in("status", statuses)
                 .findList();
     }
 

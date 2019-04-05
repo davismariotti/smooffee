@@ -119,10 +119,14 @@ public class QLFinder {
     }
 
     public static Class getFieldType(Class startingClass, String field) {
-        String getter = String.format("get%s", StringUtils.capitalize(field));
+        String[] split = field.split("\\.", 2);
+        String getter = String.format("get%s", StringUtils.capitalize(split[0]));
         Method methodGetter = Arrays.stream(startingClass.getMethods()).filter(method -> method.getName().equals(getter)).findFirst().orElse(null);
         if (methodGetter == null) {
             throw new QLException(String.format("Field %s does not exist", field));
+        }
+        if (split.length > 1) {
+            return getFieldType(methodGetter.getReturnType(), split[1]);
         }
         return methodGetter.getReturnType();
     }
