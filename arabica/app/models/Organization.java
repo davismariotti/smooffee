@@ -1,6 +1,8 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
+import utilities.QLFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -47,5 +49,9 @@ public class Organization extends BaseModel {
         public OrganizationFinder() {
             super(Organization.class);
         }
+    }
+
+    public static Query<Organization> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Organization.class);
     }
 }

@@ -1,7 +1,9 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -55,6 +57,10 @@ public class Refund extends BaseModel {
         public RefundFinder() {
             super(Refund.class);
         }
+    }
+
+    public static Query<Refund> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Refund.class);
     }
 
 }

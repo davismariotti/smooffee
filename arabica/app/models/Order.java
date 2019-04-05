@@ -1,9 +1,14 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -103,6 +108,10 @@ public class Order extends BaseModel {
         public OrderFinder() {
             super(Order.class);
         }
+    }
+
+    public static Query<Order> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Order.class);
     }
 
 }
