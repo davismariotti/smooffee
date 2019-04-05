@@ -18,7 +18,8 @@ import AuthMiddleware from '../AuthMiddleware'
 import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID } from '../../../constants'
 import { readCurrentUserQuery } from '../../../graphql/userQueries'
 import history from '../../../utils/history'
-import { MainCenterDiv, StyledFormRow } from '../../styles'
+import { MainCenterDiv} from '../../styles/core'
+import { StyledFormRow } from '../../styles/forms'
 
 const styles = {
   loginSubmit: {

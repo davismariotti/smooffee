@@ -4,6 +4,8 @@ export default class OrganizationSettingsActions {
   static OPEN_EDIT_PRODUCT_MODAL = 'OPEN_EDIT_PRODUCT_MODAL'
   static OPEN_MORE_VERT_MENU = 'OPEN_MORE_VERT_MENU'
   static CLOSE_MORE_VERT_MENU = 'CLOSE_MORE_VERT_MENU'
+  static OPEN_ARE_YOU_SURE_MODAL = 'OPEN_ARE_YOU_SURE_MODAL'
+  static CLOSE_ARE_YOU_SURE_MODAL = 'CLOSE_ARE_YOU_SURE_MODAL'
 
   static openCreateProductModal() {
     return {
@@ -38,6 +40,22 @@ export default class OrganizationSettingsActions {
   static closeMoreVertMenu() {
     return {
       type: OrganizationSettingsActions.CLOSE_MORE_VERT_MENU
+    }
+  }
+
+  static openAreYouSureModal(message, onSubmit) {
+    return {
+      type: OrganizationSettingsActions.OPEN_ARE_YOU_SURE_MODAL,
+      payload: {
+        message,
+        onSubmit
+      }
+    }
+  }
+
+  static closeAreYouSureModal() {
+    return {
+      type: OrganizationSettingsActions.CLOSE_ARE_YOU_SURE_MODAL
     }
   }
 }

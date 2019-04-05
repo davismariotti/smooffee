@@ -6,9 +6,10 @@ import { TextField } from 'redux-form-material-ui'
 import { Alert } from 'reactstrap'
 import * as PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { MainCenterDiv, StyledFormRow } from '../../styles'
+import { MainCenterDiv} from '../../styles/core'
 
 import AuthMiddleware from '../AuthMiddleware'
+import { StyledFormRow } from '../../styles/forms'
 
 class Recover extends Component {
   render() {
