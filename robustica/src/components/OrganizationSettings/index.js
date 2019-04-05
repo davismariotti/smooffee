@@ -17,7 +17,7 @@ import { ORGANIZATION_ID } from '../../constants'
 import { editProductStatusMutation, listProductsQuery } from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
 import OrganizationSettingsActions from './actions'
-import { AlignCenter, AlignRight} from '../styles/core'
+import { AlignCenter, AlignRight } from '../styles/core'
 import AreYouSureModal from '../util/AreYouSureModal'
 
 const styles = {
@@ -68,6 +68,19 @@ class Index extends Component {
             <Button onClick={() => {
               openEditProductModal(openMenu.productItem)
             }}>Edit</Button>
+          </MenuItem>
+          <MenuItem>
+            <Button onClick={() => {
+              openAreYouSure(() => {
+                editProductStatusMutate({
+                  variables: {
+                    productId: openMenu.productItem.id,
+                    status: -2
+                  }
+                })
+                listProductsQueryResult.refetch()
+              })
+            }} style={{color: '#E83323'}}>Delete</Button>
           </MenuItem>
         </Menu>
         <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>

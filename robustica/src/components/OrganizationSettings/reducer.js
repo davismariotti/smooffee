@@ -51,12 +51,13 @@ export default {
         case OrganizationSettingsActions.OPEN_ARE_YOU_SURE_MODAL:
           return {
             ...state,
-            areYouSure: action.payload
+            areYouSure: action.payload,
+            openMenu: null
           }
         case OrganizationSettingsActions.CLOSE_ARE_YOU_SURE_MODAL:
           return {
             ...state,
-            areYouSure: null
+            areYouSure: null,
           }
         default:
           return {
