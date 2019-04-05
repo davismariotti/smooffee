@@ -28,14 +28,14 @@ const styles = theme => ({
 
 class CreateOrderModal extends Component {
   render() {
-    const {classes, open, listProductsQueryResult, closeModal, createOrderMutate, handleSubmit} = this.props
+    const {classes, open, listProductsQueryResult, closeModal, createOrderMutate, handleSubmit, refetch} = this.props
 
     const submit = values => {
       const orderInput = {
         location: values.location,
         notes: values.notes,
         productId: values.product,
-        recipient: values.name,
+        recipient: values.recipient,
         deliveryPeriodId: 0 // TODO
       }
       createOrderMutate({
@@ -45,6 +45,7 @@ class CreateOrderModal extends Component {
         }
       }).then(() => {
         closeModal()
+        refetch()
       })
     }
 
@@ -62,7 +63,7 @@ class CreateOrderModal extends Component {
             <Typography variant="headline">Create Order</Typography>
             <form onSubmit={handleSubmit(submit)}>
               <StyledFormRow>
-                <Field fullWidth required name="product" component={Select} label="Product">
+                <Field fullWidth name="product" component={Select} label="Product">
                   {
                     listProductsQueryResult.product.list.map(productItem => {
                       return <MenuItem key={productItem.id} value={productItem.id}>{productItem.name}</MenuItem>
@@ -71,7 +72,7 @@ class CreateOrderModal extends Component {
                 </Field>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth required="recipient" component={TextField} label="Recipient"/>
+                <Field fullWidth required name="recipient" component={TextField} label="Recipient"/>
               </StyledFormRow>
               <StyledFormRow>
                 <Field fullWidth required name="location" component={TextField} label="Location"/>
@@ -94,11 +95,13 @@ CreateOrderModal.propTypes = {
   classes: PropTypes.object.isRequired,
   listProductsQueryResult: PropTypes.object,
   createOrderMutate: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired
+  closeModal: PropTypes.func.isRequired,
+  refetch: PropTypes.func
 }
 
 CreateOrderModal.defaultProps = {
-  listProductsQueryResult: {}
+  listProductsQueryResult: {},
+  refetch: () => {}
 }
 
 function mapDispatchToProps(dispatch) {

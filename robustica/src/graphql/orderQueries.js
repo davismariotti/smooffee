@@ -37,3 +37,13 @@ mutation CreateOrder($orderInput: OrderInput!, $userId: String!) {
   }
 }
 `
+
+export const editOrderStatusMutation = gql`
+mutation EditOrderStatus($orderId: Long!, $status: Int!) {
+  order {
+    updateStatus(orderId: $orderId, status: $status) {
+      id
+    }
+  }
+}
+`

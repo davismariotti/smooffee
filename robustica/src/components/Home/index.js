@@ -37,7 +37,7 @@ class Home extends Component {
         <div className="orderList">
           <div>
             <AlignCenter>
-              <CreateOrderModal open={showModal}/>
+              <CreateOrderModal open={showModal} refetch={listOrdersQueryResult.refetch}/>
               <Typography className={classes.title} variant="h3" color="inherit">
                 Current Orders
               </Typography>
@@ -45,7 +45,7 @@ class Home extends Component {
             </AlignCenter>
             <GridList cols={3} padding={10}>
               {listOrdersQueryResult.order.list.map(order => {
-                return <Order key={order.id} item={order.product.name} user={order.recipient} location={order.location} notes={order.notes}/>
+                return <Order key={order.id} order={order} refetch={listOrdersQueryResult.refetch}/>
               })}
             </GridList>
           </div>
@@ -87,7 +87,7 @@ export default compose(
       return {
         variables: {
           organizationId: localStorage.getItem(ORGANIZATION_ID),
-          statuses: [1]
+          statuses: [1, 2]
         }
       }
     }
