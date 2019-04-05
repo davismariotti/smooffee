@@ -11,7 +11,7 @@ import CreateOrderModal from './orders/CreateOrderModal'
 import { ORGANIZATION_ID } from '../../constants'
 import { listOrdersQuery } from '../../graphql/orderQueries'
 import HomeActions from './actions'
-import { AlignCenter, CenterDiv, MainView } from '../styles'
+import { AlignCenter, CenterDiv, MainView } from '../styles/core'
 
 const styles = {
   title: {

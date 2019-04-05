@@ -49,6 +49,16 @@ public class QLProduct {
 
             return new ProductEntry(ProductActions.updateProduct(productId, productInput.getName(), productInput.getDescription(), productInput.getPrice(), productInput.getStatus()));
         }
+
+        public ProductEntry updateStatus(Long orderId, int status) {
+            Product product = Product.find.byId(orderId);
+            if (product == null) throw new QLException("Product not found");
+            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
+
+            product.setStatus(status).store();
+
+            return new ProductEntry(product);
+        }
     }
 
     public static class ProductInput extends QLInput {

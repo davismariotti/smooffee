@@ -30,6 +30,8 @@ function getModalStyle() {
 
 class EditProductModal extends Component {
   render() {
+    const {onSubmit} = this.props
+
     const {
       classes,
       createProductMutate,
@@ -55,6 +57,7 @@ class EditProductModal extends Component {
           }
         }).then(() => {
           closeCreateProductModal()
+          onSubmit()
         })
       } else {
         createProductMutate({
@@ -64,6 +67,7 @@ class EditProductModal extends Component {
           }
         }).then(() => {
           closeCreateProductModal()
+          onSubmit()
         })
       }
     }
@@ -87,11 +91,13 @@ EditProductModal.propTypes = {
   editProductMutate: PropTypes.func.isRequired,
   editProduct: PropTypes.bool.isRequired,
   closeCreateProductModal: PropTypes.func.isRequired,
-  createProductModalOpen: PropTypes.bool.isRequired
+  createProductModalOpen: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func
 }
 
 EditProductModal.defaultProps = {
-  currentProduct: null
+  currentProduct: null,
+  onSubmit: () => {}
 }
 
 const mapStateToProps = ({organizationSettings}) => {

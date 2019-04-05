@@ -7,25 +7,29 @@ import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import { TableBody, Typography } from '@material-ui/core'
+import { Checkbox, TableBody, Typography } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import { connect } from 'react-redux'
 import { ORGANIZATION_ID } from '../../constants'
-import { listProductsQuery } from '../../graphql/productQueries'
+import { editProductStatusMutation, listProductsQuery } from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
 import OrganizationSettingsActions from './actions'
+import { AlignCenter, AlignRight} from '../styles/core'
+import AreYouSureModal from '../util/AreYouSureModal'
 
 const styles = {
   organizationSettings: {
     textAlign: 'center'
   },
   paper: {
-    marginLeft: '60px',
-    marginRight: '60px',
+    margin: '30px',
     padding: '10px'
+  },
+  tableRowDisabled: {
+    color: '#B0B0B0'
   }
 }
 
@@ -35,7 +39,9 @@ const mapDispatchToProps = (dispatch) => {
     closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
     openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product)),
     openMoreVertMenu: (row) => dispatch(OrganizationSettingsActions.openMoreVertMenu(row)),
-    closeMoreVertMenu: () => dispatch(OrganizationSettingsActions.closeMoreVertMenu())
+    closeMoreVertMenu: () => dispatch(OrganizationSettingsActions.closeMoreVertMenu()),
+    openAreYouSure: (onSubmit) => dispatch(OrganizationSettingsActions.openAreYouSureModal('Are You Sure?', onSubmit)),
+    closeAreYouSure: () => dispatch(OrganizationSettingsActions.closeAreYouSureModal())
   }
 }
 
@@ -48,7 +54,11 @@ class Index extends Component {
       openCreateProductModal,
       openMenu,
       openMoreVertMenu,
-      closeMoreVertMenu
+      closeMoreVertMenu,
+      areYouSure,
+      openAreYouSure,
+      closeAreYouSure,
+      editProductStatusMutate
     } = this.props
 
     return (
@@ -60,12 +70,18 @@ class Index extends Component {
             }}>Edit</Button>
           </MenuItem>
         </Menu>
-        <EditProductModal/>
+        <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>
+        <EditProductModal onSubmit={listProductsQueryResult.refetch}/>
         <Paper className={classes.paper} elevation={1}>
-          <Typography variant="h5" component="h3">
-            Products
-          </Typography>
-          <Button onClick={openCreateProductModal}>Create Product</Button>
+          Organization Name
+        </Paper>
+        <Paper className={classes.paper} elevation={1}>
+          <AlignCenter>
+            <Typography variant="h5" component="h3">
+              Products
+            </Typography>
+            <Button onClick={openCreateProductModal}>Create Product</Button>
+          </AlignCenter>
           <div>
             <Table className={classes.table}>
               <TableHead>
@@ -73,12 +89,13 @@ class Index extends Component {
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="right">Price</TableCell>
                   <TableCell align="right">Description</TableCell>
+                  <TableCell align="right">Available?</TableCell>
                   <TableCell align="right">Options</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(() => {
-                  if (listProductsQueryResult.loading) return (
+                  if (listProductsQueryResult.product == null) return (
                     <TableRow>
                       <TableCell>Loading</TableCell>
                     </TableRow>
@@ -90,15 +107,27 @@ class Index extends Component {
                   )
                   return listProductsQueryResult.product.list.map(productItem => {
                     return (
-                      <TableRow key={productItem.id}>
-                        <TableCell align="left">
+                      <TableRow key={productItem.id} className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
+                        <TableCell align="left" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
                           {productItem.name}
                         </TableCell>
-                        <TableCell align="right">
-                          {`$${productItem.price / 100}`}
+                        <TableCell align="right" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
+                          {`$${(productItem.price / 100).toFixed(2)}`}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="right" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
                           {productItem.description}
+                        </TableCell>
+                        <TableCell>
+                          <AlignRight>
+                            <Checkbox checked={productItem.status === 1} onChange={() => {
+                              editProductStatusMutate({
+                                variables: {
+                                  productId: productItem.id,
+                                  status: productItem.status === 1 ? -3 : 1
+                                }
+                              }).then(listProductsQueryResult.refetch)
+                            }}/>
+                          </AlignRight>
                         </TableCell>
                         <TableCell align="right">
                           <Button onClick={(e) => {
@@ -131,7 +160,11 @@ Index.propTypes = {
   closeCreateProductModal: PropTypes.func.isRequired,
   openMoreVertMenu: PropTypes.func.isRequired,
   closeMoreVertMenu: PropTypes.func.isRequired,
-  openMenu: PropTypes.object
+  openAreYouSure: PropTypes.func.isRequired,
+  closeAreYouSure: PropTypes.func.isRequired,
+  openMenu: PropTypes.object,
+  areYouSure: PropTypes.object,
+  editProductStatusMutate: PropTypes.func.isRequired
 }
 
 Index.defaultProps = {
@@ -141,7 +174,8 @@ Index.defaultProps = {
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
-    openMenu: organizationSettings.openMenu
+    openMenu: organizationSettings.openMenu,
+    areYouSure: organizationSettings.areYouSure
   }
 }
 
@@ -157,5 +191,8 @@ export default compose(
         }
       }
     }
-  })
+  }),
+  graphql(editProductStatusMutation, {
+    name: 'editProductStatusMutate'
+  }),
 )(Index)

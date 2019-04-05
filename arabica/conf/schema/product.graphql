@@ -22,4 +22,5 @@ type ProductQuery {
 type ProductMutation {
     create(organizationId: Long!, productInput: ProductInput!): ProductEntry!
     update(productId: Long!, productInput: ProductInput!): ProductEntry!
+    updateStatus(productId: Long!, status: Int!): ProductEntry!
 }
