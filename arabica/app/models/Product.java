@@ -1,7 +1,9 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -74,6 +76,10 @@ public class Product extends BaseModel {
         public ProductFinder() {
             super(Product.class);
         }
+    }
+
+    public static Query<Product> findWithParameters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Product.class);
     }
 
 }

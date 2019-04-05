@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const listOrdersQuery = gql`
-query ListOrders($organizationId: Long!, $statuses: [Int]!) {
+query ListOrders($organizationId: Long!, $parameters: QLFinder) {
   order {
-    list(organizationId: $organizationId, statuses: $statuses) {
+    list(organizationId: $organizationId, parameters: $parameters) {
       id
       notes
       location

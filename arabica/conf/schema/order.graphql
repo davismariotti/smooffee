@@ -19,7 +19,7 @@ type OrderEntry {
 
 type OrderQuery {
     read(id: Long!): OrderEntry!
-    list(organizationId: Long!, statuses: [Int]!): [OrderEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [OrderEntry!]!
 }
 
 type OrderMutation {

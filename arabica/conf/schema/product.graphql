@@ -16,7 +16,7 @@ input ProductInput {
 
 type ProductQuery {
     read(id: Long!): ProductEntry!
-    list(organizationId: Long!): [ProductEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [ProductEntry!]!
 }
 
 type ProductMutation {

@@ -13,12 +13,13 @@ type UserEntry {
     organizationId: Long!
     balance: Int!
     role: String!
+    status: Int!
 }
 
 type UserQuery {
     currentUser: UserEntry!
     read(id: String!): UserEntry!
-    list(organizationId: Long!): [UserEntry]!
+    list(organizationId: Long!, parameters: QLFinder): [UserEntry]!
 }
 
 type UserMutation {

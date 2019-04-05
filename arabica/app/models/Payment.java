@@ -1,7 +1,9 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -67,5 +69,9 @@ public class Payment extends BaseModel {
         public PaymentFinder() {
             super(Payment.class);
         }
+    }
+
+    public static Query<Payment> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Payment.class);
     }
 }

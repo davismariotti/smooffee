@@ -1,8 +1,10 @@
 package graphql;
 
 import actions.OrganizationActions;
+import models.BaseModel;
 import models.Organization;
 import services.authorization.Permission;
+import utilities.QLFinder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +22,14 @@ public class QLOrganization {
             return new OrganizationEntry(organization);
         }
 
-        public List<OrganizationEntry> list() {
+        public List<OrganizationEntry> list(QLFinder parameters) {
             Permission.check(Permission.ORGANIZATION_LIST);
 
-            List<Organization> organizations = Organization.find.all(); // TODO except deprecated
+            List<Organization> organizations = Organization.findWithParamters(parameters)
+                    .where()
+                    .not()
+                    .eq("status", BaseModel.DELETED)
+                    .findList();
 
             return organizations.stream().map(OrganizationEntry::new).collect(Collectors.toList());
         }

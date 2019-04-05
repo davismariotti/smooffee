@@ -87,7 +87,14 @@ export default compose(
       return {
         variables: {
           organizationId: localStorage.getItem(ORGANIZATION_ID),
-          statuses: [1, 2]
+          parameters: {
+            filter: {
+              include: {
+                field: 'status',
+                values: ['1', '2']
+              }
+            }
+          }
         }
       }
     }
