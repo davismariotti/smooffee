@@ -200,7 +200,13 @@ export default compose(
     options: () => {
       return {
         variables: {
-          organizationId: localStorage.getItem(ORGANIZATION_ID)
+          organizationId: localStorage.getItem(ORGANIZATION_ID),
+          parameters: {
+            order: [
+              'name',
+              'asc'
+            ]
+          }
         }
       }
     }

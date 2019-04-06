@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const listProductsQuery = gql`
-query ListProducts($organizationId: Long!) {
+query ListProducts($organizationId: Long!, $parameters: QLFinder) {
   product {
-    list(organizationId: $organizationId) {
+    list(organizationId: $organizationId, parameters: $parameters) {
       id
       price
       description

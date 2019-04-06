@@ -1,6 +1,8 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -48,6 +50,10 @@ public class DeliveryPeriod extends BaseModel {
                 .eq("organization_id", organizationId)
                 .in("status", statuses)
                 .findList();
+    }
+
+    public static Query<DeliveryPeriod> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(DeliveryPeriod.class);
     }
 
 }
