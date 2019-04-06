@@ -1,37 +1,18 @@
 import React, { Component } from 'react'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import * as PropTypes from 'prop-types'
 import { Alert } from 'reactstrap'
 import { connect } from 'react-redux'
 
 import EmailPasswordSignUp from './EmailPasswordSignUp'
-import GoogleSignIn from '../components/GoogleSignIn'
-import FacebookSignIn from '../components/FacebookSignIn'
-import history from '../../../utils/history'
 import '../../../css/index.css'
-import { AUTH_TOKEN, USER_ID } from '../../../constants'
-import firebaseApp from '../../../services/AuthService'
+import { AlignCenter } from '../../styles/core'
+import AuthMiddleware from '../AuthMiddleware'
 
 class Signup extends Component {
-  constructor(props) {
-    super(props)
-    this.signupCallback = this.signupCallback.bind(this)
-  }
-
-  signupCallback(user) {
-    localStorage.setItem(USER_ID, user.uid)
-    firebaseApp
-      .auth()
-      .currentUser.getToken()
-      .then(token => {
-        localStorage.setItem(AUTH_TOKEN, token)
-        history.push('/signupcontinued')
-      })
-  }
-
   render() {
-    const {authError} = this.props
+    const {authError, signInWithGoogle} = this.props
 
     return (
       <main>
@@ -39,10 +20,11 @@ class Signup extends Component {
           <Typography component="h6" variant="h5" align="center">
             Create New Account
           </Typography>
-          <div align="center">
-            <FacebookSignIn callback={this.signupCallback}/>
-            <GoogleSignIn callback={this.signupCallback}/>
-          </div>
+          <AlignCenter>
+            <Button onClick={signInWithGoogle}>
+              Sign Up With Google
+            </Button>
+          </AlignCenter>
           <EmailPasswordSignUp/>
           <br/>
           <Alert hidden={!authError} color="danger">{authError}</Alert>
@@ -56,7 +38,8 @@ class Signup extends Component {
 }
 
 Signup.propTypes = {
-  authError: PropTypes.string
+  authError: PropTypes.string,
+  signInWithGoogle: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({auth}) => {
@@ -65,4 +48,10 @@ const mapStateToProps = ({auth}) => {
   }
 }
 
-export default connect(mapStateToProps)(Signup)
+const mapDispatchToProps = dispatch => {
+  return {
+    signInWithGoogle: () => AuthMiddleware.signInWithGoogle()(dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)

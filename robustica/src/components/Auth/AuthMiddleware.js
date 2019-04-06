@@ -1,4 +1,5 @@
 import isEmail from 'validator/lib/isEmail'
+import * as firebase from 'firebase'
 
 import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID } from '../../constants'
 import firebaseApp from '../../services/AuthService'
@@ -6,6 +7,7 @@ import { readCurrentUserQuery } from '../../graphql/userQueries'
 import history from '../../utils/history'
 import { client } from '../../services/apollo'
 import AuthActions from './actions'
+
 
 export default class AuthMiddleware {
   static createUserWithEmailAndPassword(email, password) {
@@ -38,19 +40,7 @@ export default class AuthMiddleware {
     return dispatch => {
       if (isEmail(email)) {
         firebaseApp.auth().signInWithEmailAndPassword(email, password).then(result => {
-          localStorage.setItem(USER_ID, result.uid)
-          firebaseApp.auth().currentUser.getToken().then(token => {
-            localStorage.setItem(AUTH_TOKEN, token)
-            client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-              if (error) {
-                dispatch(AuthActions.signInError(error))
-              } else {
-                localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-                dispatch(AuthActions.signInSuccess())
-                history.push('/home')
-              }
-            })
-          })
+          AuthMiddleware.continueLogin(result, dispatch)
         })
           .catch(error => {
             dispatch(AuthActions.signInError(error.message))
@@ -59,6 +49,36 @@ export default class AuthMiddleware {
         dispatch(AuthActions.signInError('Email Address is not valid'))
       }
     }
+  }
+
+  static signInWithGoogle() {
+    return dispatch => {
+      firebaseApp
+        .auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(result => {
+          AuthMiddleware.continueLogin(result, dispatch)
+        })
+        .catch(error => {
+          dispatch(AuthActions.signInError(error.message))
+        })
+    }
+  }
+
+  static continueLogin(result, dispatch) {
+    localStorage.setItem(USER_ID, result.uid)
+    firebaseApp.auth().currentUser.getToken().then(token => {
+      localStorage.setItem(AUTH_TOKEN, token)
+      client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+        if (error) {
+          dispatch(AuthActions.signInError(error))
+        } else {
+          localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+          dispatch(AuthActions.signInSuccess())
+          history.push('/home')
+        }
+      })
+    })
   }
 
   static recoverWithEmail(email) {
