@@ -18,13 +18,11 @@ public class ProductActions {
                 .store();
     }
 
-    public static Product updateProduct(Long productId, String name, String description, Integer price, Integer status) {
-        Product product = Product.find.byId(productId);
-        if (product == null) throw new QLException("Product not found");
+    public static Product updateProduct(Product product, String name, String description, Integer price) {
+        if (product == null || name == null || description == null || price == null) return null;
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
-        product.setStatus(status);
         product.save();
         return product;
     }

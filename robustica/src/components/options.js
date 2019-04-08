@@ -9,6 +9,9 @@ class Options extends Component {
     return (
       <div>
         <MenuItem>
+          <Link to="/home">Home</Link>
+        </MenuItem>
+        <MenuItem>
           <Link to="/settings">Organization Settings</Link>
         </MenuItem>
       </div>
