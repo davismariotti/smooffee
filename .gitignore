@@ -70,4 +70,4 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
-*.metro-cache/*
+*/metro-cache*
