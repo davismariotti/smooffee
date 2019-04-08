@@ -3,7 +3,9 @@ package graphql;
 import actions.OrganizationActions;
 import models.BaseModel;
 import models.Organization;
+import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
+import utilities.QLException;
 import utilities.QLFinder;
 
 import java.util.List;
@@ -36,13 +38,21 @@ public class QLOrganization {
     }
 
     public static class Mutation {
-        public OrganizationEntry create(OrganiationInput input) {
+        public OrganizationEntry create(OrganizationInput input) {
             Permission.check(Permission.ORGANIZATION_CREATE);
             return new OrganizationEntry(OrganizationActions.createOrganization(input.getName()));
         }
+
+        public OrganizationEntry update(Long organizationId, OrganizationInput input) {
+            Organization organization = Organization.find.byId(organizationId);
+            if (organization == null) throw new QLException("Organization not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
+
+            return new OrganizationEntry(OrganizationActions.updateOrganization(organizationId, input.getName()));
+        }
     }
 
-    public static class OrganiationInput extends QLInput {
+    public static class OrganizationInput extends QLInput {
         private String name;
 
         public String getName() {

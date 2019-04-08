@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { createProductMutation, editProductMutation } from '../../graphql/productQueries'
 import OrganizationSettingsActions from './actions'
-import EditProductForm from './EditProductForm'
+import EditProductForm from './forms/EditProductForm'
 import { ORGANIZATION_ID } from '../../constants'
 
 const styles = theme => ({

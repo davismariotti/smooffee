@@ -17,4 +17,5 @@ type OrganizationQuery {
 
 type OrganizationMutation {
     create(input: OrganizationInput!): OrganizationEntry!
+    update(organizationId: Long!, input: OrganizationInput!): OrganizationEntry!
 }

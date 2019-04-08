@@ -6,7 +6,8 @@ const initialState = Immutable({
   editProduct: false,
   editProductObject: null,
   openMenu: null,
-  areYouSure: null
+  areYouSure: null,
+  editOrganization: null
 })
 
 export default {
@@ -58,6 +59,19 @@ export default {
           return {
             ...state,
             areYouSure: null,
+          }
+        case OrganizationSettingsActions.OPEN_EDIT_ORGANIZATION_MODAL:
+          return {
+            ...state,
+            editOrganization: {
+              organizationId: action.payload.id,
+              name: action.payload.name
+            }
+          }
+        case OrganizationSettingsActions.CLOSE_EDIT_ORGANIZATION_MODAL:
+          return {
+            ...state,
+            editOrganization: null
           }
         default:
           return {

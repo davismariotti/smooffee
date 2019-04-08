@@ -19,6 +19,10 @@ export const AlignRight = styled.div`
   text-align: right;
 `
 
+export const SideBySide = styled.div`
+  display: inline-block;
+`
+
 export const MainCenterDiv = styled.div`
   position:absolute;
   left:50%;

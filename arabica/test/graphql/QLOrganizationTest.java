@@ -29,7 +29,7 @@ public class QLOrganizationTest {
     }
 
     public static void createOrganizationTest() {
-        QLOrganization.OrganiationInput input = new QLOrganization.OrganiationInput();
+        QLOrganization.OrganizationInput input = new QLOrganization.OrganizationInput();
         input.setStatus(BaseModel.ACTIVE);
         input.setName("Next Organization");
 
