@@ -57,3 +57,14 @@ mutation CreateUser($userInput: UserInput!) {
   }
 }
 `
+
+export const addCashFundsMutation = gql`
+mutation AddsFunds($userId: String!, $paymentInput: PaymentInput!) {
+  payment {
+    create(userId: $userId, paymentInput: $paymentInput) {
+      id
+    }
+  }
+}
+ 
+`

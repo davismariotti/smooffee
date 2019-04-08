@@ -12,7 +12,7 @@ import OrganizationSettingsActions from '../actions'
 import { editProductStatusMutation, listProductsQuery } from '../../../graphql/productQueries'
 import { ORGANIZATION_ID } from '../../../constants'
 import AreYouSureModal from '../../util/AreYouSureModal'
-import EditProductModal from '../EditProductModal'
+import EditProductModal from '../modals/EditProductModal'
 
 const styles = {
   organizationSettings: {
@@ -32,8 +32,8 @@ const mapDispatchToProps = (dispatch) => {
     openCreateProductModal: () => dispatch(OrganizationSettingsActions.openCreateProductModal()),
     closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
     openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product)),
-    openMoreVertMenu: (row) => dispatch(OrganizationSettingsActions.openMoreVertMenu(row)),
-    closeMoreVertMenu: () => dispatch(OrganizationSettingsActions.closeMoreVertMenu()),
+    openProductMenu: (row) => dispatch(OrganizationSettingsActions.openProductMenu(row)),
+    closeProductMenu: () => dispatch(OrganizationSettingsActions.closeProductMenu()),
     openAreYouSure: (onSubmit) => dispatch(OrganizationSettingsActions.openAreYouSureModal('Are You Sure?', onSubmit)),
     closeAreYouSure: () => dispatch(OrganizationSettingsActions.closeAreYouSureModal())
   }
@@ -43,24 +43,24 @@ class ProductList extends Component {
   render() {
     const {classes,
       openCreateProductModal,
-      openMoreVertMenu,
+      openProductMenu,
       openEditProductModal,
-      openMenu,
+      productMenu,
       openAreYouSure,
       editProductStatusMutate,
       listProductsQueryResult,
       areYouSure,
       closeAreYouSure,
-      closeMoreVertMenu
+      closeProductMenu
     } = this.props
     return (
       <div>
         <EditProductModal onSubmit={listProductsQueryResult.refetch}/>
         <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>
-        <Menu id="menu" open={openMenu != null} anchorEl={(openMenu && openMenu.anchorEl) || null} onClose={closeMoreVertMenu}>
+        <Menu id="menu" open={!!productMenu} anchorEl={(productMenu && productMenu.anchorEl) || null} onClose={closeProductMenu}>
           <MenuItem>
             <Button onClick={() => {
-              openEditProductModal(openMenu.productItem)
+              openEditProductModal(productMenu.productItem)
             }}>Edit</Button>
           </MenuItem>
           <MenuItem>
@@ -68,7 +68,7 @@ class ProductList extends Component {
               openAreYouSure(() => {
                 editProductStatusMutate({
                   variables: {
-                    productId: openMenu.productItem.id,
+                    productId: productMenu.productItem.id,
                     status: -2
                   }
                 })
@@ -133,7 +133,7 @@ class ProductList extends Component {
                         </TableCell>
                         <TableCell align="right">
                           <Button onClick={(e) => {
-                            openMoreVertMenu({
+                            openProductMenu({
                               anchorEl: e.target,
                               productItem
                             })
@@ -160,22 +160,22 @@ ProductList.propTypes = {
   openCreateProductModal: PropTypes.func.isRequired,
   openEditProductModal: PropTypes.func.isRequired,
   closeCreateProductModal: PropTypes.func.isRequired,
-  openMoreVertMenu: PropTypes.func.isRequired,
-  closeMoreVertMenu: PropTypes.func.isRequired,
+  openProductMenu: PropTypes.func.isRequired,
+  closeProductMenu: PropTypes.func.isRequired,
   openAreYouSure: PropTypes.func.isRequired,
   closeAreYouSure: PropTypes.func.isRequired,
-  openMenu: PropTypes.object,
+  productMenu: PropTypes.object,
   areYouSure: PropTypes.object,
   editProductStatusMutate: PropTypes.func.isRequired
 }
 
 ProductList.defaultProps = {
-  openMenu: null
+  productMenu: null
 }
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
-    openMenu: organizationSettings.openMenu,
+    productMenu: organizationSettings.productMenu,
     areYouSure: organizationSettings.areYouSure
   }
 }

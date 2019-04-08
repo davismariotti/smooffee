@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
 import { graphql } from 'react-apollo'
@@ -10,6 +10,8 @@ import MoreVert from '@material-ui/icons/Menu'
 import { AlignCenter } from '../../styles/core'
 import { listUsersQuery } from '../../../graphql/userQueries'
 import { ORGANIZATION_ID } from '../../../constants'
+import OrganizationSettingsActions from '../actions'
+import AddFundsModal from '../modals/AddFundsModal'
 
 const styles = {
   paper: {
@@ -25,13 +27,12 @@ class UserList extends Component {
   }
 
   renderTable() {
-    const {classes, listUsersQueryResult} = this.props
+    const {classes, listUsersQueryResult, openUserMenu} = this.props
     if (listUsersQueryResult.loading) {
       return <div>Loading</div>
     } else if (listUsersQueryResult.error) {
       return <div>Error</div>
     }
-    console.log('listUsersQueryResult', listUsersQueryResult)
     return (
       <Table className={classes.table}>
         <TableHead>
@@ -46,13 +47,18 @@ class UserList extends Component {
         <TableBody>
           {listUsersQueryResult.user.list.map(userItem => {
             return (
-              <TableRow>
+              <TableRow key={userItem.id} >
                 <TableCell align="left">{userItem.firstName}</TableCell>
                 <TableCell align="left">{userItem.lastName}</TableCell>
                 <TableCell align="right">{`$${(userItem.balance / 100).toFixed(2)}`}</TableCell>
                 <TableCell align="right">{userItem.role}</TableCell>
                 <TableCell align="right">
-                  <Button>
+                  <Button onClick={(e) => {
+                    openUserMenu({
+                      anchorEl: e.target,
+                      userItem
+                    })
+                  }}>
                     <MoreVert/>
                   </Button>
                 </TableCell>
@@ -65,10 +71,18 @@ class UserList extends Component {
   }
 
   render() {
-    const {classes} = this.props
+    const {classes, userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
 
     return (
       <div>
+        <AddFundsModal onSubmit={listUsersQueryResult.refetch}/>
+        <Menu id="menu" open={!!userMenu} anchorEl={(userMenu && userMenu.anchorEl) || null} onClose={closeUserMenu}>
+          <MenuItem>
+            <Button onClick={() => {
+              openAddMoreFunds(userMenu.userItem)
+            }}>Add Funds</Button>
+          </MenuItem>
+        </Menu>
         <Paper className={classes.paper} elevation={1}>
           <AlignCenter>
             <Typography variant="h5" component="h3">
@@ -86,15 +100,29 @@ class UserList extends Component {
 
 UserList.propTypes = {
   classes: PropTypes.object.isRequired,
-  listUsersQueryResult: PropTypes.object.isRequired
+  listUsersQueryResult: PropTypes.object.isRequired,
+  addMoreFunds: PropTypes.object,
+  userMenu: PropTypes.object,
+  closeUserMenu: PropTypes.func.isRequired,
+  openUserMenu: PropTypes.func.isRequired,
+  openAddMoreFunds: PropTypes.func.isRequired,
+  closeAddMoreFunds: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({organizationSettings}) => {
-  return {}
+  return {
+    addMoreFunds: organizationSettings.addMoreFunds,
+    userMenu: organizationSettings.userMenu
+  }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    closeUserMenu: () => dispatch(OrganizationSettingsActions.closeUserMenu()),
+    openUserMenu: (row) => dispatch(OrganizationSettingsActions.openUserMenu(row)),
+    openAddMoreFunds: (user) => dispatch(OrganizationSettingsActions.openAddMoreFundsModal(user)),
+    closeAddMoreFunds: () => dispatch(OrganizationSettingsActions.closeAddFundsModal())
+  }
 }
 
 export default compose(

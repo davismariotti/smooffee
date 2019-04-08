@@ -5,9 +5,11 @@ const initialState = Immutable({
   createProductModalOpen: false,
   editProduct: false,
   editProductObject: null,
-  openMenu: null,
+  productMenu: null,
+  userMenu:  null,
   areYouSure: null,
-  editOrganization: null
+  editOrganization: null,
+  addMoreFunds: null
 })
 
 export default {
@@ -21,7 +23,7 @@ export default {
             createProductModalOpen: true,
             editProduct: false,
             editProductObject: null,
-            openMenu: null,
+            productMenu: null,
           }
         case OrganizationSettingsActions.CLOSE_CREATE_PRODUCT_MODAL:
           return {
@@ -29,7 +31,7 @@ export default {
             createProductModalOpen: false,
             editProduct: false,
             editProductObject: null,
-            openMenu: null,
+            productMenu: null,
           }
         case OrganizationSettingsActions.OPEN_EDIT_PRODUCT_MODAL:
           return {
@@ -37,23 +39,23 @@ export default {
             createProductModalOpen: true,
             editProduct: true,
             editProductObject: action.payload,
-            openMenu: null,
+            productMenu: null,
           }
-        case OrganizationSettingsActions.OPEN_MORE_VERT_MENU:
+        case OrganizationSettingsActions.OPEN_PRODUCT_MENU:
           return {
             ...state,
-            openMenu: {...action.payload.row}
+            productMenu: {...action.payload}
           }
-        case OrganizationSettingsActions.CLOSE_MORE_VERT_MENU:
+        case OrganizationSettingsActions.CLOSE_PRODUCT_MENU:
           return {
             ...state,
-            openMenu: null
+            productMenu: null
           }
         case OrganizationSettingsActions.OPEN_ARE_YOU_SURE_MODAL:
           return {
             ...state,
             areYouSure: action.payload,
-            openMenu: null
+            productMenu: null
           }
         case OrganizationSettingsActions.CLOSE_ARE_YOU_SURE_MODAL:
           return {
@@ -72,6 +74,27 @@ export default {
           return {
             ...state,
             editOrganization: null
+          }
+        case OrganizationSettingsActions.OPEN_USER_MENU:
+          return {
+            ...state,
+            userMenu: {...action.payload}
+          }
+        case OrganizationSettingsActions.CLOSE_USER_MENU:
+          return {
+            ...state,
+            userMenu: null
+          }
+        case OrganizationSettingsActions.OPEN_ADD_FUNDS_MODAL:
+          return {
+            ...state,
+            userMenu: null,
+            addMoreFunds: action.payload
+          }
+        case OrganizationSettingsActions.CLOSE_ADD_FUNDS_MODAL:
+          return {
+            ...state,
+            addMoreFunds: null
           }
         default:
           return {

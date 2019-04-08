@@ -11,7 +11,7 @@ import { AlignCenter } from '../../styles/core'
 import { organizationReadQuery } from '../../../graphql/organizationQueries'
 import { ORGANIZATION_ID } from '../../../constants'
 import OrganizationSettingsActions from '../actions'
-import EditOrganizationModal from '../EditOrganizationModal'
+import EditOrganizationModal from '../modals/EditOrganizationModal'
 
 const styles = {
   organizationSettings: {
