@@ -2,12 +2,16 @@ export default class OrganizationSettingsActions {
   static OPEN_CREATE_PRODUCT_MODAL = 'OPEN_CREATE_PRODUCT_MODAL'
   static CLOSE_CREATE_PRODUCT_MODAL = 'CLOSE_CREATE_PRODUCT_MODAL'
   static OPEN_EDIT_PRODUCT_MODAL = 'OPEN_EDIT_PRODUCT_MODAL'
-  static OPEN_MORE_VERT_MENU = 'OPEN_MORE_VERT_MENU'
-  static CLOSE_MORE_VERT_MENU = 'CLOSE_MORE_VERT_MENU'
+  static OPEN_PRODUCT_MENU = 'OPEN_PRODUCT_MENU'
+  static CLOSE_PRODUCT_MENU = 'CLOSE_PRODUCT_MENU'
   static OPEN_ARE_YOU_SURE_MODAL = 'OPEN_ARE_YOU_SURE_MODAL'
   static CLOSE_ARE_YOU_SURE_MODAL = 'CLOSE_ARE_YOU_SURE_MODAL'
   static OPEN_EDIT_ORGANIZATION_MODAL = 'OPEN_EDIT_ORGANIZATION_MODAL'
   static CLOSE_EDIT_ORGANIZATION_MODAL = 'CLOSE_EDIT_ORGANIZATION_MODAL'
+  static OPEN_USER_MENU = 'OPEN_USER_MENU'
+  static CLOSE_USER_MENU = 'CLOSE_USER_MENU'
+  static OPEN_ADD_FUNDS_MODAL = 'OPEN_ADD_FUNDS_MODAL'
+  static CLOSE_ADD_FUNDS_MODAL = 'CLOSE_ADD_FUNDS_MODAL'
 
   static openCreateProductModal() {
     return {
@@ -30,18 +34,18 @@ export default class OrganizationSettingsActions {
     }
   }
 
-  static openMoreVertMenu(row) {
+  static openProductMenu(row) {
     return {
-      type: OrganizationSettingsActions.OPEN_MORE_VERT_MENU,
+      type: OrganizationSettingsActions.OPEN_PRODUCT_MENU,
       payload: {
-        row
+        ...row
       }
     }
   }
 
-  static closeMoreVertMenu() {
+  static closeProductMenu() {
     return {
-      type: OrganizationSettingsActions.CLOSE_MORE_VERT_MENU
+      type: OrganizationSettingsActions.CLOSE_PRODUCT_MENU
     }
   }
 
@@ -73,6 +77,36 @@ export default class OrganizationSettingsActions {
   static closeEditOrganizationModal() {
     return {
       type: OrganizationSettingsActions.CLOSE_EDIT_ORGANIZATION_MODAL
+    }
+  }
+
+  static openUserMenu(row) {
+    return {
+      type: OrganizationSettingsActions.OPEN_USER_MENU,
+      payload: {
+        ...row
+      }
+    }
+  }
+
+  static closeUserMenu() {
+    return {
+      type: OrganizationSettingsActions.CLOSE_USER_MENU
+    }
+  }
+
+  static openAddMoreFundsModal(user) {
+    return {
+      type: OrganizationSettingsActions.OPEN_ADD_FUNDS_MODAL,
+      payload: {
+        ...user
+      }
+    }
+  }
+
+  static closeAddFundsModal() {
+    return {
+      type: OrganizationSettingsActions.CLOSE_ADD_FUNDS_MODAL
     }
   }
 }

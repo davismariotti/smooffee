@@ -5,6 +5,7 @@ import { Button, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
+import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
 
 class EditProductForm extends React.Component {
   componentDidMount() {
@@ -19,13 +20,33 @@ class EditProductForm extends React.Component {
           <Typography variant="headline">
             {editProduct ? 'Edit' : 'Create'} Product
           </Typography>
-          <Field fullWidth name="name" component={TextField} label="Name"/>
-          <Field fullWidth name="description" component={TextField} label="Description"/>
-          <Field fullWidth name="price" component={TextField} label="Price"/>
-          <Field fullWidth name="status" component={TextField} label="Status"/>
-          <Button fullWidth type="submit" variant="contained">
-            Submit
-          </Button>
+          <StyledFormRow>
+            <StyledFormRowItem>
+              <Field fullWidth name="name" component={TextField} label="Name"/>
+            </StyledFormRowItem>
+          </StyledFormRow>
+          <StyledFormRow>
+            <StyledFormRowItem>
+              <Field fullWidth name="description" component={TextField} label="Description"/>
+            </StyledFormRowItem>
+          </StyledFormRow>
+          <StyledFormRow>
+            <StyledFormRowItem>
+              <Field fullWidth name="price" component={TextField} label="Price"/>
+            </StyledFormRowItem>
+          </StyledFormRow>
+          <StyledFormRow>
+            <StyledFormRowItem>
+              <Field fullWidth name="status" component={TextField} label="Status"/>
+            </StyledFormRowItem>
+          </StyledFormRow>
+          <StyledFormRow>
+            <StyledFormRowItem>
+              <Button fullWidth type="submit" variant="contained">
+                Submit
+              </Button>
+            </StyledFormRowItem>
+          </StyledFormRow>
         </form>
       </div>
     )

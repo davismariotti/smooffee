@@ -6,10 +6,10 @@ import { compose } from 'redux'
 import { Modal } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
-import { AlignCenter, CenterDiv } from '../styles/core'
-import { editOrganizationMutation } from '../../graphql/organizationQueries'
-import OrganizationSettingsActions from './actions'
-import EditOrganizationForm from './forms/EditOrganizationForm'
+import { AlignCenter, CenterDiv } from '../../styles/core'
+import { editOrganizationMutation } from '../../../graphql/organizationQueries'
+import OrganizationSettingsActions from '../actions'
+import EditOrganizationForm from '../forms/EditOrganizationForm'
 
 const styles = theme => ({
   paper: {
