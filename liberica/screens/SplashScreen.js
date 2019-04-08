@@ -3,6 +3,7 @@ import {
   Image,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 
 
@@ -17,6 +18,7 @@ export default class SplashScreen extends React.Component {
               <Image style={styles.logoImage}
                 source={require('../assets/images/Logo.png')}
               />
+              <ActivityIndicator size="medium"/>
         </View>
       );
     }

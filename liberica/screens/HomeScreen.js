@@ -8,54 +8,57 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Order from '../components/Order'
 import { WebBrowser } from 'expo';
+import ScrollingOrders from '../components/ScrollingOrders'
 
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
+  state = {currentUser: "Joe Tester", email: "joe.tester@tester.com", userBalance: "0.00",}
+  
+  static navigationOptions = { //dont show a header
     header: null,
   };
 
+
   render() {
+    const {currentUser,email,userBalance} = this.state
+
+    if(this.state.ordersExist){
+      
+    }
+
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
             <Image
-              source={require('../assets/images/Logo.png')}
+              source={require('../assets/images/Cup.png')}
               style={styles.logoImage}
             />
+            <Text style={styles.usernameText}>{currentUser}</Text>
+            <Text>{email}</Text>
+            <Text style={styles.currentBalanceText}>Current Balance: ${userBalance}</Text>
+            
           </View>
-
-          <View style={styles.getStartedContainer}>
-
-            <Text style={styles.getStartedText}>MyInfo</Text>
-          </View>
-        </ScrollView>
+            <ScrollingOrders style={styles.scrollingContainer}/>
+        </View>
       </View>
     );
   }
 
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
 
 }
-
+//TODO remove styles that we dont use
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  scrollingContainer: {
+    flex: 1
   },
   contentContainer: {
     paddingTop: 30,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 80,
     resizeMode: 'contain',
-    marginTop: 3,
+    marginTop: 5,
     marginLeft: -10,
   },
   getStartedContainer: {
@@ -79,57 +82,18 @@ const styles = StyleSheet.create({
   homeScreenFilename: {
     marginVertical: 7,
   },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
+  usernameText: {
+    fontSize: 30,
     color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    lineHeight: 34,
     textAlign: 'center',
   },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
+  currentBalanceText: {
+    fontSize: 20,
+    color:'green',
+    textAlign:'left',
+    lineHeight:30,
   },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+ 
+ 
 });
