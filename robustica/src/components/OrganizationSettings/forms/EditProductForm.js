@@ -7,9 +7,8 @@ import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
 
 class EditProductForm extends React.Component {
-
   componentDidMount() {
-    this.props.initialize(this.props.initialValues) // here add this line to initialize the form
+    this.props.initialize(this.props.initialValues)
   }
 
   render() {

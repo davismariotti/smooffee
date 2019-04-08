@@ -22,7 +22,6 @@ export class AuthService {
         () => {
           localStorage.setItem(AUTH_TOKEN, '')
           localStorage.setItem(USER_ID, '')
-          console.log('sign out succesful')
           history.push('/')
         },
         () => {

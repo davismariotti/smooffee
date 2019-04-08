@@ -21,9 +21,7 @@ class App extends Component {
 
   componentWillMount() {
     firebaseApp.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('AUTH STATE CHANGED', user)
-        // If logged in...
+      if (user) { // If logged in...
         this.setState({
           loggedin: true
         })

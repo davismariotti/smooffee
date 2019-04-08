@@ -12,13 +12,16 @@ import Paper from '@material-ui/core/Paper'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
+import { Button as ReactStrapButton } from 'reactstrap'
 import { connect } from 'react-redux'
 import { ORGANIZATION_ID } from '../../constants'
 import { editProductStatusMutation, listProductsQuery } from '../../graphql/productQueries'
 import EditProductModal from './EditProductModal'
+import EditOrganizationModal from './EditOrganizationModal'
 import OrganizationSettingsActions from './actions'
 import { AlignCenter, AlignRight } from '../styles/core'
 import AreYouSureModal from '../util/AreYouSureModal'
+import { organizationReadQuery } from '../../graphql/organizationQueries'
 
 const styles = {
   organizationSettings: {
@@ -41,7 +44,8 @@ const mapDispatchToProps = (dispatch) => {
     openMoreVertMenu: (row) => dispatch(OrganizationSettingsActions.openMoreVertMenu(row)),
     closeMoreVertMenu: () => dispatch(OrganizationSettingsActions.closeMoreVertMenu()),
     openAreYouSure: (onSubmit) => dispatch(OrganizationSettingsActions.openAreYouSureModal('Are You Sure?', onSubmit)),
-    closeAreYouSure: () => dispatch(OrganizationSettingsActions.closeAreYouSureModal())
+    closeAreYouSure: () => dispatch(OrganizationSettingsActions.closeAreYouSureModal()),
+    openEditOrganizationModal: (organization) => dispatch(OrganizationSettingsActions.openEditOrganizationModal(organization))
   }
 }
 
@@ -58,7 +62,10 @@ class Index extends Component {
       areYouSure,
       openAreYouSure,
       closeAreYouSure,
-      editProductStatusMutate
+      editProductStatusMutate,
+      organizationReadQueryResult,
+      openEditOrganizationModal,
+      editOrganization
     } = this.props
 
     return (
@@ -85,8 +92,16 @@ class Index extends Component {
         </Menu>
         <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>
         <EditProductModal onSubmit={listProductsQueryResult.refetch}/>
+        <EditOrganizationModal open={!!editOrganization} onSubmit={organizationReadQueryResult.refetch}/>
         <Paper className={classes.paper} elevation={1}>
-          Organization Name
+          <AlignCenter>
+            <Typography style={{margin: '10px'}} variant="h5" component="h3">
+              {organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read.name || ''}
+              <div style={{float: 'right', marginRight: '40px'}}><ReactStrapButton color="secondary" outline onClick={() => {
+                openEditOrganizationModal(organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read || null)
+              }}>Edit</ReactStrapButton></div>
+            </Typography>
+          </AlignCenter>
         </Paper>
         <Paper className={classes.paper} elevation={1}>
           <AlignCenter>
@@ -167,7 +182,8 @@ class Index extends Component {
 
 Index.propTypes = {
   classes: PropTypes.object.isRequired,
-  listProductsQueryResult: PropTypes.object,
+  listProductsQueryResult: PropTypes.object.isRequired,
+  organizationReadQueryResult: PropTypes.object.isRequired,
   openCreateProductModal: PropTypes.func.isRequired,
   openEditProductModal: PropTypes.func.isRequired,
   closeCreateProductModal: PropTypes.func.isRequired,
@@ -177,18 +193,20 @@ Index.propTypes = {
   closeAreYouSure: PropTypes.func.isRequired,
   openMenu: PropTypes.object,
   areYouSure: PropTypes.object,
-  editProductStatusMutate: PropTypes.func.isRequired
+  editProductStatusMutate: PropTypes.func.isRequired,
+  openEditOrganizationModal: PropTypes.func.isRequired,
+  editOrganization: PropTypes.object
 }
 
 Index.defaultProps = {
-  listProductsQueryResult: {},
   openMenu: null
 }
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
     openMenu: organizationSettings.openMenu,
-    areYouSure: organizationSettings.areYouSure
+    areYouSure: organizationSettings.areYouSure,
+    editOrganization: organizationSettings.editOrganization
   }
 }
 
@@ -197,17 +215,23 @@ export default compose(
   withStyles(styles),
   graphql(listProductsQuery, {
     name: 'listProductsQueryResult',
-    options: () => {
-      return {
-        variables: {
-          organizationId: localStorage.getItem(ORGANIZATION_ID),
-          parameters: {
-            order: [
-              'name',
-              'asc'
-            ]
-          }
+    options: {
+      variables: {
+        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        parameters: {
+          order: [
+            'name',
+            'asc'
+          ]
         }
+      }
+    }
+  }),
+  graphql(organizationReadQuery, {
+    name: 'organizationReadQueryResult',
+    options: {
+      variables: {
+        organizationId: localStorage.getItem(ORGANIZATION_ID)
       }
     }
   }),

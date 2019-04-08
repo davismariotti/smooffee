@@ -6,6 +6,8 @@ export default class OrganizationSettingsActions {
   static CLOSE_MORE_VERT_MENU = 'CLOSE_MORE_VERT_MENU'
   static OPEN_ARE_YOU_SURE_MODAL = 'OPEN_ARE_YOU_SURE_MODAL'
   static CLOSE_ARE_YOU_SURE_MODAL = 'CLOSE_ARE_YOU_SURE_MODAL'
+  static OPEN_EDIT_ORGANIZATION_MODAL = 'OPEN_EDIT_ORGANIZATION_MODAL'
+  static CLOSE_EDIT_ORGANIZATION_MODAL = 'CLOSE_EDIT_ORGANIZATION_MODAL'
 
   static openCreateProductModal() {
     return {
@@ -56,6 +58,21 @@ export default class OrganizationSettingsActions {
   static closeAreYouSureModal() {
     return {
       type: OrganizationSettingsActions.CLOSE_ARE_YOU_SURE_MODAL
+    }
+  }
+
+  static openEditOrganizationModal(organization) {
+    return {
+      type: OrganizationSettingsActions.OPEN_EDIT_ORGANIZATION_MODAL,
+      payload: {
+        ...organization
+      }
+    }
+  }
+
+  static closeEditOrganizationModal() {
+    return {
+      type: OrganizationSettingsActions.CLOSE_EDIT_ORGANIZATION_MODAL
     }
   }
 }
