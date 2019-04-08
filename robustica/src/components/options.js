@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MenuItem from '@material-ui/core/MenuItem'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 // Options create Menu items and links to pages for users depending on their authorizations
 
@@ -9,7 +9,10 @@ class Options extends Component {
     return (
       <div>
         <MenuItem>
-          <Link to="/settings">Organiation Settings</Link>
+          <Link to="/home">Home</Link>
+        </MenuItem>
+        <MenuItem>
+          <Link to="/settings">Organization Settings</Link>
         </MenuItem>
       </div>
     )

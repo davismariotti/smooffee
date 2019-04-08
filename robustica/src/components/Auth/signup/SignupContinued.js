@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import {Mutation} from 'react-apollo'
-import firebaseApp from '../../services/AuthService'
-import history from '../../utils/history'
-import {ORGANIZATION_ID} from '../../constants'
-import {signUpMutation} from '../../graphql/userQueries'
+import React, { Component } from 'react'
+import { Mutation } from 'react-apollo'
+import firebaseApp from '../../../services/AuthService'
+import history from '../../../utils/history'
+import { ORGANIZATION_ID } from '../../../constants'
+import { signUpMutation } from '../../../graphql/userQueries'
 
 class SignupContinued extends Component {
   render() {

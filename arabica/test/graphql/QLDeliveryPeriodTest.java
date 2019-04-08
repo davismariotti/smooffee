@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
+import utilities.QLFinder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,10 +50,10 @@ public class QLDeliveryPeriodTest {
 
     @Test
     public void listDeliveryPeriodTest() {
+
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { deliveryPeriod { list(organizationId: %d, statuses: %s) { id classPeriod status } } }",
-                Setup.defaultOrganization.getId(),
-                QL.prepare(new Integer[] {1})
+                "query { deliveryPeriod { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"1\\\" } } }) { id classPeriod status } } }",
+                Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());

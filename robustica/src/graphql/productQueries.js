@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const listProductsQuery = gql`
-query ListProducts($organizationId: Long!) {
+query ListProducts($organizationId: Long!, $parameters: QLFinder) {
   product {
-    list(organizationId: $organizationId) {
+    list(organizationId: $organizationId, parameters: $parameters) {
       id
       price
       description
@@ -40,4 +40,14 @@ mutation EditProduct($productId: Long!, $productInput: ProductInput!) {
     }
   }
 }
+`
+
+export const editProductStatusMutation = gql`
+mutation EditProductStatus($productId: Long!, $status: Int!) {
+  product {
+    updateStatus(productId: $productId, status: $status) {
+      id
+    }
+  }
+}  
 `

@@ -50,20 +50,19 @@ public class GraphQLController extends Controller {
             // Get firebase token
             if (!request.getHeaders().get("Authorization").isPresent()) {
                 count++;
-                return forbidden();
+                return unauthorized();
             }
             String authToken = request.getHeaders().get("Authorization").get();
             if (authToken.equals("Bearer undefined")) {
                 count++;
-                return forbidden();
+                return unauthorized();
             }
 
             try {
                 uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer", "").trim());
             } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
-                e.printStackTrace();
-                return forbidden();
+                return unauthorized(e.getMessage());
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
             storage.uid = uid;
@@ -93,7 +92,7 @@ public class GraphQLController extends Controller {
         try {
             executionResult = root.execute(input);
         } catch (Permission.AccessDeniedException e) {
-            return forbidden();
+            return forbidden(e.getMessage());
         }
 
         if (ThreadStorage.get() != null && !ThreadStorage.get().hasCheckedPermissions) {
