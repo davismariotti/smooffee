@@ -35,12 +35,13 @@ $RECYCLE.BIN/
 *.lnk
 venv
 
+#Liberica
 npm-debug.log
 manifest.yml
 
-node_modules/**/*
-.expo/*
-npm-debug.*
+/liberica/node_modules/**/*
+/liberica/.expo/*
+/liberica/npm-debug.*
 *.jks
 *.p12
 *.key
@@ -54,13 +55,13 @@ scripts/flow/*/.flowconfig
 .grunt
 _SpecRunner.html
 __benchmarks__
-build/
-remote-repo/
-coverage/
-.module-cache
-fixtures/dom/public/react-dom.js
-fixtures/dom/public/react.js
-test/the-files-to-test.generated.js
+liberica/build/
+liberica/remote-repo/
+liberica/coverage/
+liberica/.module-cache
+liberica/fixtures/dom/public/react-dom.js
+liberica/fixtures/dom/public/react.js
+liberica/test/the-files-to-test.generated.js
 *.log*
 chrome-user-data
 *.sublime-project
