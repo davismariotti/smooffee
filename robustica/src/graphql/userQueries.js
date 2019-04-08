@@ -21,6 +21,23 @@ query ReadCurrentUser {
     currentUser {
       id
       organizationId
+      role
+    }
+  }
+}
+`
+
+export const listUsersQuery = gql`
+query ListUsers($organizationId: Long!, $parameters: QLFinder) {
+  user {
+    list(organizationId: $organizationId, parameters: $parameters) {
+      id
+      firstName
+      lastName
+      status
+      role
+      balance
+      organizationId
     }
   }
 }

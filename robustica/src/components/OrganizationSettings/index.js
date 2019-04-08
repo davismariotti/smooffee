@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import OrganizationName from './components/OrganizationName'
 import ProductList from './components/ProductList'
+import UserList from './components/UserList'
 
 class OrganizationSettings extends Component {
   render() {
@@ -8,6 +9,7 @@ class OrganizationSettings extends Component {
       <div>
         <OrganizationName/>
         <ProductList/>
+        <UserList/>
       </div>
     )
   }
