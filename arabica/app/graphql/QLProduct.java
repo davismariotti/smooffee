@@ -49,7 +49,7 @@ public class QLProduct {
             if (product == null) throw new QLException("Product not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
 
-            return new ProductEntry(ProductActions.updateProduct(productId, productInput.getName(), productInput.getDescription(), productInput.getPrice(), productInput.getStatus()));
+            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
         }
 
         public ProductEntry updateStatus(Long orderId, int status) {
@@ -63,7 +63,7 @@ public class QLProduct {
         }
     }
 
-    public static class ProductInput extends QLInput {
+    public static class ProductInput {
         private String name;
         private String description;
         private Integer price;

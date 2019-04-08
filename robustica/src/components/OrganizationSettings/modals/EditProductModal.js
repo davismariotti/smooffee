@@ -46,8 +46,7 @@ class EditProductModal extends Component {
       const productInput = {
         price: values.price,
         description: values.description,
-        name: values.name,
-        status: values.status
+        name: values.name
       }
       if (editProduct) {
         editProductMutate({

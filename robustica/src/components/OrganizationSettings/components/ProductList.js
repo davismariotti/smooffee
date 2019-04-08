@@ -71,8 +71,9 @@ class ProductList extends Component {
                     productId: productMenu.productItem.id,
                     status: -2
                   }
+                }).then(() => {
+                  listProductsQueryResult.refetch()
                 })
-                listProductsQueryResult.refetch()
               })
             }} style={{color: '#E83323'}}>Delete</Button>
           </MenuItem>
@@ -192,7 +193,15 @@ export default compose(
           order: [
             'name',
             'asc'
-          ]
+          ],
+          filter: {
+            not: {
+              eq: {
+                field: 'status',
+                value: '-2'
+              }
+            }
+          }
         }
       }
     }

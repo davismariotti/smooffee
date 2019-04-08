@@ -34,8 +34,6 @@ public class QLProductTest {
         input.setName("Latte");
         input.setDescription("Very yummy");
         input.setPrice(500);
-        input.setStatus(BaseModel.ACTIVE);
-        input.setStatus(1);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price } } }",
@@ -56,11 +54,9 @@ public class QLProductTest {
     @Test
     public void updateProductTest() {
         QLProduct.ProductInput input = new QLProduct.ProductInput();
-        input.setStatus(BaseModel.ACTIVE);
         input.setName("Macchiato");
         input.setDescription("Very nice");
         input.setPrice(625);
-        input.setStatus(1);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(productId: %d, productInput: %s) { id organizationId name description price } } }", productId, QL.prepare(input)));
         assertEquals(OK, result.status());

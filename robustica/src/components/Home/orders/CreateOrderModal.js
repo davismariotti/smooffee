@@ -118,7 +118,15 @@ export default compose(
     options: () => {
       return {
         variables: {
-          organizationId: localStorage.getItem(ORGANIZATION_ID) // TODO use as props?
+          organizationId: localStorage.getItem(ORGANIZATION_ID), // TODO use as props?
+          parameters: {
+            filter: {
+              eq: {
+                field: 'status',
+                value: '1'
+              }
+            }
+          }
         }
       }
     }
