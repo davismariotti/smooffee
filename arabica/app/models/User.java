@@ -1,8 +1,10 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
 import services.authorization.Role;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -130,5 +132,9 @@ public class User extends BaseModel {
         public UserFinder() {
             super(User.class);
         }
+    }
+
+    public static Query<User> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(User.class);
     }
 }

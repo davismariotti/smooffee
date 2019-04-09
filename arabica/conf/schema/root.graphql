@@ -16,3 +16,36 @@ type Mutation {
     payment: PaymentMutation!
     deliveryPeriod: DeliveryPeriodMutation!
 }
+
+input QLFinder {
+    offset: Int
+    count: Int
+    filter: QLFinderTerm
+    order: [String!]
+}
+
+input QLFinderTerm {
+    and: [QLFinderTerm!]
+    or:  [QLFinderTerm!]
+    not: QLFinderTerm
+
+    eq: QLFinderValue
+    gt: QLFinderValue
+    gte: QLFinderValue
+    lt: QLFinderValue
+    lte: QLFinderValue
+    like: QLFinderValue
+    ilike: QLFinderValue
+
+    include: QLFinderValueList
+}
+
+input QLFinderValue {
+    field: String!
+    value: String!
+}
+
+input QLFinderValueList {
+    field: String!
+    values: [String!]!
+}

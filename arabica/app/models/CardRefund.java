@@ -1,7 +1,9 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -54,6 +56,10 @@ public class CardRefund extends BaseModel {
         public CardRefundFinder() {
             super(CardRefund.class);
         }
+    }
+
+    public static Query<CardRefund> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(CardRefund.class);
     }
 
 }

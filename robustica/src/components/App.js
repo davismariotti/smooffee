@@ -1,42 +1,33 @@
-import React, {Component} from 'react'
-import * as PropTypes from 'prop-types'
-import {Route, Switch} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import {AUTH_TOKEN, USER_ID} from '../constants'
+import { AUTH_TOKEN, USER_ID } from '../constants'
 import Home from './Home'
-import SignupContinued from './auth/SignupContinued'
-import Login from './auth/Login'
-import Recover from './auth/Recover'
-import Signup from './auth/Signup'
+import SignupContinued from './Auth/signup/SignupContinued'
+import Login from './Auth/login/Login'
+import Recover from './Auth/login/Recover'
+import Signup from './Auth/signup/Signup'
 import Navbar from './Navbar'
-import OrganizationSettings from './organizationsettings/OrganizationSettings'
+import OrganizationSettings from './OrganizationSettings'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loggedin: localStorage.getItem(USER_ID) !== '',
-      updateClientCallback: props.updateClientCallback
+      loggedin: localStorage.getItem(USER_ID) !== ''
     }
   }
 
   componentWillMount() {
-    const {updateClientCallback} = this.props
     firebaseApp.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('AUTH STATE CHANGED', user)
-        // If logged in...
+      if (user) { // If logged in...
         this.setState({
           loggedin: true
         })
         user.getToken().then(result => {
-          const pastToken = localStorage.getItem(AUTH_TOKEN)
           localStorage.setItem(AUTH_TOKEN, result)
           localStorage.setItem(USER_ID, user.uid)
-          if (pastToken !== result) {
-            updateClientCallback(result)
-          }
         })
       } else {
         // If not logged in...
@@ -67,19 +58,13 @@ class App extends Component {
           <Route
             path="/login"
             render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
+              <Login {...routeProps}/>
             )}
           />
           <Route
             path="/signup"
             render={routeProps => (
-              <Signup
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
+              <Signup {...routeProps}/>
             )}
           />
           <Route path="/signupcontinued" component={SignupContinued}/>
@@ -92,8 +77,6 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  updateClientCallback: PropTypes.func.isRequired
-}
+App.propTypes = {}
 
 export default App

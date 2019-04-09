@@ -11,15 +11,15 @@ input ProductInput {
     name: String
     description: String
     price: Int
-    status: Int
 }
 
 type ProductQuery {
     read(id: Long!): ProductEntry!
-    list(organizationId: Long!): [ProductEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [ProductEntry!]!
 }
 
 type ProductMutation {
     create(organizationId: Long!, productInput: ProductInput!): ProductEntry!
     update(productId: Long!, productInput: ProductInput!): ProductEntry!
+    updateStatus(productId: Long!, status: Int!): ProductEntry!
 }

@@ -1,14 +1,13 @@
 package graphql;
 
 import actions.ProductActions;
-import models.BaseModel;
 import models.Organization;
 import models.Product;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
+import utilities.QLFinder;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,12 +21,15 @@ public class QLProduct {
             return new ProductEntry(product);
         }
 
-        public List<ProductEntry> list(Long organizationId) {
+        public List<ProductEntry> list(Long organizationId, QLFinder parameters) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_PRODUCTS_READ, new AuthorizationContext(organization));
 
-            List<Product> products = Product.findProductsByOrganizationId(organizationId, Arrays.asList(BaseModel.ACTIVE, BaseModel.NOT_AVAILABLE));
+            List<Product> products = Product.findWithParameters(parameters)
+                    .where()
+                    .eq("organization.id", organizationId)
+                    .findList();
 
             return products.stream().map(ProductEntry::new).collect(Collectors.toList());
         }
@@ -48,11 +50,21 @@ public class QLProduct {
             if (product == null) throw new QLException("Product not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
 
-            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice(), productInput.getStatus()));
+            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
+        }
+
+        public ProductEntry updateStatus(Long orderId, int status) {
+            Product product = Product.find.byId(orderId);
+            if (product == null) throw new QLException("Product not found");
+            Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
+
+            product.setStatus(status).store();
+
+            return new ProductEntry(product);
         }
     }
 
-    public static class ProductInput extends QLInput {
+    public static class ProductInput {
         private String name;
         private String description;
         private Integer price;

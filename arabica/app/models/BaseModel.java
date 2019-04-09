@@ -70,7 +70,7 @@ public class BaseModel extends Model {
         this.updatedAt = updatedAt;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 

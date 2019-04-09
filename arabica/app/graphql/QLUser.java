@@ -1,16 +1,15 @@
 package graphql;
 
 import actions.UserActions;
-import models.BaseModel;
 import models.Organization;
 import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import services.authorization.Role;
 import utilities.QLException;
+import utilities.QLFinder;
 import utilities.ThreadStorage;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,12 +31,15 @@ public class QLUser {
             return new UserEntry(user);
         }
 
-        public List<UserEntry> list(Long organizationId) {
+        public List<UserEntry> list(Long organizationId, QLFinder finder) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_USERS_READ, new AuthorizationContext(organization));
 
-            List<User> users = User.findByOrganizationId(organizationId, Collections.singletonList(BaseModel.ACTIVE));
+            List<User> users = User.findWithParamters(finder)
+                    .where()
+                    .eq("organization_id", organizationId)
+                    .findList();
 
             return users.stream().map(UserEntry::new).collect(Collectors.toList());
         }

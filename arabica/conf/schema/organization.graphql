@@ -12,7 +12,7 @@ input OrganizationInput {
 
 type OrganizationQuery {
     read(id: Long!): OrganizationEntry
-    list: [OrganizationEntry]!
+    list(parameters: QLFinder): [OrganizationEntry]!
 }
 
 type OrganizationMutation {

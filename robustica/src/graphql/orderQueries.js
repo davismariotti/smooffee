@@ -1,9 +1,9 @@
-import {gql} from 'apollo-boost'
+import gql from 'graphql-tag'
 
 export const listOrdersQuery = gql`
-query ListOrders($organizationId: Long!, $statuses: [Int]!) {
+query ListOrders($organizationId: Long!, $parameters: QLFinder) {
   order {
-    list(organizationId: $organizationId, statuses: $statuses) {
+    list(organizationId: $organizationId, parameters: $parameters) {
       id
       notes
       location
@@ -33,6 +33,16 @@ mutation CreateOrder($orderInput: OrderInput!, $userId: String!) {
         status
       }
       status
+    }
+  }
+}
+`
+
+export const editOrderStatusMutation = gql`
+mutation EditOrderStatus($orderId: Long!, $status: Int!) {
+  order {
+    updateStatus(orderId: $orderId, status: $status) {
+      id
     }
   }
 }

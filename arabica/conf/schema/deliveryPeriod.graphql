@@ -11,7 +11,7 @@ type DeliveryPeriodEntry {
 
 type DeliveryPeriodQuery {
     read(id: Long!): DeliveryPeriodEntry!
-    list(organizationId: Long!, statuses: [Int]!): [DeliveryPeriodEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [DeliveryPeriodEntry!]!
 }
 
 type DeliveryPeriodMutation {

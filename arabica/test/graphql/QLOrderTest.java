@@ -154,9 +154,8 @@ public class QLOrderTest {
         assertEquals(OK, result.status());
 
         result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { list(organizationId: %d, statuses: %s) { id location notes product { id } status recipient } } }",
-                Setup.defaultOrganization.getId(),
-                QL.prepare(new Integer[]{1})
+                "query { order { list(organizationId: %d) { id location notes product { id } status recipient } } }",
+                Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
