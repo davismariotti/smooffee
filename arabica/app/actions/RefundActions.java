@@ -7,9 +7,8 @@ import models.User;
 import utilities.QLException;
 
 public class RefundActions {
-    public static Refund createRefund(Long orderId) {
-        Order order = Order.find.byId(orderId);
-        if (order == null) throw new QLException("Order not found");
+    public static Refund createRefund(Order order) {
+        if (order == null) return null;
 
         Refund refund = new Refund()
                 .setAmount(order.getProduct().getPrice()) // TODO Think about discounts and actual paid price??
@@ -18,8 +17,7 @@ public class RefundActions {
                 .setStatus(BaseModel.ACTIVE)
                 .store();
 
-        User user = order.getUser();
-        user.setBalance(user.getBalance() + refund.getAmount()).store();
+        UserActions.addToBalance(order.getUser(), refund.getAmount());
 
         return refund;
     }

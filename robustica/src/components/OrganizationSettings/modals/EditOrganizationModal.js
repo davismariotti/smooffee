@@ -30,7 +30,7 @@ class EditOrganizationModal extends Component {
       editOrganizationMutate({
         variables: {
           organizationId,
-          input: {
+          organizationInput: {
             name
           }
         }
