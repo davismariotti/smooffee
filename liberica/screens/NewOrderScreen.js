@@ -4,9 +4,10 @@ import {
   StyleSheet,
   Text,
   Button,
-  CheckBox,
-  View
+  View,
+  Picker
 } from "react-native";
+import CheckBox from "react-native-elements";
 
 export class Order extends React.Component {
   static navigationOptions = {
@@ -48,26 +49,22 @@ export class Options extends React.Component {
     const drinkOrdered = navigation.getParam("item", "error");
     return (
       <View style={styles.container}>
-        <Text>{drinkOrdered}</Text>
+        <Text style={styles.drinkText}>{drinkOrdered}</Text>
         <View style={styles.sectionContainer}>
           <Text>Choose Size</Text>
-          <CheckBox title="Small" size="medium" iconRight />
-          <CheckBox title="Medium" />
-          <CheckBox title="Large" />
+          <Picker style={{ height: 50, width: 100 }}>
+            <Picker.Item label="Small" value="Small" />
+            <Picker.Item label="Medium" value="Medium" />
+            <Picker.Item label="Large" value="Large" />
+          </Picker>
+          {/* <CheckBox title="Medium" checked={this.state.checked} />
+          <CheckBox title="Large" checked={this.state.checked} /> */}
         </View>
-        <View style={styles.sectionContainer}>
-          <Text>Choose Flavor</Text>
-          <CheckBox title="Small" size="medium" iconRight />
-          <CheckBox title="Medium" />
-          <CheckBox title="Large" />
-        </View>
+
         <Button
           title="Next"
           onPress={() => {
-            this.props.navigation.navigate("Information", {
-              itemId: 1,
-              item: "drip coffee"
-            });
+            this.props.navigation.navigate("Information");
           }}
         />
       </View>
@@ -86,10 +83,7 @@ export class Information extends React.Component {
         <Button
           title="Submit"
           onPress={() => {
-            this.props.navigation.navigate("Order", {
-              itemId: 1,
-              item: "drip coffee"
-            });
+            this.props.navigation.navigate("Order");
           }}
         />
       </ScrollView>
@@ -116,6 +110,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "green",
     textAlign: "left",
-    lineHeight: 30
+    lineHeight: 100
+  },
+  drinkText: {
+    fontSize: 30,
+    color: "rgba(96,100,109, 1)",
+    lineHeight: 34,
+    textAlign: "center"
   }
 });
