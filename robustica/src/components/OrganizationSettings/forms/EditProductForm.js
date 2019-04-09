@@ -6,6 +6,7 @@ import { compose } from 'redux'
 import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
 import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
+import { currencyMask } from '../../../utils/formUtils'
 
 class EditProductForm extends React.Component {
   componentDidMount() {
@@ -32,12 +33,7 @@ class EditProductForm extends React.Component {
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field fullWidth name="price" component={TextField} label="Price"/>
-            </StyledFormRowItem>
-          </StyledFormRow>
-          <StyledFormRow>
-            <StyledFormRowItem>
-              <Field fullWidth name="status" component={TextField} label="Status"/>
+              <Field fullWidth name="price" component={TextField} {...currencyMask} label="Price"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
