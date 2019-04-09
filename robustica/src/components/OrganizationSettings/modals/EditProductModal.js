@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import {compose, graphql} from 'react-apollo'
-import {connect} from 'react-redux'
-import {createProductMutation, editProductMutation} from '../../graphql/productQueries'
-import OrganizationSettingsActions from './actions'
-import EditProductForm from './EditProductForm'
-import {ORGANIZATION_ID} from '../../constants'
+import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql } from 'react-apollo'
+import { connect } from 'react-redux'
+import { createProductMutation, editProductMutation } from '../../../graphql/productQueries'
+import OrganizationSettingsActions from '../actions'
+import EditProductForm from '../forms/EditProductForm'
+import { ORGANIZATION_ID } from '../../../constants'
 
 const styles = theme => ({
   paper: {
@@ -30,6 +30,8 @@ function getModalStyle() {
 
 class EditProductModal extends Component {
   render() {
+    const {onSubmit} = this.props
+
     const {
       classes,
       createProductMutate,
@@ -44,8 +46,7 @@ class EditProductModal extends Component {
       const productInput = {
         price: values.price,
         description: values.description,
-        name: values.name,
-        status: values.status
+        name: values.name
       }
       if (editProduct) {
         editProductMutate({
@@ -55,6 +56,7 @@ class EditProductModal extends Component {
           }
         }).then(() => {
           closeCreateProductModal()
+          onSubmit()
         })
       } else {
         createProductMutate({
@@ -64,12 +66,13 @@ class EditProductModal extends Component {
           }
         }).then(() => {
           closeCreateProductModal()
+          onSubmit()
         })
       }
     }
 
     return (
-        <div>
+      <div>
         <Modal open={createProductModalOpen} onClose={closeCreateProductModal}>
           <div style={getModalStyle()} className={classes.paper}>
             <EditProductForm editProduct={editProduct} onSubmit={submit}/>
@@ -87,11 +90,13 @@ EditProductModal.propTypes = {
   editProductMutate: PropTypes.func.isRequired,
   editProduct: PropTypes.bool.isRequired,
   closeCreateProductModal: PropTypes.func.isRequired,
-  createProductModalOpen: PropTypes.bool.isRequired
+  createProductModalOpen: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func
 }
 
 EditProductModal.defaultProps = {
-  currentProduct: null
+  currentProduct: null,
+  onSubmit: () => {}
 }
 
 const mapStateToProps = ({organizationSettings}) => {

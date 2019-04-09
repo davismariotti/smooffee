@@ -1,16 +1,15 @@
-import React, {Component} from 'react'
-import * as PropTypes from 'prop-types'
-import {Route, Switch} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import {AUTH_TOKEN, USER_ID} from '../constants'
+import { AUTH_TOKEN, USER_ID } from '../constants'
 import Home from './Home'
-import SignupContinued from './auth/SignupContinued'
-import Login from './auth/Login'
-import Recover from './auth/Recover'
-import Signup from './auth/Signup'
+import SignupContinued from './Auth/signup/SignupContinued'
+import Login from './Auth/login/Login'
+import Recover from './Auth/login/Recover'
+import Signup from './Auth/signup/Signup'
 import Navbar from './Navbar'
-import OrganizationSettings from './OrgSettings/OrganizationSettings'
+import OrganizationSettings from './OrganizationSettings'
 
 class App extends Component {
   constructor(props) {
@@ -22,9 +21,7 @@ class App extends Component {
 
   componentWillMount() {
     firebaseApp.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('AUTH STATE CHANGED', user)
-        // If logged in...
+      if (user) { // If logged in...
         this.setState({
           loggedin: true
         })
@@ -80,7 +77,6 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-}
+App.propTypes = {}
 
 export default App

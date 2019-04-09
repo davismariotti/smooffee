@@ -1,10 +1,13 @@
-import React, {Component} from 'react'
-import {Card, CardContent, GridListTile, Typography} from '@material-ui/core'
+import React, { Component } from 'react'
+import { Card, CardContent, GridListTile, Typography } from '@material-ui/core'
 import '../../../css/index.css'
 import * as PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import CardActions from '@material-ui/core/CardActions'
+import { compose } from 'redux'
+import { graphql } from 'react-apollo'
+import { editOrderStatusMutation } from '../../../graphql/orderQueries'
 
 const styles = {
   card: {
@@ -21,48 +24,54 @@ const styles = {
 }
 
 class Order extends Component {
-  constructor(props) {
-    super(props)
-
-    // TODO create fullfil and edit buttons(need to bind them to DB)
-    this.fulfill = this.fulfill.bind(this)
-    this.edit = this.edit.bind(this)
-  }
-
-  fulfill() {
-    // TODO tie user who fulfills order to reciept
-  }
-
-  edit() {
-    // TODO add edit order options
-  }
-
   render() {
-    const {item, user, location, notes, classes} = this.props
+    const {order, classes, updateOrderStatusMutate, refetch} = this.props
 
     return (
       <GridListTile className={classes.gridTile}>
         <Card className={classes.card}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h3">
-              {item}
+              {order.product.name}
             </Typography>
             <Typography component="p">
-              {user}
+              {order.recipient}
             </Typography>
             <Typography component="p">
-              {location}
+              {order.location}
             </Typography>
             <Typography component="p">
-              {notes}
+              {order.notes}
             </Typography>
           </CardContent>
           <CardActions>
+            {order.status === 1 ?
+              <Button variant="contained" size="small" color="primary" onClick={() => {
+                updateOrderStatusMutate({
+                  variables: {
+                    orderId: order.id,
+                    status: 2
+                  }
+                }).then(() => {
+                  refetch()
+                })
+              }}>
+                Start Order
+              </Button> :
+              <Button variant="contained" size="small" color="primary" onClick={() => {
+                updateOrderStatusMutate({
+                  variables: {
+                    orderId: order.id,
+                    status: 3
+                  }
+                }).then(() => {
+                  refetch()
+                })
+              }}>
+                Complete Order
+              </Button>}
             <Button size="small" color="primary">
               Edit
-            </Button>
-            <Button size="small" color="primary">
-              In Progress
             </Button>
           </CardActions>
         </Card>
@@ -72,15 +81,19 @@ class Order extends Component {
 }
 
 Order.propTypes = {
-  item: PropTypes.string.isRequired,
-  user: PropTypes.string.isRequired,
-  notes: PropTypes.string,
-  location: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired
+  order: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  updateOrderStatusMutate: PropTypes.func.isRequired,
+  refetch: PropTypes.func
 }
 
 Order.defaultProps = {
-  notes: ''
+  refetch: () => {}
 }
 
-export default withStyles(styles)(Order)
+export default compose(
+  graphql(editOrderStatusMutation, {
+    name: 'updateOrderStatusMutate'
+  }),
+  withStyles(styles)
+)(Order)

@@ -9,6 +9,7 @@ import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
+import utilities.QLFinder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +24,15 @@ public class QLOrder {
             return new OrderEntry(order);
         }
 
-        public List<OrderEntry> list(Long organizationId, List<Integer> statuses) {
+        public List<OrderEntry> list(Long organizationId, QLFinder parameters) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_ORDERS_READ, new AuthorizationContext(organization));
 
-            List<Order> orders = Order.findByOrganizationId(organizationId, statuses);
+            List<Order> orders = Order.findWithParamters(parameters)
+                    .where()
+                    .eq("user.organization.id", organizationId)
+                    .findList();
 
             return orders.stream().map(OrderEntry::new).collect(Collectors.toList());
         }
