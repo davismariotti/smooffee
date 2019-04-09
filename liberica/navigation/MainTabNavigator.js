@@ -25,11 +25,11 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
+const NewOrder = createStackNavigator({
   Links: NewOrderScreen,
 });
 
-LinksStack.navigationOptions = {
+NewOrder.navigationOptions = {
   tabBarLabel: 'New Order',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -55,6 +55,6 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  NewOrder,
   SettingsStack,
 });

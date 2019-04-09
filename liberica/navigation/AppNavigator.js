@@ -3,17 +3,17 @@ import { createAppContainer, createSwitchNavigator, createStackNavigator } from 
 import MainTabNavigator from './MainTabNavigator'
 import HomeScreen from '../screens/HomeScreen'
 import SettingsScreen from '../screens/SettingsScreen'
-import NewOrderScreen from '../screens/NewOrderScreen'
+import OrderStack from '../screens/NewOrderScreen'
 import LoginScreen from '../screens/LoginScreen'
 import SplashScreen from '../screens/SplashScreen'
 
-const AppStack = createStackNavigator({Home:HomeScreen,NewOrderScreen,SettingsScreen})
 const AuthStack =createStackNavigator({Login: LoginScreen})
 
 export default createAppContainer(createSwitchNavigator(
   {
-    AuthLoading: SplashScreen,
+    Loading: SplashScreen,
     App: MainTabNavigator,
+    Order: OrderStack,
     Auth: AuthStack,
   },
   {
