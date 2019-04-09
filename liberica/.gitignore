@@ -31,3 +31,4 @@ chrome-user-data
 *.swp
 *.swo
 */metro-cache*
+*haste-map-metro*
