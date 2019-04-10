@@ -41,7 +41,11 @@ public class QLPayment {
             Permission.check(Permission.THIS_USER_PAYMENT_WRITE, new AuthorizationContext(user));
 
             if (paymentInput.getType().equals(Payment.CARD)) {
-                return new PaymentEntry(PaymentActions.makeCardPayment(user, paymentInput.getAmount(), paymentInput.stripeCardId));
+                if (paymentInput.getStripeCardId() != null) {
+                    return new PaymentEntry(PaymentActions.makeCardPayment(user, paymentInput.getAmount(), paymentInput.getStripeCardId()));
+                } else if (paymentInput.getStripeToken() != null) {
+                    return new PaymentEntry(PaymentActions.makeOneOffCardPayment(user, paymentInput.getAmount(), paymentInput.getStripeToken()));
+                } else throw new QLException("Payment must contain stripe token or stripe card id.");
             } else {
                 return new PaymentEntry(PaymentActions.makeCashPayment(user, paymentInput.getAmount()));
             }
@@ -52,6 +56,7 @@ public class QLPayment {
         private String type;
         private Integer amount;
         private String stripeCardId;
+        private String stripeToken;
 
         public String getStripeCardId() {
             return stripeCardId;
@@ -59,6 +64,14 @@ public class QLPayment {
 
         public void setStripeCardId(String stripeCardId) {
             this.stripeCardId = stripeCardId;
+        }
+
+        public String getStripeToken() {
+            return stripeToken;
+        }
+
+        public void setStripeToken(String stripeToken) {
+            this.stripeToken = stripeToken;
         }
 
         public String getType() {

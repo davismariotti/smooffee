@@ -50,6 +50,29 @@ public class PaymentActions {
         return payment;
     }
 
+    public static Payment makeOneOffCardPayment(User user, Integer amount, String token) {
+        if (user == null || amount == null || token == null) return null;
+
+        Payment payment = new Payment()
+                .setAmount(amount)
+                .setUser(user)
+                .setType(Payment.CARD)
+                .setStatus(BaseModel.ACTIVE);
+
+        try {
+            Charge charge = StripeAPI.createChargeFromToken(user, amount, token);
+            payment.setStripeChargeId(charge.getId());
+        } catch (StripeException e) {
+            throw new QLException(e);
+        }
+        
+        UserActions.addToBalance(user, amount);
+
+        payment.save();
+
+        return payment;
+    }
+
     public static Payment refundPayment(Payment payment) {
         if (payment == null) return null;
 

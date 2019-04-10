@@ -66,7 +66,7 @@ public class StripeAPI {
     }
 
     // Charge
-    public static Charge createChargeFromToken(User user, String token, Integer amount) throws StripeException {
+    public static Charge createChargeFromToken(User user, Integer amount, String token) throws StripeException {
         if (user == null || token == null || amount == null) return null;
 
         Map<String, Object> chargeParams = new HashMap<>();
@@ -84,15 +84,18 @@ public class StripeAPI {
         if (user == null || amount == null) return null;
 
         // Charge the Customer instead of the card:
-        Map<String, Object> customerParams = new HashMap<>();
-        customerParams.put("amount", amount);
-        customerParams.put("currency", "usd");
-        customerParams.put("customer", user.getStripeCustomerId());
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", amount);
+        chargeParams.put("currency", "usd");
+        chargeParams.put("customer", user.getStripeCustomerId());
+        chargeParams.put("description", String.format("Make payment for user %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
+        chargeParams.put("receipt_email", user.getEmail());
+        chargeParams.put("statement_descriptor", "Smooffee Payment");
         if (stripeCardId != null) {
-            customerParams.put("source", stripeCardId);
+            chargeParams.put("source", stripeCardId);
         }
 
-        return Charge.create(customerParams, options());
+        return Charge.create(chargeParams, options());
     }
 
     public static Refund makeRefund(User user, String stripeChargeId) throws StripeException {
