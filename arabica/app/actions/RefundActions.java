@@ -22,6 +22,8 @@ public class RefundActions {
 
         UserActions.addToBalance(order.getUser(), refund.getAmount());
 
+        order.setStatus(BaseModel.REFUNDED).store();
+
         return refund;
     }
 

@@ -68,10 +68,9 @@ public class QLOrder {
 
                 order = OrderActions.cancelOrder(order);
 
-                // Refund order
-                RefundActions.createRefund(order);
-
                 return new OrderEntry(order);
+            } else if (status == BaseModel.REFUNDED) {
+                throw new QLException("Use createRefund to refund an order");
             } else { // All other status updates
                 Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
 
@@ -185,14 +184,14 @@ public class QLOrder {
     }
 
     public static class RefundEntry extends QLEntry {
-        private int amount;
+        private Integer amount;
 
         public RefundEntry(Refund refund) {
             super(refund);
             this.amount = refund.getAmount();
         }
 
-        public int getAmount() {
+        public Integer getAmount() {
             return amount;
         }
     }
