@@ -260,7 +260,7 @@ CREATE TABLE public.refund (
     deprecated_at timestamp without time zone,
     status integer DEFAULT 0 NOT NULL,
     amount integer NOT NULL,
-    user_id bigint NOT NULL,
+    order_id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -446,7 +446,7 @@ COPY public.product (id, deprecated_at, status, name, price, description, organi
 -- Data for Name: refund; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-COPY public.refund (id, deprecated_at, status, amount, user_id, created_at, updated_at) FROM stdin;
+COPY public.refund (id, deprecated_at, status, amount, order_id, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -454,10 +454,10 @@ COPY public.refund (id, deprecated_at, status, amount, user_id, created_at, upda
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: davis
 --
 
-1	\N	1	Davis	Mariotti	3	davismariotti@gmail.com	\N	0	76GqSI6ohMaBGAiDRvGOqgb6tp03	95950	2019-03-15 11:37:49.888	2019-03-21 17:57:13.458	\N
 COPY public.users (id, deprecated_at, status, firstname, lastname, organization_id, email, last_logged_in, role, firebase_user_id, balance, created_at, updated_at, stripe_customer_id) FROM stdin;
 2	\N	1	Tom	Dale	3	tom.k.dale@gmail.com	\N	0	5uR1C21Z6hQI4aCrewu3TFfzmLB2	100000	2019-03-15 17:11:56.577988	2019-03-15 17:11:56.577988	\N
 3	\N	1	Tersa	Almaw	3	tersaalmaw@gmail.com	\N	0	0h3WAUBDBOMtG1Onrg8zQjbBlzM2	100000	2019-03-15 17:12:40.347689	2019-03-15 17:12:40.347689	\N
+1	\N	1	Davis	Mariotti	3	davismariotti@gmail.com	\N	0	76GqSI6ohMaBGAiDRvGOqgb6tp03	155950	2019-03-15 11:37:49.888	2019-04-09 20:57:25.492	\N
 \.
 
 
@@ -620,7 +620,7 @@ CREATE INDEX ix_product_organization_id ON public.product USING btree (organizat
 -- Name: ix_refund_user_id; Type: INDEX; Schema: public; Owner: davis
 --
 
-CREATE INDEX ix_refund_user_id ON public.refund USING btree (user_id);
+CREATE INDEX ix_refund_order_id ON public.refund USING btree (order_id);
 
 
 --
@@ -683,7 +683,7 @@ ALTER TABLE ONLY public.product
 --
 
 ALTER TABLE ONLY public.refund
-    ADD CONSTRAINT fk_refund_user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_refund_user_id FOREIGN KEY (order_id) REFERENCES public.users(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
@@ -692,6 +692,14 @@ ALTER TABLE ONLY public.refund
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT fk_users_organization_id FOREIGN KEY (organization_id) REFERENCES public.organization(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: refund refund_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: davis
+--
+
+ALTER TABLE ONLY public.refund
+    ADD CONSTRAINT refund_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(id);
 
 
 --

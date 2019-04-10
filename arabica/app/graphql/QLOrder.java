@@ -80,6 +80,15 @@ public class QLOrder {
                 return new OrderEntry(order);
             }
         }
+
+        public RefundEntry createRefund(Long orderId) {
+            Order order = Order.find.byId(orderId);
+            if (order == null) throw new QLException("Order not found");
+
+            Permission.check(Permission.THIS_ORGANIZATION_CREATE_ORDER_REFUND, new AuthorizationContext(order.getUser().getOrganization()));
+
+            return new RefundEntry(RefundActions.createRefund(order));
+        }
     }
 
     public static class OrderEntry extends QLEntry {
@@ -88,6 +97,7 @@ public class QLOrder {
         private String recipient;
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
+        private RefundEntry refund;
 
         public OrderEntry(Order order) {
             super(order);
@@ -96,6 +106,9 @@ public class QLOrder {
             this.product = new QLProduct.ProductEntry(order.getProduct());
             this.recipient = order.getRecipient();
             this.deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
+            if (Refund.findByOrderId(order.getId()) != null) {
+                this.refund = new RefundEntry(Refund.findByOrderId(order.getId()));
+            }
         }
 
         public String getLocation() {
@@ -116,6 +129,10 @@ public class QLOrder {
 
         public QLDeliveryPeriod.DeliveryPeriodEntry getDeliveryPeriod() {
             return deliveryPeriod;
+        }
+
+        public RefundEntry getRefund() {
+            return refund;
         }
     }
 
@@ -164,6 +181,19 @@ public class QLOrder {
 
         public void setDeliveryPeriodId(Long deliveryPeriodId) {
             this.deliveryPeriodId = deliveryPeriodId;
+        }
+    }
+
+    public static class RefundEntry extends QLEntry {
+        private int amount;
+
+        public RefundEntry(Refund refund) {
+            super(refund);
+            this.amount = refund.getAmount();
+        }
+
+        public int getAmount() {
+            return amount;
         }
     }
 }

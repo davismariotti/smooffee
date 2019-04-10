@@ -8,12 +8,15 @@ import utilities.QLException;
 
 public class RefundActions {
     public static Refund createRefund(Order order) {
+        return createPartialRefund(order, order.getProduct().getPrice());
+    }
+
+    public static Refund createPartialRefund(Order order, Integer amount) {
         if (order == null) return null;
 
         Refund refund = new Refund()
-                .setAmount(order.getProduct().getPrice()) // TODO Think about discounts and actual paid price??
+                .setAmount(amount) // TODO Think about discounts and actual paid price??
                 .setOrder(order)
-                .setUser(order.getUser())
                 .setStatus(BaseModel.ACTIVE)
                 .store();
 
