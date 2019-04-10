@@ -44,6 +44,16 @@ public class QLUser {
 
             return users.stream().map(UserEntry::new).collect(Collectors.toList());
         }
+
+        public List<CardEntry> listCards(String userId) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_CARD_READ, new AuthorizationContext(user));
+
+            List<Card> cards = UserActions.listCards(user);
+
+            return cards.stream().map(CardEntry::new).collect(Collectors.toList());
+        }
     }
 
     public static class Mutation {
@@ -79,6 +89,17 @@ public class QLUser {
             if (role.equals(Role.SYSADMIN.getName()) || role.equals(Role.ANONYMOUS.getName())) throw new Permission.AccessDeniedException(); // Can't make a user a sysadmin
 
             return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
+        }
+
+        public UserEntry attachCard(String userId, String stripeToken) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+
+            Permission.check(Permission.THIS_USER_CARD_WRITE, new AuthorizationContext(user));
+
+            UserActions.addStripeCardToUser(user, stripeToken);
+
+            return new UserEntry(user);
         }
     }
 
@@ -175,7 +196,7 @@ public class QLUser {
         }
     }
 
-    public class CardEntry {
+    public static class CardEntry {
 
         String stripeCardId;
         String last4;

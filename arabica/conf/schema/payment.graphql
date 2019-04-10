@@ -2,6 +2,7 @@ input PaymentInput {
     type: String
     amount: Int
     stripeCardId: String
+    stripeToken: String
     status: Int
 }
 
@@ -10,7 +11,6 @@ type PaymentEntry {
     status: Int!
     amount: Int!
     stripeCardId: String
-    stripeToken: String
     user: UserEntry!
     type: String!
 }

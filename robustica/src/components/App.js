@@ -4,12 +4,12 @@ import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
 import { AUTH_TOKEN, USER_ID } from '../constants'
 import Home from './Home'
-import SignupContinued from './Auth/signup/SignupContinued'
-import Login from './Auth/login/Login'
-import Recover from './Auth/login/Recover'
-import Signup from './Auth/signup/Signup'
+import SignupContinued from './auth/signup/SignupContinued'
+import Login from './auth/login/Login'
+import Recover from './auth/login/Recover'
+import Signup from './auth/signup/Signup'
 import Navbar from './Navbar'
-import OrganizationSettings from './OrganizationSettings'
+import OrganizationSettings from './organizationsettings'
 
 class App extends Component {
   constructor(props) {
