@@ -27,7 +27,7 @@ public class StripeAPI {
     public static Customer createCustomer(User user, String cardToken) throws StripeException {
         if (user == null || cardToken == null) return null;
         Map<String, Object> customerParams = new HashMap<>();
-        customerParams.put("description", String.format("Customer for %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
+        customerParams.put("description", String.format("%s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
         customerParams.put("source", cardToken);
         return Customer.create(customerParams, options());
     }
@@ -44,6 +44,8 @@ public class StripeAPI {
     public static Card addCardToCustomer(User user, String cardToken) throws StripeException {
         if (user == null || cardToken == null) return null;
         Customer customer = retrieveCustomer(user);
+        if (customer == null) return null;
+
         Map<String, Object> params = new HashMap<>();
         params.put("source", cardToken);
         return (Card) customer.getSources().create(params, options());
@@ -53,6 +55,7 @@ public class StripeAPI {
         if (user == null) return null;
 
         Customer customer = retrieveCustomer(user);
+        if (customer == null) return null;
 
         Map<String, Object> cardParams = new HashMap<>();
         cardParams.put("object", "card");
@@ -62,6 +65,8 @@ public class StripeAPI {
     public static Card retrieveCard(User user, String stripeCardId) throws StripeException {
         if (user == null || user.getStripeCustomerId() == null || stripeCardId == null) return null;
         Customer customer = retrieveCustomer(user);
+        if (customer == null) return null;
+
         return (Card) customer.getSources().retrieve(stripeCardId, options());
     }
 
@@ -72,7 +77,7 @@ public class StripeAPI {
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", amount);
         chargeParams.put("currency", "usd");
-        chargeParams.put("description", String.format("Make payment for user %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
+        chargeParams.put("description", String.format("Payment for user %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
         chargeParams.put("source", token);
         chargeParams.put("receipt_email", user.getEmail());
         chargeParams.put("statement_descriptor", "Smooffee Payment");
@@ -88,7 +93,7 @@ public class StripeAPI {
         chargeParams.put("amount", amount);
         chargeParams.put("currency", "usd");
         chargeParams.put("customer", user.getStripeCustomerId());
-        chargeParams.put("description", String.format("Make payment for user %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
+        chargeParams.put("description", String.format("Payment for user %s %s (%s)", user.getFirstname(), user.getLastname(), user.getEmail()));
         chargeParams.put("receipt_email", user.getEmail());
         chargeParams.put("statement_descriptor", "Smooffee Payment");
         if (stripeCardId != null) {

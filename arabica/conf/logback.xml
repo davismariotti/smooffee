@@ -27,12 +27,13 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
 
-  <!-- Off these ones as they are annoying, and anyway we manage configuration ourselves -->
   <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />
   <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
   <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
   <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
   <logger name="com.coxautodev.graphql.tools.SchemaClassScanner" level="OFF" />
+  <logger name="graphql.execution.SimpleDataFetcherExceptionHandler" level="OFF" />
+
 
   <logger name="arabica" level="DEBUG" />
 
