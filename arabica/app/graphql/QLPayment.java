@@ -50,6 +50,15 @@ public class QLPayment {
                 return new PaymentEntry(PaymentActions.makeCashPayment(user, paymentInput.getAmount()));
             }
         }
+
+        public PaymentEntry refundPayment(Long paymentId) {
+            Payment payment = Payment.find.byId(paymentId);
+            if (payment == null) throw new QLException("Payment not found.");
+
+            Permission.check(Permission.THIS_ORGANIZATION_CREATE_PAYMENT_REFUND, new AuthorizationContext(payment.getUser().getOrganization()));
+
+            return new PaymentEntry(PaymentActions.refundPayment(payment));
+        }
     }
 
     public static class PaymentInput extends QLInput {

@@ -22,4 +22,5 @@ type PaymentQuery {
 
 type PaymentMutation {
     create(userId: String!, paymentInput: PaymentInput!): PaymentEntry!
+    refundPayment(paymentId: Long!): PaymentEntry!
 }

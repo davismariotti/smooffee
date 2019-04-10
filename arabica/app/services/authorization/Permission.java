@@ -47,6 +47,7 @@ public class Permission {
     public static final int THIS_ORGANIZATION_PRODUCTS_READ         = 307;
     public static final int THIS_ORGANIZATION_USERS_READ            = 308;
     public static final int THIS_ORGANIZATION_DELIVERY_PERIODS_READ = 309;
+    public static final int THIS_ORGANIZATION_CREATE_PAYMENT_REFUND = 310;
 
 
     // ALL OTHER PERMISSIONS
@@ -82,6 +83,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_USERS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+            add(Permission.THIS_ORGANIZATION_CREATE_PAYMENT_REFUND);
 
             add(Permission.ORGANIZATION_LIST);
         }});
