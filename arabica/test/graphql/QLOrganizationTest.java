@@ -41,6 +41,7 @@ public class QLOrganizationTest {
         QLOrganization.OrganizationInput input = new QLOrganization.OrganizationInput();
         input.setName("Org2");
         input.setStatus(BaseModel.DELETED);
+
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { organization { update(organizationId: %d, organizationInput: %s) { id name status } } }",
                 orgEntry.getId(),

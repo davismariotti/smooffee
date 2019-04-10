@@ -45,6 +45,7 @@ public class QLOrganization {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
+
             return new OrganizationEntry(OrganizationActions.updateOrganization(organization, input.getName(), input.getStatus()));
         }
     }

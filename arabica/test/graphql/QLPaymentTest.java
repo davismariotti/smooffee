@@ -4,6 +4,7 @@ import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
 import models.BaseModel;
+import models.Payment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class QLPaymentTest {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
         input.setStatus(BaseModel.ACTIVE);
         input.setAmount(amount);
-        input.setType("cash");
+        input.setType(Payment.CASH);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } } } }",

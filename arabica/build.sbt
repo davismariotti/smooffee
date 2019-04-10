@@ -20,6 +20,7 @@ libraryDependencies += "com.sun.jersey" % "jersey-client" % "1.19.4"
 libraryDependencies += "com.sun.jersey.contribs" % "jersey-multipart" % "1.19.4"
 libraryDependencies += "com.google.firebase" % "firebase-admin" % "6.7.0"
 libraryDependencies += "com.h2database" % "h2" % "1.4.198"
+libraryDependencies += "com.stripe" % "stripe-java" % "8.0.2"
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.8.1"
 libraryDependencies ++= Seq(evolutions, jdbc)
 

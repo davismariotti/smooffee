@@ -15,6 +15,7 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseModel extends Model {
 
+    public static final int REFUNDED = -4;
     public static final int NOT_AVAILABLE = -3;
     public static final int DELETED = -2;
     public static final int CANCELLED = -1;
