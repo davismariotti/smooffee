@@ -52,34 +52,41 @@ public class QLOrder {
         public OrderEntry updateStatus(Long orderId, int status) {
             Order order = Order.find.byId(orderId);
             if (order == null) throw new QLException("Order not found");
-            Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
 
-            order.setStatus(status).store();
+            if (status == BaseModel.CANCELLED) {
+                Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(order.getUser()));
 
-            return new OrderEntry(order);
+                // If an order is in progress or has already been completed, then it cannot be cancelled
+                if (order.getStatus() != BaseModel.ACTIVE) {
+                    // Employee/Admin can override
+                    try {
+                        Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
+                    } catch (Permission.AccessDeniedException e) { // Convert exception
+                        throw new QLException("Order cannot be cancelled at this time.");
+                    }
+                }
+
+                order = OrderActions.cancelOrder(order);
+
+                return new OrderEntry(order);
+            } else if (status == BaseModel.REFUNDED) {
+                throw new QLException("Use createRefund to refund an order");
+            } else { // All other status updates
+                Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
+
+                order.setStatus(status).store();
+
+                return new OrderEntry(order);
+            }
         }
 
-        public OrderEntry cancelOrder(Long orderId) {
+        public RefundEntry createRefund(Long orderId) {
             Order order = Order.find.byId(orderId);
             if (order == null) throw new QLException("Order not found");
-            Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(order.getUser()));
 
-            // If an order is in progress or has already been completed, then it cannot be cancelled
-            if (order.getStatus() != BaseModel.ACTIVE) {
-                // Employee/Admin can override
-                try {
-                    Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
-                } catch (Permission.AccessDeniedException e) { // Convert exception
-                    throw new QLException("Order cannot be cancelled at this time.");
-                }
-            }
+            Permission.check(Permission.THIS_ORGANIZATION_CREATE_ORDER_REFUND, new AuthorizationContext(order.getUser().getOrganization()));
 
-            order.setStatus(BaseModel.CANCELLED).deprecate();
-
-            // Refund order
-            RefundActions.createRefund(order);
-
-            return new OrderEntry(order);
+            return new RefundEntry(RefundActions.createRefund(order));
         }
     }
 
@@ -89,6 +96,7 @@ public class QLOrder {
         private String recipient;
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
+        private RefundEntry refund;
 
         public OrderEntry(Order order) {
             super(order);
@@ -97,6 +105,9 @@ public class QLOrder {
             this.product = new QLProduct.ProductEntry(order.getProduct());
             this.recipient = order.getRecipient();
             this.deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
+            if (Refund.findByOrderId(order.getId()) != null) {
+                this.refund = new RefundEntry(Refund.findByOrderId(order.getId()));
+            }
         }
 
         public String getLocation() {
@@ -117,6 +128,10 @@ public class QLOrder {
 
         public QLDeliveryPeriod.DeliveryPeriodEntry getDeliveryPeriod() {
             return deliveryPeriod;
+        }
+
+        public RefundEntry getRefund() {
+            return refund;
         }
     }
 
@@ -165,6 +180,19 @@ public class QLOrder {
 
         public void setDeliveryPeriodId(Long deliveryPeriodId) {
             this.deliveryPeriodId = deliveryPeriodId;
+        }
+    }
+
+    public static class RefundEntry extends QLEntry {
+        private Integer amount;
+
+        public RefundEntry(Refund refund) {
+            super(refund);
+            this.amount = refund.getAmount();
+        }
+
+        public Integer getAmount() {
+            return amount;
         }
     }
 }

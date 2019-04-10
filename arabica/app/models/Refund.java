@@ -5,10 +5,7 @@ import io.ebean.Query;
 import io.ebean.annotation.NotNull;
 import utilities.QLFinder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "refund")
@@ -20,11 +17,8 @@ public class Refund extends BaseModel {
     private int amount;
 
     @NotNull
+    @OneToOne
     private Order order;
-
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
 
     public int getAmount() {
         return amount;
@@ -44,15 +38,6 @@ public class Refund extends BaseModel {
         return this;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public Refund setUser(User user) {
-        this.user = user;
-        return this;
-    }
-
     public static class RefundFinder extends Finder<Long, Refund> {
         public RefundFinder() {
             super(Refund.class);
@@ -61,6 +46,10 @@ public class Refund extends BaseModel {
 
     public static Query<Refund> findWithParamters(QLFinder finder) {
         return (finder == null) ? find.query() : finder.build(Refund.class);
+    }
+
+    public static Refund findByOrderId(Long orderId) {
+        return find.query().where().eq("order_id", orderId).findOne();
     }
 
 }

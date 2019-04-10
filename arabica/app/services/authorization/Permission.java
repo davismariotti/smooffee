@@ -48,6 +48,7 @@ public class Permission {
     public static final int THIS_ORGANIZATION_USERS_READ            = 308;
     public static final int THIS_ORGANIZATION_DELIVERY_PERIODS_READ = 309;
     public static final int THIS_ORGANIZATION_CREATE_PAYMENT_REFUND = 310;
+    public static final int THIS_ORGANIZATION_CREATE_ORDER_REFUND   = 311;
 
 
     // ALL OTHER PERMISSIONS
@@ -84,6 +85,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_USERS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
             add(Permission.THIS_ORGANIZATION_CREATE_PAYMENT_REFUND);
+            add(Permission.THIS_ORGANIZATION_CREATE_ORDER_REFUND);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -218,7 +220,7 @@ public class Permission {
         if (user == null) throw new AccessDeniedException("User is null");
 
         boolean result = checkUserPermission(user, permission, context);
-        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d", permission));
+        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d, or context is not allowed", permission));
     }
 
     public static void ignore() {

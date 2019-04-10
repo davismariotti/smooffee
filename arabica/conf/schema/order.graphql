@@ -15,6 +15,13 @@ type OrderEntry {
     product: ProductEntry!
     recipient: String!
     deliveryPeriod: DeliveryPeriodEntry!
+    refund: RefundEntry
+}
+
+type RefundEntry {
+    id: Long!
+    status: Int!
+    amount: Int!
 }
 
 type OrderQuery {
@@ -25,5 +32,5 @@ type OrderQuery {
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
     updateStatus(orderId: Long!, status: Int!): OrderEntry!
-    cancelOrder(orderId: Long!): OrderEntry!
+    createRefund(orderId: Long!): RefundEntry!
 }

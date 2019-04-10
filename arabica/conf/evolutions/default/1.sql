@@ -71,7 +71,7 @@ create table refund (
   deprecated_at                 timestamp,
   status                        INTEGER DEFAULT 0 not null,
   amount                        integer not null,
-  user_id                       bigint not null,
+  order_id                       bigint not null,
   created_at                    timestamp not null,
   updated_at                    timestamp not null,
   constraint pk_refund primary key (id)
@@ -113,8 +113,8 @@ alter table payment add constraint fk_payment_user_id foreign key (user_id) refe
 create index ix_product_organization_id on product (organization_id);
 alter table product add constraint fk_product_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;
 
-create index ix_refund_user_id on refund (user_id);
-alter table refund add constraint fk_refund_user_id foreign key (user_id) references users (id) on delete restrict on update restrict;
+create index ix_refund_order_id on refund (order_id);
+alter table refund add constraint fk_refund_order_id foreign key (order_id) references orders (id) on delete restrict on update restrict;
 
 create index ix_users_organization_id on users (organization_id);
 alter table users add constraint fk_users_organization_id foreign key (organization_id) references organization (id) on delete restrict on update restrict;
