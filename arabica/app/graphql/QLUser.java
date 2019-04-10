@@ -1,6 +1,7 @@
 package graphql;
 
 import actions.UserActions;
+import com.stripe.model.Card;
 import models.Organization;
 import models.User;
 import services.authorization.AuthorizationContext;
@@ -171,6 +172,31 @@ public class QLUser {
 
         public Integer getStatus() {
             return status;
+        }
+    }
+
+    public class CardEntry {
+
+        String stripeCardId;
+        String last4;
+        String brand;
+
+        public CardEntry(Card card) {
+            this.brand = card.getBrand();
+            this.last4 = card.getLast4();
+            this.stripeCardId = card.getId();
+        }
+
+        public String getStripeCardId() {
+            return stripeCardId;
+        }
+
+        public String getLast4() {
+            return last4;
+        }
+
+        public String getBrand() {
+            return brand;
         }
     }
 }

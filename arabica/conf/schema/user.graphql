@@ -16,6 +16,12 @@ type UserEntry {
     status: Int!
 }
 
+type CardEntry {
+    id: String!
+    brand: String!
+    last4: String!
+}
+
 type UserQuery {
     currentUser: UserEntry!
     read(id: String!): UserEntry!

@@ -1,7 +1,7 @@
 input PaymentInput {
     type: String
     amount: Int
-    cardId: Long
+    stripeCardId: String
     status: Int
 }
 
@@ -9,13 +9,14 @@ type PaymentEntry {
     id: Long!
     status: Int!
     amount: Int!
-    cardId: Long
+    stripeCardId: String
     user: UserEntry!
     type: String!
 }
 
 type PaymentQuery {
-    read(id: Long!): PaymentEntry
+    read(id: Long!): PaymentEntry!
+    list(userId: String!, parameters: QLFinder): [PaymentEntry!]!
 }
 
 type PaymentMutation {

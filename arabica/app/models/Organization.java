@@ -20,7 +20,8 @@ public class Organization extends BaseModel {
     @OneToMany(mappedBy = "organization")
     private List<Product> products;
 
-    private String apiKey;
+    private String secretApiKey;
+    private String publishableApiKey;
 
     public List<Product> getProducts() {
         return products;
@@ -35,12 +36,21 @@ public class Organization extends BaseModel {
         return this;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public String getSecretApiKey() {
+        return secretApiKey;
     }
 
-    public Organization setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public Organization setSecretApiKey(String secretApiKey) {
+        this.secretApiKey = secretApiKey;
+        return this;
+    }
+
+    public String getPublisableApiKey() {
+        return publishableApiKey;
+    }
+
+    public Organization setPublishableApiKey(String publishableApiKey) {
+        this.publishableApiKey = publishableApiKey;
         return this;
     }
 

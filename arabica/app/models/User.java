@@ -37,8 +37,11 @@ public class User extends BaseModel {
     private int role;
 
     private String firebaseUserId;
+
     @NotNull
     private Integer balance;
+
+    private String stripeCustomerId;
 
     public Integer getBalance() {
         return balance;
@@ -113,6 +116,15 @@ public class User extends BaseModel {
 
     public User setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getStripeCustomerId() {
+        return this.stripeCustomerId;
+    }
+
+    public User setStripeCustomerId(String stripeCustomerId) {
+        this.stripeCustomerId = stripeCustomerId;
         return this;
     }
 

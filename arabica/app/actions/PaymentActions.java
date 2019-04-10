@@ -1,12 +1,13 @@
 package actions;
 
 import business.StripeAPI;
+import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Refund;
 import models.BaseModel;
-import models.Card;
 import models.Payment;
 import models.User;
+import utilities.QLException;
 
 public class PaymentActions {
 
@@ -16,31 +17,35 @@ public class PaymentActions {
         Payment payment = new Payment()
                 .setAmount(amount)
                 .setUser(user)
-                .setType("cash")
-                .setStatus(BaseModel.ACTIVE)
-                .store();
+                .setType(Payment.CASH)
+                .setStatus(BaseModel.ACTIVE);
 
         UserActions.addToBalance(user, amount);
-        payment.refresh();
+
+        payment.save();
 
         return payment;
     }
 
-    public static Payment makeCardPayment(User user, Card card, Integer amount) {
-        if (user == null || card == null || amount == null) return null;
+    public static Payment makeCardPayment(User user, Integer amount, String stripeCardId) {
+        if (user == null || amount == null) return null;
 
         Payment payment = new Payment()
                 .setAmount(amount)
                 .setUser(user)
-                .setType("card")
-                .setCard(card)
+                .setType(Payment.CARD)
                 .setStatus(BaseModel.ACTIVE);
 
-        Charge charge = StripeAPI.chargeCard(user.getOrganization(), card, payment);
-        payment.setStripeChargeId(charge.getId()); // TODO handle errors
+        try {
+            Charge charge = StripeAPI.createChargeFromCustomer(user, amount, stripeCardId);
+            payment.setStripeChargeId(charge.getId());
+        } catch (StripeException e) {
+            throw new QLException(e);
+        }
+
+        UserActions.addToBalance(user, amount);
 
         payment.save();
-        UserActions.addToBalance(user, amount);
 
         return payment;
     }
@@ -48,14 +53,15 @@ public class PaymentActions {
     public static Payment refundPayment(Payment payment) {
         if (payment == null) return null;
 
-        if (payment.getType().equals("cash")) {
+        if (payment.getType().equals(Payment.CARD)) {
+            try {
+                Refund refund = StripeAPI.makeRefund(payment.getUser(), payment.getStripeChargeId());
+                return payment.setStripeRefundId(refund.getId()).store();
+            } catch (StripeException e) {
+                throw new QLException(e);
+            }
+        } else { // CASH
             return payment.setStatus(BaseModel.REFUNDED).store();
-        } else if (payment.getType().equals("card")) {
-            Refund refund = StripeAPI.makeRefund(payment);
-            payment.setCardRefund(CardRefundActions.createCardRefund(payment, refund)).save();
-            return payment;
-        } else {
-            return null;
         }
     }
 }

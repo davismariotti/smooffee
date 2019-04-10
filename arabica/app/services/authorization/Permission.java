@@ -18,19 +18,23 @@ public class Permission {
     // THIS USER
     public static final int THIS_USER_INFO_READ     = 100;
     public static final int THIS_USER_INFO_WRITE    = 101;
-    public static final int THIS_USER_CARD_READ     = 102;
-    public static final int THIS_USER_CARD_WRITE    = 103;
-    public static final int THIS_USER_ORDER_READ    = 104;
-    public static final int THIS_USER_ORDER_WRITE   = 105;
+    public static final int THIS_USER_PAYMENT_READ  = 102;
+    public static final int THIS_USER_PAYMENT_WRITE = 103;
+    public static final int THIS_USER_CARD_READ     = 104;
+    public static final int THIS_USER_CARD_WRITE    = 105;
+    public static final int THIS_USER_ORDER_READ    = 106;
+    public static final int THIS_USER_ORDER_WRITE   = 107;
 
     // OTHER USER
     // OTHER_USER must be exactly 100 more than THIS_USER entry of same type
-    public static final int OTHER_USER_INFO_READ    = THIS_USER_INFO_READ + 100;
-    public static final int OTHER_USER_INFO_WRITE   = THIS_USER_INFO_WRITE + 100;
-    public static final int OTHER_USER_CARD_READ    = THIS_USER_CARD_READ + 100;
-    public static final int OTHER_USER_CARD_WRITE   = THIS_USER_CARD_WRITE + 100;
-    public static final int OTHER_USER_ORDER_READ   = THIS_USER_ORDER_READ + 100;
-    public static final int OTHER_USER_ORDER_WRITE  = THIS_USER_ORDER_WRITE + 100;
+    public static final int OTHER_USER_INFO_READ        = THIS_USER_INFO_READ       + 100;
+    public static final int OTHER_USER_INFO_WRITE       = THIS_USER_INFO_WRITE      + 100;
+    public static final int OTHER_USER_PAYMENT_READ     = THIS_USER_PAYMENT_READ    + 100;
+    public static final int OTHER_USER_PAYMENT_WRITE    = THIS_USER_PAYMENT_WRITE   + 100;
+    public static final int OTHER_USER_CARD_READ        = THIS_USER_CARD_READ       + 100;
+    public static final int OTHER_USER_CARD_WRITE       = THIS_USER_CARD_WRITE      + 100;
+    public static final int OTHER_USER_ORDER_READ       = THIS_USER_ORDER_READ      + 100;
+    public static final int OTHER_USER_ORDER_WRITE      = THIS_USER_ORDER_WRITE     + 100;
 
     // THIS ORGANIZATION
     public static final int THIS_ORGANIZATION_READ                  = 300;
@@ -56,6 +60,8 @@ public class Permission {
         put(Role.ADMIN, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -63,6 +69,7 @@ public class Permission {
 
             add(Permission.OTHER_USER_INFO_READ);
             add(Permission.OTHER_USER_INFO_WRITE);
+            add(Permission.OTHER_USER_PAYMENT_READ);
             add(Permission.OTHER_USER_ORDER_READ);
             add(Permission.OTHER_USER_ORDER_WRITE);
 
@@ -81,6 +88,8 @@ public class Permission {
         put(Role.SUPERVISOR, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -102,6 +111,8 @@ public class Permission {
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -122,6 +133,8 @@ public class Permission {
         put(Role.CUSTOMER, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
