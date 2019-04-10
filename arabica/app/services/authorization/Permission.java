@@ -218,7 +218,7 @@ public class Permission {
         if (user == null) throw new AccessDeniedException("User is null");
 
         boolean result = checkUserPermission(user, permission, context);
-        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d", permission));
+        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d, or context is not allowed", permission));
     }
 
     public static void ignore() {

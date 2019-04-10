@@ -12,8 +12,7 @@ import play.mvc.Result;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.contentAsString;
 
@@ -27,6 +26,7 @@ public class QLOrderTest {
         Setup.createDefaultOrganization();
         Setup.createDefaultDeliveryPeriod();
         Setup.createDefaultSysadmin();
+        Setup.createDefaultCustomer();
         Setup.createDefaultProduct();
 
         createOrderTest();
@@ -48,17 +48,7 @@ public class QLOrderTest {
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } deliveryPeriod { id } } } }",
-                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
-                QL.prepare(orderInput)
-        ));
-        assertNotNull(result);
-        assertEquals(OK, result.status());
-
-        QLOrder.OrderEntry entry = FakeApplication.graphQLResultToObject(result, "order/create", QLOrder.OrderEntry.class);
-        assertNotNull(entry);
-        assertNotNull(entry.getId());
+        QLOrder.OrderEntry entry = createOrder(orderInput);
         orderId = entry.getId();
 
         assertEquals("Notes", entry.getNotes());
@@ -70,7 +60,7 @@ public class QLOrderTest {
         assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
 
         // Make sure funds were deducted
-        result = FakeApplication.routeGraphQLRequest(String.format(
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "query { user { read(id: %s) { id balance } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId())
 
@@ -101,15 +91,7 @@ public class QLOrderTest {
         assertNotNull(result);
         assertEquals(OK, result.status());
 
-        try {
-            JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
-            assertNotNull(node);
-            assertNotNull(node.get(0));
-            assertNotNull(node.get(0).get("message"));
-            assertEquals("\"Exception while fetching data (/order/create) : Insufficient funds\"", node.get(0).get("message").toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertErrorMessageEquals("Exception while fetching data (/order/create) : Insufficient funds", result);
     }
 
     @Test
@@ -145,15 +127,9 @@ public class QLOrderTest {
         orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient product { id } } } }",
-                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
-                QL.prepare(orderInput)
-        ));
-        assertNotNull(result);
-        assertEquals(OK, result.status());
+        createOrder(orderInput);
 
-        result = FakeApplication.routeGraphQLRequest(String.format(
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "query { order { list(organizationId: %d) { id location notes product { id } status recipient } } }",
                 Setup.defaultOrganization.getId()
         ));
@@ -171,6 +147,111 @@ public class QLOrderTest {
         assertEquals("EJ308", entries[1].getLocation());
         assertEquals("Other notes", entries[1].getNotes());
         assertEquals("Tom Dale", entries[1].getRecipient());
+    }
 
+    @Test
+    public void cancelActiveOrderTest() {
+        QLPaymentTest.createPaymentCash(Setup.defaultCustomer.getFirebaseUserId(), Setup.defaultProduct.getPrice());
+        FakeApplication.authToken.push(Setup.defaultCustomer.getFirebaseUserId());
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setLocation("EJ308");
+        orderInput.setNotes("Other notes");
+        orderInput.setRecipient("Tom Dale");
+        orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
+        orderInput.setStatus(BaseModel.ACTIVE);
+        orderInput.setProductId(Setup.defaultProduct.getId());
+
+        QLOrder.OrderEntry entry = createOrder(Setup.defaultCustomer.getFirebaseUserId(), orderInput);
+
+        // Cancel order
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { order { updateStatus(orderId: %d, status: %d) { id status } } }",
+                entry.getId(),
+                BaseModel.CANCELLED
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        entry = FakeApplication.graphQLResultToObject(result, "order/updateStatus", QLOrder.OrderEntry.class);
+        assertNotNull(entry);
+        assertNotNull(entry.getId());
+        assertEquals(BaseModel.CANCELLED, entry.getStatus().intValue());
+
+        FakeApplication.authToken.pop();
+    }
+
+    @Test
+    public void cancelInProgressOrderTest() {
+        QLPaymentTest.createPaymentCash(Setup.defaultCustomer.getFirebaseUserId(), Setup.defaultProduct.getPrice());
+        FakeApplication.authToken.push(Setup.defaultCustomer.getFirebaseUserId());
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setLocation("EJ308");
+        orderInput.setNotes("Other notes");
+        orderInput.setRecipient("Tom Dale");
+        orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
+        orderInput.setStatus(BaseModel.ACTIVE);
+        orderInput.setProductId(Setup.defaultProduct.getId());
+
+        QLOrder.OrderEntry entry = createOrder(Setup.defaultCustomer.getFirebaseUserId(), orderInput);
+
+        String tempToken = FakeApplication.authToken.pop();
+
+        // Start order
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { order { updateStatus(orderId: %d, status: %d) { id status } } }",
+                entry.getId(),
+                BaseModel.IN_PROGRESS
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+        FakeApplication.authToken.push(tempToken);
+
+        result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { order { updateStatus(orderId: %d, status: %d) { id status } } }",
+                entry.getId(),
+                BaseModel.CANCELLED
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+        assertErrorMessageEquals("Exception while fetching data (/order/updateStatus) : Order cannot be cancelled at this time.", result);
+
+        FakeApplication.authToken.pop();
+    }
+
+    public static QLOrder.OrderEntry createOrder(QLOrder.OrderInput input) {
+        return createOrder(Setup.defaultSysadmin.getFirebaseUserId(), input);
+    }
+
+    public static QLOrder.OrderEntry createOrder(String userId, QLOrder.OrderInput input) {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status product { id } deliveryPeriod { id } } } }",
+                QL.prepare(userId),
+                QL.prepare(input)
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLOrder.OrderEntry entry = FakeApplication.graphQLResultToObject(result, "order/create", QLOrder.OrderEntry.class);
+        assertNotNull(entry);
+        assertNotNull(entry.getId());
+        assertEquals(input.getLocation(), entry.getLocation());
+        assertEquals(input.getRecipient(), entry.getRecipient());
+        assertEquals(input.getNotes(), entry.getNotes());
+        assertEquals(input.getProductId(), entry.getProduct().getId());
+        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+
+        return entry;
+    }
+
+    public static void assertErrorMessageEquals(String expected, Result result) {
+        try {
+            JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
+            assertNotNull(node);
+            assertNotNull(node.get(0));
+            assertNotNull(node.get(0).get("message"));
+            assertEquals(String.format("\"%s\"", expected), node.get(0).get("message").toString());
+        } catch (IOException e) {
+            fail();
+        }
     }
 }

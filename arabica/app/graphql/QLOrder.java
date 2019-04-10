@@ -52,34 +52,33 @@ public class QLOrder {
         public OrderEntry updateStatus(Long orderId, int status) {
             Order order = Order.find.byId(orderId);
             if (order == null) throw new QLException("Order not found");
-            Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
 
-            order.setStatus(status).store();
+            if (status == BaseModel.CANCELLED) {
+                Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(order.getUser()));
 
-            return new OrderEntry(order);
-        }
-
-        public OrderEntry cancelOrder(Long orderId) {
-            Order order = Order.find.byId(orderId);
-            if (order == null) throw new QLException("Order not found");
-            Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(order.getUser()));
-
-            // If an order is in progress or has already been completed, then it cannot be cancelled
-            if (order.getStatus() != BaseModel.ACTIVE) {
-                // Employee/Admin can override
-                try {
-                    Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
-                } catch (Permission.AccessDeniedException e) { // Convert exception
-                    throw new QLException("Order cannot be cancelled at this time.");
+                // If an order is in progress or has already been completed, then it cannot be cancelled
+                if (order.getStatus() != BaseModel.ACTIVE) {
+                    // Employee/Admin can override
+                    try {
+                        Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE);
+                    } catch (Permission.AccessDeniedException e) { // Convert exception
+                        throw new QLException("Order cannot be cancelled at this time.");
+                    }
                 }
+
+                order = OrderActions.cancelOrder(order);
+
+                // Refund order
+                RefundActions.createRefund(order);
+
+                return new OrderEntry(order);
+            } else { // All other status updates
+                Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
+
+                order.setStatus(status).store();
+
+                return new OrderEntry(order);
             }
-
-            order.setStatus(BaseModel.CANCELLED).deprecate();
-
-            // Refund order
-            RefundActions.createRefund(order);
-
-            return new OrderEntry(order);
         }
     }
 

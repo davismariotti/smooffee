@@ -41,7 +41,7 @@ public class OrderActions {
                 .store();
     }
 
-    public static Order deprecateOrder(Order order) {
-        return order.deprecate();
+    public static Order cancelOrder(Order order) {
+        return order.setStatus(BaseModel.CANCELLED).deprecate();
     }
 }

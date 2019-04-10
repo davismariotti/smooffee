@@ -25,5 +25,4 @@ type OrderQuery {
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
     updateStatus(orderId: Long!, status: Int!): OrderEntry!
-    cancelOrder(orderId: Long!): OrderEntry!
 }
