@@ -21,6 +21,12 @@ public class DeliveryPeriod extends BaseModel {
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
 
+    private String monday;
+    private String tuesday;
+    private String wednesday;
+    private String thursday;
+    private String friday;
+
     public Organization getOrganization() {
         return organization;
     }
@@ -38,6 +44,52 @@ public class DeliveryPeriod extends BaseModel {
         this.classPeriod = classPeriod;
         return this;
     }
+
+    public String getMonday() {
+        return monday;
+    }
+
+    public DeliveryPeriod setMonday(String monday) {
+        this.monday = monday;
+        return this;
+    }
+
+    public String getTuesday() {
+        return tuesday;
+    }
+
+    public DeliveryPeriod setTuesday(String tuesday) {
+        this.tuesday = tuesday;
+        return this;
+    }
+
+    public String getWednesday() {
+        return wednesday;
+    }
+
+    public DeliveryPeriod setWednesday(String wednesday) {
+        this.wednesday = wednesday;
+        return this;
+    }
+
+    public String getThursday() {
+        return thursday;
+    }
+
+    public DeliveryPeriod setThursday(String thursday) {
+        this.thursday = thursday;
+        return this;
+    }
+
+    public String getFriday() {
+        return friday;
+    }
+
+    public DeliveryPeriod setFriday(String friday) {
+        this.friday = friday;
+        return this;
+    }
+
 
     public static class DeliveryPeriodFinder extends Finder<Long, DeliveryPeriod> {
         public DeliveryPeriodFinder() {

@@ -6,21 +6,32 @@ import models.Organization;
 
 public class DeliveryPeriodActions {
 
-    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod) {
+    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod, String monday, String tuesday, String wednesday, String thursday, String friday) {
         if (organization == null || classPeriod == null) return null;
+
+
 
         return new DeliveryPeriod()
                 .setClassPeriod(classPeriod)
                 .setOrganization(organization)
+                .setMonday(monday == null       || monday.equals("")    ? null : monday)
+                .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
+                .setWednesday(wednesday == null || wednesday.equals("") ? null : wednesday)
+                .setThursday(thursday == null   || thursday.equals("")  ? null : thursday)
+                .setFriday(friday == null       || friday.equals("")    ? null : friday)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
     }
 
-    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, Integer status) {
-        if (deliveryPeriod == null || classPeriod == null || status == null) return null;
+    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, String monday, String tuesday, String wednesday, String thursday, String friday) {
+        if (deliveryPeriod == null || classPeriod == null) return null;
 
         return deliveryPeriod.setClassPeriod(classPeriod)
-                .setStatus(status)
+                .setMonday(monday == null       || monday.equals("")    ? null : monday)
+                .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
+                .setWednesday(wednesday == null || wednesday.equals("") ? null : wednesday)
+                .setThursday(thursday == null   || thursday.equals("")  ? null : thursday)
+                .setFriday(friday == null       || friday.equals("")    ? null : friday)
                 .store();
     }
 

@@ -1,12 +1,21 @@
 input DeliveryPeriodInput {
     classPeriod: Int
-    status: Int
+    monday: String
+    tuesday: String
+    wednesday: String
+    thursday: String
+    friday: String
 }
 
 type DeliveryPeriodEntry {
     id: Long!
     status: Int!
     classPeriod: Int!
+    monday: String
+    tuesday: String
+    wednesday: String
+    thursday: String
+    friday: String
 }
 
 type DeliveryPeriodQuery {
@@ -17,4 +26,5 @@ type DeliveryPeriodQuery {
 type DeliveryPeriodMutation {
     create(organizationId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
     update(deliveryPeriodId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
+    updateStatus(deliveryPeriodId: Long!, status: Int!): DeliveryPeriodEntry!
 }

@@ -70,10 +70,6 @@ EditOrganizationModal.defaultProps = {
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
-    enableReinitialize: true,
-    initialValues: {
-      name: organizationSettings.editOrganization && organizationSettings.editOrganization.name || null
-    },
     organizationId: organizationSettings.editOrganization && organizationSettings.editOrganization.organizationId || null
   }
 }
