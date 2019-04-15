@@ -34,6 +34,9 @@ class DeliveryPeriodForm extends React.Component {
             <Typography variant="headline">
               Times
             </Typography>
+            <Typography variant="subheading">
+              Leave a time blank if there is no class.
+            </Typography>
           </AlignCenter>
           {daysOfTheWeek.map(day => {
             return (

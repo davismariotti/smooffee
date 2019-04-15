@@ -117,7 +117,7 @@ class DeliveryPeriodList extends Component {
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
                         <TableCell>
                           <AlignRight>

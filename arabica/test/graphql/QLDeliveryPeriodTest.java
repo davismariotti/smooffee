@@ -10,8 +10,7 @@ import org.junit.Test;
 import play.mvc.Result;
 import utilities.QLFinder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static play.mvc.Http.Status.OK;
 
 public class QLDeliveryPeriodTest {
@@ -67,13 +66,18 @@ public class QLDeliveryPeriodTest {
 
     @Test
     public void updateDeliveryPeriodTest() {
-        QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(4);
+        QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(4, "monday", "tuesday", "wednesday", "thursday", "friday");
 
         QLDeliveryPeriod.DeliveryPeriodInput input = new QLDeliveryPeriod.DeliveryPeriodInput();
         input.setClassPeriod(3);
+        input.setMonday("");
+        input.setTuesday(createEntry.getTuesday());
+        input.setWednesday(createEntry.getWednesday());
+        input.setThursday(createEntry.getThursday());
+        input.setFriday(createEntry.getFriday());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { deliveryPeriod { update(deliveryPeriodId: %d, deliveryPeriodInput: %s) { id classPeriod status } } }",
+                "mutation { deliveryPeriod { update(deliveryPeriodId: %d, deliveryPeriodInput: %s) { id classPeriod status monday tuesday wednesday thursday friday } } }",
                 createEntry.getId(),
                 QL.prepare(input)
         ));
@@ -84,6 +88,8 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry);
         assertEquals(createEntry.getId(), entry.getId());
         assertEquals(3, entry.getClassPeriod().intValue());
+        assertNull(entry.getMonday());
+        assertNotNull(entry.getTuesday());
     }
 
     @Test
