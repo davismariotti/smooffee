@@ -69,7 +69,6 @@ public class QLPaymentTest {
 
     public static QLPayment.PaymentEntry createPaymentCash(String userId, int amount) {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
-        input.setStatus(BaseModel.ACTIVE);
         input.setAmount(amount);
         input.setType(Payment.CASH);
 

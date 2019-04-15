@@ -15,11 +15,10 @@ public class OrganizationActions {
             .store();
     }
 
-    public static Organization updateOrganization(Organization organization, String name, Integer status) {
-        if (organization == null || name == null || status == null) return null;
+    public static Organization updateOrganization(Organization organization, String name) {
+        if (organization == null || name == null) return null;
 
         organization.setName(name);
-        organization.setStatus(status);
         organization.save();
         return organization;
     }

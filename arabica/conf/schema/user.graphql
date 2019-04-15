@@ -2,7 +2,6 @@ input UserInput {
     firstName: String
     lastName: String
     email: String
-    status: Int
 }
 
 type UserEntry {
@@ -32,6 +31,7 @@ type UserQuery {
 type UserMutation {
     create(organizationId: Long!, userInput: UserInput!): UserEntry!
     update(userId: String!, userInput: UserInput!): UserEntry!
+    updateStatus(userId: String!, status: Int!): UserEntry!
     updateRole(userId: String!, role: String!): UserEntry!
     attachCard(userId: String!, stripeToken: String!): UserEntry!
 }

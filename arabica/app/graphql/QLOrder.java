@@ -135,7 +135,7 @@ public class QLOrder {
         }
     }
 
-    public static class OrderInput extends QLInput {
+    public static class OrderInput {
         private String location;
         private String notes;
         private Long productId;
