@@ -49,6 +49,11 @@ class DeliveryPeriodForm extends React.Component {
           })}
           <StyledFormRow>
             <StyledFormRowItem>
+              <Field style={{width: '300px'}} fullWidth name="maxQueueSize" component={TextField} label="Max Queue Size" />
+            </StyledFormRowItem>
+          </StyledFormRow>
+          <StyledFormRow>
+            <StyledFormRowItem>
               <Button fullWidth type="submit" variant="contained">
                 Submit
               </Button>

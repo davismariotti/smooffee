@@ -3,6 +3,9 @@ package actions;
 import models.*;
 import utilities.QLException;
 
+import static io.ebean.Expr.eq;
+import static io.ebean.Expr.or;
+
 public class OrderActions {
 
     public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {
@@ -11,6 +14,12 @@ public class OrderActions {
         // Check user funds
         int balance = user.getBalance();
         if (balance < product.getPrice()) throw new QLException("Insufficient funds");
+
+        // Check if order might break max queue size restraint
+        if (deliveryPeriod.getMaxQueueSize() > 0) {
+            int currentQueueSize = Organization.currentQueueSize(user.getOrganization().getId(), deliveryPeriod.getId());
+            if (currentQueueSize >= deliveryPeriod.getMaxQueueSize()) throw new QLException("Max queue size reached");
+        }
 
         user.setBalance(balance - product.getPrice());
 

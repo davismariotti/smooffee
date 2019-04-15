@@ -89,7 +89,7 @@ public class QLOrderTest {
         assertNotNull(result);
         assertEquals(OK, result.status());
 
-        assertErrorMessageEquals("Exception while fetching data (/order/create) : Insufficient funds", result);
+        FakeApplication.assertErrorMessageEquals("Exception while fetching data (/order/create) : Insufficient funds", result);
     }
 
     @Test
@@ -191,7 +191,7 @@ public class QLOrderTest {
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
-        assertErrorMessageEquals("Exception while fetching data (/order/updateStatus) : Order cannot be cancelled at this time.", result);
+        FakeApplication.assertErrorMessageEquals("Exception while fetching data (/order/updateStatus) : Order cannot be cancelled at this time.", result);
 
         FakeApplication.authToken.pop();
     }
@@ -276,17 +276,5 @@ public class QLOrderTest {
         assertNotNull(entry.getAmount());
 
         return entry;
-    }
-
-    public static void assertErrorMessageEquals(String expected, Result result) {
-        try {
-            JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
-            assertNotNull(node);
-            assertNotNull(node.get(0));
-            assertNotNull(node.get(0).get("message"));
-            assertEquals(String.format("\"%s\"", expected), node.get(0).get("message").toString());
-        } catch (IOException e) {
-            fail();
-        }
     }
 }

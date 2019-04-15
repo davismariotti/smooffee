@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
+import static io.ebean.Expr.*;
+
 @Entity
 @Table(name = "organization")
 public class Organization extends BaseModel {
@@ -59,6 +61,20 @@ public class Organization extends BaseModel {
         public OrganizationFinder() {
             super(Organization.class);
         }
+    }
+
+    public static int currentQueueSize(Long organizationId, Long deliveryPeriodId) {
+
+        return Order.find.query().where()
+                .and()
+                    .eq("user.organization.id", organizationId)
+                    .eq("deliveryPeriod.id", deliveryPeriodId)
+                    .or()
+                        .eq("status", BaseModel.ACTIVE)
+                        .eq("status", BaseModel.IN_PROGRESS)
+                    .endOr()
+                .endAnd()
+                .findCount();
     }
 
     public static Query<Organization> findWithParamters(QLFinder finder) {

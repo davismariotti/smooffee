@@ -25,6 +25,7 @@ public class Setup {
         defaultDeliveryPeriod = new DeliveryPeriod()
                 .setOrganization(defaultOrganization)
                 .setClassPeriod(1)
+                .setMaxQueueSize(0)
                 .store();
     }
 

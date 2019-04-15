@@ -45,6 +45,7 @@ class EditDeliveryPeriodModal extends Component {
     const submit = values => {
       const deliveryPeriodInput = {
         classPeriod: values.classPeriod,
+        maxQueueSize: values.maxQueueSize,
         monday: values.monday,
         tuesday: values.tuesday,
         wednesday: values.wednesday,

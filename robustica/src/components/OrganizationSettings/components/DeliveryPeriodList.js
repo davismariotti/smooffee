@@ -7,7 +7,7 @@ import { graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import * as PropTypes from 'prop-types'
 
-import { AlignCenter, AlignRight } from '../../styles/core'
+import { AlignCenter } from '../../styles/core'
 import OrganizationSettingsActions from '../actions'
 import { ORGANIZATION_ID } from '../../../constants'
 import AreYouSureModal from '../../util/AreYouSureModal'
@@ -95,6 +95,7 @@ class DeliveryPeriodList extends Component {
                   {daysOfTheWeek.map(day => {
                     return <TableCell align="right">{day}</TableCell>
                   })}
+                  <TableCell align="right">Max Queue Size</TableCell>
                   <TableCell align="right">Available?</TableCell>
                   <TableCell align="right">Options</TableCell>
                 </TableRow>
@@ -121,17 +122,18 @@ class DeliveryPeriodList extends Component {
                           return <TableCell align="right"
                                             className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
-                        <TableCell>
-                          <AlignRight>
-                            <Checkbox checked={deliveryPeriodItem.status === 1} onChange={() => {
-                              editDeliveryPeriodStatusMutate({
-                                variables: {
-                                  deliveryPeriodId: deliveryPeriodItem.id,
-                                  status: deliveryPeriodItem.status === 1 ? -3 : 1
-                                }
-                              }).then(listDeliveryPeriodsQueryResult.refetch)
-                            }}/>
-                          </AlignRight>
+                        <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>
+                          {deliveryPeriodItem.maxQueueSize === 0 ? 'Unlimited' : deliveryPeriodItem.maxQueueSize}
+                        </TableCell>
+                        <TableCell align="right">
+                          <Checkbox checked={deliveryPeriodItem.status === 1} onChange={() => {
+                            editDeliveryPeriodStatusMutate({
+                              variables: {
+                                deliveryPeriodId: deliveryPeriodItem.id,
+                                status: deliveryPeriodItem.status === 1 ? -3 : 1
+                              }
+                            }).then(listDeliveryPeriodsQueryResult.refetch)
+                          }}/>
                         </TableCell>
                         <TableCell align="right">
                           <Button onClick={(e) => {
