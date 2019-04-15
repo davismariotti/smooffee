@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Checkbox, TableBody, Typography, Table, TableCell, TableHead, TableRow, Paper, Menu, MenuItem, Button } from '@material-ui/core'
+import { Button, Checkbox, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withStyles } from '@material-ui/core/styles'
 import MoreVert from '@material-ui/icons/Menu'
@@ -42,7 +42,8 @@ const mapDispatchToProps = (dispatch) => {
 
 class DeliveryPeriodList extends Component {
   render() {
-    const {classes,
+    const {
+      classes,
       openCreateDeliveryPeriodModal,
       openDeliveryPeriodMenu,
       closeDeliveryPeriodMenu,
@@ -117,7 +118,8 @@ class DeliveryPeriodList extends Component {
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell align="right"
+                                            className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
                         <TableCell>
                           <AlignRight>

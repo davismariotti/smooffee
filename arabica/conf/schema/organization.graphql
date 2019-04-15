@@ -7,7 +7,6 @@ type OrganizationEntry {
 
 input OrganizationInput {
     name: String
-    status: Int
 }
 
 type OrganizationQuery {
@@ -18,4 +17,5 @@ type OrganizationQuery {
 type OrganizationMutation {
     create(input: OrganizationInput!): OrganizationEntry!
     update(organizationId: Long!, organizationInput: OrganizationInput!): OrganizationEntry!
+    updateStatus(organizationId: Long!, status: Int!): OrganizationEntry!
 }

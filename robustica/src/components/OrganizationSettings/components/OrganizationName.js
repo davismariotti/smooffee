@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Paper } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import { Button as ReactStrapButton } from 'reactstrap'
 import { compose } from 'redux'
 import { graphql } from 'react-apollo'

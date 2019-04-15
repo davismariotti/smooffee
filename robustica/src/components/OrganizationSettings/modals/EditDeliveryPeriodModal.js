@@ -99,7 +99,8 @@ EditDeliveryPeriodModal.propTypes = {
 
 EditDeliveryPeriodModal.defaultProps = {
   currentDeliveryPeriod: null,
-  onSubmit: () => {}
+  onSubmit: () => {
+  }
 }
 
 const mapStateToProps = ({organizationSettings}) => {

@@ -79,6 +79,16 @@ public class QLUser {
             return (user == null) ? null : new UserEntry(user);
         }
 
+        public UserEntry updateStatus(String userId, Integer status) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.OTHER_USER_INFO_WRITE, new AuthorizationContext(user));
+
+            user.setStatus(status).store();
+
+            return new UserEntry(user);
+        }
+
         public UserEntry updateRole(String userId, String role) {
             User user = User.findByFirebaseUid(userId);
             if (user == null) throw new QLException("User not found.");
@@ -107,7 +117,6 @@ public class QLUser {
         String firstName;
         String lastName;
         String email;
-        Integer status;
 
         public String getFirstName() {
             return firstName;
@@ -131,14 +140,6 @@ public class QLUser {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public Integer getStatus() {
-            return status;
-        }
-
-        public void setStatus(Integer status) {
-            this.status = status;
         }
     }
 

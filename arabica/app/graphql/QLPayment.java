@@ -51,6 +51,17 @@ public class QLPayment {
             }
         }
 
+        public PaymentEntry updateStatus(Long paymentId, Integer status) {
+            Payment payment = Payment.find.byId(paymentId);
+            if (payment == null) throw new QLException("Payment not found.");
+
+            Permission.check(Permission.OTHER_USER_PAYMENT_WRITE, new AuthorizationContext(payment.getUser()));
+
+            payment.setStatus(status).store();
+
+            return new PaymentEntry(payment);
+        }
+
         public PaymentEntry refundPayment(Long paymentId) {
             Payment payment = Payment.find.byId(paymentId);
             if (payment == null) throw new QLException("Payment not found.");
@@ -61,7 +72,7 @@ public class QLPayment {
         }
     }
 
-    public static class PaymentInput extends QLInput {
+    public static class PaymentInput {
         private String type;
         private Integer amount;
         private String stripeCardId;

@@ -3,7 +3,6 @@ input PaymentInput {
     amount: Int
     stripeCardId: String
     stripeToken: String
-    status: Int
 }
 
 type PaymentEntry {
@@ -22,5 +21,6 @@ type PaymentQuery {
 
 type PaymentMutation {
     create(userId: String!, paymentInput: PaymentInput!): PaymentEntry!
+    updateStatus(paymentId: Long!, status: Int!): PaymentEntry!
     refundPayment(paymentId: Long!): PaymentEntry!
 }

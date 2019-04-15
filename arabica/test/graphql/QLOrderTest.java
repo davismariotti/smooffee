@@ -41,7 +41,6 @@ public class QLOrderTest {
         QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice());
 
         QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
@@ -79,7 +78,6 @@ public class QLOrderTest {
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
@@ -124,7 +122,6 @@ public class QLOrderTest {
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         createOrder(orderInput);
@@ -158,7 +155,6 @@ public class QLOrderTest {
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         QLOrder.OrderEntry entry = createOrder(Setup.defaultCustomer.getFirebaseUserId(), orderInput);
@@ -178,7 +174,6 @@ public class QLOrderTest {
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         QLOrder.OrderEntry entry = createOrder(Setup.defaultCustomer.getFirebaseUserId(), orderInput);
@@ -205,7 +200,6 @@ public class QLOrderTest {
     public void refundOrder() {
         QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice());
         QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
-        orderInput.setStatus(BaseModel.ACTIVE);
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");

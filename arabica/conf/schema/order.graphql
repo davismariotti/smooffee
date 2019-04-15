@@ -3,7 +3,6 @@ input OrderInput {
     notes: String
     productId: Long
     recipient: String
-    status: Int
     deliveryPeriodId: Long
 }
 
