@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Modal from '@material-ui/core/Modal'
 import * as PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import { Button, Typography, MenuItem } from '@material-ui/core'
+import { Button, MenuItem, Typography } from '@material-ui/core'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { Field, propTypes, reduxForm } from 'redux-form'
@@ -14,6 +14,7 @@ import { listProductsQuery } from '../../../graphql/productQueries'
 import HomeActions from '../actions'
 import { CenterDiv } from '../../styles/core'
 import { StyledFormRow } from '../../styles/forms'
+import { listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
 
 const styles = theme => ({
   paper: {
@@ -28,7 +29,16 @@ const styles = theme => ({
 
 class CreateOrderModal extends Component {
   render() {
-    const {classes, open, listProductsQueryResult, closeModal, createOrderMutate, handleSubmit, refetch} = this.props
+    const {
+      classes,
+      open,
+      listProductsQueryResult,
+      listDeliveryPeriodsQueryResult,
+      closeModal,
+      createOrderMutate,
+      handleSubmit,
+      refetch
+    } = this.props
 
     const submit = values => {
       const orderInput = {
@@ -36,7 +46,7 @@ class CreateOrderModal extends Component {
         notes: values.notes,
         productId: values.product,
         recipient: values.recipient,
-        deliveryPeriodId: 0 // TODO
+        deliveryPeriodId: values.deliveryPeriod
       }
       createOrderMutate({
         variables: {
@@ -72,6 +82,15 @@ class CreateOrderModal extends Component {
                 </Field>
               </StyledFormRow>
               <StyledFormRow>
+                <Field fullWidth name="deliveryPeriod" component={Select} label="Delivery Period">
+                  {
+                    listDeliveryPeriodsQueryResult.deliveryPeriod.list.map(deliveryPeriodItem => {
+                      return <MenuItem key={deliveryPeriodItem.id} value={deliveryPeriodItem.id}>{`${deliveryPeriodItem.classPeriod} - ${deliveryPeriodItem.monday}`}</MenuItem>
+                    })
+                  }
+                </Field>
+              </StyledFormRow>
+              <StyledFormRow>
                 <Field fullWidth required name="recipient" component={TextField} label="Recipient"/>
               </StyledFormRow>
               <StyledFormRow>
@@ -93,15 +112,16 @@ CreateOrderModal.propTypes = {
   ...propTypes,
   open: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired,
-  listProductsQueryResult: PropTypes.object,
+  listProductsQueryResult: PropTypes.object.isRequired,
+  listDeliveryPeriodsQueryResult: PropTypes.object.isRequired,
   createOrderMutate: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   refetch: PropTypes.func
 }
 
 CreateOrderModal.defaultProps = {
-  listProductsQueryResult: {},
-  refetch: () => {}
+  refetch: () => {
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -115,16 +135,34 @@ export default compose(
   withStyles(styles),
   graphql(listProductsQuery, {
     name: 'listProductsQueryResult',
-    options: () => {
-      return {
-        variables: {
-          organizationId: localStorage.getItem(ORGANIZATION_ID), // TODO use as props?
-          parameters: {
-            filter: {
-              eq: {
-                field: 'status',
-                value: '1'
-              }
+    options: {
+      variables: {
+        organizationId: localStorage.getItem(ORGANIZATION_ID), // TODO use as props?
+        parameters: {
+          filter: {
+            eq: {
+              field: 'status',
+              value: '1'
+            }
+          }
+        }
+      }
+    }
+  }),
+  graphql(listDeliveryPeriodsQuery, {
+    name: 'listDeliveryPeriodsQueryResult',
+    options: {
+      variables: {
+        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        parameters: {
+          order: [
+            'classPeriod',
+            'asc'
+          ],
+          filter: {
+            eq: {
+              field: 'status',
+              value: '1'
             }
           }
         }

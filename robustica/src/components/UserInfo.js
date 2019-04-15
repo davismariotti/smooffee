@@ -35,11 +35,9 @@ UserInfo.defaultProps = {
 
 export default compose(
   graphql(readUserQuery, {
-    options: () => {
-      return {
-        variables: {
-          userId: localStorage.getItem(USER_ID)
-        }
+    options: {
+      variables: {
+        userId: localStorage.getItem(USER_ID)
       }
     }
   })

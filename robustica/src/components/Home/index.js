@@ -83,16 +83,14 @@ export default compose(
   withStyles(styles),
   graphql(listOrdersQuery, {
     name: 'listOrdersQueryResult',
-    options: () => {
-      return {
-        variables: {
-          organizationId: localStorage.getItem(ORGANIZATION_ID),
-          parameters: {
-            filter: {
-              include: {
-                field: 'status',
-                values: ['1', '2']
-              }
+    options: {
+      variables: {
+        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        parameters: {
+          filter: {
+            include: {
+              field: 'status',
+              values: ['1', '2']
             }
           }
         }
