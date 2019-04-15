@@ -32,14 +32,9 @@ class OrganizationDetailsForm extends React.Component {
             </StyledFormRowItem>
           </StyledFormRow>
           <br />
-          <Typography variant="subheading">
+          <Typography variant="h5">
             Other settings
           </Typography>
-          <StyledFormRow>
-            <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="max_orders" component={TextField} label="Maximum orders per delivery period"/>
-            </StyledFormRowItem>
-          </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
               <Button fullWidth type="submit" variant="contained">

@@ -6,13 +6,12 @@ import models.Organization;
 
 public class DeliveryPeriodActions {
 
-    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod, String monday, String tuesday, String wednesday, String thursday, String friday) {
+    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod, Integer maxQueueSize, String monday, String tuesday, String wednesday, String thursday, String friday) {
         if (organization == null || classPeriod == null) return null;
-
-
 
         return new DeliveryPeriod()
                 .setClassPeriod(classPeriod)
+                .setMaxQueueSize(maxQueueSize)
                 .setOrganization(organization)
                 .setMonday(monday == null       || monday.equals("")    ? null : monday)
                 .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
@@ -23,10 +22,11 @@ public class DeliveryPeriodActions {
                 .store();
     }
 
-    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, String monday, String tuesday, String wednesday, String thursday, String friday) {
+    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, Integer maxQueueSize,String monday, String tuesday, String wednesday, String thursday, String friday) {
         if (deliveryPeriod == null || classPeriod == null) return null;
 
         return deliveryPeriod.setClassPeriod(classPeriod)
+                .setMaxQueueSize(maxQueueSize)
                 .setMonday(monday == null       || monday.equals("")    ? null : monday)
                 .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
                 .setWednesday(wednesday == null || wednesday.equals("") ? null : wednesday)

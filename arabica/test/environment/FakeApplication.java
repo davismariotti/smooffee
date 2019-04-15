@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class FakeApplication {
@@ -94,6 +95,18 @@ public class FakeApplication {
         } catch (IOException e) {
             e.printStackTrace();
             throw new QLException(e);
+        }
+    }
+
+    public static void assertErrorMessageEquals(String expected, Result result) {
+        try {
+            JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
+            assertNotNull(node);
+            assertNotNull(node.get(0));
+            assertNotNull(node.get(0).get("message"));
+            assertEquals(String.format("\"%s\"", expected), node.get(0).get("message").toString());
+        } catch (IOException e) {
+            fail();
         }
     }
 }

@@ -7,6 +7,7 @@ query ListDeliveryPeriod($organizationId: Long!, $parameters: QLFinder) {
       id
       status
       classPeriod
+      maxQueueSize
       monday
       tuesday
       wednesday

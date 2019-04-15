@@ -47,6 +47,7 @@ public class QLDeliveryPeriod {
             return new DeliveryPeriodEntry(DeliveryPeriodActions.createDeliveryPeriod(
                     organization,
                     deliveryPeriodInput.getClassPeriod(),
+                    deliveryPeriodInput.getMaxQueueSize(),
                     deliveryPeriodInput.getMonday(),
                     deliveryPeriodInput.getTuesday(),
                     deliveryPeriodInput.getWednesday(),
@@ -64,6 +65,7 @@ public class QLDeliveryPeriod {
             return new DeliveryPeriodEntry(DeliveryPeriodActions.updateDeliveryPeriod(
                     deliveryPeriod,
                     deliveryPeriodInput.getClassPeriod(),
+                    deliveryPeriodInput.getMaxQueueSize(),
                     deliveryPeriodInput.getMonday(),
                     deliveryPeriodInput.getTuesday(),
                     deliveryPeriodInput.getWednesday(),
@@ -85,6 +87,7 @@ public class QLDeliveryPeriod {
 
     public static class DeliveryPeriodInput {
         private Integer classPeriod;
+        private Integer maxQueueSize;
         private String monday;
         private String tuesday;
         private String wednesday;
@@ -97,6 +100,14 @@ public class QLDeliveryPeriod {
 
         public void setClassPeriod(Integer classPeriod) {
             this.classPeriod = classPeriod;
+        }
+
+        public Integer getMaxQueueSize() {
+            return maxQueueSize;
+        }
+
+        public void setMaxQueueSize(Integer maxQueueSize) {
+            this.maxQueueSize = maxQueueSize;
         }
 
         public String getMonday() {
@@ -142,6 +153,7 @@ public class QLDeliveryPeriod {
 
     public static class DeliveryPeriodEntry extends QLEntry {
         private Integer classPeriod;
+        private Integer maxQueueSize;
 
         private String monday;
         private String tuesday;
@@ -151,18 +163,22 @@ public class QLDeliveryPeriod {
 
         public DeliveryPeriodEntry(DeliveryPeriod deliveryPeriod) {
             super(deliveryPeriod);
-            this.classPeriod = deliveryPeriod.getClassPeriod();
-            this.monday = deliveryPeriod.getMonday();
-            this.tuesday = deliveryPeriod.getTuesday();
-            this.wednesday = deliveryPeriod.getWednesday();
-            this.thursday = deliveryPeriod.getThursday();
-            this.friday = deliveryPeriod.getFriday();
+            this.classPeriod    = deliveryPeriod.getClassPeriod();
+            this.maxQueueSize   = deliveryPeriod.getMaxQueueSize();
+            this.monday         = deliveryPeriod.getMonday();
+            this.tuesday        = deliveryPeriod.getTuesday();
+            this.wednesday      = deliveryPeriod.getWednesday();
+            this.thursday       = deliveryPeriod.getThursday();
+            this.friday         = deliveryPeriod.getFriday();
         }
 
         public Integer getClassPeriod() {
             return classPeriod;
         }
 
+        public Integer getMaxQueueSize() {
+            return maxQueueSize;
+        }
 
         public String getMonday() {
             return monday;

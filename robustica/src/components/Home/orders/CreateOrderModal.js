@@ -59,10 +59,10 @@ class CreateOrderModal extends Component {
       })
     }
 
-    if (listProductsQueryResult.loading) return (
+    if (listProductsQueryResult.loading || listDeliveryPeriodsQueryResult.loading) return (
       <CenterDiv>Loading...</CenterDiv>
     )
-    if (listProductsQueryResult.error) return (
+    if (listProductsQueryResult.error || listDeliveryPeriodsQueryResult.error) return (
       <CenterDiv>Error</CenterDiv>
     )
 

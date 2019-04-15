@@ -113,7 +113,7 @@ public class GraphQLController extends Controller {
             result.put("errors", executionResult.getErrors().stream().map(item -> {
                 String errors = gson.toJson(item);
                 Map<String,Object> map = gson.fromJson(errors, Map.class);
-                if (((ExceptionWhileDataFetching) item).getException() instanceof QLException) {
+                if (item instanceof ExceptionWhileDataFetching && ((ExceptionWhileDataFetching) item).getException() instanceof QLException) {
                     map.put("code", ((QLException)((ExceptionWhileDataFetching) item).getException()).getCode());
                 }
                 try {

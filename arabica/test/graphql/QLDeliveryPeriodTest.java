@@ -22,7 +22,8 @@ public class QLDeliveryPeriodTest {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
-        QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriodEntry = createDeliveryPeriod(1, "monday", "tuesday", "wednesday", "thursday", "friday");
+        Setup.createDefaultProduct();
+        QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriodEntry = createDeliveryPeriod(1, 0, "monday", "tuesday", "wednesday", "thursday", "friday");
         deliveryPeriodId = deliveryPeriodEntry.getId();
     }
 
@@ -66,10 +67,11 @@ public class QLDeliveryPeriodTest {
 
     @Test
     public void updateDeliveryPeriodTest() {
-        QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(4, "monday", "tuesday", "wednesday", "thursday", "friday");
+        QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(4, 0, "monday", "tuesday", "wednesday", "thursday", "friday");
 
         QLDeliveryPeriod.DeliveryPeriodInput input = new QLDeliveryPeriod.DeliveryPeriodInput();
         input.setClassPeriod(3);
+        input.setMaxQueueSize(5);
         input.setMonday("");
         input.setTuesday(createEntry.getTuesday());
         input.setWednesday(createEntry.getWednesday());
@@ -77,7 +79,7 @@ public class QLDeliveryPeriodTest {
         input.setFriday(createEntry.getFriday());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { deliveryPeriod { update(deliveryPeriodId: %d, deliveryPeriodInput: %s) { id classPeriod status monday tuesday wednesday thursday friday } } }",
+                "mutation { deliveryPeriod { update(deliveryPeriodId: %d, deliveryPeriodInput: %s) { id classPeriod maxQueueSize status monday tuesday wednesday thursday friday } } }",
                 createEntry.getId(),
                 QL.prepare(input)
         ));
@@ -88,6 +90,7 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry);
         assertEquals(createEntry.getId(), entry.getId());
         assertEquals(3, entry.getClassPeriod().intValue());
+        assertEquals(5, entry.getMaxQueueSize().intValue());
         assertNull(entry.getMonday());
         assertNotNull(entry.getTuesday());
     }
@@ -111,13 +114,41 @@ public class QLDeliveryPeriodTest {
         assertEquals(BaseModel.DELETED, entry.getStatus().intValue());
     }
 
-    public static QLDeliveryPeriod.DeliveryPeriodEntry createDeliveryPeriod(int classPeriod) {
-        return createDeliveryPeriod(classPeriod, null, null, null, null, null);
+    @Test
+    public void maxQueueSizeTest() {
+        QLPaymentTest.createPaymentCash(Setup.defaultProduct.getPrice() * 5);
+
+        QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(4, 3, "monday", "tuesday", "wednesday", "thursday", "friday");
+
+        QLOrder.OrderInput orderInput = new QLOrder.OrderInput();
+        orderInput.setDeliveryPeriodId(createEntry.getId());
+        orderInput.setRecipient("recipient");
+        orderInput.setProductId(Setup.defaultProduct.getId());
+        orderInput.setLocation("location");
+        orderInput.setNotes("notes");
+
+        // Create two orders
+        for (int i = 0; i < 3; i++) {
+            QLOrderTest.createOrder(orderInput);
+        }
+
+        Result result = FakeApplication.routeGraphQLRequest(
+                "mutation { order { create(userId: %s, orderInput: %s) { id } } }",
+                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(orderInput)
+        );
+
+        FakeApplication.assertErrorMessageEquals("Exception while fetching data (/order/create) : Max queue size reached", result);
     }
 
-    public static QLDeliveryPeriod.DeliveryPeriodEntry createDeliveryPeriod(int classPeriod, String monday, String tuesday, String wednesday, String thursday, String friday) {
+    public static QLDeliveryPeriod.DeliveryPeriodEntry createDeliveryPeriod(int classPeriod) {
+        return createDeliveryPeriod(classPeriod, 0, null, null, null, null, null);
+    }
+
+    public static QLDeliveryPeriod.DeliveryPeriodEntry createDeliveryPeriod(int classPeriod, int maxQueueSize, String monday, String tuesday, String wednesday, String thursday, String friday) {
         QLDeliveryPeriod.DeliveryPeriodInput input = new QLDeliveryPeriod.DeliveryPeriodInput();
         input.setClassPeriod(classPeriod);
+        input.setMaxQueueSize(maxQueueSize);
         input.setMonday(monday);
         input.setTuesday(tuesday);
         input.setWednesday(wednesday);
@@ -125,7 +156,7 @@ public class QLDeliveryPeriodTest {
         input.setFriday(friday);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { deliveryPeriod { create(organizationId: %s, deliveryPeriodInput: %s) { id classPeriod status monday tuesday wednesday thursday friday } } }",
+                "mutation { deliveryPeriod { create(organizationId: %s, deliveryPeriodInput: %s) { id classPeriod maxQueueSize status monday tuesday wednesday thursday friday } } }",
                 QL.prepare(Setup.defaultOrganization.getId()),
                 QL.prepare(input)
         ));
@@ -135,6 +166,7 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry);
         assertNotNull(entry.getId());
         assertEquals(classPeriod, entry.getClassPeriod().intValue());
+        assertEquals(maxQueueSize, entry.getMaxQueueSize().intValue());
         assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
         assertEquals(monday, entry.getMonday());
         assertEquals(tuesday, entry.getTuesday());
