@@ -96,7 +96,8 @@ EditProductModal.propTypes = {
 
 EditProductModal.defaultProps = {
   currentProduct: null,
-  onSubmit: () => {}
+  onSubmit: () => {
+  }
 }
 
 const mapStateToProps = ({organizationSettings}) => {

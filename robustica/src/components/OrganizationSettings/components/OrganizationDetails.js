@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Paper } from '@material-ui/core'
-import { Button as ReactStrapButton } from 'reactstrap'
+import { Paper, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { graphql } from 'react-apollo'
 import * as PropTypes from 'prop-types'
@@ -10,8 +9,6 @@ import { withStyles } from '@material-ui/core/styles'
 import { AlignCenter } from '../../styles/core'
 import { organizationReadQuery } from '../../../graphql/organizationQueries'
 import { ORGANIZATION_ID } from '../../../constants'
-import OrganizationSettingsActions from '../actions'
-import EditOrganizationModal from '../modals/EditOrganizationModal'
 import OrganizationDetailsForm from '../forms/OrganizationDetailsForm'
 
 const styles = {
@@ -27,12 +24,6 @@ const styles = {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // openEditOrganizationModal: (organization) => dispatch(OrganizationSettingsActions.openEditOrganizationModal(organization))
-  }
-}
-
 class OrganizationDetails extends Component {
 
   render() {
@@ -44,7 +35,7 @@ class OrganizationDetails extends Component {
             <Typography style={{margin: '10px'}} variant="h5" component="h3">
               Details
             </Typography>
-            <br />
+            <br/>
             <OrganizationDetailsForm/>
           </AlignCenter>
         </Paper>
@@ -77,6 +68,6 @@ export default compose(
       }
     }
   }),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps)
 )
 (OrganizationDetails)

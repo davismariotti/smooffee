@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Checkbox, TableBody, Typography, Table, TableCell, TableHead, TableRow, Paper, Menu, MenuItem, Button } from '@material-ui/core'
+import { Button, Checkbox, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import { withStyles } from '@material-ui/core/styles'
 import MoreVert from '@material-ui/icons/Menu'

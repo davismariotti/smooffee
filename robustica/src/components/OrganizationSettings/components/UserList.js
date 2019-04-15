@@ -47,7 +47,7 @@ class UserList extends Component {
         <TableBody>
           {listUsersQueryResult.user.list.map(userItem => {
             return (
-              <TableRow key={userItem.id} >
+              <TableRow key={userItem.id}>
                 <TableCell align="left">{userItem.firstName}</TableCell>
                 <TableCell align="left">{userItem.lastName}</TableCell>
                 <TableCell align="right">{`$${(userItem.balance / 100).toFixed(2)}`}</TableCell>

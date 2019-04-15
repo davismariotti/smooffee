@@ -70,7 +70,8 @@ AddFundsModal.propTypes = {
 }
 
 AddFundsModal.defaultProps = {
-  onSubmit: () => {},
+  onSubmit: () => {
+  },
   addMoreFunds: null
 }
 
