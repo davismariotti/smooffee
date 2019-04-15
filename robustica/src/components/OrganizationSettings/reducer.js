@@ -6,7 +6,12 @@ const initialState = Immutable({
   editProduct: false,
   editProductObject: null,
   productMenu: null,
-  userMenu:  null,
+
+  createDeliveryPeriodModalOpen: false,
+  editDeliveryPeriod: false,
+  editDeliveryPeriodObject: null,
+  deliveryPeriodMenu: null,
+  userMenu: null,
   areYouSure: null,
   editOrganization: null,
   addMoreFunds: null
@@ -55,7 +60,8 @@ export default {
           return {
             ...state,
             areYouSure: action.payload,
-            productMenu: null
+            productMenu: null,
+            deliveryPeriodMenu: null
           }
         case OrganizationSettingsActions.CLOSE_ARE_YOU_SURE_MODAL:
           return {
@@ -95,6 +101,41 @@ export default {
           return {
             ...state,
             addMoreFunds: null
+          }
+
+        case OrganizationSettingsActions.OPEN_DELIVERY_PERIOD_MENU:
+          return {
+            ...state,
+            deliveryPeriodMenu: {...action.payload}
+          }
+        case OrganizationSettingsActions.CLOSE_DELIVERY_PERIOD_MENU:
+          return {
+            ...state,
+            deliveryPeriodMenu: null
+          }
+        case OrganizationSettingsActions.OPEN_CREATE_DELIVERY_PERIOD_MODAL:
+          return {
+            ...state,
+            createDeliveryPeriodModalOpen: true,
+            editDeliveryPeriod: false,
+            editDeliveryPeriodObject: null,
+            deliveryPeriodMenu: null,
+          }
+        case OrganizationSettingsActions.CLOSE_CREATE_DELIVERY_PERIOD_MODAL:
+          return {
+            ...state,
+            createDeliveryPeriodModalOpen: false,
+            editDeliveryPeriod: false,
+            editDeliveryPeriodObject: null,
+            deliveryPeriodMenu: null,
+          }
+        case OrganizationSettingsActions.OPEN_EDIT_DELIVERY_PERIOD_MODAL:
+          return {
+            ...state,
+            createDeliveryPeriodModalOpen: true,
+            editDeliveryPeriod: true,
+            editDeliveryPeriodObject: action.payload,
+            deliveryPeriodMenu: null,
           }
         default:
           return {

@@ -6,21 +6,32 @@ import models.Organization;
 
 public class DeliveryPeriodActions {
 
-    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod) {
+    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod, String monday, String tuesday,
+                                                      String wednesday, String thursday, String friday) {
         if (organization == null || classPeriod == null) return null;
 
         return new DeliveryPeriod()
                 .setClassPeriod(classPeriod)
                 .setOrganization(organization)
+                .setMonday(monday)
+                .setTuesday(tuesday)
+                .setWednesday(wednesday)
+                .setThursday(thursday)
+                .setFriday(friday)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
     }
 
-    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, Integer status) {
-        if (deliveryPeriod == null || classPeriod == null || status == null) return null;
+    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, String monday, String tuesday,
+                                                      String wednesday, String thursday, String friday) {
+        if (deliveryPeriod == null || classPeriod == null) return null;
 
         return deliveryPeriod.setClassPeriod(classPeriod)
-                .setStatus(status)
+                .setMonday(monday)
+                .setTuesday(tuesday)
+                .setWednesday(wednesday)
+                .setThursday(thursday)
+                .setFriday(friday)
                 .store();
     }
 

@@ -66,7 +66,7 @@ AddFundsModal.propTypes = {
   onSubmit: PropTypes.func,
   addMoreFunds: PropTypes.object,
   closeAddFundsModal: PropTypes.func.isRequired,
-  addCashFundsMutate: PropTypes.object.isRequired
+  addCashFundsMutate: PropTypes.func.isRequired
 }
 
 AddFundsModal.defaultProps = {
