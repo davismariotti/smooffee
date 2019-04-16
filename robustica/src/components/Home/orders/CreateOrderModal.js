@@ -15,6 +15,7 @@ import HomeActions from '../actions'
 import { CenterDiv } from '../../styles/core'
 import { StyledFormRow } from '../../styles/forms'
 import { listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
+import { validateIsRequired } from '../../../utils/formUtils'
 
 const styles = theme => ({
   paper: {
@@ -73,7 +74,7 @@ class CreateOrderModal extends Component {
             <Typography variant="headline">Create Order</Typography>
             <form onSubmit={handleSubmit(submit)}>
               <StyledFormRow>
-                <Field fullWidth name="product" component={Select} label="Product">
+                <Field fullWidth name="product" component={Select} validate={validateIsRequired} label="Product">
                   {
                     listProductsQueryResult.product.list.map(productItem => {
                       return <MenuItem key={productItem.id} value={productItem.id}>{productItem.name}</MenuItem>
@@ -82,7 +83,7 @@ class CreateOrderModal extends Component {
                 </Field>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth name="deliveryPeriod" component={Select} label="Delivery Period">
+                <Field fullWidth name="deliveryPeriod" component={Select} validate={validateIsRequired} label="Delivery Period">
                   {
                     listDeliveryPeriodsQueryResult.deliveryPeriod.list.map(deliveryPeriodItem => {
                       return <MenuItem key={deliveryPeriodItem.id} value={deliveryPeriodItem.id}>{`${deliveryPeriodItem.classPeriod} - ${deliveryPeriodItem.monday}`}</MenuItem>
@@ -91,10 +92,10 @@ class CreateOrderModal extends Component {
                 </Field>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth required name="recipient" component={TextField} label="Recipient"/>
+                <Field fullWidth name="recipient" component={TextField} validate={validateIsRequired} label="Recipient"/>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth required name="location" component={TextField} label="Location"/>
+                <Field fullWidth name="location" component={TextField} validate={validateIsRequired} label="Location"/>
               </StyledFormRow>
               <StyledFormRow>
                 <Field fullWidth name="notes" component={TextField} label="Notes"/>

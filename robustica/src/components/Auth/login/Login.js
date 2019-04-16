@@ -12,6 +12,7 @@ import '../../../css/index.css'
 import AuthMiddleware from '../AuthMiddleware'
 import { AlignCenter, MainCenterDiv } from '../../styles/core'
 import { StyledFormRow } from '../../styles/forms'
+import { validateIsRequired } from '../../../utils/formUtils'
 
 class Login extends Component {
   render() {
@@ -33,10 +34,10 @@ class Login extends Component {
             </AlignCenter>
             <form onSubmit={handleSubmit(submit)}>
               <StyledFormRow>
-                <Field fullWidth name="email" type="email" autoComplete="email" component={TextField} label="Email"/>
+                <Field fullWidth name="email" type="email" autoComplete="email" component={TextField} validate={validateIsRequired} label="Email"/>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth name="password" type="password" component={TextField} label="Password"/>
+                <Field fullWidth name="password" type="password" component={TextField} validate={validateIsRequired} label="Password"/>
               </StyledFormRow>
               <StyledFormRow>
                 <Button type="submit" fullWidth variant="contained" style={{marginTop: '20px'}}>Submit</Button>
