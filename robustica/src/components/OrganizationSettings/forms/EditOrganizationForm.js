@@ -5,6 +5,7 @@ import { TextField } from 'redux-form-material-ui'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
+import { validateIsRequired } from '../../../utils/formUtils'
 
 class EditOrganizationForm extends Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class EditOrganizationForm extends Component {
           </Typography>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field fullWidth name="name" component={TextField} label="Name"/>
+              <Field fullWidth name="name" component={TextField} validate={validateIsRequired} label="Name"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>

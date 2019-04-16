@@ -6,6 +6,7 @@ import { TextField } from 'redux-form-material-ui'
 import { connect } from 'react-redux'
 
 import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
+import { validateStripeTokenPk, validateStripeTokenSk } from '../../../utils/formUtils'
 
 class OrganizationDetailsForm extends React.Component {
   componentDidMount() {
@@ -25,10 +26,10 @@ class OrganizationDetailsForm extends React.Component {
           </Typography>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} name="stripe_pk" component={TextField} label="Publishable API Key"/>
+              <Field style={{width: '300px'}} name="stripe_pk" component={TextField} validate={validateStripeTokenPk} label="Publishable API Key"/>
             </StyledFormRowItem>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="stripe_sk" component={TextField} label="Secret API Key"/>
+              <Field style={{width: '300px'}} fullWidth name="stripe_sk" component={TextField} validate={validateStripeTokenSk} label="Secret API Key"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <br />

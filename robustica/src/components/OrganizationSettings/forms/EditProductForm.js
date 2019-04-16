@@ -6,7 +6,7 @@ import { compose } from 'redux'
 import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
 import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
-import { currencyMask } from '../../../utils/formUtils'
+import { currencyMask, validateIsRequired } from '../../../utils/formUtils'
 
 class EditProductForm extends React.Component {
   componentDidMount() {
@@ -23,17 +23,17 @@ class EditProductForm extends React.Component {
           </Typography>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field fullWidth name="name" component={TextField} label="Name"/>
+              <Field fullWidth name="name" component={TextField} validate={validateIsRequired} label="Name"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field fullWidth name="description" component={TextField} label="Description"/>
+              <Field fullWidth name="description" component={TextField} validate={validateIsRequired} label="Description"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field fullWidth name="price" component={TextField} {...currencyMask} label="Price"/>
+              <Field fullWidth name="price" component={TextField} {...currencyMask} validate={validateIsRequired} label="Price"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
