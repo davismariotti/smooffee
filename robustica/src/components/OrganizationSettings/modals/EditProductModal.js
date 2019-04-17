@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { createProductMutation, editProductMutation } from '../../../graphql/productQueries'
 import OrganizationSettingsActions from '../actions'
 import EditProductForm from '../forms/EditProductForm'
-import { ORGANIZATION_ID } from '../../../constants'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = theme => ({
   paper: {
@@ -62,7 +62,7 @@ class EditProductModal extends Component {
         createProductMutate({
           variables: {
             productInput: values,
-            organizationId: localStorage.getItem(ORGANIZATION_ID)
+            organizationId: StorageService.getOrganizationId()
           }
         }).then(() => {
           closeCreateProductModal()

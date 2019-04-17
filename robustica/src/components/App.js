@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import { AUTH_TOKEN, USER_ID } from '../constants'
 import Home from './Home'
 import SignupContinued from './auth/signup/SignupContinued'
 import Login from './auth/login/Login'
@@ -12,6 +11,7 @@ import Navbar from './Navbar/Navbar'
 import OrganizationSettings from './organizationsettings'
 import { ProtectedRoute } from '../utils/routeUtils'
 import { ADMIN, EMPLOYEE, SUPERVISOR } from '../utils/role'
+import { StorageService } from '../services/StorageService'
 
 class App extends Component {
 
@@ -19,8 +19,8 @@ class App extends Component {
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
         user.getToken().then(result => {
-          localStorage.setItem(AUTH_TOKEN, result)
-          localStorage.setItem(USER_ID, user.uid)
+          StorageService.setAuthToken(result)
+          StorageService.setUserId(user.uid)
         })
       }
     })

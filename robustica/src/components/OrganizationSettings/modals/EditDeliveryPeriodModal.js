@@ -5,9 +5,9 @@ import { withStyles } from '@material-ui/core/styles'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import OrganizationSettingsActions from '../actions'
-import { ORGANIZATION_ID } from '../../../constants'
 import DeliveryPeriodForm from '../forms/DeliveryPeriodForm'
 import { createDeliveryPeriodMutation, editDeliveryPeriodMutation } from '../../../graphql/deliveryPeriodQueries'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = theme => ({
   paper: {
@@ -66,7 +66,7 @@ class EditDeliveryPeriodModal extends Component {
         createDeliveryPeriodMutate({
           variables: {
             deliveryPeriodInput: values,
-            organizationId: localStorage.getItem(ORGANIZATION_ID)
+            organizationId: StorageService.getOrganizationId()
           }
         }).then(() => {
           closeCreateDeliveryPeriodModal()

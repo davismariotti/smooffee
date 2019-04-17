@@ -9,10 +9,10 @@ import * as PropTypes from 'prop-types'
 
 import { AlignCenter } from '../../styles/core'
 import OrganizationSettingsActions from '../actions'
-import { ORGANIZATION_ID } from '../../../constants'
 import AreYouSureModal from '../../util/AreYouSureModal'
 import EditDeliveryPeriodModal from '../modals/EditDeliveryPeriodModal'
 import { editDeliveryPeriodStatusMutation, listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = {
   organizationSettings: {
@@ -193,7 +193,7 @@ export default compose(
     name: 'listDeliveryPeriodsQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        organizationId: StorageService.getOrganizationId(),
         parameters: {
           order: [
             'classPeriod',

@@ -1,12 +1,12 @@
 import isEmail from 'validator/lib/isEmail'
 import * as firebase from 'firebase'
 
-import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID, USER_ROLE } from '../../constants'
 import firebaseApp from '../../services/AuthService'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
 import history from '../../utils/history'
 import { client } from '../../services/apollo'
 import AuthActions from './actions'
+import { StorageService } from '../../services/StorageService'
 
 
 export default class AuthMiddleware {
@@ -17,12 +17,12 @@ export default class AuthMiddleware {
           .auth()
           .createUserWithEmailAndPassword(email.trim(), password.trim())
           .then((result) => {
-            localStorage.setItem(USER_ID, result.uid)
+            StorageService.setUserId(result.uid)
             firebaseApp
               .auth()
               .currentUser.getToken()
               .then(token => {
-                localStorage.setItem(AUTH_TOKEN, token)
+                StorageService.setAuthToken(token)
                 dispatch(AuthActions.signUpSuccess())
                 history.push('/signupcontinued')
               })
@@ -66,15 +66,15 @@ export default class AuthMiddleware {
   }
 
   static continueLogin(result, dispatch) {
-    localStorage.setItem(USER_ID, result.uid)
+    StorageService.setUserId(result.uid)
     firebaseApp.auth().currentUser.getToken().then(token => {
-      localStorage.setItem(AUTH_TOKEN, token)
+      StorageService.setAuthToken(token)
       client.query({query: readCurrentUserQuery}).then(({error, data}) => {
         if (error) {
           dispatch(AuthActions.signInError(error))
         } else {
-          localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
-          localStorage.setItem(USER_ROLE, data.user.currentUser.role)
+          StorageService.setOrganizationId(data.user.currentUser.organizationId)
+          StorageService.setUserRole(data.user.currentUser.role)
           dispatch(AuthActions.signInSuccess())
           history.push('/home')
         }

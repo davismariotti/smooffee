@@ -1,7 +1,7 @@
 import * as firebase from 'firebase'
 import history from '../utils/history'
-import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID, USER_ROLE } from '../constants'
 import { SYSADMIN } from '../utils/role'
+import { StorageService } from './StorageService'
 
 const config = {
   apiKey: 'AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY',
@@ -21,10 +21,7 @@ export class AuthService {
       .signOut()
       .then(
         () => {
-          localStorage.setItem(AUTH_TOKEN, '')
-          localStorage.setItem(USER_ID, '')
-          localStorage.setItem(ORGANIZATION_ID, '')
-          localStorage.setItem(USER_ROLE, '')
+          StorageService.clearAll()
           history.push('/')
         },
         () => {
@@ -35,15 +32,34 @@ export class AuthService {
 
   static isSignedIn() {
     if (firebase.auth().currentUser) return true
-    return localStorage.getItem(USER_ID) != null && localStorage.getItem(USER_ID) !== '';
+    return StorageService.getUserId() != null && StorageService.getUserId() !== '';
   }
 
   static userHasRole(role) {
-    return localStorage.getItem(USER_ROLE) === role
+    return StorageService.getUserRole() === role
   }
 
   static userInRoles(roles) {
-    return roles.includes(localStorage.getItem(USER_ROLE)) || AuthService.userHasRole(SYSADMIN)
+    return roles.includes(StorageService.getUserRole()) || AuthService.userHasRole(SYSADMIN)
+  }
+
+  static getAuthToken() {
+    if (firebase.auth().currentUser) {
+      return firebase.auth().currentUser.getToken()
+    } else {
+      return new Promise((success, reject) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+          unsubscribe()
+          user.getToken()
+            .then(token => {
+              StorageService.setAuthToken(token)
+              success(token)
+            }).catch(error => {
+              reject(error)
+          })
+        })
+      })
+    }
   }
 }
 

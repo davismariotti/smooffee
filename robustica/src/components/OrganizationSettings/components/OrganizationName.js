@@ -9,9 +9,9 @@ import { withStyles } from '@material-ui/core/styles'
 
 import { AlignCenter } from '../../styles/core'
 import { organizationReadQuery } from '../../../graphql/organizationQueries'
-import { ORGANIZATION_ID } from '../../../constants'
 import OrganizationSettingsActions from '../actions'
 import EditOrganizationModal from '../modals/EditOrganizationModal'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = {
   organizationSettings: {
@@ -78,7 +78,7 @@ export default compose(
     name: 'organizationReadQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID)
+        organizationId: StorageService.getOrganizationId()
       }
     }
   }),

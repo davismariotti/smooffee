@@ -8,10 +8,10 @@ import Loader from 'react-loaders'
 import Order from './orders/Order'
 import '../../css/index.css'
 import CreateOrderModal from './orders/CreateOrderModal'
-import { ORGANIZATION_ID } from '../../constants'
 import { listOrdersQuery } from '../../graphql/orderQueries'
 import HomeActions from './actions'
 import { AlignCenter, CenterDiv, MainView } from '../styles/core'
+import { StorageService } from '../../services/StorageService'
 
 const styles = {
   title: {
@@ -85,7 +85,7 @@ export default compose(
     name: 'listOrdersQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        organizationId: StorageService.getOrganizationId(),
         parameters: {
           filter: {
             include: {
