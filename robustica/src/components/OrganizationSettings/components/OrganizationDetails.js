@@ -48,7 +48,6 @@ class OrganizationDetails extends Component {
 OrganizationDetails.propTypes = {
   classes: PropTypes.object.isRequired,
   organizationReadQueryResult: PropTypes.object.isRequired,
-  openEditOrganizationModal: PropTypes.func.isRequired,
   editOrganization: PropTypes.object
 }
 
@@ -69,5 +68,4 @@ export default compose(
     }
   }),
   connect(mapStateToProps)
-)
-(OrganizationDetails)
+)(OrganizationDetails)

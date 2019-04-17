@@ -103,7 +103,7 @@ EditProductModal.defaultProps = {
 const mapStateToProps = ({organizationSettings}) => {
   return {
     createProductModalOpen: organizationSettings.createProductModalOpen,
-    currentProduct: {...organizationSettings.editProductObject && organizationSettings.editProductObject.product || null},
+    currentProduct: {...(organizationSettings.editProductObject && organizationSettings.editProductObject.product) || null},
     editProduct: organizationSettings.editProduct
   }
 }

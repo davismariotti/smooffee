@@ -42,10 +42,10 @@ class OrganizationName extends Component {
         <Paper className={classes.paper} elevation={1}>
           <AlignCenter>
             <Typography style={{margin: '10px'}} variant="h5" component="h3">
-              {organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read.name || ''}
+              {(organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read.name) || ''}
               <div style={{float: 'right', marginRight: '40px'}}>
                 <ReactStrapButton color="secondary" outline onClick={() => {
-                  openEditOrganizationModal(organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read || null)
+                  openEditOrganizationModal((organizationReadQueryResult && organizationReadQueryResult.organization && organizationReadQueryResult.organization.read) || null)
                 }}>
                   Edit
                 </ReactStrapButton>
@@ -83,5 +83,4 @@ export default compose(
     }
   }),
   connect(mapStateToProps, mapDispatchToProps)
-)
-(OrganizationName)
+)(OrganizationName)

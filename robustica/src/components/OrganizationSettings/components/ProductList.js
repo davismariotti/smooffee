@@ -56,7 +56,7 @@ class ProductList extends Component {
     return (
       <div>
         <EditProductModal onSubmit={listProductsQueryResult.refetch}/>
-        <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>
+        <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={(areYouSure && areYouSure.onSubmit) || null}/>
         <Menu id="menu" open={!!productMenu} anchorEl={(productMenu && productMenu.anchorEl) || null} onClose={closeProductMenu}>
           <MenuItem>
             <Button onClick={() => {
@@ -209,5 +209,4 @@ export default compose(
   graphql(editProductStatusMutation, {
     name: 'editProductStatusMutate'
   }),
-)
-(ProductList)
+)(ProductList)

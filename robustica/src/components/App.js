@@ -39,38 +39,19 @@ class App extends Component {
   }
 
   render() {
-    const {updateClientCallback, loggedin} = this.state
+    const {loggedin} = this.state
     return (
       <div className="home">
         <Navbar loggedin={loggedin}/>
         <br/>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
-            )}
-          />
-          <Route
-            path="/login"
-            render={routeProps => (
-              <Login {...routeProps}/>
-            )}
-          />
-          <Route
-            path="/signup"
-            render={routeProps => (
-              <Signup {...routeProps}/>
-            )}
-          />
-          <Route path="/signupcontinued" component={SignupContinued}/>
-          <Route path="/recover" component={Recover}/>
-          <Route path="/home" component={Home}/>
-          <Route path="/settings" component={OrganizationSettings}/>
+          <Route exact path="/"           component={Login}/>
+          <Route path="/login"            component={Login}/>
+          <Route path="/signup"           component={Signup}/>
+          <Route path="/signupcontinued"  component={SignupContinued}/>
+          <Route path="/recover"          component={Recover}/>
+          <Route path="/home"             component={Home}/>
+          <Route path="/settings"         component={OrganizationSettings}/>
         </Switch>
       </div>
     )

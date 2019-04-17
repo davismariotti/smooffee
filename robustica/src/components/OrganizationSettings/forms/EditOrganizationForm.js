@@ -50,8 +50,7 @@ export default compose(
   connect(state => ({
     enableReinitialize: true,
     initialValues: {
-      name: state.organizationSettings.editOrganization && state.organizationSettings.editOrganization.name || null
+      name: (state.organizationSettings.editOrganization && state.organizationSettings.editOrganization.name) || null
     }
   }))
-)
-(EditOrganizationForm)
+)(EditOrganizationForm)

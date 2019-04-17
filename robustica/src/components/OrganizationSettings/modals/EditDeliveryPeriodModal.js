@@ -107,7 +107,7 @@ EditDeliveryPeriodModal.defaultProps = {
 const mapStateToProps = ({organizationSettings}) => {
   return {
     createDeliveryPeriodModalOpen: organizationSettings.createDeliveryPeriodModalOpen,
-    currentDeliveryPeriod: {...organizationSettings.editDeliveryPeriodObject && organizationSettings.editDeliveryPeriodObject.deliveryPeriod || null},
+    currentDeliveryPeriod: {...(organizationSettings.editDeliveryPeriodObject && organizationSettings.editDeliveryPeriodObject.deliveryPeriod) || null},
     editDeliveryPeriod: organizationSettings.editDeliveryPeriod
   }
 }

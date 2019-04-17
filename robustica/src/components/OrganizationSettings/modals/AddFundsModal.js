@@ -27,8 +27,6 @@ class AddFundsModal extends Component {
   render() {
     const {classes, addCashFundsMutate, addMoreFunds, onSubmit, closeAddFundsModal} = this.props
 
-    console.log('addMoreFunds', addMoreFunds)
-
     const submit = ({amount}) => {
       addCashFundsMutate({
         variables: {

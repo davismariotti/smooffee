@@ -60,6 +60,6 @@ export default compose(
   }),
   connect(state => ({
     enableReinitialize: true,
-    initialValues: state.organizationSettings.editProductObject && state.organizationSettings.editProductObject.product || null
+    initialValues: (state.organizationSettings.editProductObject && state.organizationSettings.editProductObject.product) || null
   }))
 )(EditProductForm)

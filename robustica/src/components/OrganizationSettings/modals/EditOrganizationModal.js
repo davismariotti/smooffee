@@ -70,7 +70,7 @@ EditOrganizationModal.defaultProps = {
 
 const mapStateToProps = ({organizationSettings}) => {
   return {
-    organizationId: organizationSettings.editOrganization && organizationSettings.editOrganization.organizationId || null
+    organizationId: (organizationSettings.editOrganization && organizationSettings.editOrganization.organizationId) || null
   }
 }
 
