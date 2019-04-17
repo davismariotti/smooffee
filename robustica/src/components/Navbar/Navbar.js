@@ -1,55 +1,27 @@
 import React, { Component } from 'react'
-import * as PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Face from '@material-ui/icons/Face'
-import { AuthService } from '../services/AuthService'
-import history from '../utils/history'
-import '../css/index.css'
-import Options from './options'
+import { AuthService } from '../../services/AuthService'
+import '../../css/index.css'
+import Options from '../options'
+import NavbarActions from './actions'
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      leftMenuShow: false,
-      rightMenuShow: false,
-    }
-
-    this.classes = props
-  }
-
-  handleRightMenuClick = () => {
-    this.setState({
-      rightMenuShow: true
-    })
-  }
-
-  handleLeftMenuClick = () => {
-    this.setState({
-      leftMenuShow: true
-    })
-  }
-
-  handleLeftClose = () => {
-    this.setState({leftMenuShow: false})
-  }
-
-  handleRightClose = () => {
-    this.setState({rightMenuShow: false})
-  }
-
   handleLogout = () => {
     AuthService.signout()
-    this.setState({
-      rightMenuShow: false
-    })
-    history.push('/login')
   }
 
   render() {
-    const {leftMenuShow, rightMenuShow} = this.state
+    const {
+      leftMenuOpen,
+      rightMenuOpen,
+      openLeftMenu,
+      closeLeftMenu,
+      openRightMenu,
+      closeRightMenu
+    } = this.props
 
     return <AppBar position="static">
       {(() => {
@@ -57,10 +29,10 @@ class Navbar extends Component {
           return <Toolbar className="navBar">
             <IconButton color="inherit" buttonRef={node => {
               this.leftMenuEl = node
-            }} onClick={this.handleLeftMenuClick}>
+            }} onClick={openLeftMenu}>
               <MenuIcon/>
             </IconButton>
-            <Menu id="simple-menu" anchorEl={this.leftMenuEl} open={leftMenuShow} onClose={this.handleLeftClose}>
+            <Menu id="simple-menu" anchorEl={this.leftMenuEl} open={leftMenuOpen} onClose={closeLeftMenu}>
               <Options/>
             </Menu>
             <Typography variant="h4" color="inherit">
@@ -68,10 +40,10 @@ class Navbar extends Component {
             </Typography>
             <IconButton align="right" color="inherit" buttonRef={node => {
               this.rightMenuEl = node
-            }} onClick={this.handleRightMenuClick}>
+            }} onClick={openRightMenu}>
               <Face/>
             </IconButton>
-            <Menu id="simple-menu" anchorEl={this.rightMenuEl} open={rightMenuShow} onClose={this.handleRightClose}>
+            <Menu id="simple-menu" anchorEl={this.rightMenuEl} open={rightMenuOpen} onClose={closeRightMenu}>
               <MenuItem>My account</MenuItem>
               <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
             </Menu>
@@ -88,4 +60,20 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar
+const mapDispatchToProps = dispatch => {
+  return {
+    openLeftMenu:   () => dispatch(NavbarActions.openLeftMenu()),
+    closeLeftMenu:  () => dispatch(NavbarActions.closeLeftMenu()),
+    openRightMenu:  () => dispatch(NavbarActions.openRightMenu()),
+    closeRightMenu: () => dispatch(NavbarActions.closeRightMenu())
+  }
+}
+
+const mapStateToProps = ({navbar}) => {
+  return {
+    leftMenuOpen: navbar.leftMenuOpen,
+    rightMenuOpen: navbar.rightMenuOpen
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

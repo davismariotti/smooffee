@@ -34,7 +34,6 @@ export class AuthService {
   }
 
   static isSignedIn() {
-    console.log('!!firebase.auth().currentUser', firebase.auth().currentUser)
     if (firebase.auth().currentUser) return true
     return localStorage.getItem(USER_ID) != null;
   }

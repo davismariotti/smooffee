@@ -8,7 +8,6 @@ import { ADMIN, SUPERVISOR } from '../utils/role'
 
 class Options extends Component {
   render() {
-    console.log(AuthService.userInRoles([SUPERVISOR, ADMIN]))
     return (
       <div>
         <MenuItem>

@@ -1,13 +1,16 @@
-import { combineReducers, createStore } from 'redux'
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import { reducer as formReducer } from 'redux-form'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 import homeReducer from '../components/Home/reducer'
 import organizationSettingsReducer from '../components/organizationsettings/reducer'
 import authReducer from '../components/auth/reducer'
+import navbarReducer from '../components/Navbar/reducer'
 
 const reducerList = [
   homeReducer,
   organizationSettingsReducer,
-  authReducer
+  authReducer,
+  navbarReducer
 ]
 
 function reducers() {
@@ -34,13 +37,19 @@ function initialState() {
   })))
 }
 
-export default function createNewStore() {
+export default function createNewStore(history) {
   return createStore(
     combineReducers({
       ...reducers(),
-      form: formReducer
+      form: formReducer,
+      router: connectRouter(history)
     }),
     initialState(),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    compose(
+      applyMiddleware(
+        routerMiddleware(history)
+      ),
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
   )
 }

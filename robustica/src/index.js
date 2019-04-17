@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { ApolloProvider } from 'react-apollo'
-import { Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { ConnectedRouter} from 'connected-react-router'
 import App from './components/App'
 import history from './utils/history'
 import 'typeface-roboto'
@@ -11,16 +11,16 @@ import 'loaders.css/loaders.min.css'
 import { client } from './services/apollo'
 import createNewStore from './services/store'
 
-const store = createNewStore()
+const store = createNewStore(history)
 
 class RootComponent extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <Router history={history}>
+          <ConnectedRouter history={history}>
             <App/>
-          </Router>
+          </ConnectedRouter>
         </Provider>
       </ApolloProvider>
     )

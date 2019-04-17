@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom'
 import React from 'react'
 import { AuthService } from '../services/AuthService'
-import { ANONYMOUS, SYSADMIN } from './role'
+import { ANONYMOUS} from './role'
 
 export const ProtectedRoute = (
   {
@@ -11,8 +11,6 @@ export const ProtectedRoute = (
     ...rest
   }
 ) => {
-  console.log('AuthService.isSignedIn()', AuthService.isSignedIn())
-  console.log('allowedRoles', allowedRoles)
   return (
     <Route
       {...rest}
