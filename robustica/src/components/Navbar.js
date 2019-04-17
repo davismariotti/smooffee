@@ -42,7 +42,6 @@ class Navbar extends Component {
 
   handleLogout = () => {
     AuthService.signout()
-    this.loggedin = false
     this.setState({
       rightMenuShow: false
     })
@@ -50,12 +49,11 @@ class Navbar extends Component {
   }
 
   render() {
-    const {loggedin} = this.props
     const {leftMenuShow, rightMenuShow} = this.state
 
     return <AppBar position="static">
       {(() => {
-        if (loggedin) {
+        if (AuthService.isSignedIn()) {
           return <Toolbar className="navBar">
             <IconButton color="inherit" buttonRef={node => {
               this.leftMenuEl = node
@@ -88,10 +86,6 @@ class Navbar extends Component {
       })()}
     </AppBar>
   }
-}
-
-Navbar.propTypes = {
-  loggedin: PropTypes.bool.isRequired
 }
 
 export default Navbar
