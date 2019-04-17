@@ -35,7 +35,7 @@ export class AuthService {
 
   static isSignedIn() {
     if (firebase.auth().currentUser) return true
-    return localStorage.getItem(USER_ID) != null;
+    return localStorage.getItem(USER_ID) != null && localStorage.getItem(USER_ID) !== '';
   }
 
   static userHasRole(role) {
