@@ -8,69 +8,37 @@ import SignupContinued from './auth/signup/SignupContinued'
 import Login from './auth/login/Login'
 import Recover from './auth/login/Recover'
 import Signup from './auth/signup/Signup'
-import Navbar from './Navbar'
+import Navbar from './Navbar/Navbar'
 import OrganizationSettings from './organizationsettings'
+import { ProtectedRoute } from '../utils/routeUtils'
+import { ADMIN, EMPLOYEE, SUPERVISOR } from '../utils/role'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedin: localStorage.getItem(USER_ID) !== ''
-    }
-  }
 
   componentWillMount() {
     firebaseApp.auth().onAuthStateChanged(user => {
-      if (user) { // If logged in...
-        this.setState({
-          loggedin: true
-        })
+      if (user) {
         user.getToken().then(result => {
           localStorage.setItem(AUTH_TOKEN, result)
           localStorage.setItem(USER_ID, user.uid)
-        })
-      } else {
-        // If not logged in...
-        this.setState({
-          loggedin: false
         })
       }
     })
   }
 
   render() {
-    const {updateClientCallback, loggedin} = this.state
     return (
       <div className="home">
-        <Navbar loggedin={loggedin}/>
+        <Navbar/>
         <br/>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
-            )}
-          />
-          <Route
-            path="/login"
-            render={routeProps => (
-              <Login {...routeProps}/>
-            )}
-          />
-          <Route
-            path="/signup"
-            render={routeProps => (
-              <Signup {...routeProps}/>
-            )}
-          />
+          <Route exact path="/" component={Login}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/signup" component={Signup}/>
           <Route path="/signupcontinued" component={SignupContinued}/>
           <Route path="/recover" component={Recover}/>
-          <Route path="/home" component={Home}/>
-          <Route path="/settings" component={OrganizationSettings}/>
+          <ProtectedRoute path="/home" component={Home} allowedRoles={[ADMIN, EMPLOYEE, SUPERVISOR]}/>
+          <ProtectedRoute path="/settings" component={OrganizationSettings} allowedRoles={[ADMIN, SUPERVISOR]}/>
         </Switch>
       </div>
     )

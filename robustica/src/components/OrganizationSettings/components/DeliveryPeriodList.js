@@ -58,7 +58,7 @@ class DeliveryPeriodList extends Component {
     return (
       <div>
         <EditDeliveryPeriodModal onSubmit={listDeliveryPeriodsQueryResult.refetch}/>
-        <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={areYouSure && areYouSure.onSubmit || null}/>
+        <AreYouSureModal open={!!areYouSure} message="Are you sure?" onClose={closeAreYouSure} onSubmit={(areYouSure && areYouSure.onSubmit) || null}/>
         <Menu id="menu" open={!!deliveryPeriodMenu} anchorEl={(deliveryPeriodMenu && deliveryPeriodMenu.anchorEl) || null} onClose={closeDeliveryPeriodMenu}>
           <MenuItem>
             <Button onClick={() => {
@@ -93,7 +93,7 @@ class DeliveryPeriodList extends Component {
                 <TableRow>
                   <TableCell align="left">Name</TableCell>
                   {daysOfTheWeek.map(day => {
-                    return <TableCell align="right">{day}</TableCell>
+                    return <TableCell key={day} align="right">{day}</TableCell>
                   })}
                   <TableCell align="right">Max Queue Size</TableCell>
                   <TableCell align="right">Available?</TableCell>
@@ -119,8 +119,7 @@ class DeliveryPeriodList extends Component {
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell align="right"
-                                            className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
                         <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.maxQueueSize === 0 ? 'Unlimited' : deliveryPeriodItem.maxQueueSize}
@@ -215,5 +214,4 @@ export default compose(
   graphql(editDeliveryPeriodStatusMutation, {
     name: 'editDeliveryPeriodStatusMutate'
   }),
-)
-(DeliveryPeriodList)
+)(DeliveryPeriodList)

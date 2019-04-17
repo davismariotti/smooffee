@@ -54,5 +54,4 @@ export default compose(
   reduxForm({
     form: 'emailPasswordSignUp'
   })
-)
-(EmailPasswordSignUp)
+)(EmailPasswordSignUp)

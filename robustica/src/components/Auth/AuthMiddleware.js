@@ -1,7 +1,7 @@
 import isEmail from 'validator/lib/isEmail'
 import * as firebase from 'firebase'
 
-import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID } from '../../constants'
+import { AUTH_TOKEN, ORGANIZATION_ID, USER_ID, USER_ROLE } from '../../constants'
 import firebaseApp from '../../services/AuthService'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
 import history from '../../utils/history'
@@ -74,6 +74,7 @@ export default class AuthMiddleware {
           dispatch(AuthActions.signInError(error))
         } else {
           localStorage.setItem(ORGANIZATION_ID, data.user.currentUser.organizationId)
+          localStorage.setItem(USER_ROLE, data.user.currentUser.role)
           dispatch(AuthActions.signInSuccess())
           history.push('/home')
         }

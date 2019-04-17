@@ -77,6 +77,6 @@ export default compose(
   }),
   connect(state => ({
     enableReinitialize: true,
-    initialValues: state.organizationSettings.editDeliveryPeriodObject && state.organizationSettings.editDeliveryPeriodObject.deliveryPeriod || null
+    initialValues: (state.organizationSettings.editDeliveryPeriodObject && state.organizationSettings.editDeliveryPeriodObject.deliveryPeriod) || null
   }))
 )(DeliveryPeriodForm)

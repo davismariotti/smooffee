@@ -29,7 +29,7 @@ class Recover extends Component {
             </Typography>
             <form onSubmit={handleSubmit(submit)}>
               <StyledFormRow>
-                <Alert hidden={!recoverResponse} color={recoverResponse && recoverResponse.color || 'success'}>{recoverResponse && recoverResponse.message || ''}</Alert>
+                <Alert hidden={!recoverResponse} color={(recoverResponse && recoverResponse.color) || 'success'}>{(recoverResponse && recoverResponse.message) || ''}</Alert>
               </StyledFormRow>
               <StyledFormRow>
                 <Field fullWidth name="email" autoComplete="email" type="email" component={TextField} label="Email"/>
