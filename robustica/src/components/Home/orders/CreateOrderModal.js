@@ -8,7 +8,6 @@ import { connect } from 'react-redux'
 import { Field, propTypes, reduxForm } from 'redux-form'
 import { Select, TextField } from 'redux-form-material-ui'
 
-import { ORGANIZATION_ID, USER_ID } from '../../../constants'
 import { createOrderMutation } from '../../../graphql/orderQueries'
 import { listProductsQuery } from '../../../graphql/productQueries'
 import HomeActions from '../actions'
@@ -16,6 +15,7 @@ import { CenterDiv } from '../../styles/core'
 import { StyledFormRow } from '../../styles/forms'
 import { listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
 import { validateIsRequired } from '../../../utils/formUtils'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = theme => ({
   paper: {
@@ -52,7 +52,7 @@ class CreateOrderModal extends Component {
       createOrderMutate({
         variables: {
           orderInput,
-          userId: localStorage.getItem(USER_ID)
+          userId: StorageService.getUserId()
         }
       }).then(() => {
         closeModal()
@@ -138,7 +138,7 @@ export default compose(
     name: 'listProductsQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID), // TODO use as props?
+        organizationId: StorageService.getOrganizationId(), // TODO use as props?
         parameters: {
           filter: {
             eq: {
@@ -154,7 +154,7 @@ export default compose(
     name: 'listDeliveryPeriodsQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        organizationId: StorageService.getOrganizationId(),
         parameters: {
           order: [
             'classPeriod',

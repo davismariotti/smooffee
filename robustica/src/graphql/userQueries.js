@@ -53,6 +53,8 @@ mutation CreateUser($userInput: UserInput!) {
       email
       organizationId
       balance
+      role
+      status
     }
   }
 }

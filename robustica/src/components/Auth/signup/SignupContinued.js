@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import firebaseApp from '../../../services/AuthService'
 import history from '../../../utils/history'
-import { ORGANIZATION_ID } from '../../../constants'
 import { signUpMutation } from '../../../graphql/userQueries'
+import { StorageService } from '../../../services/StorageService'
 
 class SignupContinued extends Component {
   render() {
@@ -12,7 +12,8 @@ class SignupContinued extends Component {
     return (
       <div>
         <Mutation mutation={signUpMutation} onCompleted={({user}) => {
-          localStorage.setItem(ORGANIZATION_ID, user.create.organizationId)
+          StorageService.setOrganizationId(user.create.organizationId)
+          StorageService.setUserRole(user.create.role)
           history.push('/home')
         }}>
           {(signup) => (

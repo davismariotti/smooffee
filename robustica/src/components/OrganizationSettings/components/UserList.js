@@ -9,9 +9,9 @@ import MoreVert from '@material-ui/icons/Menu'
 
 import { AlignCenter } from '../../styles/core'
 import { listUsersQuery } from '../../../graphql/userQueries'
-import { ORGANIZATION_ID } from '../../../constants'
 import OrganizationSettingsActions from '../actions'
 import AddFundsModal from '../modals/AddFundsModal'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = {
   paper: {
@@ -132,7 +132,7 @@ export default compose(
     name: 'listUsersQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        organizationId: StorageService.getOrganizationId(),
         parameters: {
           order: [
             'lastName',

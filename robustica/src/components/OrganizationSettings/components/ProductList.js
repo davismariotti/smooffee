@@ -10,9 +10,9 @@ import * as PropTypes from 'prop-types'
 import { AlignCenter, AlignRight } from '../../styles/core'
 import OrganizationSettingsActions from '../actions'
 import { editProductStatusMutation, listProductsQuery } from '../../../graphql/productQueries'
-import { ORGANIZATION_ID } from '../../../constants'
 import AreYouSureModal from '../../util/AreYouSureModal'
 import EditProductModal from '../modals/EditProductModal'
+import { StorageService } from '../../../services/StorageService'
 
 const styles = {
   organizationSettings: {
@@ -188,7 +188,7 @@ export default compose(
     name: 'listProductsQueryResult',
     options: {
       variables: {
-        organizationId: localStorage.getItem(ORGANIZATION_ID),
+        organizationId: StorageService.getOrganizationId(),
         parameters: {
           order: [
             'name',
