@@ -6,9 +6,9 @@ import models.Product;
 import utilities.QLException;
 
 public class ProductActions {
-    public static Product createProduct(Long organizationId, String name, String description, Integer price) {
-        Organization organization = Organization.find.byId(organizationId);
-        if (organization == null) throw new QLException("Organization not found");
+    public static Product createProduct(Organization organization, String name, String description, Integer price) {
+        if (organization == null || name == null || description == null || price == null) return null;
+
         return new Product()
                 .setName(name)
                 .setDescription(description)
@@ -18,23 +18,18 @@ public class ProductActions {
                 .store();
     }
 
-    public static Product updateProduct(Long productId, String name, String description, Integer price, Integer status) {
-        Product product = Product.find.byId(productId);
-        if (product == null) throw new QLException("Product not found");
+    public static Product updateProduct(Product product, String name, String description, Integer price) {
+        if (product == null || name == null || description == null || price == null) return null;
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
-        product.setStatus(status);
         product.save();
         return product;
     }
 
-    public static boolean deprecateProduct(Long id) {
-        Product product = Product.find.byId(id);
-        if (product == null) {
-            return false;
-        }
-        product.deprecate();
-        return true;
+    public static Product deprecateProduct(Product product) {
+        if (product == null) return null;
+
+        return product.deprecate();
     }
 }

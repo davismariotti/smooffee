@@ -15,6 +15,7 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseModel extends Model {
 
+    public static final int REFUNDED = -4;
     public static final int NOT_AVAILABLE = -3;
     public static final int DELETED = -2;
     public static final int CANCELLED = -1;
@@ -56,9 +57,9 @@ public class BaseModel extends Model {
         return deprecatedAt;
     }
 
-    public void deprecate() {
+    public <T extends BaseModel> T deprecate() {
         this.deprecatedAt = Timestamp.from(Instant.now());
-        this.save();
+        return this.store();
     }
 
     public Date getUpdatedAt() {
@@ -69,7 +70,7 @@ public class BaseModel extends Model {
         this.updatedAt = updatedAt;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 

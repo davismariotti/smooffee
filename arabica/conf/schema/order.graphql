@@ -3,7 +3,6 @@ input OrderInput {
     notes: String
     productId: Long
     recipient: String
-    status: Int
     deliveryPeriodId: Long
 }
 
@@ -15,15 +14,22 @@ type OrderEntry {
     product: ProductEntry!
     recipient: String!
     deliveryPeriod: DeliveryPeriodEntry!
+    refund: RefundEntry
+}
+
+type RefundEntry {
+    id: Long!
+    status: Int!
+    amount: Int!
 }
 
 type OrderQuery {
     read(id: Long!): OrderEntry!
-    list(organizationId: Long!, statuses: [Int]!): [OrderEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [OrderEntry!]!
 }
 
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
     updateStatus(orderId: Long!, status: Int!): OrderEntry!
-    cancelOrder(orderId: Long!): OrderEntry!
+    createRefund(orderId: Long!): RefundEntry!
 }

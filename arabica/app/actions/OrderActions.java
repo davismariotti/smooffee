@@ -3,20 +3,23 @@ package actions;
 import models.*;
 import utilities.QLException;
 
+import static io.ebean.Expr.eq;
+import static io.ebean.Expr.or;
+
 public class OrderActions {
 
-    public static Order createOrder(String userId, Long deliveryPeriodId, Long productId, String location, String notes, String recipient) {
-        User user = User.findByFirebaseUid(userId);
-        DeliveryPeriod deliveryPeriod = DeliveryPeriod.find.byId(deliveryPeriodId);
-        Product product = Product.find.byId(productId);
-
-        if (user == null) throw new QLException("User not found");
-        if (deliveryPeriod == null) throw new QLException("Delivery Period not found");
-        if (product == null) throw new QLException("Product not found");
+    public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {
+        if (user == null || deliveryPeriod == null || product == null || location == null || recipient == null) return null;
 
         // Check user funds
         int balance = user.getBalance();
         if (balance < product.getPrice()) throw new QLException("Insufficient funds");
+
+        // Check if order might break max queue size restraint
+        if (deliveryPeriod.getMaxQueueSize() > 0) {
+            int currentQueueSize = Organization.currentQueueSize(user.getOrganization().getId(), deliveryPeriod.getId());
+            if (currentQueueSize >= deliveryPeriod.getMaxQueueSize()) throw new QLException("Max queue size reached");
+        }
 
         user.setBalance(balance - product.getPrice());
 
@@ -35,14 +38,8 @@ public class OrderActions {
         return order;
     }
 
-    public static Order updateOrder(Long orderId, Long deliveryPeriodId, Long productId, String location, String notes, String recipient) {
-        Order order = Order.find.byId(orderId);
-        Product product = Product.find.byId(productId);
-        DeliveryPeriod deliveryPeriod = DeliveryPeriod.find.byId(deliveryPeriodId);
-
-        if (order == null) throw new QLException("Order not found");
-        if (deliveryPeriod == null) throw new QLException("Delivery Period not found");
-        if (product == null) throw new QLException("Product not found");
+    public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {
+        if (order == null || deliveryPeriod == null || product == null || location == null || notes == null || recipient == null) return null;
 
         return order
                 .setDeliveryPeriod(deliveryPeriod)
@@ -53,8 +50,7 @@ public class OrderActions {
                 .store();
     }
 
-    public static boolean deprecateOrder(Order order) {
-        order.deprecate();
-        return true;
+    public static Order cancelOrder(Order order) {
+        return order.setStatus(BaseModel.CANCELLED).deprecate();
     }
 }

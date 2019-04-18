@@ -2,7 +2,6 @@ input UserInput {
     firstName: String
     lastName: String
     email: String
-    status: Int
 }
 
 type UserEntry {
@@ -13,16 +12,26 @@ type UserEntry {
     organizationId: Long!
     balance: Int!
     role: String!
+    status: Int!
+}
+
+type CardEntry {
+    stripeCardId: String!
+    brand: String!
+    last4: String!
 }
 
 type UserQuery {
     currentUser: UserEntry!
     read(id: String!): UserEntry!
-    list(organizationId: Long!): [UserEntry]!
+    list(organizationId: Long!, parameters: QLFinder): [UserEntry]!
+    listCards(userId: String!): [CardEntry!]!
 }
 
 type UserMutation {
     create(organizationId: Long!, userInput: UserInput!): UserEntry!
     update(userId: String!, userInput: UserInput!): UserEntry!
+    updateStatus(userId: String!, status: Int!): UserEntry!
     updateRole(userId: String!, role: String!): UserEntry!
+    attachCard(userId: String!, stripeToken: String!): UserEntry!
 }

@@ -1,6 +1,7 @@
 package controllers;
 
 import com.coxautodev.graphql.tools.SchemaParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
 import graphql.*;
@@ -12,8 +13,10 @@ import play.mvc.With;
 import services.authorization.Permission;
 import utilities.ArabicaLogger;
 import services.AuthenticationService;
+import utilities.QLException;
 import utilities.ThreadStorage;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,20 +53,22 @@ public class GraphQLController extends Controller {
             // Get firebase token
             if (!request.getHeaders().get("Authorization").isPresent()) {
                 count++;
-                return forbidden();
+                return unauthorized();
             }
             String authToken = request.getHeaders().get("Authorization").get();
             if (authToken.equals("Bearer undefined")) {
                 count++;
-                return forbidden();
+                return unauthorized();
             }
 
             try {
                 uid = AuthenticationService.getUidFromToken(authToken.replace("Bearer", "").trim());
             } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
-                e.printStackTrace();
-                return forbidden();
+                if (e.getMessage() != null) {
+                    return unauthorized(e.getMessage());
+                }
+                return unauthorized();
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
             storage.uid = uid;
@@ -93,26 +98,45 @@ public class GraphQLController extends Controller {
         try {
             executionResult = root.execute(input);
         } catch (Permission.AccessDeniedException e) {
-            return forbidden();
+            return forbidden(e.getMessage());
         }
 
         if (ThreadStorage.get() != null && !ThreadStorage.get().hasCheckedPermissions) {
             ArabicaLogger.logger.warn("Permissions not checked!");
         }
 
-        ArabicaLogger.logger.debug("[RSP-" + count +"] - " + executionResult.getData());
-        count++;
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("data", executionResult.getData());
 
         if (executionResult.getErrors() != null && executionResult.getErrors().size() > 0) {
-            result.put("errors", executionResult.getErrors());
+            result.put("errors", executionResult.getErrors().stream().map(item -> {
+                String errors = gson.toJson(item);
+                Map<String,Object> map = gson.fromJson(errors, Map.class);
+                if (item instanceof ExceptionWhileDataFetching && ((ExceptionWhileDataFetching) item).getException() instanceof QLException) {
+                    map.put("code", ((QLException)((ExceptionWhileDataFetching) item).getException()).getCode());
+                }
+                try {
+                    ((Map<String,Object>)map.get("exception")).remove("stackTrace");
+                } catch (Exception ex) {
+                }
+                try {
+                    ((Map<String,Object>)((Map<String,Object>)map.get("exception")).get("cause")).remove("stackTrace");
+                } catch (Exception ex) {
+                }
+                return map;
+            }));
         }
 
         ThreadStorage.remove();
 
-        return ok(Json.toJson(result));
+        JsonNode node = Json.toJson(result);
+
+        ArabicaLogger.logger.debug("[RSP-" + count + "] - " + node.toString());
+
+        count++;
+
+        return ok(node);
     }
 
     static class Query {

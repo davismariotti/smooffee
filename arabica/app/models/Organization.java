@@ -1,11 +1,15 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
+import utilities.QLFinder;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+
+import static io.ebean.Expr.*;
 
 @Entity
 @Table(name = "organization")
@@ -18,7 +22,8 @@ public class Organization extends BaseModel {
     @OneToMany(mappedBy = "organization")
     private List<Product> products;
 
-    private String apiKey;
+    private String secretApiKey;
+    private String publishableApiKey;
 
     public List<Product> getProducts() {
         return products;
@@ -33,12 +38,21 @@ public class Organization extends BaseModel {
         return this;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public String getSecretApiKey() {
+        return secretApiKey;
     }
 
-    public Organization setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public Organization setSecretApiKey(String secretApiKey) {
+        this.secretApiKey = secretApiKey;
+        return this;
+    }
+
+    public String getPublisableApiKey() {
+        return publishableApiKey;
+    }
+
+    public Organization setPublishableApiKey(String publishableApiKey) {
+        this.publishableApiKey = publishableApiKey;
         return this;
     }
 
@@ -47,5 +61,23 @@ public class Organization extends BaseModel {
         public OrganizationFinder() {
             super(Organization.class);
         }
+    }
+
+    public static int currentQueueSize(Long organizationId, Long deliveryPeriodId) {
+
+        return Order.find.query().where()
+                .and()
+                    .eq("user.organization.id", organizationId)
+                    .eq("deliveryPeriod.id", deliveryPeriodId)
+                    .or()
+                        .eq("status", BaseModel.ACTIVE)
+                        .eq("status", BaseModel.IN_PROGRESS)
+                    .endOr()
+                .endAnd()
+                .findCount();
+    }
+
+    public static Query<Organization> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Organization.class);
     }
 }

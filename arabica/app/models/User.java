@@ -1,8 +1,10 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
 import services.authorization.Role;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,8 +37,11 @@ public class User extends BaseModel {
     private int role;
 
     private String firebaseUserId;
+
     @NotNull
     private Integer balance;
+
+    private String stripeCustomerId;
 
     public Integer getBalance() {
         return balance;
@@ -114,6 +119,15 @@ public class User extends BaseModel {
         return this;
     }
 
+    public String getStripeCustomerId() {
+        return this.stripeCustomerId;
+    }
+
+    public User setStripeCustomerId(String stripeCustomerId) {
+        this.stripeCustomerId = stripeCustomerId;
+        return this;
+    }
+
     public static User findByFirebaseUid(String firebaseUserId) {
         return find.query().where().eq("firebase_user_id", firebaseUserId).findOne();
     }
@@ -130,5 +144,9 @@ public class User extends BaseModel {
         public UserFinder() {
             super(User.class);
         }
+    }
+
+    public static Query<User> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(User.class);
     }
 }

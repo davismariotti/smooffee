@@ -1,53 +1,90 @@
 package actions;
 
-import models.*;
+import business.StripeAPI;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
+import com.stripe.model.Refund;
+import models.BaseModel;
+import models.Payment;
+import models.User;
 import utilities.QLException;
 
 public class PaymentActions {
 
-    public static Payment makeCashPayment(String userId, Integer amount) {
-        User user = User.findByFirebaseUid(userId);
-        if (user == null) throw new QLException("User not found");
+    public static Payment makeCashPayment(User user, Integer amount) {
+        if (user == null || amount == null) return null;
 
         Payment payment = new Payment()
                 .setAmount(amount)
                 .setUser(user)
-                .setType("cash")
-                .setStatus(BaseModel.ACTIVE)
-                .store();
+                .setType(Payment.CASH)
+                .setStatus(BaseModel.ACTIVE);
 
-        UserActions.addToBalance(userId, amount);
-        payment.refresh();
+        UserActions.addToBalance(user, amount);
+
+        payment.save();
 
         return payment;
     }
 
-    public static Payment makeCardPayment(String userId, Integer amount, Long cardId) {
-        User user = User.findByFirebaseUid(userId);
-        if (user == null) throw new QLException("User not found");
-
-        Card card = Card.find.byId(cardId);
-        if (card == null) throw new QLException("Card not found");
+    public static Payment makeCardPayment(User user, Integer amount, String stripeCardId) {
+        if (user == null || amount == null) return null;
 
         Payment payment = new Payment()
                 .setAmount(amount)
                 .setUser(user)
-                .setType("card")
-                .setCard(card)
-                .setStatus(BaseModel.ACTIVE)
-                .store();
+                .setType(Payment.CARD)
+                .setStatus(BaseModel.ACTIVE);
 
-        UserActions.addToBalance(userId, amount);
+        try {
+            Charge charge = StripeAPI.createChargeFromCustomer(user, amount, stripeCardId);
+            payment.setStripeChargeId(charge.getId());
+        } catch (StripeException e) {
+            throw new QLException(e);
+        }
+
+        UserActions.addToBalance(user, amount);
+
+        payment.save();
 
         return payment;
     }
 
-    public static Refund refundPayment(Long paymentId) {
-        Payment payment = Payment.find.byId(paymentId);
-        if (payment == null) throw new QLException("Payment not found");
+    public static Payment makeOneOffCardPayment(User user, Integer amount, String token) {
+        if (user == null || amount == null || token == null) return null;
 
-        CardRefundActions.createCardRefund(payment.getCard().getId(), paymentId);
+        Payment payment = new Payment()
+                .setAmount(amount)
+                .setUser(user)
+                .setType(Payment.CARD)
+                .setStatus(BaseModel.ACTIVE);
 
-        return null;
+        try {
+            Charge charge = StripeAPI.createChargeFromToken(user, amount, token);
+            payment.setStripeChargeId(charge.getId());
+        } catch (StripeException e) {
+            throw new QLException(e);
+        }
+        
+        UserActions.addToBalance(user, amount);
+
+        payment.save();
+
+        return payment;
+    }
+
+    public static Payment refundPayment(Payment payment) {
+        if (payment == null) return null;
+
+        if (payment.getType().equals(Payment.CARD)) {
+            try {
+                Refund refund = StripeAPI.makeRefund(payment.getUser(), payment.getStripeChargeId());
+                return payment.setStripeRefundId(refund.getId()).store();
+            } catch (StripeException e) {
+                throw new QLException(e);
+            }
+        } else { // CASH
+            return payment.setStatus(BaseModel.REFUNDED).store();
+        }
     }
 }

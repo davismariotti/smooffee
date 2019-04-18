@@ -18,19 +18,23 @@ public class Permission {
     // THIS USER
     public static final int THIS_USER_INFO_READ     = 100;
     public static final int THIS_USER_INFO_WRITE    = 101;
-    public static final int THIS_USER_CARD_READ     = 102;
-    public static final int THIS_USER_CARD_WRITE    = 103;
-    public static final int THIS_USER_ORDER_READ    = 104;
-    public static final int THIS_USER_ORDER_WRITE   = 105;
+    public static final int THIS_USER_PAYMENT_READ  = 102;
+    public static final int THIS_USER_PAYMENT_WRITE = 103;
+    public static final int THIS_USER_CARD_READ     = 104;
+    public static final int THIS_USER_CARD_WRITE    = 105;
+    public static final int THIS_USER_ORDER_READ    = 106;
+    public static final int THIS_USER_ORDER_WRITE   = 107;
 
     // OTHER USER
     // OTHER_USER must be exactly 100 more than THIS_USER entry of same type
-    public static final int OTHER_USER_INFO_READ    = THIS_USER_INFO_READ + 100;
-    public static final int OTHER_USER_INFO_WRITE   = THIS_USER_INFO_WRITE + 100;
-    public static final int OTHER_USER_CARD_READ    = THIS_USER_CARD_READ + 100;
-    public static final int OTHER_USER_CARD_WRITE   = THIS_USER_CARD_WRITE + 100;
-    public static final int OTHER_USER_ORDER_READ   = THIS_USER_ORDER_READ + 100;
-    public static final int OTHER_USER_ORDER_WRITE  = THIS_USER_ORDER_WRITE + 100;
+    public static final int OTHER_USER_INFO_READ        = THIS_USER_INFO_READ       + 100;
+    public static final int OTHER_USER_INFO_WRITE       = THIS_USER_INFO_WRITE      + 100;
+    public static final int OTHER_USER_PAYMENT_READ     = THIS_USER_PAYMENT_READ    + 100;
+    public static final int OTHER_USER_PAYMENT_WRITE    = THIS_USER_PAYMENT_WRITE   + 100;
+    public static final int OTHER_USER_CARD_READ        = THIS_USER_CARD_READ       + 100;
+    public static final int OTHER_USER_CARD_WRITE       = THIS_USER_CARD_WRITE      + 100;
+    public static final int OTHER_USER_ORDER_READ       = THIS_USER_ORDER_READ      + 100;
+    public static final int OTHER_USER_ORDER_WRITE      = THIS_USER_ORDER_WRITE     + 100;
 
     // THIS ORGANIZATION
     public static final int THIS_ORGANIZATION_READ                  = 300;
@@ -43,6 +47,8 @@ public class Permission {
     public static final int THIS_ORGANIZATION_PRODUCTS_READ         = 307;
     public static final int THIS_ORGANIZATION_USERS_READ            = 308;
     public static final int THIS_ORGANIZATION_DELIVERY_PERIODS_READ = 309;
+    public static final int THIS_ORGANIZATION_CREATE_PAYMENT_REFUND = 310;
+    public static final int THIS_ORGANIZATION_CREATE_ORDER_REFUND   = 311;
 
 
     // ALL OTHER PERMISSIONS
@@ -56,6 +62,8 @@ public class Permission {
         put(Role.ADMIN, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -63,6 +71,7 @@ public class Permission {
 
             add(Permission.OTHER_USER_INFO_READ);
             add(Permission.OTHER_USER_INFO_WRITE);
+            add(Permission.OTHER_USER_PAYMENT_READ);
             add(Permission.OTHER_USER_ORDER_READ);
             add(Permission.OTHER_USER_ORDER_WRITE);
 
@@ -75,12 +84,16 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_USERS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+            add(Permission.THIS_ORGANIZATION_CREATE_PAYMENT_REFUND);
+            add(Permission.THIS_ORGANIZATION_CREATE_ORDER_REFUND);
 
             add(Permission.ORGANIZATION_LIST);
         }});
         put(Role.SUPERVISOR, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -102,6 +115,8 @@ public class Permission {
         put(Role.EMPLOYEE, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -122,6 +137,8 @@ public class Permission {
         put(Role.CUSTOMER, new ArrayList<Integer>() {{
             add(Permission.THIS_USER_INFO_READ);
             add(Permission.THIS_USER_INFO_WRITE);
+            add(Permission.THIS_USER_PAYMENT_READ);
+            add(Permission.THIS_USER_PAYMENT_WRITE);
             add(Permission.THIS_USER_ORDER_READ);
             add(Permission.THIS_USER_ORDER_WRITE);
             add(Permission.THIS_USER_CARD_READ);
@@ -200,10 +217,10 @@ public class Permission {
 
         // Get uid
         User user = User.findByFirebaseUid(ThreadStorage.get().uid);
-        if (user == null) throw new AccessDeniedException();
+        if (user == null) throw new AccessDeniedException("User is null");
 
         boolean result = checkUserPermission(user, permission, context);
-        if (!result) throw new AccessDeniedException();
+        if (!result) throw new AccessDeniedException(String.format("User does not have permission %d, or context is not allowed", permission));
     }
 
     public static void ignore() {
@@ -211,6 +228,13 @@ public class Permission {
     }
 
     public static class AccessDeniedException extends RuntimeException {
+        public AccessDeniedException() {
+            super();
+        }
+
+        public AccessDeniedException(String message) {
+            super(message);
+        }
     }
 
 }

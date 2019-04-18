@@ -1,20 +1,32 @@
 input DeliveryPeriodInput {
-    classPeriod: Int
-    status: Int
+    classPeriod: Int!
+    maxQueueSize: Int!
+    monday: String
+    tuesday: String
+    wednesday: String
+    thursday: String
+    friday: String
 }
 
 type DeliveryPeriodEntry {
     id: Long!
     status: Int!
     classPeriod: Int!
+    maxQueueSize: Int!
+    monday: String
+    tuesday: String
+    wednesday: String
+    thursday: String
+    friday: String
 }
 
 type DeliveryPeriodQuery {
     read(id: Long!): DeliveryPeriodEntry!
-    list(organizationId: Long!, statuses: [Int]!): [DeliveryPeriodEntry!]!
+    list(organizationId: Long!, parameters: QLFinder): [DeliveryPeriodEntry!]!
 }
 
 type DeliveryPeriodMutation {
     create(organizationId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
     update(deliveryPeriodId: Long!, deliveryPeriodInput: DeliveryPeriodInput!): DeliveryPeriodEntry!
+    updateStatus(deliveryPeriodId: Long!, status: Int!): DeliveryPeriodEntry!
 }

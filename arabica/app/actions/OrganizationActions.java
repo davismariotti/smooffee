@@ -7,26 +7,23 @@ import utilities.QLException;
 public class OrganizationActions {
 
     public static Organization createOrganization(String name) {
+        if (name == null) return null;
+
         return new Organization()
             .setName(name)
             .setStatus(BaseModel.ACTIVE)
             .store();
     }
 
-    public static Organization updateOrganization(Long organizationId, String name) {
-        Organization organization = Organization.find.byId(organizationId);
-        if (organization == null) throw new QLException("Organization not found");
+    public static Organization updateOrganization(Organization organization, String name) {
+        if (organization == null || name == null) return null;
 
         organization.setName(name);
         organization.save();
         return organization;
     }
 
-    public static boolean deleteOrganization(Long id) {
-        Organization organization = Organization.find.byId(id);
-        if (organization == null) throw new QLException("Organization not found");
-
-        organization.deprecate();
-        return true;
+    public static Organization deleteOrganization(Organization organization) {
+        return organization.deprecate();
     }
 }

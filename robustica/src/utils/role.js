@@ -1,0 +1,6 @@
+export const SYSADMIN = 'sysadmin'
+export const ADMIN = 'admin'
+export const EMPLOYEE = 'employee'
+export const SUPERVISOR = 'supervisor'
+export const CUSTOMER = 'customer'
+export const ANONYMOUS = 'anonymous'

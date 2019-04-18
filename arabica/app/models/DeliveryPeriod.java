@@ -1,6 +1,9 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
+import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,10 +17,20 @@ public class DeliveryPeriod extends BaseModel {
 
     public static final DeliveryPeriodFinder find = new DeliveryPeriodFinder();
 
+    @NotNull
     private Integer classPeriod;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
+
+    private String monday;
+    private String tuesday;
+    private String wednesday;
+    private String thursday;
+    private String friday;
+
+    @NotNull
+    private Integer maxQueueSize;
 
     public Organization getOrganization() {
         return organization;
@@ -37,6 +50,61 @@ public class DeliveryPeriod extends BaseModel {
         return this;
     }
 
+    public String getMonday() {
+        return monday;
+    }
+
+    public DeliveryPeriod setMonday(String monday) {
+        this.monday = monday;
+        return this;
+    }
+
+    public String getTuesday() {
+        return tuesday;
+    }
+
+    public DeliveryPeriod setTuesday(String tuesday) {
+        this.tuesday = tuesday;
+        return this;
+    }
+
+    public String getWednesday() {
+        return wednesday;
+    }
+
+    public DeliveryPeriod setWednesday(String wednesday) {
+        this.wednesday = wednesday;
+        return this;
+    }
+
+    public String getThursday() {
+        return thursday;
+    }
+
+    public DeliveryPeriod setThursday(String thursday) {
+        this.thursday = thursday;
+        return this;
+    }
+
+    public String getFriday() {
+        return friday;
+    }
+
+    public DeliveryPeriod setFriday(String friday) {
+        this.friday = friday;
+        return this;
+    }
+
+    public Integer getMaxQueueSize() {
+        return maxQueueSize;
+    }
+
+    public DeliveryPeriod setMaxQueueSize(Integer maxQueueSize) {
+        this.maxQueueSize = maxQueueSize;
+        return this;
+    }
+
+
     public static class DeliveryPeriodFinder extends Finder<Long, DeliveryPeriod> {
         public DeliveryPeriodFinder() {
             super(DeliveryPeriod.class);
@@ -48,6 +116,10 @@ public class DeliveryPeriod extends BaseModel {
                 .eq("organization_id", organizationId)
                 .in("status", statuses)
                 .findList();
+    }
+
+    public static Query<DeliveryPeriod> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(DeliveryPeriod.class);
     }
 
 }

@@ -35,7 +35,10 @@ module.exports = {
     'react/prefer-stateless-function': 0,
     'react/no-unused-state': 1,
     'react/forbid-prop-types': 0,
+    'react/prop-types': 0,
     'react/no-unused-prop-types': 0,
+    'react/require-default-props': 0,
+    'react/destructuring-assignment': 0,
     'quotes': [2, 'single', 'avoid-escape'],
     'no-unused-vars': 1,
     'no-console': 0,
@@ -44,6 +47,7 @@ module.exports = {
     'import/prefer-default-export': 0,
     'no-else-return': 0,
     'no-underscore-dangle': 0,
-    'lines-between-class-members': 0
+    'lines-between-class-members': 0,
+    'no-mixed-operators': 0
   }
 };

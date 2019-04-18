@@ -37,21 +37,11 @@ public class QLUserTest {
         FakeApplication.authToken.push(uid);
 
         QLUser.UserInput input = new QLUser.UserInput();
-        input.setStatus(BaseModel.ACTIVE);
         input.setFirstName("User");
         input.setLastName("2");
         input.setEmail(uid);
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId } } }",
-                Setup.defaultOrganization.getId(),
-                QL.prepare(input)
-        ));
-        assertNotNull(result);
-        assertEquals(OK, result.status());
-
-        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
-        assertNotNull(entry);
+        QLUser.UserEntry entry = createUser(input);
         assertEquals(uid, entry.getId());
         assertEquals("User", entry.getFirstname());
         assertEquals("2", entry.getLastname());
@@ -63,7 +53,6 @@ public class QLUserTest {
     @Test
     public void updateUser() {
         QLUser.UserInput input = new QLUser.UserInput();
-        input.setStatus(BaseModel.ACTIVE);
         input.setFirstName("Usen");
         input.setLastName("3");
         input.setEmail(uid);
@@ -102,5 +91,23 @@ public class QLUserTest {
         assertEquals(uid, entry.getEmail());
         assertEquals("User", entry.getFirstname());
         assertEquals("2", entry.getLastname());
+    }
+
+    public static QLUser.UserEntry createUser(QLUser.UserInput input) {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { user { create(organizationId: %d, userInput: %s) { id firstName lastName email organizationId status } } }",
+                Setup.defaultOrganization.getId(),
+                QL.prepare(input)
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLUser.UserEntry entry = FakeApplication.graphQLResultToObject(result, "user/create", QLUser.UserEntry.class);
+        assertNotNull(entry);
+        assertEquals(input.getFirstName(), entry.getFirstname());
+        assertEquals(input.getLastName(), entry.getLastname());
+        assertEquals(input.getEmail(), entry.getEmail());
+        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        return entry;
     }
 }

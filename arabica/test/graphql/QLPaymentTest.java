@@ -4,6 +4,7 @@ import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
 import models.BaseModel;
+import models.Payment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,16 +63,18 @@ public class QLPaymentTest {
         assertEquals(Setup.defaultSysadmin.getFirebaseUserId(), entry.getUser().getId());
     }
 
-
     public static QLPayment.PaymentEntry createPaymentCash(int amount) {
+        return createPaymentCash(Setup.defaultSysadmin.getFirebaseUserId(), amount);
+    }
+
+    public static QLPayment.PaymentEntry createPaymentCash(String userId, int amount) {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
-        input.setStatus(BaseModel.ACTIVE);
         input.setAmount(amount);
-        input.setType("cash");
+        input.setType(Payment.CASH);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } } } }",
-                QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
+                QL.prepare(userId),
                 QL.prepare(input)
         ));
         assertNotNull(result);
@@ -81,7 +84,7 @@ public class QLPaymentTest {
         assertEquals(amount, entry.getAmount().intValue());
         assertEquals("cash", entry.getType());
         assertNotNull(entry.getUser());
-        assertEquals(Setup.defaultSysadmin.getFirebaseUserId(), entry.getUser().getId());
+        assertEquals(userId, entry.getUser().getId());
 
         return entry;
     }

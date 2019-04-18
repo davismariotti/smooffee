@@ -3,32 +3,39 @@ package actions;
 import models.BaseModel;
 import models.DeliveryPeriod;
 import models.Organization;
-import utilities.QLException;
 
 public class DeliveryPeriodActions {
 
-    public static DeliveryPeriod createDeliveryPeriod(Long organizationId, Integer classPeriod) {
-        Organization organization = Organization.find.byId(organizationId);
-        if (organization == null) throw new QLException("Organization not found");
+    public static DeliveryPeriod createDeliveryPeriod(Organization organization, Integer classPeriod, Integer maxQueueSize, String monday, String tuesday, String wednesday, String thursday, String friday) {
+        if (organization == null || classPeriod == null) return null;
 
         return new DeliveryPeriod()
                 .setClassPeriod(classPeriod)
+                .setMaxQueueSize(maxQueueSize)
                 .setOrganization(organization)
+                .setMonday(monday == null       || monday.equals("")    ? null : monday)
+                .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
+                .setWednesday(wednesday == null || wednesday.equals("") ? null : wednesday)
+                .setThursday(thursday == null   || thursday.equals("")  ? null : thursday)
+                .setFriday(friday == null       || friday.equals("")    ? null : friday)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
     }
 
-    public static DeliveryPeriod updateDeliveryPeriod(Long deliveryPeriodId, Integer classPeriod, Integer status) {
-        DeliveryPeriod deliveryPeriod = DeliveryPeriod.find.byId(deliveryPeriodId);
-        if (deliveryPeriod == null) throw new QLException("Delivery Period not found");
+    public static DeliveryPeriod updateDeliveryPeriod(DeliveryPeriod deliveryPeriod, Integer classPeriod, Integer maxQueueSize,String monday, String tuesday, String wednesday, String thursday, String friday) {
+        if (deliveryPeriod == null || classPeriod == null) return null;
 
         return deliveryPeriod.setClassPeriod(classPeriod)
-                .setStatus(status)
+                .setMaxQueueSize(maxQueueSize)
+                .setMonday(monday == null       || monday.equals("")    ? null : monday)
+                .setTuesday(tuesday == null     || tuesday.equals("")   ? null : tuesday)
+                .setWednesday(wednesday == null || wednesday.equals("") ? null : wednesday)
+                .setThursday(thursday == null   || thursday.equals("")  ? null : thursday)
+                .setFriday(friday == null       || friday.equals("")    ? null : friday)
                 .store();
     }
 
-    public static boolean deprecateDeliveryPeriod(DeliveryPeriod deliveryPeriod) {
-        deliveryPeriod.deprecate();
-        return true;
+    public static DeliveryPeriod deprecateDeliveryPeriod(DeliveryPeriod deliveryPeriod) {
+        return deliveryPeriod.deprecate();
     }
 }

@@ -1,6 +1,7 @@
 import * as firebase from 'firebase'
 import history from '../utils/history'
-import {AUTH_TOKEN, USER_ID} from '../constants'
+import { SYSADMIN } from '../utils/role'
+import { StorageService } from './StorageService'
 
 const config = {
   apiKey: 'AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY',
@@ -20,15 +21,45 @@ export class AuthService {
       .signOut()
       .then(
         () => {
-          localStorage.setItem(AUTH_TOKEN, '')
-          localStorage.setItem(USER_ID, '')
-          console.log('sign out succesful')
+          StorageService.clearAll()
           history.push('/')
         },
         () => {
           console.log('an error happened')
         }
       )
+  }
+
+  static isSignedIn() {
+    if (firebase.auth().currentUser) return true
+    return StorageService.getUserId() != null && StorageService.getUserId() !== '';
+  }
+
+  static userHasRole(role) {
+    return StorageService.getUserRole() === role
+  }
+
+  static userInRoles(roles) {
+    return roles.includes(StorageService.getUserRole()) || AuthService.userHasRole(SYSADMIN)
+  }
+
+  static getAuthToken() {
+    if (firebase.auth().currentUser) {
+      return firebase.auth().currentUser.getToken()
+    } else {
+      return new Promise((success, reject) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+          unsubscribe()
+          user.getToken()
+            .then(token => {
+              StorageService.setAuthToken(token)
+              success(token)
+            }).catch(error => {
+              reject(error)
+          })
+        })
+      })
+    }
   }
 }
 

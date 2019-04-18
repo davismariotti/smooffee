@@ -1,86 +1,50 @@
-import React, {Component} from 'react'
-import * as PropTypes from 'prop-types'
-import {Route, Switch} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
-import {AUTH_TOKEN, USER_ID} from '../constants'
 import Home from './Home'
-import SignupContinued from './auth/SignupContinued'
-import Login from './auth/Login'
-import Recover from './auth/Recover'
-import Signup from './auth/Signup'
-import Navbar from './Navbar'
-import OrganizationSettings from './OrgSettings/OrganizationSettings'
+import SignupContinued from './auth/signup/SignupContinued'
+import Login from './auth/login/Login'
+import Recover from './auth/login/Recover'
+import Signup from './auth/signup/Signup'
+import Navbar from './Navbar/Navbar'
+import OrganizationSettings from './organizationsettings'
+import { ProtectedRoute } from '../utils/routeUtils'
+import { ADMIN, EMPLOYEE, SUPERVISOR } from '../utils/role'
+import { StorageService } from '../services/StorageService'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedin: localStorage.getItem(USER_ID) !== ''
-    }
-  }
 
   componentWillMount() {
     firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('AUTH STATE CHANGED', user)
-        // If logged in...
-        this.setState({
-          loggedin: true
-        })
         user.getToken().then(result => {
-          localStorage.setItem(AUTH_TOKEN, result)
-          localStorage.setItem(USER_ID, user.uid)
-        })
-      } else {
-        // If not logged in...
-        this.setState({
-          loggedin: false
+          StorageService.setAuthToken(result)
+          StorageService.setUserId(user.uid)
         })
       }
     })
   }
 
   render() {
-    const {updateClientCallback, loggedin} = this.state
     return (
       <div className="home">
-        <Navbar loggedin={loggedin}/>
+        <Navbar/>
         <br/>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={routeProps => (
-              <Login
-                {...routeProps}
-                updateClientCallback={updateClientCallback}
-              />
-            )}
-          />
-          <Route
-            path="/login"
-            render={routeProps => (
-              <Login {...routeProps}/>
-            )}
-          />
-          <Route
-            path="/signup"
-            render={routeProps => (
-              <Signup {...routeProps}/>
-            )}
-          />
+          <Route exact path="/" component={Login}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/signup" component={Signup}/>
           <Route path="/signupcontinued" component={SignupContinued}/>
           <Route path="/recover" component={Recover}/>
-          <Route path="/home" component={Home}/>
-          <Route path="/settings" component={OrganizationSettings}/>
+          <ProtectedRoute path="/home" component={Home} allowedRoles={[ADMIN, EMPLOYEE, SUPERVISOR]}/>
+          <ProtectedRoute path="/settings" component={OrganizationSettings} allowedRoles={[ADMIN, SUPERVISOR]}/>
         </Switch>
       </div>
     )
   }
 }
 
-App.propTypes = {
-}
+App.propTypes = {}
 
 export default App

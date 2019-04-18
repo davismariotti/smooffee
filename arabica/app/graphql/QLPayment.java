@@ -6,6 +6,10 @@ import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
+import utilities.QLFinder;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QLPayment {
     public static class Query {
@@ -13,8 +17,19 @@ public class QLPayment {
             Payment payment = Payment.find.byId(id);
             if (payment == null) throw new QLException("Payment not found.");
             
-            Permission.check(Permission.THIS_USER_INFO_READ, new AuthorizationContext(payment.getUser())); // TODO Decide if this is the correct permission
+            Permission.check(Permission.THIS_USER_PAYMENT_READ, new AuthorizationContext(payment.getUser()));
             return new PaymentEntry(payment);
+        }
+
+        public List<PaymentEntry> list(String userId, QLFinder parameters) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+
+            Permission.check(Permission.THIS_USER_PAYMENT_READ, new AuthorizationContext(user));
+
+            List<Payment> payments = Payment.findWithParamters(parameters).where().eq("user_id", userId).findList();
+
+            return payments.stream().map(PaymentEntry::new).collect(Collectors.toList());
         }
     }
 
@@ -22,28 +37,61 @@ public class QLPayment {
         public PaymentEntry create(String userId, PaymentInput paymentInput) {
             User user = User.findByFirebaseUid(userId);
             if (user == null) throw new QLException("User not found.");
-            Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(user)); // TODO Decide if this is the correct permission
 
-            if (paymentInput.getType().equals("card")) {
-                return new PaymentEntry(PaymentActions.makeCardPayment(userId, paymentInput.getAmount(), paymentInput.getCardId()));
+            Permission.check(Permission.THIS_USER_PAYMENT_WRITE, new AuthorizationContext(user));
 
-            } else if (paymentInput.getType().equals("cash")) {
-                return new PaymentEntry(PaymentActions.makeCashPayment(userId, paymentInput.getAmount()));
-            } else throw new QLException("Type not valid");
+            if (paymentInput.getType().equals(Payment.CARD)) {
+                if (paymentInput.getStripeCardId() != null) {
+                    return new PaymentEntry(PaymentActions.makeCardPayment(user, paymentInput.getAmount(), paymentInput.getStripeCardId()));
+                } else if (paymentInput.getStripeToken() != null) {
+                    return new PaymentEntry(PaymentActions.makeOneOffCardPayment(user, paymentInput.getAmount(), paymentInput.getStripeToken()));
+                } else throw new QLException("Payment must contain stripe token or stripe card id.");
+            } else {
+                return new PaymentEntry(PaymentActions.makeCashPayment(user, paymentInput.getAmount()));
+            }
+        }
+
+        public PaymentEntry updateStatus(Long paymentId, Integer status) {
+            Payment payment = Payment.find.byId(paymentId);
+            if (payment == null) throw new QLException("Payment not found.");
+
+            Permission.check(Permission.OTHER_USER_PAYMENT_WRITE, new AuthorizationContext(payment.getUser()));
+
+            payment.setStatus(status).store();
+
+            return new PaymentEntry(payment);
+        }
+
+        public PaymentEntry refundPayment(Long paymentId) {
+            Payment payment = Payment.find.byId(paymentId);
+            if (payment == null) throw new QLException("Payment not found.");
+
+            Permission.check(Permission.THIS_ORGANIZATION_CREATE_PAYMENT_REFUND, new AuthorizationContext(payment.getUser().getOrganization()));
+
+            return new PaymentEntry(PaymentActions.refundPayment(payment));
         }
     }
 
-    public static class PaymentInput extends QLInput {
+    public static class PaymentInput {
         private String type;
         private Integer amount;
-        private Long cardId;
+        private String stripeCardId;
+        private String stripeToken;
 
-        public Long getCardId() {
-            return cardId;
+        public String getStripeCardId() {
+            return stripeCardId;
         }
 
-        public void setCardId(Long cardId) {
-            this.cardId = cardId;
+        public void setStripeCardId(String stripeCardId) {
+            this.stripeCardId = stripeCardId;
+        }
+
+        public String getStripeToken() {
+            return stripeToken;
+        }
+
+        public void setStripeToken(String stripeToken) {
+            this.stripeToken = stripeToken;
         }
 
         public String getType() {
@@ -65,7 +113,7 @@ public class QLPayment {
 
     public static class PaymentEntry extends QLEntry {
         private Integer amount;
-        private Long cardId;
+        private String stripeCardId;
         private String type;
         private QLUser.UserEntry user;
 
@@ -73,7 +121,7 @@ public class QLPayment {
             super(payment);
             this.amount = payment.getAmount();
             this.type = payment.getType();
-            if (payment.getCard() != null) this.cardId = payment.getCard().getId();
+            this.stripeCardId = payment.getStripeCardId();
             this.user = new QLUser.UserEntry(payment.getUser());
         }
 
@@ -85,8 +133,8 @@ public class QLPayment {
             return user;
         }
 
-        public Long getCardId() {
-            return cardId;
+        public String getCardId() {
+            return stripeCardId;
         }
 
         public Integer getAmount() {

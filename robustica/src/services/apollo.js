@@ -1,25 +1,37 @@
-import {ApolloClient} from 'apollo-client'
-import {InMemoryCache} from 'apollo-cache-inmemory'
-import {HttpLink} from 'apollo-link-http'
-import {ApolloLink, concat} from 'apollo-link'
-import {AUTH_TOKEN} from '../constants'
+import { ApolloClient } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
+import { setContext } from 'apollo-link-context'
+import { AuthService } from './AuthService'
 
 const httpLink = new HttpLink({uri: 'http://localhost:9000/graphql'})
 
-const authMiddleware = new ApolloLink((operation, forward) => {
-  // add the authorization to the headers
-  const token = localStorage.getItem(AUTH_TOKEN) || null
-  operation.setContext({
-    headers: {
-      authorization: token ? `Bearer ${token}` : ''
-    }
-  })
-  return forward(operation)
+const asyncAuthLink = setContext(
+  () => {
+    return new Promise((success, reject) => {
+      AuthService.getAuthToken().then(token => {
+        success({
+          headers: {
+            authorization: token ? `Bearer ${token}` : ''
+          }
+        })
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
+)
+
+const authAfterware = onError(({networkError}) => {
+  if (networkError.statusCode === 401) AuthService.signout()
 })
 
-export default function createApolloClient() {
+function createApolloClient() {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: concat(authMiddleware, httpLink),
+    link: asyncAuthLink.concat(authAfterware.concat(httpLink))
   })
 }
+
+export const client = createApolloClient()

@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import * as PropTypes from 'prop-types'
-import {compose, graphql} from 'react-apollo'
-import {USER_ID} from '../constants'
-import {readUserQuery} from '../graphql/userQueries'
+import { compose, graphql } from 'react-apollo'
+import { readUserQuery } from '../graphql/userQueries'
+import { StorageService } from '../services/StorageService'
 
 class UserInfo extends Component {
   render() {
@@ -35,11 +35,9 @@ UserInfo.defaultProps = {
 
 export default compose(
   graphql(readUserQuery, {
-    options: () => {
-      return {
-        variables: {
-          userId: localStorage.getItem(USER_ID)
-        }
+    options: {
+      variables: {
+        userId: StorageService.getUserId()
       }
     }
   })

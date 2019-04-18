@@ -7,14 +7,15 @@ type OrganizationEntry {
 
 input OrganizationInput {
     name: String
-    status: Int
 }
 
 type OrganizationQuery {
     read(id: Long!): OrganizationEntry
-    list: [OrganizationEntry]!
+    list(parameters: QLFinder): [OrganizationEntry]!
 }
 
 type OrganizationMutation {
     create(input: OrganizationInput!): OrganizationEntry!
+    update(organizationId: Long!, organizationInput: OrganizationInput!): OrganizationEntry!
+    updateStatus(organizationId: Long!, status: Int!): OrganizationEntry!
 }

@@ -1,18 +1,20 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.Query;
 import io.ebean.annotation.NotNull;
+import utilities.QLFinder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "payment")
 public class Payment extends BaseModel {
 
     public static final PaymentFinder find = new PaymentFinder();
+
+    public static final String CASH = "cash";
+    public static final String CARD = "card";
 
     @NotNull
     private int amount;
@@ -21,11 +23,12 @@ public class Payment extends BaseModel {
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Card card;
-
     @NotNull
     private String type;
+
+    private String stripeChargeId;
+    private String stripeCardId;
+    private String stripeRefundId;
 
     public int getAmount() {
         return amount;
@@ -45,12 +48,21 @@ public class Payment extends BaseModel {
         return this;
     }
 
-    public Card getCard() {
-        return card;
+    public String getStripeCardId() {
+        return stripeCardId;
     }
 
-    public Payment setCard(Card card) {
-        this.card = card;
+    public Payment setStripeCardId(String stripeCardId) {
+        this.stripeCardId = stripeCardId;
+        return this;
+    }
+
+    public String getStripeRefundId() {
+        return stripeRefundId;
+    }
+
+    public Payment setStripeRefundId(String stripeRefundId) {
+        this.stripeRefundId = stripeRefundId;
         return this;
     }
 
@@ -63,9 +75,22 @@ public class Payment extends BaseModel {
         return this;
     }
 
+    public String getStripeChargeId() {
+        return stripeChargeId;
+    }
+
+    public Payment setStripeChargeId(String stripeChargeId) {
+        this.stripeChargeId = stripeChargeId;
+        return this;
+    }
+
     public static class PaymentFinder extends Finder<Long, Payment> {
         public PaymentFinder() {
             super(Payment.class);
         }
+    }
+
+    public static Query<Payment> findWithParamters(QLFinder finder) {
+        return (finder == null) ? find.query() : finder.build(Payment.class);
     }
 }

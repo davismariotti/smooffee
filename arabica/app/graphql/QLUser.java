@@ -1,17 +1,16 @@
 package graphql;
 
 import actions.UserActions;
-import models.BaseModel;
+import com.stripe.model.Card;
 import models.Organization;
 import models.User;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import services.authorization.Role;
 import utilities.QLException;
+import utilities.QLFinder;
 import utilities.ThreadStorage;
 
-import javax.persistence.OneToMany;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,14 +32,27 @@ public class QLUser {
             return new UserEntry(user);
         }
 
-        public List<UserEntry> list(Long organizationId) {
+        public List<UserEntry> list(Long organizationId, QLFinder finder) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_USERS_READ, new AuthorizationContext(organization));
 
-            List<User> users = User.findByOrganizationId(organizationId, Collections.singletonList(BaseModel.ACTIVE));
+            List<User> users = User.findWithParamters(finder)
+                    .where()
+                    .eq("organization_id", organizationId)
+                    .findList();
 
             return users.stream().map(UserEntry::new).collect(Collectors.toList());
+        }
+
+        public List<CardEntry> listCards(String userId) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_USER_CARD_READ, new AuthorizationContext(user));
+
+            List<Card> cards = UserActions.listCards(user);
+
+            return cards.stream().map(CardEntry::new).collect(Collectors.toList());
         }
     }
 
@@ -51,7 +63,7 @@ public class QLUser {
             Permission.ignore();
 
             String uid = ThreadStorage.get().uid;
-            User user = UserActions.createUser(userInput.firstName, userInput.lastName, uid, userInput.email, organizationId);
+            User user = UserActions.createUser(organization, uid, userInput.getFirstName(), userInput.getLastName(), userInput.getEmail());
             if (user == null) {
                 return null; // TODO what if user exists?
             }
@@ -63,8 +75,18 @@ public class QLUser {
             if (user == null) throw new QLException("User not found.");
             Permission.check(Permission.THIS_USER_INFO_WRITE, new AuthorizationContext(user));
 
-            user = UserActions.updateUser(userId, userInput);
+            user = UserActions.updateUser(user, userInput);
             return (user == null) ? null : new UserEntry(user);
+        }
+
+        public UserEntry updateStatus(String userId, Integer status) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.OTHER_USER_INFO_WRITE, new AuthorizationContext(user));
+
+            user.setStatus(status).store();
+
+            return new UserEntry(user);
         }
 
         public UserEntry updateRole(String userId, String role) {
@@ -78,13 +100,23 @@ public class QLUser {
 
             return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
         }
+
+        public UserEntry attachCard(String userId, String stripeToken) {
+            User user = User.findByFirebaseUid(userId);
+            if (user == null) throw new QLException("User not found.");
+
+            Permission.check(Permission.THIS_USER_CARD_WRITE, new AuthorizationContext(user));
+
+            UserActions.addStripeCardToUser(user, stripeToken);
+
+            return new UserEntry(user);
+        }
     }
 
     public static class UserInput {
         String firstName;
         String lastName;
         String email;
-        Integer status;
 
         public String getFirstName() {
             return firstName;
@@ -108,14 +140,6 @@ public class QLUser {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public Integer getStatus() {
-            return status;
-        }
-
-        public void setStatus(Integer status) {
-            this.status = status;
         }
     }
 
@@ -170,6 +194,31 @@ public class QLUser {
 
         public Integer getStatus() {
             return status;
+        }
+    }
+
+    public static class CardEntry {
+
+        String stripeCardId;
+        String last4;
+        String brand;
+
+        public CardEntry(Card card) {
+            this.brand = card.getBrand();
+            this.last4 = card.getLast4();
+            this.stripeCardId = card.getId();
+        }
+
+        public String getStripeCardId() {
+            return stripeCardId;
+        }
+
+        public String getLast4() {
+            return last4;
+        }
+
+        public String getBrand() {
+            return brand;
         }
     }
 }
