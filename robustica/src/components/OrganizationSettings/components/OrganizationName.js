@@ -46,7 +46,6 @@ class OrganizationName extends Component {
 
 
 OrganizationName.propTypes = {
-  classes: PropTypes.object.isRequired,
   organizationReadQueryResult: PropTypes.object.isRequired,
   openEditOrganizationModal: PropTypes.func.isRequired,
   editOrganization: PropTypes.object

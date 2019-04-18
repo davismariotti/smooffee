@@ -19,14 +19,14 @@ class UserList extends Component {
   }
 
   renderTable() {
-    const {classes, listUsersQueryResult, openUserMenu} = this.props
+    const {listUsersQueryResult, openUserMenu} = this.props
     if (listUsersQueryResult.loading) {
       return <div>Loading</div>
     } else if (listUsersQueryResult.error) {
       return <div>Error</div>
     }
     return (
-      <Table className={classes.table}>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell align="left">First Name</TableCell>
@@ -91,7 +91,6 @@ class UserList extends Component {
 }
 
 UserList.propTypes = {
-  classes: PropTypes.object.isRequired,
   listUsersQueryResult: PropTypes.object.isRequired,
   addMoreFunds: PropTypes.object,
   userMenu: PropTypes.object,

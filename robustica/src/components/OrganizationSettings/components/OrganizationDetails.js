@@ -31,7 +31,6 @@ class OrganizationDetails extends Component {
 
 
 OrganizationDetails.propTypes = {
-  classes: PropTypes.object.isRequired,
   organizationReadQueryResult: PropTypes.object.isRequired,
   editOrganization: PropTypes.object
 }
