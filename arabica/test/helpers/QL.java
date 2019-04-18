@@ -1,5 +1,8 @@
 package helpers;
 
+import utilities.QLFinderIgnore;
+
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -40,7 +43,10 @@ public class QL {
                 // Find get methods of obj
                 Class clazz = obj.getClass();
                 Method[] methodsArray = clazz.getDeclaredMethods();
-                List<Method> methods = Arrays.stream(methodsArray).sorted(Comparator.comparing(Method::getName)).collect(Collectors.toList());
+                List<Method> methods = Arrays.stream(methodsArray)
+                        .filter(method -> null == method.getAnnotation(QLFinderIgnore.class))
+                        .sorted(Comparator.comparing(Method::getName))
+                        .collect(Collectors.toList());
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("{");
@@ -55,6 +61,24 @@ public class QL {
                         }
                     }
                 }
+
+                // Find public declared fields
+                Field[] fieldsArray = clazz.getFields();
+                List<Field> fields = Arrays.stream(fieldsArray)
+                        .filter(field -> null == field.getAnnotation(QLFinderIgnore.class))
+                        .sorted(Comparator.comparing(Field::getName))
+                        .collect(Collectors.toList());
+
+                for (Field field : fields) {
+                    Object getResult = field.get(obj);
+                    if (getResult != null) {
+                        sb.append(field.getName());
+                        sb.append(": ");
+                        sb.append(prepare(getResult));
+                        sb.append(", ");
+                    }
+                }
+
                 if (sb.length() > 1) {
                     sb.delete(sb.length() - 2, sb.length());
                 }

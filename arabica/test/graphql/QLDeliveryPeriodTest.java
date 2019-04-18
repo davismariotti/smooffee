@@ -8,7 +8,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
-import utilities.QLFinder;
 
 import static org.junit.Assert.*;
 import static play.mvc.Http.Status.OK;

@@ -33,8 +33,8 @@ public class Setup {
         defaultSysadmin = new User()
                 .setRole(Role.SYSADMIN.getValue())
                 .setEmail("davismariotti@gmail.com")
-                .setFirstname("Davis")
-                .setLastname("Mariotti")
+                .setFirstName("Davis")
+                .setLastName("Mariotti")
                 .setBalance(0)
                 .setFirebaseUserId("davismariotti@gmail.com")
                 .setOrganization(defaultOrganization)
@@ -49,8 +49,8 @@ public class Setup {
                 .setOrganization(defaultOrganization)
                 .setBalance(0)
                 .setEmail("customer@test.com")
-                .setFirstname("Default")
-                .setLastname("Customer")
+                .setFirstName("Default")
+                .setLastName("Customer")
                 .setFirebaseUserId("customer@test.com")
                 .store();
         AuthenticationService.mockMap.put(defaultCustomer.getFirebaseUserId(), defaultCustomer.getFirebaseUserId());

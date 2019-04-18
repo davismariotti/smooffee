@@ -21,8 +21,8 @@ public class UserActions {
         User existingUser = User.findByFirebaseUid(fireBaseUserId);
         if (existingUser == null) {
             User newUser = new User()
-                    .setFirstname(firstname)
-                    .setLastname(lastname)
+                    .setFirstName(firstname)
+                    .setLastName(lastname)
                     .setEmail(email)
                     .setFirebaseUserId(fireBaseUserId)
                     .setRole(Role.CUSTOMER.getValue())
@@ -40,8 +40,8 @@ public class UserActions {
     public static User updateUser(User user, QLUser.UserInput input) { // TODO
         if (user == null || input == null) return null;
 
-        user = user.setFirstname(input.getFirstName())
-                .setLastname(input.getLastName())
+        user = user.setFirstName(input.getFirstName())
+                .setLastName(input.getLastName())
                 .setEmail(input.getEmail()) // TODO Allow?
                 .store();
         return user;

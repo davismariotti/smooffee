@@ -155,8 +155,8 @@ public class QLUser {
 
         public UserEntry(User user) {
             this.id = user.getFirebaseUserId();
-            this.firstName = user.getFirstname();
-            this.lastName = user.getLastname();
+            this.firstName = user.getFirstName();
+            this.lastName = user.getLastName();
             this.email = user.getEmail();
             this.organizationId = user.getOrganization().getId();
             this.balance = user.getBalance();
