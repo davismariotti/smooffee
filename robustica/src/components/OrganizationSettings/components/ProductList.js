@@ -15,13 +15,6 @@ import EditProductModal from '../modals/EditProductModal'
 import { StorageService } from '../../../services/StorageService'
 
 const styles = {
-  organizationSettings: {
-    textAlign: 'center'
-  },
-  paper: {
-    margin: '30px',
-    padding: '10px'
-  },
   tableRowDisabled: {
     color: '#B0B0B0'
   }
@@ -78,7 +71,7 @@ class ProductList extends Component {
             }} style={{color: '#E83323'}}>Delete</Button>
           </MenuItem>
         </Menu>
-        <Paper className={classes.paper} elevation={1}>
+        <Paper className="paper" elevation={1}>
           <AlignCenter>
             <Typography variant="h5" component="h3">
               Products

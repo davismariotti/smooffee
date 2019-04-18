@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Button, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
 import { graphql } from 'react-apollo'
 import MoreVert from '@material-ui/icons/Menu'
@@ -12,13 +11,6 @@ import { listUsersQuery } from '../../../graphql/userQueries'
 import OrganizationSettingsActions from '../actions'
 import AddFundsModal from '../modals/AddFundsModal'
 import { StorageService } from '../../../services/StorageService'
-
-const styles = {
-  paper: {
-    margin: '30px',
-    padding: '10px'
-  },
-}
 
 class UserList extends Component {
   constructor(props) {
@@ -71,7 +63,7 @@ class UserList extends Component {
   }
 
   render() {
-    const {classes, userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
+    const {userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
 
     return (
       <div>
@@ -83,7 +75,7 @@ class UserList extends Component {
             }}>Add Funds</Button>
           </MenuItem>
         </Menu>
-        <Paper className={classes.paper} elevation={1}>
+        <Paper className="paper" elevation={1}>
           <AlignCenter>
             <Typography variant="h5" component="h3">
               User List
@@ -126,7 +118,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default compose(
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   graphql(listUsersQuery, {
     name: 'listUsersQueryResult',

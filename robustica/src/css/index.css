@@ -20,6 +20,12 @@
   overflow: scroll;
   max-height: fit-content;
 }
+
 .order {
   display: inline;
+}
+
+.paper {
+  margin: 30px;
+  padding: 10px;
 }

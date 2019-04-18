@@ -22,6 +22,11 @@ query ReadCurrentUser {
       id
       organizationId
       role
+      firstName
+      lastName
+      status
+      balance
+      email
     }
   }
 }
