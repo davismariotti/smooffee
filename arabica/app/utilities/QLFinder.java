@@ -88,19 +88,19 @@ public class QLFinder {
         if (term.eq != null) {
             return eq(convertFieldName(modelClazz, term.eq.field), convertFieldValue(modelClazz, term.eq.field, term.eq.value));
         } else if (term.gt != null) {
-            return gt(term.gt.field, convertFieldValue(modelClazz, term.gt.field, term.gt.value));
+            return gt(convertFieldName(modelClazz, term.gt.field), convertFieldValue(modelClazz, term.gt.field, term.gt.value));
         } else if (term.gte != null) {
-            return ge(term.gte.field, convertFieldValue(modelClazz, term.gte.field, term.gte.value));
+            return ge(convertFieldName(modelClazz, term.gte.field), convertFieldValue(modelClazz, term.gte.field, term.gte.value));
         } else if (term.lt != null) {
-            return lt(term.lt.field, convertFieldValue(modelClazz, term.lt.field, term.lt.value));
+            return lt(convertFieldName(modelClazz, term.lt.field), convertFieldValue(modelClazz, term.lt.field, term.lt.value));
         } else if (term.lte != null) {
-            return le(term.lte.field, convertFieldValue(modelClazz, term.lte.field, term.lte.value));
+            return le(convertFieldName(modelClazz, term.lte.field), convertFieldValue(modelClazz, term.lte.field, term.lte.value));
         } else if (term.like != null) {
-            return like(term.like.field, term.like.value);
+            return like(convertFieldName(modelClazz, term.like.field), term.like.value);
         } else if (term.ilike != null) {
-            return like(term.ilike.field, term.ilike.value);
+            return like(convertFieldName(modelClazz, term.ilike.field), term.ilike.value);
         } else if (term.include != null) {
-            return in(term.include.field, term.include.values.stream().map(value -> convertFieldValue(modelClazz, term.include.field, value)).collect(Collectors.toList()));
+            return in(convertFieldName(modelClazz, term.include.field), term.include.values.stream().map(value -> convertFieldValue(modelClazz, term.include.field, value)).collect(Collectors.toList()));
         } else if (term.not != null) {
             return not(getExpression(term.not, modelClazz));
         } else if (term.or != null) {
