@@ -49,9 +49,9 @@ query ListUsers($organizationId: Long!, $parameters: QLFinder) {
 `
 
 export const signUpMutation = gql`
-mutation CreateUser($userInput: UserInput!) {
+mutation CreateUser($userInput: UserInput!, $organizationId: Long!) {
   user {
-    create(organizationId: 3, userInput: $userInput) {
+    create(organizationId: $organizationId, userInput: $userInput) {
       id
       firstName
       lastName

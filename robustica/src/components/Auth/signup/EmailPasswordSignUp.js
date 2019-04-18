@@ -26,12 +26,12 @@ class EmailPasswordSignUp extends Component {
         </StyledFormRow>
         <StyledFormRow>
           <StyledFormRowItem>
-            <Field fullWidth name="password" component={TextField} validate={validateIsRequired} label="Password"/>
+            <Field fullWidth name="password" type="password" component={TextField} validate={validateIsRequired} label="Password"/>
           </StyledFormRowItem>
         </StyledFormRow>
         <StyledFormRow>
           <StyledFormRowItem>
-            <Button type="submit" fullWidth variant="contained">Submit</Button>
+            <Button fullWidth type="submit" variant="contained">Submit</Button>
           </StyledFormRowItem>
         </StyledFormRow>
       </form>
