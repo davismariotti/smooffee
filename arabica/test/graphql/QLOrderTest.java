@@ -1,20 +1,17 @@
 package graphql;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
 import models.BaseModel;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import play.mvc.Result;
 
-import java.io.IOException;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.contentAsString;
 
 public class QLOrderTest {
 

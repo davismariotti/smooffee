@@ -22,6 +22,7 @@ libraryDependencies += "com.google.firebase" % "firebase-admin" % "6.7.0"
 libraryDependencies += "com.h2database" % "h2" % "1.4.198"
 libraryDependencies += "com.stripe" % "stripe-java" % "8.0.2"
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.8.1"
+libraryDependencies += "com.google.guava" % "guava" % "27.1-jre"
 libraryDependencies ++= Seq(evolutions, jdbc)
 
 crossPaths := false

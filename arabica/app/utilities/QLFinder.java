@@ -6,6 +6,8 @@ import io.ebean.OrderBy;
 import io.ebean.Query;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.Column;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,7 +44,6 @@ public class QLFinder {
 
     public static class QLFinderValue {
         public String field;
-
         public String value;
     }
 
@@ -82,9 +83,10 @@ public class QLFinder {
         return query;
     }
 
+    @QLFinderIgnore
     public Expression getExpression(QLFinderTerm term, Class modelClazz) {
         if (term.eq != null) {
-            return eq(term.eq.field, convertFieldValue(modelClazz, term.eq.field, term.eq.value));
+            return eq(convertFieldName(modelClazz, term.eq.field), convertFieldValue(modelClazz, term.eq.field, term.eq.value));
         } else if (term.gt != null) {
             return gt(term.gt.field, convertFieldValue(modelClazz, term.gt.field, term.gt.value));
         } else if (term.gte != null) {
@@ -118,6 +120,18 @@ public class QLFinder {
         return func.apply(value);
     }
 
+    public static String convertFieldName(Class modelClazz, String fieldName) {
+        try {
+            Field field = modelClazz.getField(fieldName);
+            Column column = field.getAnnotation(Column.class);
+            if (column == null) return fieldName;
+            return column.name();
+        } catch (NoSuchFieldException e) {
+            return fieldName;
+        }
+    }
+
+    @QLFinderIgnore
     public static Class getFieldType(Class startingClass, String field) {
         String[] split = field.split("\\.", 2);
         String getter = String.format("get%s", StringUtils.capitalize(split[0]));
@@ -131,6 +145,7 @@ public class QLFinder {
         return methodGetter.getReturnType();
     }
 
+    @QLFinderIgnore
     public static final Map<Class, Function<String, Object>> convertMap = new HashMap<Class, Function<String, Object>>() {{
         put(String.class, (x) -> x);
         put(Integer.class, Integer::parseInt);
