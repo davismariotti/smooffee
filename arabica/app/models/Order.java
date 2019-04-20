@@ -11,9 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
 
-import static io.ebean.Expr.eq;
-import static io.ebean.Expr.or;
-
 @Entity
 @Table(name = "orders")
 public class Order extends BaseModel {

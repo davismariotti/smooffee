@@ -11,8 +11,6 @@ import play.mvc.Result;
 import services.AuthenticationService;
 import utilities.QLFinder;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static play.mvc.Http.Status.OK;

@@ -10,13 +10,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
+import services.AuthenticationService;
 import services.authorization.Permission;
 import utilities.ArabicaLogger;
-import services.AuthenticationService;
 import utilities.QLException;
 import utilities.ThreadStorage;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
