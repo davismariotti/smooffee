@@ -1,15 +1,12 @@
 package graphql;
 
 import actions.DeliveryPeriodActions;
-import actions.PaymentActions;
 import models.*;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import utilities.QLException;
 import utilities.QLFinder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

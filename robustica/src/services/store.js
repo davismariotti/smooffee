@@ -2,8 +2,8 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import homeReducer from '../components/Home/reducer'
-import organizationSettingsReducer from '../components/organizationsettings/reducer'
-import authReducer from '../components/auth/reducer'
+import organizationSettingsReducer from '../components/OrganizationSettings/reducer'
+import authReducer from '../components/Auth/reducer'
 import navbarReducer from '../components/Navbar/reducer'
 
 const reducerList = [

@@ -3,7 +3,6 @@ package actions;
 import models.BaseModel;
 import models.Organization;
 import models.Product;
-import utilities.QLException;
 
 public class ProductActions {
     public static Product createProduct(Organization organization, String name, String description, Integer price) {

@@ -9,8 +9,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-import static io.ebean.Expr.*;
-
 @Entity
 @Table(name = "organization")
 public class Organization extends BaseModel {

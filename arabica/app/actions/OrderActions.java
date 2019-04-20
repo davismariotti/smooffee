@@ -3,9 +3,6 @@ package actions;
 import models.*;
 import utilities.QLException;
 
-import static io.ebean.Expr.eq;
-import static io.ebean.Expr.or;
-
 public class OrderActions {
 
     public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {

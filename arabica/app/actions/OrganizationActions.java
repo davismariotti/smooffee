@@ -2,7 +2,6 @@ package actions;
 
 import models.BaseModel;
 import models.Organization;
-import utilities.QLException;
 
 public class OrganizationActions {
 
