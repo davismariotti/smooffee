@@ -15,10 +15,10 @@ public class QLOrganization {
     public static class Query {
 
         public OrganizationEntry read(Long id) {
-            Permission.check(Permission.THIS_ORGANIZATION_READ);
-            // Lookup user by firebase token
             Organization organization = Organization.find.byId(id);
             if (organization == null) throw new QLException("Organization not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_READ, new AuthorizationContext(organization));
+
             return new OrganizationEntry(organization);
         }
 
@@ -41,12 +41,12 @@ public class QLOrganization {
             return new OrganizationEntry(OrganizationActions.createOrganization(input.getName()));
         }
 
-        public OrganizationEntry update(Long organizationId, OrganizationInput input) {
+        public OrganizationEntry update(Long organizationId, OrganizationInput organizationInput) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
 
-            return new OrganizationEntry(OrganizationActions.updateOrganization(organization, input.getName()));
+            return new OrganizationEntry(OrganizationActions.updateOrganization(organization, organizationInput.getName()));
         }
 
         public OrganizationEntry updateStatus(Long organizationId, Integer status) {
