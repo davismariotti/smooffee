@@ -3,7 +3,6 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import models.BaseModel;
 import org.junit.*;
 import play.mvc.Result;
 import services.AuthenticationService;

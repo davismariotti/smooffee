@@ -6,10 +6,7 @@ import io.ebean.annotation.NotNull;
 import services.authorization.Role;
 import utilities.QLFinder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -20,10 +17,12 @@ public class User extends BaseModel {
     public static final UserFinder find = new UserFinder();
 
     @NotNull
-    private String firstname;
+    @Column(name = "firstname")
+    private String firstName;
 
     @NotNull
-    private String lastname;
+    @Column(name = "lastname")
+    private String lastName;
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
@@ -61,12 +60,12 @@ public class User extends BaseModel {
         return this;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public User setLastname(String lastname) {
-        this.lastname = lastname;
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
         return this;
     }
 
@@ -101,12 +100,12 @@ public class User extends BaseModel {
         return this;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public User setFirstname(String firstname) {
-        this.firstname = firstname;
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
         return this;
     }
 

@@ -4,8 +4,9 @@ import { HttpLink } from 'apollo-link-http'
 import { onError } from 'apollo-link-error'
 import { setContext } from 'apollo-link-context'
 import { AuthService } from './AuthService'
+import { getArabicaUri } from './env'
 
-const httpLink = new HttpLink({uri: 'http://localhost:9000/graphql'})
+const httpLink = new HttpLink({uri: getArabicaUri()})
 
 const asyncAuthLink = setContext(
   () => {

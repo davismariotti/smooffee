@@ -1,6 +1,5 @@
 package controllers;
 
-import models.Organization;
 import play.mvc.*;
 
 /**

@@ -6,25 +6,35 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
 import graphql.*;
 import play.libs.Json;
+import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
+import services.AuthenticationService;
 import services.authorization.Permission;
 import utilities.ArabicaLogger;
-import services.AuthenticationService;
 import utilities.QLException;
 import utilities.ThreadStorage;
 
-import java.util.HashMap;
+import javax.inject.Inject;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public class GraphQLController extends Controller {
 
-    private Gson gson = new Gson();
+    private static Gson gson = new Gson();
 
-    private int count = 0;
+    private static int count = 0;
+
+    private HttpExecutionContext httpExecutionContext;
+
+    @Inject
+    public GraphQLController(HttpExecutionContext ec) {
+        this.httpExecutionContext = ec;
+    }
 
     @With(Headers.class)
     public Result options() {
@@ -32,7 +42,11 @@ public class GraphQLController extends Controller {
     }
 
     @With(Headers.class)
-    public Result graphql(Http.Request request) {
+    public CompletionStage<Result> graphql(Http.Request request) {
+        return executeGraphQL(request).thenApplyAsync(result -> result, httpExecutionContext.current());
+    }
+
+    private static CompletionStage<Result> executeGraphQL(Http.Request request) {
         Query query = gson.fromJson(request.body().asText(), Query.class);
         if (query == null) {
             query = gson.fromJson(request.body().asJson().toString(), Query.class);
@@ -53,12 +67,12 @@ public class GraphQLController extends Controller {
             // Get firebase token
             if (!request.getHeaders().get("Authorization").isPresent()) {
                 count++;
-                return unauthorized();
+                return CompletableFuture.completedFuture(unauthorized());
             }
             String authToken = request.getHeaders().get("Authorization").get();
             if (authToken.equals("Bearer undefined")) {
                 count++;
-                return unauthorized();
+                return CompletableFuture.completedFuture(unauthorized());
             }
 
             try {
@@ -66,9 +80,9 @@ public class GraphQLController extends Controller {
             } catch (FirebaseAuthException | IllegalArgumentException e) {
                 count++;
                 if (e.getMessage() != null) {
-                    return unauthorized(e.getMessage());
+                    return CompletableFuture.completedFuture(unauthorized(e.getMessage()));
                 }
-                return unauthorized();
+                return CompletableFuture.completedFuture(unauthorized());
             }
             ThreadStorage.Storage storage = new ThreadStorage.Storage();
             storage.uid = uid;
@@ -98,7 +112,7 @@ public class GraphQLController extends Controller {
         try {
             executionResult = root.execute(input);
         } catch (Permission.AccessDeniedException e) {
-            return forbidden(e.getMessage());
+            return CompletableFuture.completedFuture(forbidden(e.getMessage()));
         }
 
         if (ThreadStorage.get() != null && !ThreadStorage.get().hasCheckedPermissions) {
@@ -112,16 +126,16 @@ public class GraphQLController extends Controller {
         if (executionResult.getErrors() != null && executionResult.getErrors().size() > 0) {
             result.put("errors", executionResult.getErrors().stream().map(item -> {
                 String errors = gson.toJson(item);
-                Map<String,Object> map = gson.fromJson(errors, Map.class);
+                Map<String, Object> map = gson.fromJson(errors, Map.class);
                 if (item instanceof ExceptionWhileDataFetching && ((ExceptionWhileDataFetching) item).getException() instanceof QLException) {
-                    map.put("code", ((QLException)((ExceptionWhileDataFetching) item).getException()).getCode());
+                    map.put("code", ((QLException) ((ExceptionWhileDataFetching) item).getException()).getCode());
                 }
                 try {
-                    ((Map<String,Object>)map.get("exception")).remove("stackTrace");
+                    ((Map<String, Object>) map.get("exception")).remove("stackTrace");
                 } catch (Exception ex) {
                 }
                 try {
-                    ((Map<String,Object>)((Map<String,Object>)map.get("exception")).get("cause")).remove("stackTrace");
+                    ((Map<String, Object>) ((Map<String, Object>) map.get("exception")).get("cause")).remove("stackTrace");
                 } catch (Exception ex) {
                 }
                 return map;
@@ -136,13 +150,13 @@ public class GraphQLController extends Controller {
 
         count++;
 
-        return ok(node);
+        return CompletableFuture.completedFuture(ok(node));
     }
 
     static class Query {
         String query;
         String operationName;
-        Map<String,Object> variables;
+        Map<String, Object> variables;
     }
 
 

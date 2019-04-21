@@ -3,8 +3,6 @@ package actions;
 import models.BaseModel;
 import models.Order;
 import models.Refund;
-import models.User;
-import utilities.QLException;
 
 public class RefundActions {
     public static Refund createRefund(Order order) {

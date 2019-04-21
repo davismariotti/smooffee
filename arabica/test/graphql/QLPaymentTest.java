@@ -3,7 +3,6 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
-import models.BaseModel;
 import models.Payment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

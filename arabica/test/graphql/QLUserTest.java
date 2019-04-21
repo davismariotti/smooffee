@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
 import services.AuthenticationService;
+import utilities.QLFinder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -109,5 +110,19 @@ public class QLUserTest {
         assertEquals(input.getEmail(), entry.getEmail());
         assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
         return entry;
+    }
+
+    public static QLUser.UserEntry[] listUsers(Long organizationId, QLFinder parameters) {
+        Result result = FakeApplication.routeGraphQLRequest(
+                "query { user { list(organizationId: %d, parameters: %s) { id firstName lastName email organizationId status balance role } } }",
+                organizationId,
+                QL.prepare(parameters)
+        );
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLUser.UserEntry[] entries = FakeApplication.graphQLResultToObject(result, "user/list", QLUser.UserEntry[].class);
+        assertNotNull(entries);
+        return entries;
     }
 }

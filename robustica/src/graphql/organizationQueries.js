@@ -14,7 +14,7 @@ query ReadOrganization($organizationId: Long!) {
 export const editOrganizationMutation = gql`
 mutation EditOrganization($organizationId: Long!, $organizationInput: OrganizationInput!) {
   organization {
-    update(organizationId: $organizationId, organizationInput: $input) {
+    update(organizationId: $organizationId, organizationInput: $organizationInput) {
       id
     }
   }
