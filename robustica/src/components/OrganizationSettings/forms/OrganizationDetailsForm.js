@@ -14,7 +14,7 @@ class OrganizationDetailsForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit} = this.props
+    const {handleSubmit, pristine, invalid} = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -38,7 +38,7 @@ class OrganizationDetailsForm extends React.Component {
           </Typography>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Button fullWidth type="submit" variant="contained">
+              <Button disabled={invalid || pristine} fullWidth type="submit" variant="contained">
                 Submit
               </Button>
             </StyledFormRowItem>

@@ -1,9 +1,11 @@
 package graphql;
 
 import actions.UserActions;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.stripe.model.Card;
 import models.Organization;
 import models.User;
+import services.AuthenticationService;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import services.authorization.Role;
@@ -57,16 +59,14 @@ public class QLUser {
     }
 
     public static class Mutation {
-        public UserEntry create(Long organizationId, UserInput userInput) {
+        public UserEntry create(Long organizationId, UserInput userInput) throws FirebaseAuthException {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.ignore();
 
             String uid = ThreadStorage.get().uid;
-            User user = UserActions.createUser(organization, uid, userInput.getFirstName(), userInput.getLastName(), userInput.getEmail());
-            if (user == null) {
-                return null; // TODO what if user exists?
-            }
+            String email = AuthenticationService.getEmailFromUid(uid);
+            User user = UserActions.createUser(organization, uid, userInput.getFirstName(), userInput.getLastName(), email);
             return new UserEntry(user);
         }
 
@@ -116,7 +116,6 @@ public class QLUser {
     public static class UserInput {
         String firstName;
         String lastName;
-        String email;
 
         public String getFirstName() {
             return firstName;
@@ -132,14 +131,6 @@ public class QLUser {
 
         public void setLastName(String lastName) {
             this.lastName = lastName;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
     }
 

@@ -35,11 +35,10 @@ public class QLTest {
     @Test
     public void testPrepareObject() {
         QLUser.UserInput input = new QLUser.UserInput();
-        input.setEmail("test@test.com");
         input.setFirstName("Test");
         input.setLastName("User");
 
-        assertEquals("{email: \\\"test@test.com\\\", firstName: \\\"Test\\\", lastName: \\\"User\\\"}", QL.prepare(input));
+        assertEquals("{firstName: \\\"Test\\\", lastName: \\\"User\\\"}", QL.prepare(input));
     }
 
     @Test

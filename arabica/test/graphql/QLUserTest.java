@@ -40,7 +40,6 @@ public class QLUserTest {
         QLUser.UserInput input = new QLUser.UserInput();
         input.setFirstName("User");
         input.setLastName("2");
-        input.setEmail(uid);
 
         QLUser.UserEntry entry = createUser(input);
         assertEquals(uid, entry.getId());
@@ -56,7 +55,6 @@ public class QLUserTest {
         QLUser.UserInput input = new QLUser.UserInput();
         input.setFirstName("Usen");
         input.setLastName("3");
-        input.setEmail(uid);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
                 "mutation { user { update(userId: %s, userInput: %s) { id firstName lastName email organizationId } } }",
@@ -107,7 +105,6 @@ public class QLUserTest {
         assertNotNull(entry);
         assertEquals(input.getFirstName(), entry.getFirstname());
         assertEquals(input.getLastName(), entry.getLastname());
-        assertEquals(input.getEmail(), entry.getEmail());
         assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
         return entry;
     }

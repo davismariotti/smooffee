@@ -33,16 +33,16 @@ public class UserActions {
             newUser.save();
             return newUser;
         } else {
-            return null; // TODO
+            throw new QLException("User already exists.");
         }
     }
 
     public static User updateUser(User user, QLUser.UserInput input) { // TODO
         if (user == null || input == null) return null;
 
-        user = user.setFirstName(input.getFirstName())
+        user = user
+                .setFirstName(input.getFirstName())
                 .setLastName(input.getLastName())
-                .setEmail(input.getEmail()) // TODO Allow?
                 .store();
         return user;
     }

@@ -10,7 +10,7 @@ import { currencyMask, validateIsRequired } from '../../../utils/formUtils'
 
 class UserAddFundsForm extends React.Component {
   render() {
-    const {name, handleSubmit} = this.props
+    const {name, handleSubmit, invalid, pristine} = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -24,7 +24,7 @@ class UserAddFundsForm extends React.Component {
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Button fullWidth type="submit" variant="contained">
+              <Button disabled={invalid || pristine} fullWidth type="submit" variant="contained">
                 Submit
               </Button>
             </StyledFormRowItem>

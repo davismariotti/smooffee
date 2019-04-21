@@ -48,6 +48,16 @@ query ListUsers($organizationId: Long!, $parameters: QLFinder) {
 }
 `
 
+export const updateUserMutation = gql`
+mutation UpdateUser($userId: String!, $userInput: UserInput!) {
+  user {
+    update(userId: $userId, userInput: $userInput) {
+      id
+    }
+  }
+}
+`
+
 export const signUpMutation = gql`
 mutation CreateUser($userInput: UserInput!, $organizationId: Long!) {
   user {

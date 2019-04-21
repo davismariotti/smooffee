@@ -1,17 +1,39 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { Paper } from '@material-ui/core'
 import { compose } from 'redux'
 import { graphql } from 'react-apollo'
 import Loader from 'react-loaders'
-
 import Typography from '@material-ui/core/Typography'
+import { connect } from 'react-redux'
+import { initialize } from 'redux-form'
+
 import { AlignCenter, CenterDiv } from '../styles/core'
-import { readCurrentUserQuery } from '../../graphql/userQueries'
+import { readCurrentUserQuery, updateUserMutation } from '../../graphql/userQueries'
+import MyAccountForm from './MyAccountForm'
+import { StorageService } from '../../services/StorageService'
 
 class MyAccount extends Component {
   render() {
-    const { readCurrentUserQueryResult } = this.props
+    const {readCurrentUserQueryResult, updateUserMutate, reinitializeForm} = this.props
+
+    const submit = ({firstName, lastName}) => {
+      updateUserMutate({
+        variables: {
+          userId: StorageService.getUserId(),
+          userInput: {
+            firstName,
+            lastName
+          }
+        }
+      }).then(() => {
+        return readCurrentUserQueryResult.refetch()
+      }).then((newData) => {
+        if (newData && newData.data) {
+          reinitializeForm(newData.data.user.currentUser)
+        }
+      })
+    }
+
     return (
       <div>
         {readCurrentUserQueryResult.loading && (
@@ -24,9 +46,11 @@ class MyAccount extends Component {
           <Paper className="paper" elevation={1}>
             <AlignCenter>
               <Typography variant="h5">Hi {readCurrentUserQueryResult.user.currentUser.firstName} {readCurrentUserQueryResult.user.currentUser.lastName}</Typography>
-              <Typography variant="h5">Balance: {`$${(readCurrentUserQueryResult.user.currentUser.balance / 100).toFixed(2)}`}</Typography>
-              <Typography variant="h5">Role: {readCurrentUserQueryResult.user.currentUser.role}</Typography>
-              <Typography variant="h5">Email: {readCurrentUserQueryResult.user.currentUser.email}</Typography>
+              Your balance is {`$${(readCurrentUserQueryResult.user.currentUser.balance / 100).toFixed(2)}`}
+              <br/>
+              <br/>
+              <br/>
+              <MyAccountForm initialValues={readCurrentUserQueryResult.user.currentUser} onSubmit={submit}/>
             </AlignCenter>
           </Paper>
         )}
@@ -35,12 +59,18 @@ class MyAccount extends Component {
   }
 }
 
-
-const mapStateToProps = state => ({})
+const mapDispatchToProps = dispatch => {
+  return {
+    reinitializeForm: (newData) => dispatch(initialize('myAccountForm', newData))
+  }
+}
 
 export default compose(
-  connect(mapStateToProps),
+  connect(null, mapDispatchToProps),
   graphql(readCurrentUserQuery, {
     name: 'readCurrentUserQueryResult'
+  }),
+  graphql(updateUserMutation, {
+    name: 'updateUserMutate'
   })
 )(MyAccount)

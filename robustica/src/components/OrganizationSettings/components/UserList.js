@@ -11,6 +11,7 @@ import { listUsersQuery } from '../../../graphql/userQueries'
 import OrganizationSettingsActions from '../actions'
 import AddFundsModal from '../modals/AddFundsModal'
 import { StorageService } from '../../../services/StorageService'
+import { translateRole } from '../../../utils/role'
 
 class UserList extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class UserList extends Component {
                 <TableCell align="left">{userItem.firstName}</TableCell>
                 <TableCell align="left">{userItem.lastName}</TableCell>
                 <TableCell align="right">{`$${(userItem.balance / 100).toFixed(2)}`}</TableCell>
-                <TableCell align="right">{userItem.role}</TableCell>
+                <TableCell align="right">{translateRole(userItem.role)}</TableCell>
                 <TableCell align="right">
                   <Button onClick={(e) => {
                     openUserMenu({

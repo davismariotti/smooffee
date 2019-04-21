@@ -13,7 +13,7 @@ class EditOrganizationForm extends Component {
   }
 
   render() {
-    const {handleSubmit} = this.props
+    const {handleSubmit, invalid, pristine} = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -27,7 +27,7 @@ class EditOrganizationForm extends Component {
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Button fullWidth type="submit" variant="contained">
+              <Button disabled={invalid || pristine} fullWidth type="submit" variant="contained">
                 Submit
               </Button>
             </StyledFormRowItem>
