@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Paper } from '@material-ui/core'
+import { Button, Paper } from '@material-ui/core'
 import { compose } from 'redux'
 import { graphql } from 'react-apollo'
 import Loader from 'react-loaders'
@@ -11,10 +11,22 @@ import { AlignCenter, CenterDiv } from '../styles/core'
 import { readCurrentUserQuery, updateUserMutation } from '../../graphql/userQueries'
 import MyAccountForm from './MyAccountForm'
 import { StorageService } from '../../services/StorageService'
+import MyAccountActions from './actions'
+import { AuthService } from '../../services/AuthService'
 
 class MyAccount extends Component {
+  constructor(props) {
+    super(props)
+    this.renderPasswordReset = this.renderPasswordReset.bind(this)
+  }
+
+
+  renderPasswordReset() {
+
+  }
+
   render() {
-    const {readCurrentUserQueryResult, updateUserMutate, reinitializeForm} = this.props
+    const {readCurrentUserQueryResult, updateUserMutate, reinitializeForm, doResetPasswordLinkSent, resetPasswordLinkSent} = this.props
 
     const submit = ({firstName, lastName}) => {
       updateUserMutate({
@@ -34,6 +46,15 @@ class MyAccount extends Component {
       })
     }
 
+    const resetPassword = () => {
+      AuthService.sendPasswordResetEmail(AuthService.getEmail()).then(() => {
+        console.log('Sent password reset email')
+        doResetPasswordLinkSent()
+      }).catch(error => {
+        console.log('resetPassword error', error)
+      })
+    }
+
     return (
       <div>
         {readCurrentUserQueryResult.loading && (
@@ -43,16 +64,34 @@ class MyAccount extends Component {
         )}
         {readCurrentUserQueryResult.error && <div>Error</div>}
         {readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser && (
-          <Paper className="paper" elevation={1}>
-            <AlignCenter>
-              <Typography variant="h5">Hi {readCurrentUserQueryResult.user.currentUser.firstName} {readCurrentUserQueryResult.user.currentUser.lastName}</Typography>
-              Your balance is {`$${(readCurrentUserQueryResult.user.currentUser.balance / 100).toFixed(2)}`}
-              <br/>
-              <br/>
-              <br/>
-              <MyAccountForm initialValues={readCurrentUserQueryResult.user.currentUser} onSubmit={submit}/>
-            </AlignCenter>
-          </Paper>
+          <div>
+            <Paper className="paper" elevation={1}>
+              <AlignCenter>
+                <Typography variant="h5">Hi {readCurrentUserQueryResult.user.currentUser.firstName} {readCurrentUserQueryResult.user.currentUser.lastName}</Typography>
+                Your balance is {`$${(readCurrentUserQueryResult.user.currentUser.balance / 100).toFixed(2)}`}
+                <br/>
+                <br/>
+                <br/>
+                <MyAccountForm initialValues={readCurrentUserQueryResult.user.currentUser} onSubmit={submit}/>
+              </AlignCenter>
+            </Paper>
+            {AuthService.getProviderId() && (AuthService.getProviderId() === 'password') && (
+              <Paper className="paper" elevation={1}>
+                <AlignCenter>
+                  <Typography variant="h5">Change Password</Typography>
+                  Click the button below to receive an email link at {readCurrentUserQueryResult.user.currentUser.email} to reset your password.
+                  <br />
+                  {resetPasswordLinkSent && (
+                    <div>
+                      Sent!
+                      <br />
+                    </div>
+                  )}
+                  <Button style={{marginTop: '10px'}} variant="contained" onClick={resetPassword}>Reset Password</Button>
+                </AlignCenter>
+              </Paper>
+            )}
+          </div>
         )}
       </div>
     )
@@ -61,12 +100,19 @@ class MyAccount extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    reinitializeForm: (newData) => dispatch(initialize('myAccountForm', newData))
+    reinitializeForm: (newData) => dispatch(initialize('myAccountForm', newData)),
+    doResetPasswordLinkSent: () => dispatch(MyAccountActions.resetPasswordLinkSent())
+  }
+}
+
+const mapStateToProps = ({myaccount}) => {
+  return {
+    resetPasswordLinkSent: myaccount.resetPasswordLinkSent
   }
 }
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(readCurrentUserQuery, {
     name: 'readCurrentUserQueryResult'
   }),

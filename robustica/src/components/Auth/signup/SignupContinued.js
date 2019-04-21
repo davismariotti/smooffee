@@ -24,8 +24,7 @@ class SignupContinued extends Component {
 
       const userInput = {
         firstName,
-        lastName,
-        email: (firebaseApp.auth().currentUser) ? firebaseApp.auth().currentUser.email : ''
+        lastName
       }
 
       signUpMutate({

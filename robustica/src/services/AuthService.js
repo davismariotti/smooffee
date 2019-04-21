@@ -32,7 +32,7 @@ export class AuthService {
 
   static isSignedIn() {
     if (firebase.auth().currentUser) return true
-    return StorageService.getUserId() != null && StorageService.getUserId() !== '';
+    return StorageService.getUserId() != null && StorageService.getUserId() !== ''
   }
 
   static userHasRole(role) {
@@ -50,17 +50,37 @@ export class AuthService {
       return new Promise((success, reject) => {
         const unsubscribe = firebase.auth().onAuthStateChanged(user => {
           unsubscribe()
-          user.getToken()
-            .then(token => {
-              StorageService.setAuthToken(token)
-              success(token)
-            }).catch(error => {
+          if (!user) {
+            StorageService.clearAll()
+            history.push('/login')
+          } else {
+            user.getToken()
+              .then(token => {
+                StorageService.setAuthToken(token)
+                success(token)
+              }).catch(error => {
               reject(error)
-          })
+            })
+          }
         })
       })
     }
   }
+
+  static getProviderId() {
+    if (!firebase.auth().currentUser) return null
+    return firebase.auth().currentUser.providerData[0].providerId
+  }
+
+  static getEmail() {
+    if (!firebase.auth().currentUser) return null
+    return firebase.auth().currentUser.email
+  }
+
+  static sendPasswordResetEmail(emailAddress) {
+    return firebase.auth().sendPasswordResetEmail(emailAddress)
+  }
+
 }
 
 export default firebaseApp
