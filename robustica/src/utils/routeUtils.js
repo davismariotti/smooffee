@@ -21,4 +21,20 @@ export const ProtectedRoute = (
   )
 }
 
+export const AuthenticatedRoute = (
+  {
+    component: Component,
+    redirect: pathname,
+    ...rest
+  }) => {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        AuthService.isSignedIn() ? <Component {...rest} {...props} /> : <Redirect to={{pathname, state: {from: props.location}}}/>
+      }
+    />
+  )
+}
+
 ProtectedRoute.defaultProps = {redirect: '/login', allowedRoles: [ANONYMOUS]}

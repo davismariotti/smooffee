@@ -22,6 +22,11 @@ query ReadCurrentUser {
       id
       organizationId
       role
+      firstName
+      lastName
+      status
+      balance
+      email
     }
   }
 }
@@ -43,10 +48,20 @@ query ListUsers($organizationId: Long!, $parameters: QLFinder) {
 }
 `
 
-export const signUpMutation = gql`
-mutation CreateUser($userInput: UserInput!) {
+export const updateUserMutation = gql`
+mutation UpdateUser($userId: String!, $userInput: UserInput!) {
   user {
-    create(organizationId: 3, userInput: $userInput) {
+    update(userId: $userId, userInput: $userInput) {
+      id
+    }
+  }
+}
+`
+
+export const signUpMutation = gql`
+mutation CreateUser($userInput: UserInput!, $organizationId: Long!) {
+  user {
+    create(organizationId: $organizationId, userInput: $userInput) {
       id
       firstName
       lastName

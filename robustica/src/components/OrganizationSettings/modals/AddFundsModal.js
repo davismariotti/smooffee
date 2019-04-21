@@ -33,8 +33,7 @@ class AddFundsModal extends Component {
           userId: addMoreFunds.id,
           paymentInput: {
             type: 'cash',
-            amount,
-            status: 1
+            amount
           }
         }
       }).then(() => {
@@ -47,7 +46,7 @@ class AddFundsModal extends Component {
 
     return (
       <div>
-        <Modal open={!!addMoreFunds}>
+        <Modal open={!!addMoreFunds} onClose={closeAddFundsModal}>
           <CenterDiv className={classes.paper}>
             <AlignCenter>
               <UserAddFundsForm onSubmit={submit} name={name}/>

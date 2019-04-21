@@ -16,7 +16,14 @@ import { validateIsRequired } from '../../../utils/formUtils'
 
 class Login extends Component {
   render() {
-    const {handleSubmit, authError, signInWithEmailAndPassword, signInWithGoogle} = this.props
+    const {
+      handleSubmit,
+      authError,
+      signInWithEmailAndPassword,
+      signInWithGoogle,
+      invalid,
+      pristine
+    } = this.props
 
     const submit = ({email, password}) => {
       signInWithEmailAndPassword(email, password)
@@ -40,7 +47,7 @@ class Login extends Component {
                 <Field fullWidth name="password" type="password" component={TextField} validate={validateIsRequired} label="Password"/>
               </StyledFormRow>
               <StyledFormRow>
-                <Button type="submit" fullWidth variant="contained" style={{marginTop: '20px'}}>Submit</Button>
+                <Button type="submit" disabled={invalid || pristine} fullWidth variant="contained" style={{marginTop: '20px'}}>Submit</Button>
               </StyledFormRow>
             </form>
             <br/>

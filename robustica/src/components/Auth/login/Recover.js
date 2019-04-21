@@ -14,7 +14,7 @@ import { StyledFormRow } from '../../styles/forms'
 class Recover extends Component {
   render() {
 
-    const {handleSubmit, recoverWithEmail, recoverResponse} = this.props
+    const {handleSubmit, recoverWithEmail, recoverResponse, invalid, pristine} = this.props
 
     const submit = ({email}) => {
       recoverWithEmail(email)
@@ -34,7 +34,7 @@ class Recover extends Component {
               <StyledFormRow>
                 <Field fullWidth name="email" autoComplete="email" type="email" component={TextField} label="Email"/>
               </StyledFormRow>
-              <Button type="submit" fullWidth variant="contained">Submit</Button>
+              <Button disabled={invalid || pristine} type="submit" fullWidth variant="contained">Submit</Button>
             </form>
           </Paper>
         </MainCenterDiv>

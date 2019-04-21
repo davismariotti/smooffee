@@ -17,7 +17,7 @@ class DeliveryPeriodForm extends React.Component {
   }
 
   render() {
-    const {editProduct, handleSubmit} = this.props
+    const {editProduct, handleSubmit, invalid, pristine} = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ class DeliveryPeriodForm extends React.Component {
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Button fullWidth type="submit" variant="contained">
+              <Button disabled={invalid || pristine} fullWidth type="submit" variant="contained">
                 Submit
               </Button>
             </StyledFormRowItem>

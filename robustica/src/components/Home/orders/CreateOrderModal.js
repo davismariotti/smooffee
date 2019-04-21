@@ -38,7 +38,9 @@ class CreateOrderModal extends Component {
       closeModal,
       createOrderMutate,
       handleSubmit,
-      refetch
+      refetch,
+      invalid,
+      pristine
     } = this.props
 
     const submit = values => {
@@ -100,7 +102,7 @@ class CreateOrderModal extends Component {
               <StyledFormRow>
                 <Field fullWidth name="notes" component={TextField} label="Notes"/>
               </StyledFormRow>
-              <Button type="submit" fullWidth variant="contained">Submit</Button>
+              <Button disabled={invalid || pristine} type="submit" fullWidth variant="contained">Submit</Button>
             </form>
           </CenterDiv>
         </Modal>

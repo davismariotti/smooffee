@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import firebaseApp from '../services/AuthService'
 import 'firebase/auth'
+
 import Home from './Home'
 import SignupContinued from './Auth/signup/SignupContinued'
 import Login from './Auth/login/Login'
 import Recover from './Auth/login/Recover'
 import Signup from './Auth/signup/Signup'
 import Navbar from './Navbar/Navbar'
+import MyAccount from './MyAccount'
+import { AuthenticatedRoute, ProtectedRoute } from '../utils/routeUtils'
 import OrganizationSettings from './OrganizationSettings'
-import { ProtectedRoute } from '../utils/routeUtils'
 import { ADMIN, EMPLOYEE, SUPERVISOR } from '../utils/role'
 import { StorageService } from '../services/StorageService'
 
@@ -39,6 +41,7 @@ class App extends Component {
           <Route path="/recover" component={Recover}/>
           <ProtectedRoute path="/home" component={Home} allowedRoles={[ADMIN, EMPLOYEE, SUPERVISOR]}/>
           <ProtectedRoute path="/settings" component={OrganizationSettings} allowedRoles={[ADMIN, SUPERVISOR]}/>
+          <AuthenticatedRoute path="/account" component={MyAccount} />
         </Switch>
       </div>
     )

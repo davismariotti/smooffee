@@ -5,12 +5,14 @@ import homeReducer from '../components/Home/reducer'
 import organizationSettingsReducer from '../components/OrganizationSettings/reducer'
 import authReducer from '../components/Auth/reducer'
 import navbarReducer from '../components/Navbar/reducer'
+import myAccountReducer from '../components/MyAccount/reducer'
 
 const reducerList = [
   homeReducer,
   organizationSettingsReducer,
   authReducer,
-  navbarReducer
+  navbarReducer,
+  myAccountReducer
 ]
 
 function reducers() {

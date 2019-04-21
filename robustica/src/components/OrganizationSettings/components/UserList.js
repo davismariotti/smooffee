@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Button, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
 import * as PropTypes from 'prop-types'
 import { graphql } from 'react-apollo'
 import MoreVert from '@material-ui/icons/Menu'
@@ -12,13 +11,7 @@ import { listUsersQuery } from '../../../graphql/userQueries'
 import OrganizationSettingsActions from '../actions'
 import AddFundsModal from '../modals/AddFundsModal'
 import { StorageService } from '../../../services/StorageService'
-
-const styles = {
-  paper: {
-    margin: '30px',
-    padding: '10px'
-  },
-}
+import { translateRole } from '../../../utils/role'
 
 class UserList extends Component {
   constructor(props) {
@@ -27,14 +20,14 @@ class UserList extends Component {
   }
 
   renderTable() {
-    const {classes, listUsersQueryResult, openUserMenu} = this.props
+    const {listUsersQueryResult, openUserMenu} = this.props
     if (listUsersQueryResult.loading) {
       return <div>Loading</div>
     } else if (listUsersQueryResult.error) {
       return <div>Error</div>
     }
     return (
-      <Table className={classes.table}>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell align="left">First Name</TableCell>
@@ -51,7 +44,7 @@ class UserList extends Component {
                 <TableCell align="left">{userItem.firstName}</TableCell>
                 <TableCell align="left">{userItem.lastName}</TableCell>
                 <TableCell align="right">{`$${(userItem.balance / 100).toFixed(2)}`}</TableCell>
-                <TableCell align="right">{userItem.role}</TableCell>
+                <TableCell align="right">{translateRole(userItem.role)}</TableCell>
                 <TableCell align="right">
                   <Button onClick={(e) => {
                     openUserMenu({
@@ -71,7 +64,7 @@ class UserList extends Component {
   }
 
   render() {
-    const {classes, userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
+    const {userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
 
     return (
       <div>
@@ -83,7 +76,7 @@ class UserList extends Component {
             }}>Add Funds</Button>
           </MenuItem>
         </Menu>
-        <Paper className={classes.paper} elevation={1}>
+        <Paper className="paper" elevation={1}>
           <AlignCenter>
             <Typography variant="h5" component="h3">
               User List
@@ -99,7 +92,6 @@ class UserList extends Component {
 }
 
 UserList.propTypes = {
-  classes: PropTypes.object.isRequired,
   listUsersQueryResult: PropTypes.object.isRequired,
   addMoreFunds: PropTypes.object,
   userMenu: PropTypes.object,
@@ -126,7 +118,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default compose(
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   graphql(listUsersQuery, {
     name: 'listUsersQueryResult',

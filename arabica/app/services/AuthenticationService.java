@@ -47,6 +47,10 @@ public class AuthenticationService {
         }
     }
 
+    public static String getEmailFromUid(String uid) throws FirebaseAuthException {
+        return mock ? uid : FirebaseAuth.getInstance().getUser(uid).getEmail();
+    }
+
     public static String getUidFromToken(String firebaseAuthToken) throws FirebaseAuthException {
         if (!mock) {
             return FirebaseAuth.getInstance().verifyIdToken(firebaseAuthToken).getUid();

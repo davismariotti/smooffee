@@ -11,7 +11,7 @@ import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
 
 class EmailPasswordSignUp extends Component {
   render() {
-    const {handleSubmit, createUserWithEmailAndPassword} = this.props
+    const {handleSubmit, createUserWithEmailAndPassword, invalid, pristine} = this.props
 
     const submit = ({email, password}) => {
       createUserWithEmailAndPassword(email, password)
@@ -26,12 +26,12 @@ class EmailPasswordSignUp extends Component {
         </StyledFormRow>
         <StyledFormRow>
           <StyledFormRowItem>
-            <Field fullWidth name="password" component={TextField} validate={validateIsRequired} label="Password"/>
+            <Field fullWidth name="password" type="password" component={TextField} validate={validateIsRequired} label="Password"/>
           </StyledFormRowItem>
         </StyledFormRow>
         <StyledFormRow>
           <StyledFormRowItem>
-            <Button type="submit" fullWidth variant="contained">Submit</Button>
+            <Button disabled={invalid || pristine} fullWidth type="submit" variant="contained">Submit</Button>
           </StyledFormRowItem>
         </StyledFormRow>
       </form>
