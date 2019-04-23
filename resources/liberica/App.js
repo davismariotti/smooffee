@@ -7,11 +7,12 @@
  */
 
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
-import LoginForm from './LoginForm'
+import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native'
+import LoginForm from './components/LoginForm'
 import { Provider } from 'react-redux'
 import { combineReducers, createStore } from 'redux'
 import { reducer as formReducer } from 'redux-form'
+import AppNavigator from './navigation/AppNavigator'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -33,10 +34,8 @@ export default class App extends Component<Props> {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <Text style={styles.welcome}>Welcome to React Native!</Text>
-          <Text style={styles.instructions}>To get started, edit App.js</Text>
-          <Text style={styles.instructions}>{instructions}</Text>
-          <LoginForm/>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
         </View>
       </Provider>
     )
