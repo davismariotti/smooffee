@@ -1,11 +1,12 @@
-import React from 'react';
-import { StyleSheet, Image, Text, View } from 'react-native';
-import Touchable from 'react-native-platform-touchable';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import Touchable from 'react-native-platform-touchable'
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'Settings',
-  };
+  }
+
   render() {
     return (
       <View>
@@ -13,8 +14,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Get Help
@@ -27,8 +28,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Manage Payment Options
@@ -41,8 +42,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Change Password
@@ -54,8 +55,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Edit User Information
@@ -67,8 +68,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Share Ideas/Feedback
@@ -81,8 +82,8 @@ export default class SettingsScreen extends React.Component {
           style={styles.option}
           background={Touchable.Ripple('#ccc', false)}
           onPress={this._handleEditUserInfo}>
-          <View style={{ flexDirection: 'row' }}>
-            
+          <View style={{flexDirection: 'row'}}>
+
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionText}>
                 Delete account
@@ -92,15 +93,15 @@ export default class SettingsScreen extends React.Component {
         </Touchable>
 
       </View>
-    );
+    )
   }
 
 
   _handleEditUserInfo = () => {
-    
-  };
 
-  
+  }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -128,4 +129,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 1,
   },
-});
+})
