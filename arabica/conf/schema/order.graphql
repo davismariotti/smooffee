@@ -15,6 +15,7 @@ type OrderEntry {
     recipient: String!
     deliveryPeriod: DeliveryPeriodEntry!
     refund: RefundEntry
+    orderModifiers: [OrderModifierEntry!]!
 }
 
 type RefundEntry {

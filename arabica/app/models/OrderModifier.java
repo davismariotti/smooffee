@@ -17,10 +17,16 @@ public class OrderModifier extends BaseModel {
     @NotNull
     private String name;
 
-
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
+
+    @ManyToMany(mappedBy = "orderModifiers")
+    private Set<Product> products;
+
+    private Set<Product> getProducts() {
+        return products;
+    }
 
     public String getName() {
         return name;

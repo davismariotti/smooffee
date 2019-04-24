@@ -98,6 +98,7 @@ public class QLOrder {
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
         private RefundEntry refund;
+        private List<QLOrderModifier.OrderModifierEntry> orderModifiers;
 
         public OrderEntry(Order order) {
             super(order);
@@ -137,6 +138,11 @@ public class QLOrder {
                 }
             }
             return refund;
+        }
+
+        public List<QLOrderModifier.OrderModifierEntry> orderModifiers() {
+            if (orderModifiers == null) orderModifiers = order.getOrderModifiers().stream().map(QLOrderModifier.OrderModifierEntry::new).collect(Collectors.toList());
+            return orderModifiers;
         }
     }
 
