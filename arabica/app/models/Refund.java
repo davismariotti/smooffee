@@ -39,7 +39,7 @@ public class Refund extends BaseModel {
     }
 
     public static class RefundFinder extends Finder<Long, Refund> {
-        public RefundFinder() {
+        RefundFinder() {
             super(Refund.class);
         }
     }

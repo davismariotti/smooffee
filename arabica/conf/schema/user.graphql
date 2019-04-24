@@ -12,6 +12,8 @@ type UserEntry {
     balance: Int!
     role: String!
     status: Int!
+    orders: [OrderEntry!]!
+    payments: [PaymentEntry!]!
 }
 
 type CardEntry {

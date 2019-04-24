@@ -91,6 +91,7 @@ public class QLOrder {
     }
 
     public static class OrderEntry extends QLEntry {
+        private Order order;
         private String location;
         private String notes;
         private String recipient;
@@ -100,14 +101,10 @@ public class QLOrder {
 
         public OrderEntry(Order order) {
             super(order);
+            this.order = order;
             this.location = order.getLocation();
             this.notes = order.getNotes();
-            this.product = new QLProduct.ProductEntry(order.getProduct());
             this.recipient = order.getRecipient();
-            this.deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
-            if (Refund.findByOrderId(order.getId()) != null) {
-                this.refund = new RefundEntry(Refund.findByOrderId(order.getId()));
-            }
         }
 
         public String getLocation() {
@@ -123,14 +120,22 @@ public class QLOrder {
         }
 
         public QLProduct.ProductEntry getProduct() {
+            if (product == null) product = new QLProduct.ProductEntry(order.getProduct());
             return product;
         }
 
         public QLDeliveryPeriod.DeliveryPeriodEntry getDeliveryPeriod() {
+            if (deliveryPeriod == null) deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
             return deliveryPeriod;
         }
 
         public RefundEntry getRefund() {
+            if (refund == null) {
+                Refund refundModel = Refund.findByOrderId(order.getId());
+                if (refundModel != null) {
+                    refund = new RefundEntry(refundModel);
+                }
+            }
             return refund;
         }
     }

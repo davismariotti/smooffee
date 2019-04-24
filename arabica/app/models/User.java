@@ -9,6 +9,7 @@ import utilities.QLFinder;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +42,20 @@ public class User extends BaseModel {
     private Integer balance;
 
     private String stripeCustomerId;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Payment> payments;
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
 
     public Integer getBalance() {
         return balance;
@@ -140,7 +155,7 @@ public class User extends BaseModel {
 
 
     public static class UserFinder extends Finder<Long, User> {
-        public UserFinder() {
+        UserFinder() {
             super(User.class);
         }
     }

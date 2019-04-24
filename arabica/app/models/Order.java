@@ -5,11 +5,9 @@ import io.ebean.Query;
 import io.ebean.annotation.NotNull;
 import utilities.QLFinder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -34,6 +32,13 @@ public class Order extends BaseModel {
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private DeliveryPeriod deliveryPeriod;
+
+    @ManyToMany
+    @JoinTable(
+            name = "order_modifier_orders",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_modifier_id"))
+    private Set<OrderModifier> orderModifiers;
 
     private String notes;
 
@@ -91,6 +96,15 @@ public class Order extends BaseModel {
         return this;
     }
 
+    public Set<OrderModifier> getOrderModifiers() {
+        return orderModifiers;
+    }
+
+    public Order setOrderModifiers(Set<OrderModifier> orderModifiers) {
+        this.orderModifiers = orderModifiers;
+        return this;
+    }
+
     public static List<Order> findByOrganizationId(Long organizationId) {
         return find.query().where()
                 .eq("user.organization.id", organizationId)
@@ -98,7 +112,7 @@ public class Order extends BaseModel {
     }
 
     public static class OrderFinder extends Finder<Long, Order> {
-        public OrderFinder() {
+        OrderFinder() {
             super(Order.class);
         }
     }

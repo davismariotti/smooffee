@@ -85,7 +85,7 @@ public class Payment extends BaseModel {
     }
 
     public static class PaymentFinder extends Finder<Long, Payment> {
-        public PaymentFinder() {
+        PaymentFinder() {
             super(Payment.class);
         }
     }

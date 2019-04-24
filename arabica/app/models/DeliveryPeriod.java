@@ -106,7 +106,7 @@ public class DeliveryPeriod extends BaseModel {
 
 
     public static class DeliveryPeriodFinder extends Finder<Long, DeliveryPeriod> {
-        public DeliveryPeriodFinder() {
+        DeliveryPeriodFinder() {
             super(DeliveryPeriod.class);
         }
     }

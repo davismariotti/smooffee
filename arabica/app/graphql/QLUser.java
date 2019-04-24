@@ -143,8 +143,12 @@ public class QLUser {
         private Integer balance;
         private String role;
         private Integer status;
+        private User user;
+        private List<QLPayment.PaymentEntry> payments;
+        private List<QLOrder.OrderEntry> orders;
 
         public UserEntry(User user) {
+            this.user = user;
             this.id = user.getFirebaseUserId();
             this.firstName = user.getFirstName();
             this.lastName = user.getLastName();
@@ -185,6 +189,17 @@ public class QLUser {
 
         public Integer getStatus() {
             return status;
+        }
+
+        public List<QLOrder.OrderEntry> getOrders() { // TODO check permissions
+            if (orders == null) orders = user.getOrders().stream().map(QLOrder.OrderEntry::new).collect(Collectors.toList());
+            return orders;
+        }
+
+        public List<QLPayment.PaymentEntry> getPayments() {
+            Permission.check(Permission.THIS_USER_PAYMENT_READ, new AuthorizationContext(user));
+            if (payments == null) payments = user.getPayments().stream().map(QLPayment.PaymentEntry::new).collect(Collectors.toList());
+            return payments;
         }
     }
 

@@ -73,7 +73,7 @@ public class Product extends BaseModel {
     }
 
     public static class ProductFinder extends Finder<Long, Product> {
-        public ProductFinder() {
+        ProductFinder() {
             super(Product.class);
         }
     }

@@ -6,6 +6,7 @@ type Query {
     order: OrderQuery!
     payment: PaymentQuery!
     deliveryPeriod: DeliveryPeriodQuery!
+    orderModifier: OrderModifierQuery!
 }
 
 type Mutation {
@@ -15,6 +16,7 @@ type Mutation {
     order: OrderMutation!
     payment: PaymentMutation!
     deliveryPeriod: DeliveryPeriodMutation!
+    orderModifier: OrderModifierMutation!
 }
 
 input QLFinder {

@@ -3,6 +3,8 @@ type OrganizationEntry {
     status: Int!
     name: String!
     products: [ProductEntry!]!
+    deliveryPeriods: [DeliveryPeriodEntry!]!
+    users: [UserEntry!]!
 }
 
 input OrganizationInput {
