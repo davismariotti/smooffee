@@ -11,6 +11,7 @@ import models.User;
 import services.authorization.Role;
 import utilities.QLException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserActions {
@@ -66,20 +67,20 @@ public class UserActions {
         return user.setBalance(user.getBalance() - amount).store();
     }
 
-    public static User addStripeCardToUser(User user, String token) {
+    public static Card addStripeCardToUser(User user, String token) {
         if (user == null || token == null) return null;
 
         if (user.getStripeCustomerId() == null) {
             try {
                 Customer customer = StripeAPI.createCustomer(user, token);
-                return user.setStripeCustomerId(customer.getId()).store();
+                user.setStripeCustomerId(customer.getId()).store();
+                return (Card) StripeAPI.retrieveCustomer(user).getDefaultSourceObject();
             } catch (StripeException e) {
                 throw new QLException(e);
             }
         } else {
             try {
-                StripeAPI.addCardToCustomer(user, token);
-                return user;
+                return StripeAPI.addCardToCustomer(user, token);
             } catch (StripeException e) {
                 throw new QLException(e);
             }
@@ -89,7 +90,7 @@ public class UserActions {
     public static List<Card> listCards(User user) {
         if (user == null) return null;
 
-        if (user.getStripeCustomerId() == null) throw new QLException("There are no cards on this customer.");
+        if (user.getStripeCustomerId() == null) return new ArrayList<>();
 
         try {
             return StripeAPI.listCards(user);

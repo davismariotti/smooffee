@@ -109,4 +109,18 @@ public class FakeApplication {
             fail();
         }
     }
+
+    public static void assertErrorMessageEquals(String expected, Result result, String code) {
+        try {
+            JsonNode node = new ObjectMapper().readValue(contentAsString(result), ObjectNode.class).get("errors");
+            assertNotNull(node);
+            assertNotNull(node.get(0));
+            assertNotNull(node.get(0).get("message"));
+            assertNotNull(node.get(0).get("code"));
+            assertEquals(String.format("\"%s\"", code), node.get(0).get("code").toString());
+            assertEquals(String.format("\"%s\"", expected), node.get(0).get("message").toString());
+        } catch (IOException e) {
+            fail();
+        }
+    }
 }

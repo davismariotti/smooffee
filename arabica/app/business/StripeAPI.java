@@ -10,9 +10,7 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 import models.User;
 import utilities.ThreadStorage;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StripeAPI {
@@ -32,12 +30,15 @@ public class StripeAPI {
         return Customer.create(customerParams, options());
     }
 
-
-
     public static Customer retrieveCustomer(User user) throws StripeException {
         if (user == null || user.getStripeCustomerId() == null) return null;
 
-        return Customer.retrieve(user.getStripeCustomerId(), options());
+        List<String> expandList = new LinkedList<>();
+        expandList.add("default_source");
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("expand", expandList);
+
+        return Customer.retrieve(user.getStripeCustomerId(), params, options());
     }
 
     // Card
