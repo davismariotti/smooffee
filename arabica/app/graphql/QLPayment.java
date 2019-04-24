@@ -114,6 +114,7 @@ public class QLPayment {
     public static class PaymentEntry extends QLEntry {
         private Integer amount;
         private String stripeCardId;
+        private String stripeRefundId;
         private String type;
         private QLUser.UserEntry user;
 
@@ -122,6 +123,7 @@ public class QLPayment {
             this.amount = payment.getAmount();
             this.type = payment.getType();
             this.stripeCardId = payment.getStripeCardId();
+            this.stripeRefundId = payment.getStripeRefundId();
             this.user = new QLUser.UserEntry(payment.getUser());
         }
 
@@ -133,8 +135,12 @@ public class QLPayment {
             return user;
         }
 
-        public String getCardId() {
+        public String getStripeCardId() {
             return stripeCardId;
+        }
+
+        public String getStripeRefundId() {
+            return stripeRefundId;
         }
 
         public Integer getAmount() {

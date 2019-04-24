@@ -3,6 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
+import models.BaseModel;
 import models.Payment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -67,12 +68,23 @@ public class QLPaymentTest {
     }
 
     public static QLPayment.PaymentEntry createPaymentCash(String userId, int amount) {
+        return createPayment(userId, amount, Payment.CASH, null);
+    }
+
+    public static QLPayment.PaymentEntry createPaymentCard(String userId, int amount, String stripeCardId) {
+        return createPayment(userId, amount, Payment.CARD, stripeCardId);
+    }
+
+    public static QLPayment.PaymentEntry createPayment(String userId, int amount, String type, String stripeCardId) {
         QLPayment.PaymentInput input = new QLPayment.PaymentInput();
         input.setAmount(amount);
-        input.setType(Payment.CASH);
+        input.setType(type);
+        if (stripeCardId != null) {
+            input.setStripeCardId(stripeCardId);
+        }
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } } } }",
+                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } stripeCardId } } }",
                 QL.prepare(userId),
                 QL.prepare(input)
         ));
@@ -81,9 +93,25 @@ public class QLPaymentTest {
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());
         assertEquals(amount, entry.getAmount().intValue());
-        assertEquals("cash", entry.getType());
+        assertEquals(type, entry.getType());
         assertNotNull(entry.getUser());
         assertEquals(userId, entry.getUser().getId());
+
+        return entry;
+    }
+
+    public static QLPayment.PaymentEntry createRefund(Long paymentId) {
+        Result result = FakeApplication.routeGraphQLRequest(String.format(
+                "mutation { payment { refundPayment(paymentId: %d) { id status amount user { id } stripeCardId stripeRefundId type } } }",
+                paymentId
+        ));
+        assertNotNull(result);
+        assertEquals(OK, result.status());
+
+        QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/refundPayment", QLPayment.PaymentEntry.class);
+        assertNotNull(entry);
+        assertEquals(paymentId, entry.getId());
+        assertEquals(BaseModel.REFUNDED, entry.getStatus().intValue());
 
         return entry;
     }

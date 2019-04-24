@@ -39,6 +39,7 @@ public class PaymentActions {
         try {
             Charge charge = StripeAPI.createChargeFromCustomer(user, amount, stripeCardId);
             payment.setStripeChargeId(charge.getId());
+            payment.setStripeCardId(stripeCardId);
         } catch (StripeException e) {
             throw new QLException(e);
         }
@@ -79,7 +80,7 @@ public class PaymentActions {
         if (payment.getType().equals(Payment.CARD)) {
             try {
                 Refund refund = StripeAPI.makeRefund(payment.getUser(), payment.getStripeChargeId());
-                return payment.setStripeRefundId(refund.getId()).store();
+                return payment.setStripeRefundId(refund.getId()).setStatus(BaseModel.REFUNDED).store();
             } catch (StripeException e) {
                 throw new QLException(e);
             }

@@ -101,15 +101,15 @@ public class QLUser {
             return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
         }
 
-        public UserEntry attachCard(String userId, String stripeToken) {
+        public CardEntry attachCard(String userId, String stripeToken) {
             User user = User.findByFirebaseUid(userId);
             if (user == null) throw new QLException("User not found.");
 
             Permission.check(Permission.THIS_USER_CARD_WRITE, new AuthorizationContext(user));
 
-            UserActions.addStripeCardToUser(user, stripeToken);
+            Card card = UserActions.addStripeCardToUser(user, stripeToken);
 
-            return new UserEntry(user);
+            return new CardEntry(card);
         }
     }
 
