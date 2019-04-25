@@ -1,7 +1,6 @@
 package graphql;
 
 import actions.ProductActions;
-import models.Order;
 import models.OrderModifier;
 import models.Organization;
 import models.Product;
@@ -10,7 +9,6 @@ import services.authorization.Permission;
 import utilities.QLException;
 import utilities.QLFinder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -158,7 +156,7 @@ public class QLProduct {
             return name;
         }
 
-        public List<QLOrderModifier.OrderModifierEntry> orderModifiers() {
+        public List<QLOrderModifier.OrderModifierEntry> getOrderModifiers() {
             if (orderModifiers == null) orderModifiers = product.getOrderModifiers().stream().map(QLOrderModifier.OrderModifierEntry::new).collect(Collectors.toList());
             return orderModifiers;
         }

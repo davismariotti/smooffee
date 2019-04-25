@@ -7,6 +7,8 @@ import org.junit.*;
 import play.mvc.Result;
 import services.AuthenticationService;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 import static play.mvc.Http.Status.OK;
 
@@ -19,6 +21,7 @@ public class QLProductTest {
         FakeApplication.start(true);
         Setup.createDefaultOrganization();
         Setup.createDefaultSysadmin();
+        Setup.createDefaultOrderModifier();
         AuthenticationService.mockMap.put("test2@test.com", "test2@test.com");
         createProductTest();
     }
@@ -33,9 +36,12 @@ public class QLProductTest {
         input.setName("Latte");
         input.setDescription("Very yummy");
         input.setPrice(500);
+        input.setOrderModifiers(new ArrayList<Long>() {{
+            add(Setup.defaultOrderModifier.getId());
+        }});
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price } } }",
+                "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price orderModifiers { id name } } } }",
                 Setup.defaultOrganization.getId(),
                 QL.prepare(input)
         ));
@@ -46,6 +52,10 @@ public class QLProductTest {
         assertEquals("Very yummy", entry.getDescription());
         assertEquals(500, entry.getPrice().intValue());
         assertEquals(Setup.defaultOrganization.getId(), entry.getOrganizationId());
+        assertNotNull(entry.getOrderModifiers());
+        assertEquals(1, entry.getOrderModifiers().size());
+        assertEquals(Setup.defaultOrderModifier.getId(), entry.getOrderModifiers().get(0).getId());
+        assertEquals(Setup.defaultOrderModifier.getName(), entry.getOrderModifiers().get(0).getName());
         assertNotNull(entry.getId());
         productId = entry.getId();
     }
@@ -57,7 +67,7 @@ public class QLProductTest {
         input.setDescription("Very nice");
         input.setPrice(625);
 
-        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(productId: %d, productInput: %s) { id organizationId name description price } } }", productId, QL.prepare(input)));
+        Result result = FakeApplication.routeGraphQLRequest(String.format("mutation { product { update(productId: %d, productInput: %s) { id organizationId name description price orderModifiers { id name } } } }", productId, QL.prepare(input)));
         assertEquals(OK, result.status());
         QLProduct.ProductEntry entry = FakeApplication.graphQLResultToObject(result, "product/update", QLProduct.ProductEntry.class);
         assertEquals("Macchiato", entry.getName());
@@ -65,6 +75,8 @@ public class QLProductTest {
         assertEquals(625, entry.getPrice().intValue());
         assertEquals(Setup.defaultOrganization.getId(), entry.getOrganizationId());
         assertEquals(productId, entry.getId());
+        assertNotNull(entry.getOrderModifiers());
+        assertEquals(0, entry.getOrderModifiers().size());
     }
 
     @Test

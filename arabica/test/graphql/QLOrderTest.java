@@ -9,6 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static play.mvc.Http.Status.OK;
@@ -25,6 +27,7 @@ public class QLOrderTest {
         Setup.createDefaultSysadmin();
         Setup.createDefaultCustomer();
         Setup.createDefaultProduct();
+        Setup.createDefaultOrderModifier();
 
         createOrderTest();
     }
@@ -43,6 +46,9 @@ public class QLOrderTest {
         orderInput.setRecipient("Davis Mariotti");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
+        orderInput.setOrderModifiers(new ArrayList<Long>() {{
+            add(Setup.defaultOrderModifier.getId());
+        }});
 
         QLOrder.OrderEntry entry = createOrder(orderInput);
         orderId = entry.getId();
@@ -54,6 +60,10 @@ public class QLOrderTest {
         assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
         assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
+        assertNotNull(entry.getOrderModifiers());
+        assertEquals(1, entry.getOrderModifiers().size());
+        assertEquals("Caramel Syrup", entry.getOrderModifiers().get(0).getName());
+        assertEquals(Setup.defaultOrderModifier.getId(), entry.getOrderModifiers().get(0).getId());
 
         // Make sure funds were deducted
         Result result = FakeApplication.routeGraphQLRequest(String.format(
@@ -222,7 +232,7 @@ public class QLOrderTest {
 
     public static QLOrder.OrderEntry createOrder(String userId, QLOrder.OrderInput input) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status product { id } deliveryPeriod { id } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status product { id } deliveryPeriod { id } orderModifiers { id name } } } }",
                 QL.prepare(userId),
                 QL.prepare(input)
         ));

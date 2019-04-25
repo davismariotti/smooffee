@@ -1,11 +1,11 @@
 package environment;
 
-import models.DeliveryPeriod;
-import models.Organization;
-import models.Product;
-import models.User;
+import models.*;
 import services.AuthenticationService;
 import services.authorization.Role;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Setup {
 
@@ -15,6 +15,7 @@ public class Setup {
     public static User defaultAdmin;
     public static User defaultCustomer;
     public static Product defaultProduct;
+    public static OrderModifier defaultOrderModifier;
 
     public static void createDefaultOrganization() {
         defaultOrganization = new Organization()
@@ -77,5 +78,18 @@ public class Setup {
                 .setPrice(600)
                 .setOrganization(defaultOrganization)
                 .store();
+    }
+
+    public static void createDefaultOrderModifier() {
+        defaultOrderModifier = new OrderModifier()
+                .setName("Caramel Syrup")
+                .setOrganization(defaultOrganization)
+                .store();
+    }
+
+    public static void connectDefaultOrderModifierToDefaultProduct() {
+        Set<OrderModifier> orderModifiers = new HashSet<>();
+        orderModifiers.add(defaultOrderModifier);
+        defaultProduct.setOrderModifiers(orderModifiers);
     }
 }

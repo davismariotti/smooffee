@@ -4,6 +4,7 @@ input OrderInput {
     productId: Long
     recipient: String
     deliveryPeriodId: Long
+    orderModifiers: [Long!]
 }
 
 type OrderEntry {
