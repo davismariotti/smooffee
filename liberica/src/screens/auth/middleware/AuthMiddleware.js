@@ -1,10 +1,27 @@
 import isEmail from 'validator/lib/isEmail'
 // import { readCurrentUserQuery } from '../../graphql/userQueries'
-// import { client } from '../../services/apollo'
+import { client } from '../../../services/apollo'
 import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
+import gql from 'graphql-tag'
 
+export const readCurrentUserQuery = gql`
+query ReadCurrentUser {
+  user {
+    currentUser {
+      id
+      organizationId
+      role
+      firstName
+      lastName
+      status
+      balance
+      email
+    }
+  }
+}
+`
 
 export default class AuthMiddleware {
   static createUserWithEmailAndPassword(email, password) {
@@ -19,7 +36,7 @@ export default class AuthMiddleware {
           .then(() => {
             return firebase
               .auth()
-              .currentUser.getToken()
+              .currentUser.getIdToken()
           })
           .then(token => {
             dispatch(AuthActions.signUpSuccess())
@@ -38,8 +55,6 @@ export default class AuthMiddleware {
     return dispatch => {
       if (isEmail(email)) {
         firebase.auth().signInWithEmailAndPassword(email, password).then(result => {
-          console.log('result', result)
-          console.log('result.user', result.user)
           AuthMiddleware.continueLogin(result.user, dispatch)
         })
           .catch(error => {
@@ -68,7 +83,13 @@ export default class AuthMiddleware {
   static continueLogin(result, dispatch) {
     StorageService.setUserId(result.uid).then(async () => {
       const userId = await StorageService.getUserId()
-      dispatch(AuthActions.signInError(`Success for ${userId}`))
+      client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+        if (error) {
+          dispatch(AuthActions.signInError(error))
+        } else {
+          dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
+        }
+      })
     })
 
     // firebase.auth().currentUser.getToken().then(token => {
@@ -102,6 +123,4 @@ export default class AuthMiddleware {
       }
     }
   }
-
-
 }

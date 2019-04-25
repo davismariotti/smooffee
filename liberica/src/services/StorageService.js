@@ -9,7 +9,6 @@ export class StorageService {
   }
 
   static setUserId(userId) {
-    console.log('setUserId', userId)
     return AsyncStorage.setItem(USER_ID, userId)
   }
 
