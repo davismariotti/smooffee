@@ -21,7 +21,7 @@ class EmailPasswordSignUp extends Component {
       <form onSubmit={handleSubmit(submit)}>
         <StyledFormRow>
           <StyledFormRowItem>
-            <Field fullWidth name="email" component={TextField} validate={validateIsRequired} label="Email Address"/>
+            <Field fullWidth name="email" type="email" component={TextField} validate={validateIsRequired} label="Email Address"/>
           </StyledFormRowItem>
         </StyledFormRow>
         <StyledFormRow>

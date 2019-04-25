@@ -1,12 +1,13 @@
 import isEmail from 'validator/lib/isEmail'
 import * as firebase from 'firebase'
 
-import firebaseApp from '../../services/AuthService'
+import firebaseApp, { AuthService } from '../../services/AuthService'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
 import history from '../../utils/history'
 import { client } from '../../services/apollo'
 import AuthActions from './actions'
 import { StorageService } from '../../services/StorageService'
+import { CUSTOMER } from '../../utils/role'
 
 
 export default class AuthMiddleware {
@@ -23,8 +24,8 @@ export default class AuthMiddleware {
               .currentUser.getToken()
               .then(token => {
                 StorageService.setAuthToken(token)
-                dispatch(AuthActions.signUpSuccess())
                 history.push('/signupcontinued')
+                dispatch(AuthActions.signUpSuccess())
               })
           })
           .catch(error => {
@@ -72,11 +73,14 @@ export default class AuthMiddleware {
       client.query({query: readCurrentUserQuery}).then(({error, data}) => {
         if (error) {
           dispatch(AuthActions.signInError(error))
+        } else if (data.user.currentUser.role === CUSTOMER) {
+          history.push('/')
+          dispatch(AuthActions.signInError('You must login with the mobile app.'))
         } else {
           StorageService.setOrganizationId(data.user.currentUser.organizationId)
           StorageService.setUserRole(data.user.currentUser.role)
-          dispatch(AuthActions.signInSuccess())
           history.push('/home')
+          dispatch(AuthActions.signInSuccess())
         }
       })
     })
@@ -84,7 +88,7 @@ export default class AuthMiddleware {
 
   static recoverWithEmail(email) {
     return dispatch => {
-      firebaseApp.auth().sendPasswordResetEmail(email.trim())
+      AuthService.sendPasswordResetEmail(email.trim())
         .then(
           () => {
             dispatch(AuthActions.recoverSuccess(`Please check your email ${email.trim()} for instructions.`))
