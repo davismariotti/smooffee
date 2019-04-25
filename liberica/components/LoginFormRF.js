@@ -1,12 +1,21 @@
 import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
-import { Button, TextInput, View } from "react-native";
+import { Button, View } from "react-native";
+import { Input } from "react-native-elements"
 
-const renderTextField = ({ input: { onChange, value } }) => {
-  return <TextInput onChangeText={onChange} value={value} />;
+const renderEmailField = ({ input: { onChange, value } }) => {
+  return <Input
+    placeholder='Email'
+    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+    onChangeText={onChange}
+    input={value} />;
 };
 const renderPasswordField = ({ input: { onChange, value } }) => {
-  return <TextInput onChangeText={onChange} value={value} secureTextEntry />;
+  return <Input
+    placeholder='Password'
+    leftIcon={{ type: 'font-awesome', name: 'unlock-alt' }}
+    onChangeText={onChange}
+    secureTextEntry input={value} />;
 };
 
 
@@ -15,7 +24,7 @@ class LoginFormRF extends Component {
     const { handleSubmit } = this.props;
     return (
       <View>
-        <Field name="email" type="email" component={renderTextField} />
+        <Field name="email" type="email" component={renderEmailField} />
         <Field name="password" component={renderPasswordField} />
         <Button title="Submit" onPress={handleSubmit} />
       </View>
