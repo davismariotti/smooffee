@@ -6,16 +6,21 @@ import HomeScreen from '../screens/HomeScreen'
 import SettingsScreen from '../screens/SettingsScreen'
 import { Information, Options, Order } from '../screens/NewOrderScreen'
 import LoginScreen from '../screens/LoginScreen'
-
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
+import NewUserScreen from '../screens/NewUserScreen'
+import UserConfirmationScreen from '../screens/UserConfirmationScreen'
 const AuthStack = createStackNavigator({
-  Login: LoginScreen
+  LoginScreen,
+  ForgotPasswordScreen,
+  NewUserScreen,
+  UserConfirmationScreen
 })
 const HomeStack = createStackNavigator({
   Home: HomeScreen
 })
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
@@ -34,7 +39,7 @@ const NewOrderStack = createStackNavigator({
 })
 NewOrderStack.navigationOptions = {
   tabBarLabel: 'New Order',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-cafe' : 'md-cafe'}
@@ -47,7 +52,7 @@ const SettingsStack = createStackNavigator({
 })
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
@@ -66,7 +71,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: 'App'
+      initialRouteName: 'Auth'
     }
   )
 )
