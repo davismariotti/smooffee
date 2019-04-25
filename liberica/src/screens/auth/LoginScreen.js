@@ -1,6 +1,7 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image, Button } from 'react-native'
-import LoginForm from '../components/LoginForm'
+import { Button, Image, StyleSheet, Text, View } from 'react-native'
+import LoginForm from './components/LoginForm'
+import { connect } from 'react-redux'
 
 //Login Screen is what users first see when App starts. Navigation from here is as follows:
 //
@@ -13,36 +14,40 @@ import LoginForm from '../components/LoginForm'
 //    ->user confimation(email sent to confirm)
 //      ->back to login
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'LoginScreen',
     header: null,
   }
 
   render() {
+
+    const {authError} = this.props
+
     return (
       <View>
         <Image
-          source={require('../assets/images/Logo.png')}
+          source={require('../../assets/images/Logo.png')}
           style={styles.image}
         />
         <Text style={styles.title}> Login</Text>
-        <LoginForm />
+        <LoginForm/>
 
+        { authError && <Text>{authError}</Text>}
         <Button title="New User"
-          onPress={() => {
-            this.props.navigation.navigate('NewUserScreen')
-          }} />
+                onPress={() => {
+                  this.props.navigation.navigate('NewUserScreen')
+                }}/>
         <Button title="Forgot Password"
-          onPress={() => {
-            this.props.navigation.navigate('ForgotPasswordScreen')
-          }} />
+                onPress={() => {
+                  this.props.navigation.navigate('ForgotPasswordScreen')
+                }}/>
       </View>
     )
   }
 
 
-};
+}
 
 const styles = StyleSheet.create({
   image: {
@@ -60,4 +65,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 })
+
+const mapStateToProps = ({auth}) => {
+  return {
+    authError: auth.authError
+  }
+}
+
+export default connect(mapStateToProps)(LoginScreen)
 

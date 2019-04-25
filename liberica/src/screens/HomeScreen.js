@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
-import ScrollingOrders from '../components/ScrollingOrders'
+import ScrollingOrders from './home/components/ScrollingOrders'
 
 export default class HomeScreen extends React.Component {
   state = {

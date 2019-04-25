@@ -1,8 +1,7 @@
 import React from 'react'
 import { Text, View, StyleSheet, Image, Button } from 'react-native'
-import LoginForm from '../components/LoginForm'
-
-export default class NewUserScreen extends React.Component {
+import LoginForm from './components/LoginForm'
+export default class ForgotPasswordScreen extends React.Component {
     static navigationOptions = {
         title: 'Login',
         header: null,
@@ -12,10 +11,10 @@ export default class NewUserScreen extends React.Component {
         return (
             <View>
 
-                <Text style={styles.title}>Create Account</Text>
-                <Text>TODO: Add form to create new user account</Text>
+                <Text style={styles.title}> Forgot Password</Text>
+                <Text>TODO add password recovery stuff</Text>
 
-                <Button title="Already Have an Account?"
+                <Button title="Go Back"
                     onPress={() => {
                         this.props.navigation.navigate('LoginScreen')
                     }} />

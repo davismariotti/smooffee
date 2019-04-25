@@ -5,9 +5,9 @@ import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import SettingsScreen from '../screens/SettingsScreen'
 import { Information, Options, Order } from '../screens/NewOrderScreen'
-import LoginScreen from '../screens/LoginScreen'
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
-import NewUserScreen from '../screens/NewUserScreen'
+import LoginScreen from '../screens/auth/LoginScreen'
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
+import NewUserScreen from '../screens/auth/NewUserScreen'
 import UserConfirmationScreen from '../screens/UserConfirmationScreen'
 const AuthStack = createStackNavigator({
   LoginScreen,
