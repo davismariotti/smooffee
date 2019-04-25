@@ -5,6 +5,10 @@ import { Button, TextInput, View } from "react-native";
 const renderTextField = ({ input: { onChange, value } }) => {
   return <TextInput onChangeText={onChange} value={value} />;
 };
+const renderPasswordField = ({ input: { onChange, value } }) => {
+  return <TextInput onChangeText={onChange} value={value} secureTextEntry />;
+};
+
 
 class LoginFormRF extends Component {
   render() {
@@ -12,7 +16,7 @@ class LoginFormRF extends Component {
     return (
       <View>
         <Field name="email" type="email" component={renderTextField} />
-        <Field name="password" type="password" component={renderTextField} />
+        <Field name="password" component={renderPasswordField} />
         <Button title="Submit" onPress={handleSubmit} />
       </View>
     );

@@ -3,10 +3,11 @@ import LoginFormRF from "./LoginFormRF"
 import firebase from 'react-native-firebase'
 
 class LoginForm extends Component {
-  ////this isnt working for some reason?
-  // constructor() {
-  //   this.handleSubmit = this.handleSubmit.bind(this)
-  // }
+  //this isnt working for some reason?
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
 
 
   handleSubmit = values => {

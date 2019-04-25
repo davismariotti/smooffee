@@ -23,20 +23,3 @@ export default class UserConfirmationScreen extends React.Component {
 
 };
 
-const styles = StyleSheet.create({
-    image: {
-        width: 200,
-        height: 200,
-        resizeMode: 'contain',
-        marginTop: 30,
-        marginLeft: 110
-    },
-    title: {
-        fontSize: 30,
-        marginTop: 10,
-        color: 'rgba(96,100,109, 1)',
-        lineHeight: 50,
-        textAlign: 'center'
-    }
-})
-
