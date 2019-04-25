@@ -4,6 +4,7 @@ input OrderInput {
     productId: Long
     recipient: String
     deliveryPeriodId: Long
+    orderModifiers: [Long!]
 }
 
 type OrderEntry {
@@ -15,6 +16,7 @@ type OrderEntry {
     recipient: String!
     deliveryPeriod: DeliveryPeriodEntry!
     refund: RefundEntry
+    orderModifiers: [OrderModifierEntry!]!
 }
 
 type RefundEntry {

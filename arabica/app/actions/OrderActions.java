@@ -3,9 +3,11 @@ package actions;
 import models.*;
 import utilities.QLException;
 
+import java.util.Set;
+
 public class OrderActions {
 
-    public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {
+    public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, Set<OrderModifier> orderModifiers) {
         if (user == null || deliveryPeriod == null || product == null || location == null || recipient == null) return null;
 
         // Check user funds
@@ -27,6 +29,7 @@ public class OrderActions {
                 .setLocation(location)
                 .setNotes(notes)
                 .setRecipient(recipient)
+                .setOrderModifiers(orderModifiers)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
 
@@ -35,7 +38,7 @@ public class OrderActions {
         return order;
     }
 
-    public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient) {
+    public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, Set<OrderModifier> orderModifiers) {
         if (order == null || deliveryPeriod == null || product == null || location == null || notes == null || recipient == null) return null;
 
         return order
@@ -44,6 +47,7 @@ public class OrderActions {
                 .setRecipient(recipient)
                 .setNotes(notes)
                 .setLocation(location)
+                .setOrderModifiers(orderModifiers)
                 .store();
     }
 

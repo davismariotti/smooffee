@@ -8,7 +8,9 @@ import services.authorization.Permission;
 import utilities.QLException;
 import utilities.QLFinder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class QLOrder {
@@ -44,9 +46,18 @@ public class QLOrder {
             if (deliveryPeriod == null) throw new QLException("Delivery Period not found");
             if (product == null) throw new QLException("Product not found");
 
+            Set<OrderModifier> orderModifiers = new HashSet<>();
+            if (orderInput.getOrderModifiers() != null) {
+                for (Long orderModifierId : orderInput.getOrderModifiers()) {
+                    OrderModifier orderModifier = OrderModifier.find.byId(orderModifierId);
+                    if (orderModifier == null) throw new QLException("Order Modifier not found.");
+                    orderModifiers.add(orderModifier);
+                }
+            }
+
             Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(user));
 
-            return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient()));
+            return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient(), orderModifiers));
         }
 
         public OrderEntry updateStatus(Long orderId, int status) {
@@ -91,23 +102,21 @@ public class QLOrder {
     }
 
     public static class OrderEntry extends QLEntry {
+        private Order order;
         private String location;
         private String notes;
         private String recipient;
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
         private RefundEntry refund;
+        private List<QLOrderModifier.OrderModifierEntry> orderModifiers;
 
         public OrderEntry(Order order) {
             super(order);
+            this.order = order;
             this.location = order.getLocation();
             this.notes = order.getNotes();
-            this.product = new QLProduct.ProductEntry(order.getProduct());
             this.recipient = order.getRecipient();
-            this.deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
-            if (Refund.findByOrderId(order.getId()) != null) {
-                this.refund = new RefundEntry(Refund.findByOrderId(order.getId()));
-            }
         }
 
         public String getLocation() {
@@ -123,15 +132,28 @@ public class QLOrder {
         }
 
         public QLProduct.ProductEntry getProduct() {
+            if (product == null) product = new QLProduct.ProductEntry(order.getProduct());
             return product;
         }
 
         public QLDeliveryPeriod.DeliveryPeriodEntry getDeliveryPeriod() {
+            if (deliveryPeriod == null) deliveryPeriod = new QLDeliveryPeriod.DeliveryPeriodEntry(order.getDeliveryPeriod());
             return deliveryPeriod;
         }
 
         public RefundEntry getRefund() {
+            if (refund == null) {
+                Refund refundModel = Refund.findByOrderId(order.getId());
+                if (refundModel != null) {
+                    refund = new RefundEntry(refundModel);
+                }
+            }
             return refund;
+        }
+
+        public List<QLOrderModifier.OrderModifierEntry> getOrderModifiers() {
+            if (orderModifiers == null) orderModifiers = order.getOrderModifiers().stream().map(QLOrderModifier.OrderModifierEntry::new).collect(Collectors.toList());
+            return orderModifiers;
         }
     }
 
@@ -141,6 +163,8 @@ public class QLOrder {
         private Long productId;
         private String recipient;
         private Long deliveryPeriodId;
+
+        private List<Long> orderModifiers;
 
         public String getLocation() {
             return location;
@@ -180,6 +204,14 @@ public class QLOrder {
 
         public void setDeliveryPeriodId(Long deliveryPeriodId) {
             this.deliveryPeriodId = deliveryPeriodId;
+        }
+
+        public List<Long> getOrderModifiers() {
+            return orderModifiers;
+        }
+
+        public void setOrderModifiers(List<Long> orderModifiers) {
+            this.orderModifiers = orderModifiers;
         }
     }
 

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "organization")
@@ -18,13 +19,27 @@ public class Organization extends BaseModel {
     private String name;
 
     @OneToMany(mappedBy = "organization")
-    private List<Product> products;
+    private Set<Product> products;
+
+    @OneToMany(mappedBy = "organization")
+    private Set<User> users;
+
+    @OneToMany(mappedBy = "organization")
+    private Set<DeliveryPeriod> deliveryPeriods;
 
     private String secretApiKey;
     private String publishableApiKey;
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Set<DeliveryPeriod> getDeliveryPeriods() {
+        return deliveryPeriods;
     }
 
     public String getName() {
@@ -56,7 +71,7 @@ public class Organization extends BaseModel {
 
 
     public static class OrganizationFinder extends Finder<Long, Organization> {
-        public OrganizationFinder() {
+        OrganizationFinder() {
             super(Organization.class);
         }
     }

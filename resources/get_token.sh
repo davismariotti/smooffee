@@ -1,0 +1,1 @@
+curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY' -H 'Content-Type: application/json' --data-binary '{"email":"testuser@example.com", "password": "123456","returnSecureToken":true}' | python -c "import sys, json; print json.load(sys.stdin)['idToken']"

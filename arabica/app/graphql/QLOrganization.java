@@ -87,7 +87,18 @@ public class QLOrganization {
         }
 
         public List<QLProduct.ProductEntry> getProducts() {
+            Permission.check(Permission.THIS_ORGANIZATION_PRODUCTS_READ, new AuthorizationContext(organization));
             return organization.getProducts().stream().map(QLProduct.ProductEntry::new).collect(Collectors.toList());
+        }
+
+        public List<QLUser.UserEntry> getUsers() {
+            Permission.check(Permission.THIS_ORGANIZATION_USERS_READ, new AuthorizationContext(organization));
+            return organization.getUsers().stream().map(QLUser.UserEntry::new).collect(Collectors.toList());
+        }
+
+        public List<QLDeliveryPeriod.DeliveryPeriodEntry> getDeliveryPeriods() {
+            Permission.check(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ, new AuthorizationContext(organization));
+            return organization.getDeliveryPeriods().stream().map(QLDeliveryPeriod.DeliveryPeriodEntry::new).collect(Collectors.toList());
         }
     }
 }

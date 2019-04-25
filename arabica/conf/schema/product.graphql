@@ -5,12 +5,14 @@ type ProductEntry {
     name: String!
     description: String!
     price: Int!
+    orderModifiers: [OrderModifierEntry!]!
 }
 
 input ProductInput {
     name: String
     description: String
     price: Int
+    orderModifiers: [Long!]
 }
 
 type ProductQuery {

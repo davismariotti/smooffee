@@ -1,0 +1,20 @@
+input OrderModifierInput {
+    name: String!
+}
+
+type OrderModifierEntry {
+    id: Long!
+    status: Int!
+    name: String!
+}
+
+type OrderModifierQuery {
+    read(id: Long!): OrderModifierEntry!
+    list(organizationId: Long!, parameters: QLFinder): [OrderModifierEntry!]!
+}
+
+type OrderModifierMutation {
+    create(organizationId: Long!, orderModifierInput: OrderModifierInput!): OrderModifierEntry!
+    update(orderModifierId: Long!, orderModifierInput: OrderModifierInput!): OrderModifierEntry!
+    updateStatus(orderModifierId: Long!, status: Int!): OrderModifierEntry!
+}

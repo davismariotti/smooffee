@@ -5,11 +5,9 @@ import io.ebean.Query;
 import io.ebean.annotation.NotNull;
 import utilities.QLFinder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -28,6 +26,22 @@ public class Product extends BaseModel {
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
+
+    @ManyToMany
+    @JoinTable(
+            name = "order_modifier_products",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_modifier_id"))
+    private Set<OrderModifier> orderModifiers;
+
+    public Set<OrderModifier> getOrderModifiers() {
+        return orderModifiers;
+    }
+
+    public Product setOrderModifiers(Set<OrderModifier> orderModifiers) {
+        this.orderModifiers = orderModifiers;
+        return this;
+    }
 
     public Organization getOrganization() {
         return organization;
@@ -73,7 +87,7 @@ public class Product extends BaseModel {
     }
 
     public static class ProductFinder extends Finder<Long, Product> {
-        public ProductFinder() {
+        ProductFinder() {
             super(Product.class);
         }
     }

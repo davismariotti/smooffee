@@ -32,6 +32,10 @@ public class MainGraphQLResolver {
         public QLDeliveryPeriod.Query deliveryPeriod() {
             return new QLDeliveryPeriod.Query();
         }
+
+        public QLOrderModifier.Query orderModifier() {
+            return new QLOrderModifier.Query();
+        }
     }
 
     public static class Mutation implements GraphQLMutationResolver {
@@ -57,6 +61,10 @@ public class MainGraphQLResolver {
 
         public QLDeliveryPeriod.Mutation deliveryPeriod() {
             return new QLDeliveryPeriod.Mutation();
+        }
+
+        public QLOrderModifier.Mutation orderModifier() {
+            return new QLOrderModifier.Mutation();
         }
     }
 }

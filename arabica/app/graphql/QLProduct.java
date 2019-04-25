@@ -1,6 +1,7 @@
 package graphql;
 
 import actions.ProductActions;
+import models.OrderModifier;
 import models.Organization;
 import models.Product;
 import services.authorization.AuthorizationContext;
@@ -8,7 +9,9 @@ import services.authorization.Permission;
 import utilities.QLException;
 import utilities.QLFinder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class QLProduct {
@@ -42,7 +45,16 @@ public class QLProduct {
 
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(organization));
 
-            return new ProductEntry(ProductActions.createProduct(organization, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
+            Set<OrderModifier> orderModifiers = new HashSet<>();
+            if (productInput.getOrderModifiers() != null) {
+                for (Long orderModifierId : productInput.getOrderModifiers()) {
+                    OrderModifier orderModifier = OrderModifier.find.byId(orderModifierId);
+                    if (orderModifier == null) throw new QLException("Order Modifier not found.");
+                    orderModifiers.add(orderModifier);
+                }
+            }
+
+            return new ProductEntry(ProductActions.createProduct(organization, productInput.getName(), productInput.getDescription(), productInput.getPrice(), orderModifiers));
         }
 
         public ProductEntry update(Long productId, ProductInput productInput) {
@@ -50,7 +62,15 @@ public class QLProduct {
             if (product == null) throw new QLException("Product not found.");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
 
-            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice()));
+            Set<OrderModifier> orderModifiers = new HashSet<>();
+            if (productInput.getOrderModifiers() != null) {
+                for (Long orderModifierId : productInput.getOrderModifiers()) {
+                    OrderModifier orderModifier = OrderModifier.find.byId(orderModifierId);
+                    if (orderModifier == null) throw new QLException("Order Modifier not found.");
+                    orderModifiers.add(orderModifier);
+                }
+            }
+            return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice(), orderModifiers));
         }
 
         public ProductEntry updateStatus(Long orderId, int status) {
@@ -68,6 +88,7 @@ public class QLProduct {
         private String name;
         private String description;
         private Integer price;
+        private List<Long> orderModifiers;
 
         public String getDescription() {
             return description;
@@ -92,16 +113,27 @@ public class QLProduct {
         public void setName(String name) {
             this.name = name;
         }
+
+        public List<Long> getOrderModifiers() {
+            return orderModifiers;
+        }
+
+        public void setOrderModifiers(List<Long> orderModifiers) {
+            this.orderModifiers = orderModifiers;
+        }
     }
 
     public static class ProductEntry extends QLEntry {
+        private Product product;
         private Long organizationId;
         private String name;
         private String description;
         private Integer price;
+        private List<QLOrderModifier.OrderModifierEntry> orderModifiers;
 
         public ProductEntry(Product product) {
             super(product);
+            this.product = product;
             this.name = product.getName();
             this.organizationId = product.getOrganization().getId();
             this.description = product.getDescription();
@@ -122,6 +154,11 @@ public class QLProduct {
 
         public String getName() {
             return name;
+        }
+
+        public List<QLOrderModifier.OrderModifierEntry> getOrderModifiers() {
+            if (orderModifiers == null) orderModifiers = product.getOrderModifiers().stream().map(QLOrderModifier.OrderModifierEntry::new).collect(Collectors.toList());
+            return orderModifiers;
         }
     }
 }
