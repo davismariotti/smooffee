@@ -13,6 +13,44 @@ import { readUserQueryExpanded } from '../../graphql/userQueries'
 import UserPageActions from './actions'
 
 class UserPage extends Component {
+  static renderOrdersTable(orders) {
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Date</TableCell>
+            <TableCell align="right">Product</TableCell>
+            <TableCell align="right">Cost</TableCell>
+            <TableCell align="right">Delivery Period</TableCell>
+            <TableCell align="right">Location</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Options</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {orders.map(order => {
+            return (
+              <TableRow key={order.id}>
+                <TableCell align="left">2-19-2019</TableCell>
+                <TableCell align="right">{order.product.name}</TableCell>
+                <TableCell align="right">{`$${(order.product.price / 100).toFixed(2)}`}</TableCell>
+                <TableCell align="right">{order.deliveryPeriod.classPeriod}</TableCell>
+                <TableCell align="right">{order.location}</TableCell>
+                <TableCell align="right">{order.status}</TableCell>
+                <TableCell align="right">
+                  <Button onClick={(e) => {
+                  }}>
+                    <MoreVert/>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+    )
+  }
+
   static renderPaymentsTable(payments) {
     return (
       <Table>
@@ -77,9 +115,8 @@ class UserPage extends Component {
             <Tab label="Order History"/>
             <Tab label="Payment History"/>
           </Tabs>
-          {
-            selectedTab === 1 && UserPage.renderPaymentsTable(readUser.payments)
-          }
+          {selectedTab === 0 && UserPage.renderOrdersTable(readUser.orders)}
+          {selectedTab === 1 && UserPage.renderPaymentsTable(readUser.payments)}
         </Paper>
       </div>
     )

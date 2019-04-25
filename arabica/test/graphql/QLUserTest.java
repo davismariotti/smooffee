@@ -105,7 +105,7 @@ public class QLUserTest {
         assertNotNull(entry);
         assertEquals(input.getFirstName(), entry.getFirstname());
         assertEquals(input.getLastName(), entry.getLastname());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         return entry;
     }
 

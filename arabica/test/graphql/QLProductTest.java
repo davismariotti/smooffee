@@ -3,6 +3,7 @@ package graphql;
 import environment.FakeApplication;
 import environment.Setup;
 import helpers.QL;
+import models.BaseModel;
 import org.junit.*;
 import play.mvc.Result;
 import services.AuthenticationService;
@@ -41,7 +42,7 @@ public class QLProductTest {
         }});
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price orderModifiers { id name } } } }",
+                "mutation { product { create(organizationId: %d, productInput: %s) { id organizationId name description price status orderModifiers { id name } } } }",
                 Setup.defaultOrganization.getId(),
                 QL.prepare(input)
         ));
@@ -52,6 +53,7 @@ public class QLProductTest {
         assertEquals("Very yummy", entry.getDescription());
         assertEquals(500, entry.getPrice().intValue());
         assertEquals(Setup.defaultOrganization.getId(), entry.getOrganizationId());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         assertNotNull(entry.getOrderModifiers());
         assertEquals(1, entry.getOrderModifiers().size());
         assertEquals(Setup.defaultOrderModifier.getId(), entry.getOrderModifiers().get(0).getId());

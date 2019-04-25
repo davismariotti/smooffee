@@ -50,7 +50,7 @@ class Order extends Component {
                 updateOrderStatusMutate({
                   variables: {
                     orderId: order.id,
-                    status: 2
+                    status: 'In Progress'
                   }
                 }).then(() => {
                   refetch()
@@ -62,7 +62,7 @@ class Order extends Component {
                 updateOrderStatusMutate({
                   variables: {
                     orderId: order.id,
-                    status: 3
+                    status: 'Completed'
                   }
                 }).then(() => {
                   refetch()

@@ -1,6 +1,6 @@
 type ProductEntry {
     id: Long!
-    status: Int!
+    status: String!
     organizationId: Long!
     name: String!
     description: String!
@@ -23,5 +23,5 @@ type ProductQuery {
 type ProductMutation {
     create(organizationId: Long!, productInput: ProductInput!): ProductEntry!
     update(productId: Long!, productInput: ProductInput!): ProductEntry!
-    updateStatus(productId: Long!, status: Int!): ProductEntry!
+    updateStatus(productId: Long!, status: String!): ProductEntry!
 }

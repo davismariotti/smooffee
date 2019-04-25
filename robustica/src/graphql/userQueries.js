@@ -27,9 +27,18 @@ query ReadUserExpanded($userId: String!) {
       status
       orders {
         id
+        status
+        location
+        recipient
+        notes
+        deliveryPeriod {
+          id
+          classPeriod
+        }
         product {
           id
           name
+          price
         }
         orderModifiers {
           id

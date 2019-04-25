@@ -1,6 +1,7 @@
 package graphql;
 
 import actions.PaymentActions;
+import models.BaseModel;
 import models.Payment;
 import models.User;
 import services.authorization.AuthorizationContext;
@@ -51,13 +52,13 @@ public class QLPayment {
             }
         }
 
-        public PaymentEntry updateStatus(Long paymentId, Integer status) {
+        public PaymentEntry updateStatus(Long paymentId, String status) {
             Payment payment = Payment.find.byId(paymentId);
             if (payment == null) throw new QLException("Payment not found.");
 
             Permission.check(Permission.OTHER_USER_PAYMENT_WRITE, new AuthorizationContext(payment.getUser()));
 
-            payment.setStatus(status).store();
+            payment.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new PaymentEntry(payment);
         }

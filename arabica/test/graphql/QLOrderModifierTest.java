@@ -44,13 +44,13 @@ public class QLOrderModifierTest {
         assertNotNull(entry);
         assertEquals(orderModifierId, entry.getId());
         assertEquals("Caramel Syrup", entry.getName());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
     }
 
     @Test
     public void listOrderModifierTest() {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { orderModifier { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"1\\\" } } }) { id name status } } }",
+                "query { orderModifier { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id name status } } }",
                 Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
@@ -60,7 +60,7 @@ public class QLOrderModifierTest {
         assertEquals(2, entries.length);
         assertEquals(orderModifierId, entries[0].getId());
         assertEquals("Caramel Syrup", entries[0].getName());
-        assertEquals(BaseModel.ACTIVE, entries[0].getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entries[0].getStatus());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class QLOrderModifierTest {
         assertNotNull(entry);
         assertEquals(createEntry.getId(), entry.getId());
         assertEquals("Hazelnut Syrup", entry.getName());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
     }
 
     @Test
@@ -91,9 +91,9 @@ public class QLOrderModifierTest {
         QLOrderModifier.OrderModifierEntry createEntry = createOrderModifier(name);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { orderModifier { updateStatus(orderModifierId: %d, status: %d) { id name status } } }",
+                "mutation { orderModifier { updateStatus(orderModifierId: %d, status: %s) { id name status } } }",
                 createEntry.getId(),
-                BaseModel.DELETED
+                QL.prepare(BaseModel.DELETED_STR)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
@@ -102,7 +102,7 @@ public class QLOrderModifierTest {
         assertNotNull(entry);
         assertEquals(createEntry.getId(), entry.getId());
         assertEquals(name, entry.getName());
-        assertEquals(BaseModel.DELETED, entry.getStatus().intValue());
+        assertEquals(BaseModel.DELETED_STR, entry.getStatus());
     }
 
     public static QLOrderModifier.OrderModifierEntry createOrderModifier(String name) {
@@ -120,7 +120,7 @@ public class QLOrderModifierTest {
         assertNotNull(entry);
         assertNotNull(entry.getId());
         assertEquals(name, entry.getName());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
 
         return entry;
     }

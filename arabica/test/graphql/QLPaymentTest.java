@@ -50,13 +50,14 @@ public class QLPaymentTest {
     @Test
     public void readPaymentTest() {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { payment { read(id: %d) { id amount type user { id balance } } } }",
+                "query { payment { read(id: %d) { id amount type status user { id balance } } } }",
                 paymentId
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/read", QLPayment.PaymentEntry.class);
         assertEquals(paymentId, entry.getId());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         assertEquals(600, entry.getAmount().intValue());
         assertEquals("cash", entry.getType());
         assertNotNull(entry.getUser());
@@ -84,7 +85,7 @@ public class QLPaymentTest {
         }
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type user { id balance } stripeCardId } } }",
+                "mutation { payment { create(userId: %s, paymentInput: %s) { id amount type status user { id balance } stripeCardId } } }",
                 QL.prepare(userId),
                 QL.prepare(input)
         ));
@@ -92,6 +93,7 @@ public class QLPaymentTest {
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         assertEquals(amount, entry.getAmount().intValue());
         assertEquals(type, entry.getType());
         assertNotNull(entry.getUser());
@@ -111,7 +113,7 @@ public class QLPaymentTest {
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/refundPayment", QLPayment.PaymentEntry.class);
         assertNotNull(entry);
         assertEquals(paymentId, entry.getId());
-        assertEquals(BaseModel.REFUNDED, entry.getStatus().intValue());
+        assertEquals(BaseModel.REFUNDED_STR, entry.getStatus());
 
         return entry;
     }

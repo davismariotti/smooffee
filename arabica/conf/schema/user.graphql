@@ -11,9 +11,10 @@ type UserEntry {
     organizationId: Long!
     balance: Int!
     role: String!
-    status: Int!
+    status: String!
     orders: [OrderEntry!]!
     payments: [PaymentEntry!]!
+    cards: [CardEntry!]!
 }
 
 type CardEntry {
@@ -32,7 +33,7 @@ type UserQuery {
 type UserMutation {
     create(organizationId: Long!, userInput: UserInput!): UserEntry!
     update(userId: String!, userInput: UserInput!): UserEntry!
-    updateStatus(userId: String!, status: Int!): UserEntry!
+    updateStatus(userId: String!, status: String!): UserEntry!
     updateRole(userId: String!, role: String!): UserEntry!
     attachCard(userId: String!, stripeToken: String!): CardEntry!
 }

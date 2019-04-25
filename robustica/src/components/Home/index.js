@@ -90,7 +90,7 @@ export default compose(
           filter: {
             include: {
               field: 'status',
-              values: ['1', '2']
+              values: ['Active', 'In Progress']
             }
           }
         }
