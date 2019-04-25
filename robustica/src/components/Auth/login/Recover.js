@@ -6,10 +6,12 @@ import { TextField } from 'redux-form-material-ui'
 import { Alert } from 'reactstrap'
 import * as PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { MainCenterDiv} from '../../styles/core'
+import { Link } from 'react-router-dom'
 
+import { AlignCenter, MainCenterDiv } from '../../styles/core'
 import AuthMiddleware from '../AuthMiddleware'
 import { StyledFormRow } from '../../styles/forms'
+import { validateIsRequired } from '../../../utils/formUtils'
 
 class Recover extends Component {
   render() {
@@ -27,15 +29,22 @@ class Recover extends Component {
             <Typography component="h6" variant="h5" align="center">
               Forgot password
             </Typography>
+            <AlignCenter>
+              Enter your email below and we will send a recovery email to that address if that email exists.
+            </AlignCenter>
             <form onSubmit={handleSubmit(submit)}>
               <StyledFormRow>
                 <Alert hidden={!recoverResponse} color={(recoverResponse && recoverResponse.color) || 'success'}>{(recoverResponse && recoverResponse.message) || ''}</Alert>
               </StyledFormRow>
               <StyledFormRow>
-                <Field fullWidth name="email" autoComplete="email" type="email" component={TextField} label="Email"/>
+                <Field fullWidth name="email" autoComplete="email" type="email" component={TextField} validate={validateIsRequired} label="Email"/>
               </StyledFormRow>
               <Button disabled={invalid || pristine} type="submit" fullWidth variant="contained">Submit</Button>
             </form>
+            <br/>
+            <AlignCenter>
+              <p>Go back to <Link to="/">Login</Link></p>
+            </AlignCenter>
           </Paper>
         </MainCenterDiv>
       </main>

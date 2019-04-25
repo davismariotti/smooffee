@@ -1,4 +1,5 @@
 import Immutable from 'seamless-immutable'
+import { LOCATION_CHANGE } from 'connected-react-router'
 import AuthActions from './actions'
 
 const initialState = Immutable({
@@ -30,6 +31,12 @@ export default {
           return {
             ...state,
             recoverResponse: action.payload
+          }
+        case LOCATION_CHANGE:
+          return {
+            ...state,
+            authError: null,
+            recoverResponse: null
           }
         default:
           return {
