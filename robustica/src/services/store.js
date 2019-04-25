@@ -40,6 +40,9 @@ function initialState() {
 }
 
 export default function createNewStore(history) {
+  const hasDevTools = !!window.__REDUX_DEVTOOLS_EXTENSION__
+  const middleWare = hasDevTools ? compose(applyMiddleware(routerMiddleware(history)), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()) : applyMiddleware(routerMiddleware(history))
+
   return createStore(
     combineReducers({
       ...reducers(),
@@ -47,11 +50,6 @@ export default function createNewStore(history) {
       router: connectRouter(history)
     }),
     initialState(),
-    compose(
-      applyMiddleware(
-        routerMiddleware(history)
-      ),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+    middleWare
   )
 }
