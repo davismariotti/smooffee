@@ -7,10 +7,19 @@
     "test": "jest"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "^2.5.1",
+    "apollo-link-context": "^1.0.17",
+    "apollo-link-error": "^1.1.10",
+    "apollo-link-http": "^1.5.14",
+    "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.5",
     "react-art": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-native": "^0.59.6",
+    "react-native-elements": "^1.1.0",
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-platform-touchable": "^1.1.1",
@@ -19,7 +28,9 @@
     "react-navigation": "^3.8.1",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
-    "redux-form": "^8.2.0"
+    "redux-form": "^8.2.0",
+    "seamless-immutable": "^7.1.4",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",

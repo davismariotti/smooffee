@@ -1,6 +1,9 @@
 import React from 'react'
 import { Button, Picker, ScrollView, StyleSheet, Text, View } from 'react-native'
 
+//This file contains all pages for user to create an order. Order->options->Information
+//TODO connect to DB
+//TODO make understadable layout for ordering drinks
 export class Order extends React.Component {
   static navigationOptions = {
     title: 'Order'
@@ -38,7 +41,7 @@ export class Options extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const { navigation } = this.props
     const itemId = navigation.getParam('itemId', 'NO-ID')
     const drinkOrdered = navigation.getParam('item', 'error')
     return (
@@ -46,10 +49,10 @@ export class Options extends React.Component {
         <Text style={styles.drinkText}>{drinkOrdered}</Text>
         <View style={styles.sectionContainer}>
           <Text>Choose Size</Text>
-          <Picker style={{height: 50, width: 100}}>
-            <Picker.Item label="Small" value="Small"/>
-            <Picker.Item label="Medium" value="Medium"/>
-            <Picker.Item label="Large" value="Large"/>
+          <Picker style={{ height: 50, width: 100 }}>
+            <Picker.Item label="Small" value="Small" />
+            <Picker.Item label="Medium" value="Medium" />
+            <Picker.Item label="Large" value="Large" />
           </Picker>
           {/* <CheckBox title="Medium" checked={this.state.checked} />
           <CheckBox title="Large" checked={this.state.checked} /> */}
@@ -93,7 +96,7 @@ export default class NewOrderScreen extends React.Component {
   }
 
   render() {
-    return <OrderContainer style={styles.container}/>
+    return <OrderContainer style={styles.container} />
   }
 }
 
