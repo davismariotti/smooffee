@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import MoreVert from '@material-ui/icons/Menu'
 import Loader from 'react-loaders'
@@ -13,7 +13,16 @@ import { readUserQueryExpanded } from '../../graphql/userQueries'
 import UserPageActions from './actions'
 
 class UserPage extends Component {
-  static renderOrdersTable(orders) {
+  constructor(props) {
+    super(props)
+    this.renderOrdersTable = this.renderOrdersTable.bind(this)
+    this.renderPaymentsTable = this.renderPaymentsTable.bind(this)
+  }
+
+  renderOrdersTable(orders) {
+
+    const {openOrderHistoryMenu} = this.props
+
     return (
       <Table>
         <TableHead>
@@ -39,6 +48,7 @@ class UserPage extends Component {
                 <TableCell align="right">{order.status}</TableCell>
                 <TableCell align="right">
                   <Button onClick={(e) => {
+                    openOrderHistoryMenu(order, e.target)
                   }}>
                     <MoreVert/>
                   </Button>
@@ -51,7 +61,8 @@ class UserPage extends Component {
     )
   }
 
-  static renderPaymentsTable(payments) {
+  renderPaymentsTable(payments) {
+    const {openPaymentHistoryMenu} = this.props
     return (
       <Table>
         <TableHead>
@@ -71,6 +82,7 @@ class UserPage extends Component {
                 <TableCell align="right">{payment.type.charAt(0).toUpperCase() + payment.type.slice(1)}</TableCell>
                 <TableCell align="right">
                   <Button onClick={(e) => {
+                    openPaymentHistoryMenu(payment, e.target)
                   }}>
                     <MoreVert/>
                   </Button>
@@ -84,7 +96,14 @@ class UserPage extends Component {
   }
 
   render() {
-    const {readUserQueryExpandedResult, changeTab, selectedTab} = this.props
+    const {
+      readUserQueryExpandedResult,
+      changeTab,
+      selectedTab,
+      paymentHistoryMenu,
+      orderHistoryMenu,
+      closeOrderPaymentHistoryMenu
+    } = this.props
 
     if (readUserQueryExpandedResult.loading) return (
       <CenterDiv>
@@ -95,15 +114,37 @@ class UserPage extends Component {
 
     const readUser = readUserQueryExpandedResult.user.read
 
+    const menuIsOpen = !!paymentHistoryMenu || !!orderHistoryMenu
+    const anchorEl = (paymentHistoryMenu) ? paymentHistoryMenu.anchorEl : ((orderHistoryMenu) ? orderHistoryMenu.anchorEl : null)
+
+
     return (
       <div>
+
+        <Menu id="menu" open={menuIsOpen} anchorEl={anchorEl} onClose={closeOrderPaymentHistoryMenu}>
+          {orderHistoryMenu && (
+            <MenuItem>
+              <Button onClick={() => {
+
+              }}>Refund Order</Button>
+            </MenuItem>
+          )}
+          {paymentHistoryMenu && (
+            <MenuItem>
+              <Button onClick={() => {
+
+              }}>Refund Payment</Button>
+            </MenuItem>
+          )}
+        </Menu>
+
         <Paper className="paper" elevation={1}>
           <AlignCenter>
             <Typography style={{margin: '10px'}} variant="h5" component="h3">
               {`${readUser.firstName} ${readUser.lastName}`}
             </Typography>
             {readUser.email}
-            <br />
+            <br/>
             Balance: {`$${(readUser.balance / 100).toFixed(2)}`}
           </AlignCenter>
         </Paper>
@@ -115,8 +156,8 @@ class UserPage extends Component {
             <Tab label="Order History"/>
             <Tab label="Payment History"/>
           </Tabs>
-          {selectedTab === 0 && UserPage.renderOrdersTable(readUser.orders)}
-          {selectedTab === 1 && UserPage.renderPaymentsTable(readUser.payments)}
+          {selectedTab === 0 && this.renderOrdersTable(readUser.orders)}
+          {selectedTab === 1 && this.renderPaymentsTable(readUser.payments)}
         </Paper>
       </div>
     )
@@ -125,13 +166,18 @@ class UserPage extends Component {
 
 const mapStateToProps = ({userpage}) => {
   return {
-    selectedTab: userpage.selectedTab
+    selectedTab: userpage.selectedTab,
+    paymentHistoryMenu: userpage.paymentHistoryMenu,
+    orderHistoryMenu: userpage.orderHistoryMenu
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeTab: (selectedTab) => dispatch(UserPageActions.changeTab(selectedTab))
+    changeTab: (selectedTab) => dispatch(UserPageActions.changeTab(selectedTab)),
+    openOrderHistoryMenu: (order, anchorEl) => dispatch(UserPageActions.openOrderHistoryMenu(order, anchorEl)),
+    closeOrderPaymentHistoryMenu: () => dispatch(UserPageActions.closeOrderPaymentHistoryMenu()),
+    openPaymentHistoryMenu: (payment, anchorEl) => dispatch(UserPageActions.openPaymentHistoryMenu(payment, anchorEl))
   }
 }
 

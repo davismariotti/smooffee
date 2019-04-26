@@ -59,7 +59,7 @@ public class BaseModel extends Model {
     private Date updatedAt;
 
     @NotNull
-    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    @Column(columnDefinition = "INTEGER DEFAULT 1")
     private Integer status = 0;
 
     public Long getId() {

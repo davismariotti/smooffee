@@ -48,6 +48,7 @@ module.exports = {
     'no-else-return': 0,
     'no-underscore-dangle': 0,
     'lines-between-class-members': 0,
-    'no-mixed-operators': 0
+    'no-mixed-operators': 0,
+    'no-nested-ternary' : 0
   }
 };
