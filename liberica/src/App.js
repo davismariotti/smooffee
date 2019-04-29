@@ -9,11 +9,12 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import AppNavigator from './navigation/AppNavigator'
-import NavigationService from'./navigation/NavigationService'
+import NavigationService from './services/NavigationService'
 import createNewStore from './services/store'
 import { ApolloProvider } from 'react-apollo'
 import { client } from './services/apollo'
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation'
+
 const AppContainer = createAppContainer(AppNavigator)
 
 console.disableYellowBox = true

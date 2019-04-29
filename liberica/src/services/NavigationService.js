@@ -1,11 +1,11 @@
 // NavigationService.js
 
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation'
 
-let _navigator;
+let _navigator
 
 function setTopLevelNavigator(navigatorRef) {
-  _navigator = navigatorRef;
+  _navigator = navigatorRef
 }
 
 function navigate(routeName, params) {
@@ -14,7 +14,7 @@ function navigate(routeName, params) {
       routeName,
       params,
     })
-  );
+  )
 }
 
 // add other navigation functions that you need and export them
@@ -22,4 +22,4 @@ function navigate(routeName, params) {
 export default {
   navigate,
   setTopLevelNavigator,
-};
+}

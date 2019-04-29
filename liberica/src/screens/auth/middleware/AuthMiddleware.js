@@ -5,7 +5,7 @@ import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
 import gql from 'graphql-tag'
-import NavigationService from '../../../navigation/NavigationService'
+import NavigationService from '../../../services/NavigationService'
 
 export const readCurrentUserQuery = gql`
 query ReadCurrentUser {
@@ -43,7 +43,7 @@ export default class AuthMiddleware {
           .auth()
           .createUserWithEmailAndPassword(email.trim(), password.trim())
           .then((result) => {
-            return StorageService.setUserId(result.uid)
+            return StorageService.setUserId(result.user.uid)
           })
           .then(() => {
             dispatch(AuthActions.signUpSuccess())
@@ -57,10 +57,9 @@ export default class AuthMiddleware {
                 }
               }
             })
-          }).then((data)=> {
-            console.log(data)
-            NavigationService.navigate('App')
-          })
+          }).then(() => {
+          NavigationService.navigate('App')
+        })
           .catch(error => {
             console.log(error)
             dispatch(AuthActions.signUpError(error.message))
@@ -108,7 +107,7 @@ export default class AuthMiddleware {
           dispatch(AuthActions.signInError(error))
         } else {
           dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
-          NavigationService.navigate('App')
+          NavigationService.navigate('Home')
         }
       })
     })
