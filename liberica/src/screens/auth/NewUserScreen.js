@@ -12,9 +12,10 @@ class NewUserScreen extends React.Component {
 
   render() {
     const { createUserWithEmailAndPassword } = this.props;
-
+    const firstName = 'tom'
+    const lastName = 'tester'
     const submit = ({ email, password }) => {
-      createUserWithEmailAndPassword(email, password);
+      createUserWithEmailAndPassword(email, password,firstName,lastName);
     };
     return (
       <View>
@@ -32,8 +33,8 @@ class NewUserScreen extends React.Component {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    createUserWithEmailAndPassword: (email, password) =>
-      AuthMiddleware.createUserWithEmailAndPassword(email, password)(dispatch)
+    createUserWithEmailAndPassword: (email, password, firstName, lastName) =>
+      AuthMiddleware.createUserWithEmailAndPassword(email, password, firstName, lastName)(dispatch)
   };
 };
 

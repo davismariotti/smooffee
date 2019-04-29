@@ -23,9 +23,20 @@ query ReadCurrentUser {
   }
 }
 `
+export const creatUserMutation = gql`
+mutation CreateUser($organizationId:Long!,$userInput:UserInput!) {
+  user{
+    create(organizationId:$organizationId,userInput:$userInput) {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+`
 
 export default class AuthMiddleware {
-  static createUserWithEmailAndPassword(email, password) {
+  static createUserWithEmailAndPassword(email, password, firstName, lastName) {
     return dispatch => {
       if (isEmail(email)) {
         firebase
@@ -35,15 +46,23 @@ export default class AuthMiddleware {
             return StorageService.setUserId(result.uid)
           })
           .then(() => {
-            return firebase
-              .auth()
-              .currentUser.getIdToken()
-          })
-          .then(token => {
             dispatch(AuthActions.signUpSuccess())
-            // history.push('/signupcontinued')
+            return client.mutate({
+              mutation: creatUserMutation,
+              variables: {
+                organizationId: 3,
+                userInput: {
+                  firstName,
+                  lastName
+                }
+              }
+            })
+          }).then((data)=> {
+            console.log(data)
+            NavigationService.navigate('App')
           })
           .catch(error => {
+            console.log(error)
             dispatch(AuthActions.signUpError(error.message))
           })
       } else {
