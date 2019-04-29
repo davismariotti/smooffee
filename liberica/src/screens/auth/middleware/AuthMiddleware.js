@@ -5,6 +5,7 @@ import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
 import gql from 'graphql-tag'
+import NavigationService from '../../../navigation/NavigationService'
 
 export const readCurrentUserQuery = gql`
 query ReadCurrentUser {
@@ -88,6 +89,7 @@ export default class AuthMiddleware {
           dispatch(AuthActions.signInError(error))
         } else {
           dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
+          NavigationService.navigate('App')
         }
       })
     })
