@@ -1,45 +1,59 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image, Button } from 'react-native'
-import LoginForm from './components/LoginForm'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import LoginFormRF from './components/LoginFormRF'
+import AuthMiddleware from './middleware/AuthMiddleware'
+import { connect } from 'react-redux'
 
-export default class NewUserScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Login',
-        header: null,
+class NewUserScreen extends React.Component {
+  static navigationOptions = {
+    title: 'New User Screen',
+    header: null
+  }
+
+  render() {
+    const {createUserWithEmailAndPassword} = this.props
+    const submit = ({email, password, firstName, lastName}) => {
+      createUserWithEmailAndPassword(email, password, firstName, lastName)
     }
+    return (
+      <View>
+        <Text style={styles.title}>Create Account</Text>
+        <LoginFormRF onSubmit={submit}/>
+        <Button
+          title="Already Have an Account?"
+          onPress={() => {
+            this.props.navigation.navigate('LoginScreen')
+          }}
+        />
+      </View>
+    )
+  }
+}
 
-    render() {
-        return (
-            <View>
+const mapDispatchToProps = dispatch => {
+  return {
+    createUserWithEmailAndPassword: (email, password, firstName, lastName) =>
+      AuthMiddleware.createUserWithEmailAndPassword(email, password, firstName, lastName)(dispatch)
+  }
+}
 
-                <Text style={styles.title}>Create Account</Text>
-                <Text>TODO: Add form to create new user account</Text>
-
-                <Button title="Already Have an Account?"
-                    onPress={() => {
-                        this.props.navigation.navigate('LoginScreen')
-                    }} />
-            </View>
-        )
-    }
-
-
-};
-
+export default connect(
+  null,
+  mapDispatchToProps
+)(NewUserScreen)
 const styles = StyleSheet.create({
-    image: {
-        width: 200,
-        height: 200,
-        resizeMode: 'contain',
-        marginTop: 30,
-        marginLeft: 110
-    },
-    title: {
-        fontSize: 30,
-        marginTop: 10,
-        color: 'rgba(96,100,109, 1)',
-        lineHeight: 50,
-        textAlign: 'center'
-    }
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    marginTop: 30,
+    marginLeft: 110
+  },
+  title: {
+    fontSize: 30,
+    marginTop: 10,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 50,
+    textAlign: 'center'
+  }
 })
-

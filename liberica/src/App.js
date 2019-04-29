@@ -9,9 +9,13 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import AppNavigator from './navigation/AppNavigator'
+import NavigationService from './services/NavigationService'
 import createNewStore from './services/store'
 import { ApolloProvider } from 'react-apollo'
 import { client } from './services/apollo'
+import { createAppContainer } from 'react-navigation'
+
+const AppContainer = createAppContainer(AppNavigator)
 
 console.disableYellowBox = true
 
@@ -22,7 +26,9 @@ export default class App extends Component<Props> {
     return (
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <AppNavigator/>
+          <AppContainer ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef)
+          }}/>
         </Provider>
       </ApolloProvider>
     )

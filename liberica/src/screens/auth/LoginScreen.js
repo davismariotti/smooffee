@@ -33,7 +33,7 @@ class LoginScreen extends React.Component {
         <Text style={styles.title}> Login</Text>
         <LoginForm/>
 
-        { authError && <Text>{authError}</Text>}
+        {authError && <Text>{authError}</Text>}
         <Button title="New User"
                 onPress={() => {
                   this.props.navigation.navigate('NewUserScreen')

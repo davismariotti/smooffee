@@ -1,26 +1,37 @@
 import React, { Component } from 'react'
-import { ScrollView, } from 'react-native'
-import Order from './Order'
+import { ScrollView, Text, View } from 'react-native'
+import { graphql } from 'react-apollo'
 
+import Order from './Order'
+import { readOrdersQuery } from '../../../graphql/userQueries'
 
 class ScrollingOrders extends Component {
   render() {
+
+    const {readOrdersQueryResult} = this.props
+
+    if (readOrdersQueryResult.loading || readOrdersQueryResult.error) {
+      return (
+        <View>
+          <Text>Loading</Text>
+        </View>
+      )
+    }
+
     return (
       <ScrollView>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
-        <Order name="Drip Coffee" price="5.20" description="drip drip drip"/>
+        {readOrdersQueryResult.user.currentUser.orders.map(order => {
+          return (
+            <Order key={order.id} name={order.product.name} price={order.product.price} description={order.product.description}/>
+          )
+        })}
       </ScrollView>
 
     )
   }
 }
 
-export default ScrollingOrders
+export default graphql(readOrdersQuery, {
+  name: 'readOrdersQueryResult'
+})
+(ScrollingOrders)

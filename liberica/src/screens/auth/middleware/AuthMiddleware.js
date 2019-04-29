@@ -1,48 +1,38 @@
 import isEmail from 'validator/lib/isEmail'
-// import { readCurrentUserQuery } from '../../graphql/userQueries'
 import { client } from '../../../services/apollo'
 import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
-import gql from 'graphql-tag'
-
-export const readCurrentUserQuery = gql`
-query ReadCurrentUser {
-  user {
-    currentUser {
-      id
-      organizationId
-      role
-      firstName
-      lastName
-      status
-      balance
-      email
-    }
-  }
-}
-`
+import NavigationService from '../../../services/NavigationService'
+import { creatUserMutation, readCurrentUserQuery } from '../../../graphql/userQueries'
 
 export default class AuthMiddleware {
-  static createUserWithEmailAndPassword(email, password) {
+  static createUserWithEmailAndPassword(email, password, firstName, lastName) {
     return dispatch => {
       if (isEmail(email)) {
         firebase
           .auth()
           .createUserWithEmailAndPassword(email.trim(), password.trim())
           .then((result) => {
-            return StorageService.setUserId(result.uid)
+            return StorageService.setUserId(result.user.uid)
           })
           .then(() => {
-            return firebase
-              .auth()
-              .currentUser.getIdToken()
-          })
-          .then(token => {
             dispatch(AuthActions.signUpSuccess())
-            // history.push('/signupcontinued')
-          })
+            return client.mutate({
+              mutation: creatUserMutation,
+              variables: {
+                organizationId: 3,
+                userInput: {
+                  firstName,
+                  lastName
+                }
+              }
+            })
+          }).then(() => {
+          NavigationService.navigate('App')
+        })
           .catch(error => {
+            console.log(error)
             dispatch(AuthActions.signUpError(error.message))
           })
       } else {
@@ -66,20 +56,6 @@ export default class AuthMiddleware {
     }
   }
 
-  // static signInWithGoogle() {
-  //   return dispatch => {
-  //     firebase
-  //       .auth()
-  //       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-  //       .then(result => {
-  //         AuthMiddleware.continueLogin(result, dispatch)
-  //       })
-  //       .catch(error => {
-  //         dispatch(AuthActions.signInError(error.message))
-  //       })
-  //   }
-  // }
-
   static continueLogin(result, dispatch) {
     StorageService.setUserId(result.uid).then(async () => {
       const userId = await StorageService.getUserId()
@@ -88,22 +64,10 @@ export default class AuthMiddleware {
           dispatch(AuthActions.signInError(error))
         } else {
           dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
+          NavigationService.navigate('Home')
         }
       })
     })
-
-    // firebase.auth().currentUser.getToken().then(token => {
-    //   StorageService.setAuthToken(token)
-    //   client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-    //     if (error) {
-    //       dispatch(AuthActions.signInError(error))
-    //     } else {
-    //       StorageService.setOrganizationId(data.user.currentUser.organizationId)
-    //       dispatch(AuthActions.signInSuccess())
-    //       history.push('/home')
-    //     }
-    //   })
-    // })
   }
 
   static recoverWithEmail(email) {
