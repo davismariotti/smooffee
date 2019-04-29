@@ -3,7 +3,8 @@ import { Platform } from 'react-native'
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
-import SettingsScreen from '../screens/SettingsScreen'
+import {AccountInfo, ChangePassword, ShareFeedback, DeleteAccount, SettingsScreen} from '../screens/SettingsScreen'
+
 import { Information, Options, Order } from '../screens/NewOrderScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
@@ -48,8 +49,14 @@ NewOrderStack.navigationOptions = {
 }
 
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen
+  Settings: SettingsScreen,
+    AccountInfo,
+    ChangePassword,
+    ShareFeedback,
+    DeleteAccount
+
 })
+
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
@@ -71,7 +78,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: 'Auth'
+      initialRouteName: 'App'
     }
   )
 )
