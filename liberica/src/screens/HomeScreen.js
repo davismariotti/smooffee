@@ -17,9 +17,6 @@ export default class HomeScreen extends React.Component {
   render() {
     const {currentUser, email, userBalance} = this.state
 
-    if (this.state.ordersExist) {
-    }
-
     return (
       <View style={styles.container}>
         <View style={styles.contentContainer}>
