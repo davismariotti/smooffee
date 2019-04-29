@@ -6,13 +6,15 @@ import organizationSettingsReducer from '../components/OrganizationSettings/redu
 import authReducer from '../components/Auth/reducer'
 import navbarReducer from '../components/Navbar/reducer'
 import myAccountReducer from '../components/MyAccount/reducer'
+import userPageReducer from '../components/UserPage/reducer'
 
 const reducerList = [
   homeReducer,
   organizationSettingsReducer,
   authReducer,
   navbarReducer,
-  myAccountReducer
+  myAccountReducer,
+  userPageReducer
 ]
 
 function reducers() {

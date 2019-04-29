@@ -71,12 +71,12 @@ public class QLDeliveryPeriod {
             ));
         }
 
-        public DeliveryPeriodEntry updateStatus(Long deliveryPeriodId, Integer status) {
+        public DeliveryPeriodEntry updateStatus(Long deliveryPeriodId, String status) {
             DeliveryPeriod deliveryPeriod = DeliveryPeriod.find.byId(deliveryPeriodId);
             if (deliveryPeriod == null) throw new QLException("Delivery Period not found.");
 
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(deliveryPeriod.getOrganization()));
-            deliveryPeriod.setStatus(status).store();
+            deliveryPeriod.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new DeliveryPeriodEntry(deliveryPeriod);
         }

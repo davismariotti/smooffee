@@ -1,6 +1,7 @@
 package graphql;
 
 import actions.ProductActions;
+import models.BaseModel;
 import models.OrderModifier;
 import models.Organization;
 import models.Product;
@@ -73,12 +74,12 @@ public class QLProduct {
             return new ProductEntry(ProductActions.updateProduct(product, productInput.getName(), productInput.getDescription(), productInput.getPrice(), orderModifiers));
         }
 
-        public ProductEntry updateStatus(Long orderId, int status) {
+        public ProductEntry updateStatus(Long orderId, String status) {
             Product product = Product.find.byId(orderId);
             if (product == null) throw new QLException("Product not found");
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(product.getOrganization()));
 
-            product.setStatus(status).store();
+            product.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new ProductEntry(product);
         }

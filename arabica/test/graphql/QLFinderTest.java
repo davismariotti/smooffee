@@ -3,6 +3,7 @@ package graphql;
 import com.google.common.collect.Ordering;
 import environment.FakeApplication;
 import environment.Setup;
+import models.BaseModel;
 import models.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
@@ -36,7 +37,7 @@ public class QLFinderTest {
                     .setEmail(RandomStringUtils.randomAlphabetic(6) + "@" + RandomStringUtils.randomAlphabetic(4) + ".com")
                     .setFirstName(RandomStringUtils.randomAlphabetic(7))
                     .setLastName(RandomStringUtils.randomAlphabetic(10))
-                    .setStatus(i % 4)
+                    .setStatus(i % 3 + 1)
                     .store();
         }
         new User()
@@ -47,6 +48,7 @@ public class QLFinderTest {
                 .setEmail("sample@sample.com")
                 .setFirstName("sample")
                 .setLastName("sample")
+                .setStatus(BaseModel.ACTIVE)
                 .store();
     }
 
@@ -218,12 +220,12 @@ public class QLFinderTest {
         parameters.filter.include = new QLFinder.QLFinderValueList();
         parameters.filter.include.field = "status";
         parameters.filter.include.values = new ArrayList<>();
-        parameters.filter.include.values.add("1");
-        parameters.filter.include.values.add("3");
+        parameters.filter.include.values.add(BaseModel.ACTIVE_STR);
+        parameters.filter.include.values.add(BaseModel.COMPLETED_STR);
 
         QLUser.UserEntry[] entries = QLUserTest.listUsers(Setup.defaultOrganization.getId(), parameters);
         for (QLUser.UserEntry entry : entries) {
-            assertTrue(entry.getStatus() == 1 || entry.getStatus() == 3);
+            assertTrue(entry.getStatus().equals(BaseModel.ACTIVE_STR) || entry.getStatus().equals(BaseModel.COMPLETED_STR));
         }
     }
 }

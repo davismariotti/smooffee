@@ -43,7 +43,7 @@ mutation EditProduct($productId: Long!, $productInput: ProductInput!) {
 `
 
 export const editProductStatusMutation = gql`
-mutation EditProductStatus($productId: Long!, $status: Int!) {
+mutation EditProductStatus($productId: Long!, $status: String!) {
   product {
     updateStatus(productId: $productId, status: $status) {
       id

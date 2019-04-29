@@ -15,6 +15,47 @@ query ReadUser($userId: String!) {
 }
 `
 
+export const readUserQueryExpanded = gql`
+query ReadUserExpanded($userId: String!) {
+  user {
+    read(id: $userId) {
+      id
+      firstName
+      lastName
+      email
+      balance
+      status
+      orders {
+        id
+        status
+        location
+        recipient
+        notes
+        deliveryPeriod {
+          id
+          classPeriod
+        }
+        product {
+          id
+          name
+          price
+        }
+        orderModifiers {
+          id
+          name
+        }
+      }
+      payments {
+        id
+        amount
+        type
+        status
+      }
+    }
+  }
+}
+`
+
 export const readCurrentUserQuery = gql`
 query ReadCurrentUser {
   user {

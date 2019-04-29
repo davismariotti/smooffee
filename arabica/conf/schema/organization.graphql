@@ -1,6 +1,6 @@
 type OrganizationEntry {
     id: Long!
-    status: Int!
+    status: String!
     name: String!
     products: [ProductEntry!]!
     deliveryPeriods: [DeliveryPeriodEntry!]!
@@ -19,5 +19,5 @@ type OrganizationQuery {
 type OrganizationMutation {
     create(input: OrganizationInput!): OrganizationEntry!
     update(organizationId: Long!, organizationInput: OrganizationInput!): OrganizationEntry!
-    updateStatus(organizationId: Long!, status: Int!): OrganizationEntry!
+    updateStatus(organizationId: Long!, status: String!): OrganizationEntry!
 }

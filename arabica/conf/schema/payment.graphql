@@ -7,7 +7,7 @@ input PaymentInput {
 
 type PaymentEntry {
     id: Long!
-    status: Int!
+    status: String!
     amount: Int!
     stripeCardId: String
     stripeRefundId: String
@@ -22,6 +22,6 @@ type PaymentQuery {
 
 type PaymentMutation {
     create(userId: String!, paymentInput: PaymentInput!): PaymentEntry!
-    updateStatus(paymentId: Long!, status: Int!): PaymentEntry!
+    updateStatus(paymentId: Long!, status: String!): PaymentEntry!
     refundPayment(paymentId: Long!): PaymentEntry!
 }

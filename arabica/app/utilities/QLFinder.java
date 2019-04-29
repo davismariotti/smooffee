@@ -4,6 +4,7 @@ import io.ebean.Expression;
 import io.ebean.Finder;
 import io.ebean.OrderBy;
 import io.ebean.Query;
+import models.BaseModel;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Column;
@@ -112,6 +113,9 @@ public class QLFinder {
     }
 
     public static Object convertFieldValue(Class modelClazz, String field, String value) {
+        if (field.endsWith("status")) {
+            return BaseModel.statusStringToInt(value);
+        }
         Class clazz = getFieldType(modelClazz, field);
         Function<String, Object> func = convertMap.get(clazz);
         if (func == null) {

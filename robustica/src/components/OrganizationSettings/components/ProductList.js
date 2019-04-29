@@ -62,7 +62,7 @@ class ProductList extends Component {
                 editProductStatusMutate({
                   variables: {
                     productId: productMenu.productItem.id,
-                    status: -2
+                    status: 'Deleted'
                   }
                 }).then(() => {
                   listProductsQueryResult.refetch()
@@ -103,23 +103,23 @@ class ProductList extends Component {
                   )
                   return listProductsQueryResult.product.list.map(productItem => {
                     return (
-                      <TableRow key={productItem.id} className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
-                        <TableCell align="left" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
+                      <TableRow key={productItem.id} className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                        <TableCell align="left" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
                           {productItem.name}
                         </TableCell>
-                        <TableCell align="right" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
                           {`$${(productItem.price / 100).toFixed(2)}`}
                         </TableCell>
-                        <TableCell align="right" className={productItem.status !== 1 ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
                           {productItem.description}
                         </TableCell>
                         <TableCell>
                           <AlignRight>
-                            <Checkbox checked={productItem.status === 1} onChange={() => {
+                            <Checkbox checked={productItem.status === 'Active'} onChange={() => {
                               editProductStatusMutate({
                                 variables: {
                                   productId: productItem.id,
-                                  status: productItem.status === 1 ? -3 : 1
+                                  status: productItem.status === 'Active' ? 'Not Available' : 'Active'
                                 }
                               }).then(listProductsQueryResult.refetch)
                             }}/>
@@ -191,7 +191,7 @@ export default compose(
             not: {
               eq: {
                 field: 'status',
-                value: '-2'
+                value: 'Deleted'
               }
             }
           }

@@ -49,12 +49,12 @@ public class QLOrganization {
             return new OrganizationEntry(OrganizationActions.updateOrganization(organization, organizationInput.getName()));
         }
 
-        public OrganizationEntry updateStatus(Long organizationId, Integer status) {
+        public OrganizationEntry updateStatus(Long organizationId, String status) {
             Organization organization = Organization.find.byId(organizationId);
             if (organization == null) throw new QLException("Organization not found.");
             Permission.check(Permission.ALL);
 
-            organization.setStatus(status).store();
+            organization.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new OrganizationEntry(organization);
         }

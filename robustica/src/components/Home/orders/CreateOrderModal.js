@@ -145,7 +145,7 @@ export default compose(
           filter: {
             eq: {
               field: 'status',
-              value: '1'
+              value: 'Active'
             }
           }
         }
@@ -165,7 +165,7 @@ export default compose(
           filter: {
             eq: {
               field: 'status',
-              value: '1'
+              value: 'Active'
             }
           }
         }

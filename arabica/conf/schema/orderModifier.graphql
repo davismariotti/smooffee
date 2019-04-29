@@ -4,7 +4,7 @@ input OrderModifierInput {
 
 type OrderModifierEntry {
     id: Long!
-    status: Int!
+    status: String!
     name: String!
 }
 
@@ -16,5 +16,5 @@ type OrderModifierQuery {
 type OrderModifierMutation {
     create(organizationId: Long!, orderModifierInput: OrderModifierInput!): OrderModifierEntry!
     update(orderModifierId: Long!, orderModifierInput: OrderModifierInput!): OrderModifierEntry!
-    updateStatus(orderModifierId: Long!, status: Int!): OrderModifierEntry!
+    updateStatus(orderModifierId: Long!, status: String!): OrderModifierEntry!
 }

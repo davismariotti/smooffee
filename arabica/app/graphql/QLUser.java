@@ -3,6 +3,7 @@ package graphql;
 import actions.UserActions;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.stripe.model.Card;
+import models.BaseModel;
 import models.Organization;
 import models.User;
 import services.AuthenticationService;
@@ -79,12 +80,12 @@ public class QLUser {
             return (user == null) ? null : new UserEntry(user);
         }
 
-        public UserEntry updateStatus(String userId, Integer status) {
+        public UserEntry updateStatus(String userId, String  status) {
             User user = User.findByFirebaseUid(userId);
             if (user == null) throw new QLException("User not found.");
             Permission.check(Permission.OTHER_USER_INFO_WRITE, new AuthorizationContext(user));
 
-            user.setStatus(status).store();
+            user.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new UserEntry(user);
         }
@@ -142,10 +143,11 @@ public class QLUser {
         private Long organizationId;
         private Integer balance;
         private String role;
-        private Integer status;
+        private String status;
         private User user;
         private List<QLPayment.PaymentEntry> payments;
         private List<QLOrder.OrderEntry> orders;
+        private List<CardEntry> cards;
 
         public UserEntry(User user) {
             this.user = user;
@@ -156,7 +158,7 @@ public class QLUser {
             this.organizationId = user.getOrganization().getId();
             this.balance = user.getBalance();
             this.role = user.getRole().getName();
-            this.status = user.getStatus();
+            this.status = BaseModel.statusIntToString(user.getStatus());
         }
 
         public Integer getBalance() {
@@ -187,11 +189,12 @@ public class QLUser {
             return role;
         }
 
-        public Integer getStatus() {
+        public String  getStatus() {
             return status;
         }
 
-        public List<QLOrder.OrderEntry> getOrders() { // TODO check permissions
+        public List<QLOrder.OrderEntry> getOrders() {
+            Permission.check(Permission.THIS_USER_ORDER_READ, new AuthorizationContext(user));
             if (orders == null) orders = user.getOrders().stream().map(QLOrder.OrderEntry::new).collect(Collectors.toList());
             return orders;
         }
@@ -201,10 +204,15 @@ public class QLUser {
             if (payments == null) payments = user.getPayments().stream().map(QLPayment.PaymentEntry::new).collect(Collectors.toList());
             return payments;
         }
+
+        public List<CardEntry> getCards() {
+            Permission.check(Permission.THIS_USER_CARD_READ, new AuthorizationContext(user));
+            if (cards == null) cards = UserActions.listCards(user).stream().map(CardEntry::new).collect(Collectors.toList());
+            return cards;
+        }
     }
 
     public static class CardEntry {
-
         String stripeCardId;
         String last4;
         String brand;
