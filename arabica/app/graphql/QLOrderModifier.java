@@ -1,6 +1,7 @@
 package graphql;
 
 import actions.OrderModifierActions;
+import models.BaseModel;
 import models.OrderModifier;
 import models.Organization;
 import services.authorization.AuthorizationContext;
@@ -60,12 +61,12 @@ public class QLOrderModifier {
             ));
         }
 
-        public OrderModifierEntry updateStatus(Long orderModifierId, Integer status) {
+        public OrderModifierEntry updateStatus(Long orderModifierId, String status) {
             OrderModifier orderModifier = OrderModifier.find.byId(orderModifierId);
             if (orderModifier == null) throw new QLException("Order Modifier not found.");
 
             Permission.check(Permission.THIS_ORGANIZATION_SETTINGS_WRITE, new AuthorizationContext(orderModifier.getOrganization()));
-            orderModifier.setStatus(status).store();
+            orderModifier.setStatus(BaseModel.statusStringToInt(status)).store();
 
             return new OrderModifierEntry(orderModifier);
         }

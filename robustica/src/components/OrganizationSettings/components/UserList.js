@@ -12,6 +12,7 @@ import OrganizationSettingsActions from '../actions'
 import AddFundsModal from '../modals/AddFundsModal'
 import { StorageService } from '../../../services/StorageService'
 import { translateRole } from '../../../utils/role'
+import history from '../../../utils/history'
 
 class UserList extends Component {
   constructor(props) {
@@ -74,6 +75,11 @@ class UserList extends Component {
             <Button onClick={() => {
               openAddMoreFunds(userMenu.userItem)
             }}>Add Funds</Button>
+          </MenuItem>
+          <MenuItem>
+            <Button onClick={() => {
+              history.push(`/userinfo/${userMenu.userItem.id}`)
+            }}>More Information</Button>
           </MenuItem>
         </Menu>
         <Paper className="paper" elevation={1}>

@@ -117,7 +117,7 @@ public class QLOrderTest {
         assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
         assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class QLOrderTest {
         createOrder(orderInput);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"1\\\" } } }) { id location notes product { id } status recipient } } }",
+                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id location notes product { id } status recipient } } }",
                 Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
@@ -167,7 +167,7 @@ public class QLOrderTest {
         QLOrder.OrderEntry entry = createOrder(Setup.defaultCustomer.getFirebaseUserId(), orderInput);
 
         // Cancel order
-        updateOrderStatus(entry.getId(), BaseModel.CANCELLED);
+        updateOrderStatus(entry.getId(), BaseModel.CANCELLED_STR);
 
         FakeApplication.authToken.pop();
     }
@@ -188,13 +188,13 @@ public class QLOrderTest {
         String tempToken = FakeApplication.authToken.pop();
 
         // Start order
-        updateOrderStatus(entry.getId(), BaseModel.IN_PROGRESS);
+        updateOrderStatus(entry.getId(), BaseModel.IN_PROGRESS_STR);
         FakeApplication.authToken.push(tempToken);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { updateStatus(orderId: %d, status: %d) { id status } } }",
+                "mutation { order { updateStatus(orderId: %d, status: %s) { id status } } }",
                 entry.getId(),
-                BaseModel.CANCELLED
+                QL.prepare(BaseModel.CANCELLED_STR)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
@@ -215,8 +215,8 @@ public class QLOrderTest {
         QLOrder.OrderEntry entry = createOrder(orderInput);
 
         // Update to completed
-        updateOrderStatus(entry.getId(), BaseModel.IN_PROGRESS);
-        updateOrderStatus(entry.getId(), BaseModel.COMPLETED);
+        updateOrderStatus(entry.getId(), BaseModel.IN_PROGRESS_STR);
+        updateOrderStatus(entry.getId(), BaseModel.COMPLETED_STR);
 
         // Refund order
         QLOrder.RefundEntry refundEntry = refundOrder(entry.getId());
@@ -246,16 +246,16 @@ public class QLOrderTest {
         assertEquals(input.getRecipient(), entry.getRecipient());
         assertEquals(input.getNotes(), entry.getNotes());
         assertEquals(input.getProductId(), entry.getProduct().getId());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
 
         return entry;
     }
 
-    public static QLOrder.OrderEntry updateOrderStatus(Long orderId, Integer status) {
+    public static QLOrder.OrderEntry updateOrderStatus(Long orderId, String status) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { updateStatus(orderId: %d, status: %d) { id status } } }",
+                "mutation { order { updateStatus(orderId: %d, status: %s) { id status } } }",
                 orderId,
-                status
+                QL.prepare(status)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());

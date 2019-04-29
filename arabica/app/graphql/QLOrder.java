@@ -60,11 +60,11 @@ public class QLOrder {
             return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient(), orderModifiers));
         }
 
-        public OrderEntry updateStatus(Long orderId, int status) {
+        public OrderEntry updateStatus(Long orderId, String status) {
             Order order = Order.find.byId(orderId);
             if (order == null) throw new QLException("Order not found");
 
-            if (status == BaseModel.CANCELLED) {
+            if (status.equals(BaseModel.CANCELLED_STR)) {
                 Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(order.getUser()));
 
                 // If an order is in progress or has already been completed, then it cannot be cancelled
@@ -80,12 +80,12 @@ public class QLOrder {
                 order = OrderActions.cancelOrder(order);
 
                 return new OrderEntry(order);
-            } else if (status == BaseModel.REFUNDED) {
+            } else if (status.equals(BaseModel.REFUNDED_STR)) {
                 throw new QLException("Use createRefund to refund an order");
             } else { // All other status updates
                 Permission.check(Permission.THIS_ORGANIZATION_ORDERS_WRITE, new AuthorizationContext(order.getUser().getOrganization()));
 
-                order.setStatus(status).store();
+                order.setStatus(BaseModel.statusStringToInt(status)).store();
 
                 return new OrderEntry(order);
             }

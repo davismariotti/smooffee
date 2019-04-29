@@ -39,7 +39,7 @@ mutation EditDeliveryPeriod($deliveryPeriodId: Long!, $deliveryPeriodInput: Deli
 `
 
 export const editDeliveryPeriodStatusMutation = gql`
-mutation EditDeliveryPeriodStatus($deliveryPeriodId: Long!, $status: Int!) {
+mutation EditDeliveryPeriodStatus($deliveryPeriodId: Long!, $status: String!) {
   deliveryPeriod {
     updateStatus(deliveryPeriodId: $deliveryPeriodId, status: $status) {
       id

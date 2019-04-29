@@ -5,18 +5,18 @@ import models.BaseModel;
 public class QLEntry {
 
     private Long id;
-    private Integer status;
+    private String status;
 
     public QLEntry(BaseModel model) {
         this.id = model.getId();
-        this.status = model.getStatus();
+        this.status = BaseModel.statusIntToString(model.getStatus());
     }
 
     public Long getId() {
         return id;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 }

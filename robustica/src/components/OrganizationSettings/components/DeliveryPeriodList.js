@@ -64,7 +64,7 @@ class DeliveryPeriodList extends Component {
                 editDeliveryPeriodStatusMutate({
                   variables: {
                     deliveryPeriodId: deliveryPeriodMenu.deliveryPeriodItem.id,
-                    status: -2
+                    status: 'Deleted'
                   }
                 }).then(() => {
                   listDeliveryPeriodsQueryResult.refetch()
@@ -107,22 +107,22 @@ class DeliveryPeriodList extends Component {
                   )
                   return listDeliveryPeriodsQueryResult.deliveryPeriod.list.map(deliveryPeriodItem => {
                     return (
-                      <TableRow key={deliveryPeriodItem.id} className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>
-                        <TableCell align="left" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>
+                      <TableRow key={deliveryPeriodItem.id} className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                        <TableCell align="left" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
-                        <TableCell align="right" className={deliveryPeriodItem.status !== 1 ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.maxQueueSize === 0 ? 'Unlimited' : deliveryPeriodItem.maxQueueSize}
                         </TableCell>
                         <TableCell align="right">
-                          <Checkbox checked={deliveryPeriodItem.status === 1} onChange={() => {
+                          <Checkbox checked={deliveryPeriodItem.status === 'Active'} onChange={() => {
                             editDeliveryPeriodStatusMutate({
                               variables: {
                                 deliveryPeriodId: deliveryPeriodItem.id,
-                                status: deliveryPeriodItem.status === 1 ? -3 : 1
+                                status: deliveryPeriodItem.status === 'Active' ? 'Not Available' : 'Active'
                               }
                             }).then(listDeliveryPeriodsQueryResult.refetch)
                           }}/>
@@ -196,7 +196,7 @@ export default compose(
             not: {
               eq: {
                 field: 'status',
-                value: '-2'
+                value: 'Deleted'
               }
             }
           }

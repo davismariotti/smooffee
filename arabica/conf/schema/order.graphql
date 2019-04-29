@@ -9,7 +9,7 @@ input OrderInput {
 
 type OrderEntry {
     id: Long!
-    status: Int!
+    status: String!
     location: String!
     notes: String
     product: ProductEntry!
@@ -21,7 +21,7 @@ type OrderEntry {
 
 type RefundEntry {
     id: Long!
-    status: Int!
+    status: String!
     amount: Int!
 }
 
@@ -32,6 +32,6 @@ type OrderQuery {
 
 type OrderMutation {
     create(userId: String!, orderInput: OrderInput!): OrderEntry!
-    updateStatus(orderId: Long!, status: Int!): OrderEntry!
+    updateStatus(orderId: Long!, status: String!): OrderEntry!
     createRefund(orderId: Long!): RefundEntry!
 }

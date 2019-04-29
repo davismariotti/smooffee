@@ -56,7 +56,7 @@ public class StripeAPI {
         if (user == null) return null;
 
         Customer customer = retrieveCustomer(user);
-        if (customer == null) return null;
+        if (customer == null) return new ArrayList<>();
 
         Map<String, Object> cardParams = new HashMap<>();
         cardParams.put("object", "card");

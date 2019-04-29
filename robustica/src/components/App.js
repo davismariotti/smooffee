@@ -10,6 +10,7 @@ import Recover from './Auth/login/Recover'
 import Signup from './Auth/signup/Signup'
 import Navbar from './Navbar/Navbar'
 import MyAccount from './MyAccount'
+import UserPage from './UserPage'
 import { AuthenticatedRoute, ProtectedRoute } from '../utils/routeUtils'
 import OrganizationSettings from './OrganizationSettings'
 import { ADMIN, EMPLOYEE, SUPERVISOR } from '../utils/role'
@@ -41,6 +42,7 @@ class App extends Component {
           <Route path="/recover" component={Recover}/>
           <ProtectedRoute path="/home" component={Home} allowedRoles={[ADMIN, EMPLOYEE, SUPERVISOR]}/>
           <ProtectedRoute path="/settings" component={OrganizationSettings} allowedRoles={[ADMIN, SUPERVISOR]}/>
+          <ProtectedRoute path="/userinfo/:id" component={UserPage} allowedRoles={[ADMIN]}/>
           <AuthenticatedRoute path="/account" component={MyAccount} />
         </Switch>
       </div>

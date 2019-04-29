@@ -44,14 +44,14 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry);
         assertEquals(deliveryPeriodId, entry.getId());
         assertEquals(1, entry.getClassPeriod().intValue());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
     }
 
     @Test
     public void listDeliveryPeriodTest() {
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { deliveryPeriod { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"1\\\" } } }) { id classPeriod status } } }",
+                "query { deliveryPeriod { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id classPeriod status } } }",
                 Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
@@ -61,7 +61,7 @@ public class QLDeliveryPeriodTest {
         assertEquals(2, entries.length);
         assertEquals(deliveryPeriodId, entries[0].getId());
         assertEquals(1, entries[0].getClassPeriod().intValue());
-        assertEquals(BaseModel.ACTIVE, entries[0].getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entries[0].getStatus());
     }
 
     @Test
@@ -99,9 +99,9 @@ public class QLDeliveryPeriodTest {
         QLDeliveryPeriod.DeliveryPeriodEntry createEntry = createDeliveryPeriod(5);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { deliveryPeriod { updateStatus(deliveryPeriodId: %d, status: %d) { id classPeriod status } } }",
+                "mutation { deliveryPeriod { updateStatus(deliveryPeriodId: %d, status: %s) { id classPeriod status } } }",
                 createEntry.getId(),
-                BaseModel.DELETED
+                QL.prepare(BaseModel.DELETED_STR)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
@@ -110,7 +110,7 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry);
         assertEquals(createEntry.getId(), entry.getId());
         assertEquals(5, entry.getClassPeriod().intValue());
-        assertEquals(BaseModel.DELETED, entry.getStatus().intValue());
+        assertEquals(BaseModel.DELETED_STR, entry.getStatus());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class QLDeliveryPeriodTest {
         assertNotNull(entry.getId());
         assertEquals(classPeriod, entry.getClassPeriod().intValue());
         assertEquals(maxQueueSize, entry.getMaxQueueSize().intValue());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         assertEquals(monday, entry.getMonday());
         assertEquals(tuesday, entry.getTuesday());
         assertEquals(wednesday, entry.getWednesday());

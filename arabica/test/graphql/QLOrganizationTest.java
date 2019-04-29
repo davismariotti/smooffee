@@ -60,16 +60,16 @@ public class QLOrganizationTest {
 
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { organization { updateStatus(organizationId: %d, status: %d) { id name status } } }",
+                "mutation { organization { updateStatus(organizationId: %d, status: %s) { id name status } } }",
                 orgEntry.getId(),
-                BaseModel.DELETED
+                QL.prepare(BaseModel.DELETED_STR)
         ));
         assertNotNull(result);
         assertEquals(OK, result.status());
 
         QLOrganization.OrganizationEntry entry = FakeApplication.graphQLResultToObject(result, "organization/updateStatus", QLOrganization.OrganizationEntry.class);
         assertNotNull(entry);
-        assertEquals(BaseModel.DELETED, entry.getStatus().intValue());
+        assertEquals(BaseModel.DELETED_STR, entry.getStatus());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class QLOrganizationTest {
 
         QLOrganization.OrganizationEntry entry = FakeApplication.graphQLResultToObject(result, "organization/create", QLOrganization.OrganizationEntry.class);
         assertEquals(name, entry.getName());
-        assertEquals(BaseModel.ACTIVE, entry.getStatus().intValue());
+        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
         assertNotNull(entry.getId());
         return entry;
     }
