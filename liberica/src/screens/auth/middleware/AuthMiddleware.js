@@ -1,39 +1,10 @@
 import isEmail from 'validator/lib/isEmail'
-// import { readCurrentUserQuery } from '../../graphql/userQueries'
 import { client } from '../../../services/apollo'
 import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
-import gql from 'graphql-tag'
 import NavigationService from '../../../services/NavigationService'
-
-export const readCurrentUserQuery = gql`
-query ReadCurrentUser {
-  user {
-    currentUser {
-      id
-      organizationId
-      role
-      firstName
-      lastName
-      status
-      balance
-      email
-    }
-  }
-}
-`
-export const creatUserMutation = gql`
-mutation CreateUser($organizationId:Long!,$userInput:UserInput!) {
-  user{
-    create(organizationId:$organizationId,userInput:$userInput) {
-      id
-      firstName
-      lastName
-    }
-  }
-}
-`
+import { creatUserMutation, readCurrentUserQuery } from '../../../graphql/userQueries'
 
 export default class AuthMiddleware {
   static createUserWithEmailAndPassword(email, password, firstName, lastName) {
@@ -85,20 +56,6 @@ export default class AuthMiddleware {
     }
   }
 
-  // static signInWithGoogle() {
-  //   return dispatch => {
-  //     firebase
-  //       .auth()
-  //       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-  //       .then(result => {
-  //         AuthMiddleware.continueLogin(result, dispatch)
-  //       })
-  //       .catch(error => {
-  //         dispatch(AuthActions.signInError(error.message))
-  //       })
-  //   }
-  // }
-
   static continueLogin(result, dispatch) {
     StorageService.setUserId(result.uid).then(async () => {
       const userId = await StorageService.getUserId()
@@ -111,19 +68,6 @@ export default class AuthMiddleware {
         }
       })
     })
-
-    // firebase.auth().currentUser.getToken().then(token => {
-    //   StorageService.setAuthToken(token)
-    //   client.query({query: readCurrentUserQuery}).then(({error, data}) => {
-    //     if (error) {
-    //       dispatch(AuthActions.signInError(error))
-    //     } else {
-    //       StorageService.setOrganizationId(data.user.currentUser.organizationId)
-    //       dispatch(AuthActions.signInSuccess())
-    //       history.push('/home')
-    //     }
-    //   })
-    // })
   }
 
   static recoverWithEmail(email) {
