@@ -16,6 +16,7 @@ import { StyledFormRow } from '../../styles/forms'
 import { listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
 import { validateIsRequired } from '../../../utils/formUtils'
 import { StorageService } from '../../../services/StorageService'
+import Status from '../../../utils/Status'
 
 const styles = theme => ({
   paper: {
@@ -145,7 +146,7 @@ export default compose(
           filter: {
             eq: {
               field: 'status',
-              value: 'Active'
+              value: Status.ACTIVE
             }
           }
         }
@@ -165,7 +166,7 @@ export default compose(
           filter: {
             eq: {
               field: 'status',
-              value: 'Active'
+              value: Status.ACTIVE
             }
           }
         }

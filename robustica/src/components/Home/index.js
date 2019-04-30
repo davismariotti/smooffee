@@ -12,6 +12,8 @@ import { listOrdersQuery } from '../../graphql/orderQueries'
 import HomeActions from './actions'
 import { AlignCenter, CenterDiv, MainView } from '../styles/core'
 import { StorageService } from '../../services/StorageService'
+import { listDeliveryPeriodsQuery } from '../../graphql/deliveryPeriodQueries'
+import Status from '../../utils/Status'
 
 const styles = {
   title: {
@@ -90,9 +92,29 @@ export default compose(
           filter: {
             include: {
               field: 'status',
-              values: ['Active', 'In Progress']
+              values: [Status.ACTIVE, Status.IN_PROGRESS]
             }
           }
+        }
+      }
+    }
+  }),
+  graphql(listDeliveryPeriodsQuery, {
+    name: 'listDeliveryPeriodsQueryResult',
+    options: {
+      variables: {
+        organizationId: StorageService.getOrganizationId(),
+        parameters: {
+          filter: {
+            eq: {
+              field: 'status',
+              value: Status.ACTIVE
+            }
+          },
+          order: [
+            'name',
+            'asc'
+          ]
         }
       }
     }

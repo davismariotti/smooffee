@@ -13,6 +13,7 @@ import { editProductStatusMutation, listProductsQuery } from '../../../graphql/p
 import AreYouSureModal from '../../util/AreYouSureModal'
 import EditProductModal from '../modals/EditProductModal'
 import { StorageService } from '../../../services/StorageService'
+import Status from '../../../utils/Status'
 
 const styles = {
   tableRowDisabled: {
@@ -62,7 +63,7 @@ class ProductList extends Component {
                 editProductStatusMutate({
                   variables: {
                     productId: productMenu.productItem.id,
-                    status: 'Deleted'
+                    status: Status.DELETED
                   }
                 }).then(() => {
                   listProductsQueryResult.refetch()
@@ -103,23 +104,23 @@ class ProductList extends Component {
                   )
                   return listProductsQueryResult.product.list.map(productItem => {
                     return (
-                      <TableRow key={productItem.id} className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
-                        <TableCell align="left" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                      <TableRow key={productItem.id} className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
+                        <TableCell align="left" className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {productItem.name}
                         </TableCell>
-                        <TableCell align="right" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {`$${(productItem.price / 100).toFixed(2)}`}
                         </TableCell>
-                        <TableCell align="right" className={productItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {productItem.description}
                         </TableCell>
                         <TableCell>
                           <AlignRight>
-                            <Checkbox checked={productItem.status === 'Active'} onChange={() => {
+                            <Checkbox checked={productItem.status === Status.ACTIVE} onChange={() => {
                               editProductStatusMutate({
                                 variables: {
                                   productId: productItem.id,
-                                  status: productItem.status === 'Active' ? 'Not Available' : 'Active'
+                                  status: productItem.status === Status.ACTIVE ? Status.NOT_AVAILABLE : Status.ACTIVE
                                 }
                               }).then(listProductsQueryResult.refetch)
                             }}/>
@@ -191,7 +192,7 @@ export default compose(
             not: {
               eq: {
                 field: 'status',
-                value: 'Deleted'
+                value: Status.DELETED
               }
             }
           }
