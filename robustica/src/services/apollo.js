@@ -31,7 +31,10 @@ const authAfterware = onError(({networkError}) => {
 function createApolloClient() {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: asyncAuthLink.concat(authAfterware.concat(httpLink))
+    link: asyncAuthLink.concat(authAfterware.concat(httpLink)),
+    defaultOptions: {
+      fetchPolicy: 'no-cache'
+    }
   })
 }
 
