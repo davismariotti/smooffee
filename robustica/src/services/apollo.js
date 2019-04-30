@@ -24,14 +24,15 @@ const asyncAuthLink = setContext(
   }
 )
 
-const authAfterware = onError(({networkError}) => {
-  if (networkError.statusCode === 401) AuthService.signout()
+const afterware = onError(({networkError, graphQLErrors, operation}) => {
+  if (graphQLErrors) console.error(`GraphQL Error with ${operation.operationName}`, graphQLErrors)
+  if (networkError && networkError.statusCode === 401) AuthService.signout()
 })
 
 function createApolloClient() {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: asyncAuthLink.concat(authAfterware.concat(httpLink)),
+    link: asyncAuthLink.concat(afterware.concat(httpLink)),
     defaultOptions: {
       fetchPolicy: 'no-cache'
     }
