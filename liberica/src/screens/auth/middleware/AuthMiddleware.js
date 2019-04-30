@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase'
 import NavigationService from '../../../services/NavigationService'
 import { creatUserMutation, readCurrentUserQuery } from '../../../graphql/userQueries'
 
+
 export default class AuthMiddleware {
   static createUserWithEmailAndPassword(email, password, firstName, lastName) {
     return dispatch => {
@@ -63,7 +64,6 @@ export default class AuthMiddleware {
         if (error) {
           dispatch(AuthActions.signInError(error))
         } else {
-          dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
           NavigationService.navigate('Home')
         }
       })
