@@ -43,7 +43,7 @@ class UserPage extends Component {
           {orders.map(order => {
             return (
               <TableRow key={order.id}>
-                <TableCell align="left">2-19-2019</TableCell>
+                <TableCell align="left">{order.createdAt}</TableCell>
                 <TableCell align="right">{order.product.name}</TableCell>
                 <TableCell align="right">{`$${(order.product.price / 100).toFixed(2)}`}</TableCell>
                 <TableCell align="right">{order.deliveryPeriod.classPeriod}</TableCell>
@@ -81,7 +81,7 @@ class UserPage extends Component {
           {payments.map(payment => {
             return (
               <TableRow key={payment.id}>
-                <TableCell align="left">2-19-2019</TableCell>
+                <TableCell align="left">{payment.createdAt}</TableCell>
                 <TableCell align="right">{`$${(payment.amount / 100).toFixed(2)}`}</TableCell>
                 <TableCell align="right">{payment.type.charAt(0).toUpperCase() + payment.type.slice(1)}</TableCell>
                 <TableCell align="right">{payment.status}</TableCell>

@@ -15,6 +15,7 @@ type UserEntry {
     orders: [OrderEntry!]!
     payments: [PaymentEntry!]!
     cards: [CardEntry!]!
+    createdAt: String!
 }
 
 type CardEntry {
