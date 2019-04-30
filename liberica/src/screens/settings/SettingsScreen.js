@@ -1,65 +1,71 @@
-import React, { Component } from 'react'
-import { Button, StyleSheet, View } from 'react-native'
+import React from 'react'
+import { Button, StyleSheet, View, FlatList, Text} from 'react-native'
+import {List, ListItem, SearchBar} from 'react-native-elements'
 import { AccountInfo } from './AccountInfo'
+import { ChangePassword } from './ChangePassword'
 
-// export class AccountInfo extends React.Component {
-//   static navigationOptions = {
-//     title: 'Account Information',
-//   }
-//
-//   render() {
-//     return (
-//       <View>
-//         <Text> This is account information page</Text>
-//       </View>
-//     )
-//   }
-// }
-//
-// export class ChangePassword extends React.Component {
-//   static navigationOptions = {
-//     title: 'Change Password',
-//   }
-//
-//   render() {
-//     return (
-//       <View>
-//         <Text> This is where you can change your password</Text>
-//       </View>
-//     )
-//   }
-// }
-//
-// export class ShareFeedback extends React.Component {
-//   static navigationOptions = {
-//     title: 'Share Feedback',
-//   }
-//
-//   render() {
-//     return (
-//       <View>
-//         <Text> This where users can share their feedback </Text>
-//       </View>
-//     )
-//   }
-// }
-//
-// export class DeleteAccount extends React.Component {
-//   static navigationOptions = {
-//     title: 'Delete Account',
-//   }
-//
-//   render() {
-//     return (
-//       <View>
-//         <Text> This where user can delete their account </Text>
-//       </View>
-//     )
-//   }
-// }
+export class SettingsScreen extends React.Component {
+    static navigationOptions = {
+    title: 'Settings'
+  };
+
+    render() {
+    return (
+
+        <View style={styles.container}>
+            <FlatList
+
+                data={[
+                    {key: 'Account Information', nav: 'AccountInfo'},
+                    {key: 'Change Password', nav: 'ChangePassword'},
+                    {key: 'Manage Payment', nav: 'ManagePayment'},
+                    {key: 'Share Feedback', nav: 'ShareFeedback'},
+                    {key: 'Delete Account', nav:'DeleteAccount'},
+
+                ]}
+
+                renderItem={({item}) => (
+                    <ListItem
+                        title = {`${item.key}`}
+                        containerStyle={{ borderBottomWidth: 0 }}
+                        onPress={() => { this.props.navigation.navigate(item.nav)}}
+                    />
+                )}
+                ItemSeparatorComponent={this.renderSeparator}
+                ListHeaderComponent={this.renderHeader}
+            />
+
+          </View>
+    );
+  }
+  /*
+  renderHeader = () => {
+    return <SearchBar placeholder="Type Here..." lightTheme round />;
+  };
+*/
+  renderSeparator = () => {
+    return (
+        <View
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#CED0CE",
+              marginLeft: "5%",
+              marginRight: "5%"
+            }}
+        />
+    );
+  };
+
+
+}
 
 
 const styles = StyleSheet.create({
+  item: {
+    padding: 10,
+    height:44,
+  },
   container: {
     flex: 1,
     paddingTop: 15,
@@ -86,40 +92,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export class SettingsScreen extends Component {
-  static navigationOptions = {
-    header: null
-  }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.contentContainer}>
-          <Button title="Account Information" onPress={() => {
-            this.props.navigation.navigate('AccountInfo')
-          }}/>
-        </View>
-      </View>
-    )
-  }
-}
-
-
-//         <Button
-//           title="Change Password"
-//           onPress={() => {
-//             this.props.navigation.navigate('ChangePassword')
-//           }
-//           }/>
-//         <Button
-//           title="Share Feedback"
-//           onPress={() => {
-//             this.props.navigation.navigate('Share Feedback')
-//           }
-//           }/>
-//         <Button
-//           title="Delete Account"
-//           onPress={() => {
-//             this.props.navigation.navigate('DeleteAccount')
-//           }
-//           }/>

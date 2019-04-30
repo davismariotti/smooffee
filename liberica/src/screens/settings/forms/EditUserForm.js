@@ -12,7 +12,7 @@ const renderTextField = ({placeholder, input: onChange, value}) => {
 }
 
 const EditUserForm = props => {
-  const {handleSubmit} = props
+  const {handleSubmit} = props;
   // <View>
   // <Button type="button" onPress={() => load(data)} title="Load Account"/>
   //   </View>

@@ -13,11 +13,11 @@ export class Order extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <Button
-          title="Smoothee"
+          title="Smoothie"
           onPress={() => {
             this.props.navigation.navigate('Options', {
               itemId: 1,
-              item: 'Smoothee'
+              item: 'Smoothie'
             })
           }}
         />

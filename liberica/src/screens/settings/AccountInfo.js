@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import {StyleSheet, Text, View} from 'react-native'
 import EditUserForm from './forms/EditUserForm'
 
 export class AccountInfo extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Account Information'
   }
 
   static styles = StyleSheet.create({
