@@ -16,6 +16,7 @@ export default class AuthService {
         }
       )
   }
+
   //
   // static isSignedIn() {
   //   if (firebase.auth().currentUser) return true

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
-import LoginFormRF from './components/LoginFormRF'
 import AuthMiddleware from './middleware/AuthMiddleware'
 import { connect } from 'react-redux'
+import SignupForm from './components/SignupForm'
 
 class NewUserScreen extends React.Component {
   static navigationOptions = {
@@ -18,7 +18,7 @@ class NewUserScreen extends React.Component {
     return (
       <View>
         <Text style={styles.title}>Create Account</Text>
-        <LoginFormRF onSubmit={submit}/>
+        <SignupForm onSubmit={submit}/>
         <Button
           title="Already Have an Account?"
           onPress={() => {

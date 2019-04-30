@@ -5,6 +5,9 @@ export default class UserPageActions {
   static OPEN_PAYMENT_HISTORY_MENU = 'OPEN_PAYMENT_HISTORY_MENU'
   static CLOSE_ORDER_PAYMENT_HISTORY_MENU = 'CLOSE_ORDER_PAYMENT_HISTORY_MENU'
 
+  static CLOSE_ARE_YOU_SURE = 'CLOSE_ARE_YOU_SURE'
+  static OPEN_ARE_YOU_SURE = 'OPEN_ARE_YOU_SURE'
+
   static changeTab(selectedTab) {
     return {
       type: UserPageActions.CHANGE_TAB,
@@ -37,6 +40,24 @@ export default class UserPageActions {
         payment,
         anchorEl
       }
+    }
+  }
+
+
+  static openAreYouSure(message, subText, onSubmit) {
+    return {
+      type: UserPageActions.OPEN_ARE_YOU_SURE,
+      payload: {
+        message,
+        subText,
+        onSubmit
+      }
+    }
+  }
+
+  static closeAreYouSure() {
+    return {
+      type: UserPageActions.CLOSE_ARE_YOU_SURE
     }
   }
 }

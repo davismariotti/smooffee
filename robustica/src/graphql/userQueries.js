@@ -28,6 +28,7 @@ query ReadUserExpanded($userId: String!) {
       orders {
         id
         status
+        createdAt
         location
         recipient
         notes
@@ -50,6 +51,7 @@ query ReadUserExpanded($userId: String!) {
         amount
         type
         status
+        createdAt
       }
     }
   }

@@ -18,20 +18,12 @@ const renderPasswordField = ({input: {onChange, value}}) => {
     secureTextEntry input={value}/>
 }
 
-const renderFirstName = ({input: {onChange, value}}) => {
+const renderNormalField = ({placeholder, input: {onChange, value}}) => {
   return <Input
-    placeholder='First Name'
-    leftIcon={{type: 'font-awesome', name: 'unlock-alt'}}
+    placeholder={placeholder}
+    leftIcon={{type: 'font-awesome', name: 'user-circle'}}
     onChangeText={onChange}
-    secureTextEntry input={value}/>
-}
-
-const renderLastName = ({input: {onChange, value}}) => {
-  return <Input
-    placeholder='First Name'
-    leftIcon={{type: 'font-awesome', name: 'unlock-alt'}}
-    onChangeText={onChange}
-    secureTextEntry input={value}/>
+    input={value}/>
 }
 
 class LoginFormRF extends Component {
@@ -41,8 +33,8 @@ class LoginFormRF extends Component {
       <View>
         <Field name="email" type="email" component={renderEmailField}/>
         <Field name="password" component={renderPasswordField}/>
-        <Field name="firstName" component={renderFirstName}/>
-        <Field name="lastName" component={renderLastName}/>
+        <Field name="firstName" placeholder="First Name" component={renderNormalField}/>
+        <Field name="lastName" placeholder="Last Name" component={renderNormalField}/>
         <Button title="Submit" onPress={handleSubmit}/>
       </View>
     )

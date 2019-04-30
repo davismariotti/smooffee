@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView } from 'react-native'
 import { graphql } from 'react-apollo'
 
 import Order from './Order'
 import { readOrdersQuery } from '../../../graphql/userQueries'
+import LoadScreen from '../../LoadScreen'
 
 class ScrollingOrders extends Component {
   render() {
@@ -12,9 +13,7 @@ class ScrollingOrders extends Component {
 
     if (readOrdersQueryResult.loading || readOrdersQueryResult.error) {
       return (
-        <View>
-          <Text>Loading</Text>
-        </View>
+        <LoadScreen/>
       )
     }
 

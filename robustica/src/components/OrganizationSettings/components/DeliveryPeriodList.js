@@ -13,6 +13,8 @@ import AreYouSureModal from '../../util/AreYouSureModal'
 import EditDeliveryPeriodModal from '../modals/EditDeliveryPeriodModal'
 import { editDeliveryPeriodStatusMutation, listDeliveryPeriodsQuery } from '../../../graphql/deliveryPeriodQueries'
 import { StorageService } from '../../../services/StorageService'
+import Status from '../../../utils/Status'
+
 
 const styles = {
   tableRowDisabled: {
@@ -64,7 +66,7 @@ class DeliveryPeriodList extends Component {
                 editDeliveryPeriodStatusMutate({
                   variables: {
                     deliveryPeriodId: deliveryPeriodMenu.deliveryPeriodItem.id,
-                    status: 'Deleted'
+                    status: Status.DELETED
                   }
                 }).then(() => {
                   listDeliveryPeriodsQueryResult.refetch()
@@ -107,22 +109,22 @@ class DeliveryPeriodList extends Component {
                   )
                   return listDeliveryPeriodsQueryResult.deliveryPeriod.list.map(deliveryPeriodItem => {
                     return (
-                      <TableRow key={deliveryPeriodItem.id} className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
-                        <TableCell align="left" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                      <TableRow key={deliveryPeriodItem.id} className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
+                        <TableCell align="left" className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
-                        <TableCell align="right" className={deliveryPeriodItem.status !== 'Active' ? classes.tableRowDisabled : null}>
+                        <TableCell align="right" className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.maxQueueSize === 0 ? 'Unlimited' : deliveryPeriodItem.maxQueueSize}
                         </TableCell>
                         <TableCell align="right">
-                          <Checkbox checked={deliveryPeriodItem.status === 'Active'} onChange={() => {
+                          <Checkbox checked={deliveryPeriodItem.status === Status.ACTIVE} onChange={() => {
                             editDeliveryPeriodStatusMutate({
                               variables: {
                                 deliveryPeriodId: deliveryPeriodItem.id,
-                                status: deliveryPeriodItem.status === 'Active' ? 'Not Available' : 'Active'
+                                status: deliveryPeriodItem.status === Status.ACTIVE ? Status.NOT_AVAILABLE : Status.ACTIVE
                               }
                             }).then(listDeliveryPeriodsQueryResult.refetch)
                           }}/>
@@ -196,7 +198,7 @@ export default compose(
             not: {
               eq: {
                 field: 'status',
-                value: 'Deleted'
+                value: Status.DELETED
               }
             }
           }

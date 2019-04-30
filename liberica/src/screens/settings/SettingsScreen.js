@@ -8,7 +8,7 @@ import {ManagePayment} from "./ManagePayment";
 import {DeleteAccount} from "./DeleteAccount";
 import {LogOut} from "./LogOut";
 
-export class SettingsScreen extends React.Component {
+export default class SettingsScreen extends React.Component {
     static navigationOptions = {
     title: 'Settings'
   };

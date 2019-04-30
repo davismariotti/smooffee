@@ -14,6 +14,7 @@ import utilities.QLException;
 import utilities.QLFinder;
 import utilities.ThreadStorage;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -145,6 +146,8 @@ public class QLUser {
         private String role;
         private String status;
         private User user;
+
+        private String createdAt;
         private List<QLPayment.PaymentEntry> payments;
         private List<QLOrder.OrderEntry> orders;
         private List<CardEntry> cards;
@@ -159,6 +162,7 @@ public class QLUser {
             this.balance = user.getBalance();
             this.role = user.getRole().getName();
             this.status = BaseModel.statusIntToString(user.getStatus());
+            this.createdAt = new SimpleDateFormat("MM-dd-yyyy").format(user.getCreatedAt());
         }
 
         public Integer getBalance() {
@@ -191,6 +195,10 @@ public class QLUser {
 
         public String  getStatus() {
             return status;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
         }
 
         public List<QLOrder.OrderEntry> getOrders() {

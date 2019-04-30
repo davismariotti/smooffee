@@ -6,6 +6,7 @@ type OrderModifierEntry {
     id: Long!
     status: String!
     name: String!
+    createdAt: String!
 }
 
 type OrderModifierQuery {

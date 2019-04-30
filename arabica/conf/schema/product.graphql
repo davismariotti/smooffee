@@ -6,6 +6,7 @@ type ProductEntry {
     description: String!
     price: Int!
     orderModifiers: [OrderModifierEntry!]!
+    createdAt: String!
 }
 
 input ProductInput {

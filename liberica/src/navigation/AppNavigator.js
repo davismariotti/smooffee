@@ -3,24 +3,24 @@ import { Platform } from 'react-native'
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
-import { Information, Options, Order } from '../screens/NewOrderScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import NewUserScreen from '../screens/auth/NewUserScreen'
-import UserConfirmationScreen from '../screens/UserConfirmationScreen'
-import { SettingsScreen } from '../screens/settings/SettingsScreen'
-import {ChangePassword} from "../screens/settings/ChangePassword";
-import {ManagePayment} from "../screens/settings/ManagePayment";
-import {ShareFeedback} from "../screens/settings/ShareFeedback";
-import {DeleteAccount} from "../screens/settings/DeleteAccount";
-import {AccountInfo} from "../screens/settings/AccountInfo";
-import {LogOut} from "../screens/settings/LogOut";
+import { ChangePassword } from '../screens/settings/ChangePassword'
+import { ManagePayment } from '../screens/settings/ManagePayment'
+import { ShareFeedback } from '../screens/settings/ShareFeedback'
+import { DeleteAccount } from '../screens/settings/DeleteAccount'
+import { AccountInfo } from '../screens/settings/AccountInfo'
+import { LogOut } from '../screens/settings/LogOut'
+import SettingsScreen from '../screens/settings/SettingsScreen'
+import ProductList from '../screens/products/ProductList'
+import ProductInformation from '../screens/products/ProductInformation'
+import { ProductOptions } from '../screens/products/ProductOptions'
 
 const AuthStack = createStackNavigator({
   LoginScreen,
   ForgotPasswordScreen,
   NewUserScreen,
-  UserConfirmationScreen
 })
 const HomeStack = createStackNavigator({
   Home: HomeScreen
@@ -59,10 +59,11 @@ SettingsStack.navigationOptions = {
 }
 
 const NewOrderStack = createStackNavigator({
-  Order,
-  Options,
-  Information
+  ProductList,
+  ProductOptions,
+  ProductInformation
 })
+
 NewOrderStack.navigationOptions = {
   tabBarLabel: 'New Order',
   tabBarIcon: ({focused}) => (
@@ -86,7 +87,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: 'App'
+      initialRouteName: 'Auth'
     }
   )
 )

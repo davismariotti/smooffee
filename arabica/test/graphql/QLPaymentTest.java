@@ -57,7 +57,7 @@ public class QLPaymentTest {
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/read", QLPayment.PaymentEntry.class);
         assertEquals(paymentId, entry.getId());
-        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
+        assertEquals(BaseModel.COMPLETED_STR, entry.getStatus());
         assertEquals(600, entry.getAmount().intValue());
         assertEquals("cash", entry.getType());
         assertNotNull(entry.getUser());
@@ -93,7 +93,7 @@ public class QLPaymentTest {
         assertEquals(OK, result.status());
         QLPayment.PaymentEntry entry = FakeApplication.graphQLResultToObject(result, "payment/create", QLPayment.PaymentEntry.class);
         assertNotNull(entry.getId());
-        assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
+        assertEquals(BaseModel.COMPLETED_STR, entry.getStatus());
         assertEquals(amount, entry.getAmount().intValue());
         assertEquals(type, entry.getType());
         assertNotNull(entry.getUser());

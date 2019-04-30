@@ -64,7 +64,6 @@ export default class AuthMiddleware {
         if (error) {
           dispatch(AuthActions.signInError(error))
         } else {
-          dispatch(AuthActions.signInError(`Success for ${userId}, ${data.user.currentUser.firstName}`))
           NavigationService.navigate('Home')
         }
       })
