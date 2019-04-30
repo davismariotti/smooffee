@@ -1,12 +1,12 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
-import FeedbackForms from "./forms/FeedbackForms";
+import {StyleSheet, Text, View, Button} from "react-native";
+import AuthService from "../../services/AuthService";
+import NavigationService from "../../services/NavigationService";
 
-export class ShareFeedback extends React.Component {
+export class LogOut extends React.Component {
     static navigationOptions = {
-       title: 'Share Feedback'
+        title: 'Log Out'
     }
-
     static styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -37,7 +37,11 @@ export class ShareFeedback extends React.Component {
     render() {
         return (
             <View>
-
+                <Text>Are you sure you want to log out?</Text>
+                <Button title="Logout" onPress={() => {
+                    AuthService.signout()
+                    NavigationService.navigate('Auth')
+                }}/>
             </View>
         )
     }

@@ -3,6 +3,10 @@ import { Button, StyleSheet, View, FlatList, Text} from 'react-native'
 import {List, ListItem, SearchBar} from 'react-native-elements'
 import { AccountInfo } from './AccountInfo'
 import { ChangePassword } from './ChangePassword'
+import {ShareFeedback} from "./ShareFeedback";
+import {ManagePayment} from "./ManagePayment";
+import {DeleteAccount} from "./DeleteAccount";
+import {LogOut} from "./LogOut";
 
 export class SettingsScreen extends React.Component {
     static navigationOptions = {
@@ -21,6 +25,7 @@ export class SettingsScreen extends React.Component {
                     {key: 'Manage Payment', nav: 'ManagePayment'},
                     {key: 'Share Feedback', nav: 'ShareFeedback'},
                     {key: 'Delete Account', nav:'DeleteAccount'},
+                    {key: 'Log Out', nav: 'LogOut'}
 
                 ]}
 

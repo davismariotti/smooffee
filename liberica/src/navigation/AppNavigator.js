@@ -9,6 +9,12 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import NewUserScreen from '../screens/auth/NewUserScreen'
 import UserConfirmationScreen from '../screens/UserConfirmationScreen'
 import { SettingsScreen } from '../screens/settings/SettingsScreen'
+import {ChangePassword} from "../screens/settings/ChangePassword";
+import {ManagePayment} from "../screens/settings/ManagePayment";
+import {ShareFeedback} from "../screens/settings/ShareFeedback";
+import {DeleteAccount} from "../screens/settings/DeleteAccount";
+import {AccountInfo} from "../screens/settings/AccountInfo";
+import {LogOut} from "../screens/settings/LogOut";
 
 const AuthStack = createStackNavigator({
   LoginScreen,
@@ -35,7 +41,12 @@ HomeStack.navigationOptions = {
 
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
-  // AccountInfo: AccountInfo
+  AccountInfo: AccountInfo,
+  ChangePassword: ChangePassword,
+  ManagePayment: ManagePayment,
+  ShareFeedback: ShareFeedback,
+  DeleteAccount: DeleteAccount,
+  LogOut: LogOut,
 })
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
@@ -75,7 +86,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: 'Auth'
+      initialRouteName: 'App'
     }
   )
 )
