@@ -47,3 +47,13 @@ mutation EditOrderStatus($orderId: Long!, $status: String!) {
   }
 }
 `
+
+export const refundOrderMutation = gql`
+mutation RefundOrder($orderId: Long!) {
+  order {
+    createRefund(orderId: $orderId) {
+      id
+    }
+  }
+}
+`

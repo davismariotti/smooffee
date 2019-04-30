@@ -20,7 +20,7 @@ const styles = theme => ({
 
 class AreYouSureModal extends Component {
   render() {
-    const {open, message, onClose, onSubmit, classes} = this.props
+    const {open, message, onClose, onSubmit, classes, subText} = this.props
 
     const handleYes = () => {
       onSubmit()
@@ -34,7 +34,7 @@ class AreYouSureModal extends Component {
             <AlignCenter>
               <Typography variant="h4">{message}</Typography>
               <Typography variant="subtitle1">
-                <div style={{color: '#E83323', marginTop: '8px'}}>This cannot be undone.</div>
+                <div style={{color: '#E83323', marginTop: '8px'}}>{subText}</div>
               </Typography>
               <StyledFormRow>
                 <StyledFormRowItem>
@@ -57,14 +57,16 @@ AreYouSureModal.propTypes = {
   message: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   onClose: PropTypes.func,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  subText: PropTypes.string
 }
 
 AreYouSureModal.defaultProps = {
   onSubmit: () => {
   },
   onClose: () => {
-  }
+  },
+  subText: 'This cannot be undone.'
 }
 
 export default withStyles(styles)(AreYouSureModal)

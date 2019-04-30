@@ -5,6 +5,7 @@ type OrganizationEntry {
     products: [ProductEntry!]!
     deliveryPeriods: [DeliveryPeriodEntry!]!
     users: [UserEntry!]!
+    createdAt: String!
 }
 
 input OrganizationInput {

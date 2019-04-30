@@ -18,7 +18,7 @@ public class PaymentActions {
                 .setAmount(amount)
                 .setUser(user)
                 .setType(Payment.CASH)
-                .setStatus(BaseModel.ACTIVE);
+                .setStatus(BaseModel.COMPLETED);
 
         UserActions.addToBalance(user, amount);
 
@@ -34,7 +34,7 @@ public class PaymentActions {
                 .setAmount(amount)
                 .setUser(user)
                 .setType(Payment.CARD)
-                .setStatus(BaseModel.ACTIVE);
+                .setStatus(BaseModel.COMPLETED);
 
         try {
             Charge charge = StripeAPI.createChargeFromCustomer(user, amount, stripeCardId);

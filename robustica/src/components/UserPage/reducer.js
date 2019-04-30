@@ -5,7 +5,8 @@ import UserPageActions from './actions'
 const initialState = Immutable({
   selectedTab: false,
   orderHistoryMenu: null,
-  paymentHistoryMenu: null
+  paymentHistoryMenu: null,
+  areYouSure: null
 })
 
 export default {
@@ -46,6 +47,19 @@ export default {
           return {
             ...state,
             selectedTab: 0,
+            orderHistoryMenu: null,
+            paymentHistoryMenu: null,
+            areYouSure: null
+          }
+        case UserPageActions.CLOSE_ARE_YOU_SURE:
+          return {
+            ...state,
+            areYouSure: null
+          }
+        case UserPageActions.OPEN_ARE_YOU_SURE:
+          return {
+            ...state,
+            areYouSure: action.payload,
             orderHistoryMenu: null,
             paymentHistoryMenu: null
           }

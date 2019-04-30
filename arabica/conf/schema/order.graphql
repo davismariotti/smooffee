@@ -17,6 +17,7 @@ type OrderEntry {
     deliveryPeriod: DeliveryPeriodEntry!
     refund: RefundEntry
     orderModifiers: [OrderModifierEntry!]!
+    createdAt: String!
 }
 
 type RefundEntry {

@@ -18,6 +18,7 @@ type DeliveryPeriodEntry {
     wednesday: String
     thursday: String
     friday: String
+    createdAt: String!
 }
 
 type DeliveryPeriodQuery {

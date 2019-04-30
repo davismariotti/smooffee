@@ -13,6 +13,7 @@ type PaymentEntry {
     stripeRefundId: String
     user: UserEntry!
     type: String!
+    createdAt: String!
 }
 
 type PaymentQuery {

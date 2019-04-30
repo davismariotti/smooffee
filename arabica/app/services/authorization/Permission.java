@@ -173,7 +173,7 @@ public class Permission {
             }
 
             // Otherwise check if the user has the corresponding OTHER_USER permission
-            else if (userPermissions.contains(permission + 100)) {
+            if (userPermissions.contains(permission + 100)) {
                 // Check if the context user's organization matches the calling user's organization
                 User contextUser = context.getUser();
                 if (contextUser != null && user.getOrganization().equals(contextUser.getOrganization())) return true; // Access granted
