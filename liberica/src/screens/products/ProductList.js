@@ -14,11 +14,7 @@ export class ProductList extends React.Component {
     render() {
       const {readProductQueryResult} = this.props
       
-    // if (readProductQueryResult.loading || readProductQueryResult.error) {
-    //   return (
-    //     <LoadScreen/>
-    //   )
-    // }
+    
       return (
         <ScrollView style={styles.container}>
           {readProductQueryResult.product.map(product => {
@@ -31,6 +27,12 @@ export class ProductList extends React.Component {
     }
   }
   export default graphql(readProductQuery, {
-    name: 'readProductQueryResult'
+    name: 'readProductQueryResult',
+    options: {
+      variables: {
+        organizationId: 3
+        
+      }
+    }
   })
   (ProductList)
