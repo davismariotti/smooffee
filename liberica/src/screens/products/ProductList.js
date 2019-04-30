@@ -1,9 +1,17 @@
 import React from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { graphql } from 'react-apollo'
 import { readProductQuery } from '../../graphql/productQuery'
 import LoadScreen from '../LoadScreen'
 import Product from './Product'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+})
+
 
 
 class ProductList extends React.Component {
@@ -20,7 +28,7 @@ class ProductList extends React.Component {
       )
     }
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView>
         {readProductQueryResult.product.list.map(product => {
           return (
             <Product key={product.id} name={product.name} price={product.price} description={product.description}/>
