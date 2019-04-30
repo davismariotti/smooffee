@@ -7,19 +7,23 @@ import LoadScreen from '../LoadScreen';
 import Product from './Product'
 
 
-export class ProductList extends React.Component {
+ class ProductList extends React.Component {
     static navigationOptions = {
       title: 'Products'
     }
     render() {
       const {readProductQueryResult} = this.props
       
-    
+    if (readProductQueryResult.loading || readProductQueryResult.error) {
+      return (
+        <LoadScreen/>
+      )
+    }
       return (
         <ScrollView style={styles.container}>
-          {readProductQueryResult.product.map(product => {
+          {readProductQueryResult.product.list.map(product => {
             return(
-              <Product key={product.id} name={product.product.name} price={product.product.price} description={product.product.description}/>
+              <Product key={product.id} name={product.name} price={product.price} description={product.description}/>
             )
           })}
         </ScrollView>
