@@ -9,16 +9,16 @@ import {
 import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import { Information, Options, Order } from "../screens/NewOrderScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
-import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen";
+import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen"
+import ProductList from '../screens/products/ProductList'
+import ProductOptions from '../screens/products/ProductOptions'
+import ProductInformation from '../screens/products/ProductInformation'
 import NewUserScreen from "../screens/auth/NewUserScreen";
-import UserConfirmationScreen from "../screens/UserConfirmationScreen";
 const AuthStack = createStackNavigator({
   LoginScreen,
   ForgotPasswordScreen,
-  NewUserScreen,
-  UserConfirmationScreen
+  NewUserScreen
 });
 const HomeStack = createStackNavigator({
   Home: HomeScreen
@@ -38,9 +38,9 @@ HomeStack.navigationOptions = {
 };
 
 const NewOrderStack = createStackNavigator({
-  Order,
-  Options,
-  Information
+  ProductList,
+  ProductOptions,
+  ProductInformation
 });
 NewOrderStack.navigationOptions = {
   tabBarLabel: "New Order",
@@ -76,7 +76,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: "Auth"
+      initialRouteName: "App"
     }
   )
 );

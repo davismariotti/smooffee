@@ -4,6 +4,7 @@ import ScrollingOrders from './home/components/ScrollingOrders'
 import { graphql } from 'react-apollo'
 import { readCurrentUserQuery } from '../graphql/userQueries'
 import { formatCurrency } from '../utils/currencyUtils'
+import LoadScreen from './LoadScreen';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -15,9 +16,10 @@ class HomeScreen extends React.Component {
 
     const {readCurrentUserQueryResult} = this.props
 
-    // TODO
     if (readCurrentUserQueryResult.loading || readCurrentUserQueryResult.error) {
-      // RETURN LOADING SCREEN
+      return(
+      <LoadScreen/>
+      )
     }
 
     const balance = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.balance) || ''

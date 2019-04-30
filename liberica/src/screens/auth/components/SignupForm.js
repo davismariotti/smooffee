@@ -21,7 +21,7 @@ const renderPasswordField = ({input: {onChange, value}}) => {
 const renderNormalField = ({placeholder, input: {onChange, value}}) => {
   return <Input
     placeholder={placeholder}
-    leftIcon={{type: 'font-awesome', name: 'unlock-alt'}}
+    leftIcon={{type: 'font-awesome', name: 'user-circle'}}
     onChangeText={onChange}
     input={value}/>
 }
