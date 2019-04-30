@@ -2,7 +2,8 @@ import Immutable from 'seamless-immutable'
 import HomeActions from './actions'
 
 const initialState = Immutable({
-  createOrderModalOpen: false
+  createOrderModalOpen: false,
+  selectedDeliveryPeriod: null
 })
 
 export default {
@@ -19,6 +20,11 @@ export default {
           return {
             ...state,
             createOrderModalOpen: false
+          }
+        case HomeActions.CHOOSE_CLASS_PERIOD:
+          return {
+            ...state,
+            selectedDeliveryPeriod: action.payload.deliveryPeriod
           }
         default:
           return {
