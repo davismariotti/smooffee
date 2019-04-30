@@ -1,21 +1,29 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import ScrollingOrders from './home/components/ScrollingOrders'
+import { graphql } from 'react-apollo'
+import { readCurrentUserQuery } from '../graphql/userQueries'
+import { formatCurrency } from '../utils/currencyUtils'
 
-export default class HomeScreen extends React.Component {
-  state = {
-    currentUser: 'Joe Tester',
-    email: 'joe.tester@tester.com',
-    userBalance: '0.00'
-  }
-
+class HomeScreen extends React.Component {
   static navigationOptions = {
     //dont show a header
     header: null
   }
 
   render() {
-    const {currentUser, email, userBalance} = this.state
+
+    const {readCurrentUserQueryResult} = this.props
+
+    // TODO
+    if (readCurrentUserQueryResult.loading || readCurrentUserQueryResult.error) {
+      // RETURN LOADING SCREEN
+    }
+
+    const balance = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.balance) || ''
+    const firstName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.firstName) || ''
+    const lastName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.lastName) || ''
+    const email = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.email) || ''
 
     return (
       <View style={styles.container}>
@@ -25,10 +33,10 @@ export default class HomeScreen extends React.Component {
               source={require('../assets/images/Cup.png')}
               style={styles.logoImage}
             />
-            <Text style={styles.usernameText}>{currentUser}</Text>
+            <Text style={styles.usernameText}>{`${firstName} ${lastName}`}</Text>
             <Text>{email}</Text>
             <Text style={styles.currentBalanceText}>
-              Current Balance: ${userBalance}
+              Current Balance: {formatCurrency(balance)}
             </Text>
           </View>
           <ScrollingOrders style={styles.scrollingContainer}/>
@@ -37,6 +45,13 @@ export default class HomeScreen extends React.Component {
     )
   }
 }
+
+export default graphql(readCurrentUserQuery, {
+  name: 'readCurrentUserQueryResult'
+})
+(HomeScreen)
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
