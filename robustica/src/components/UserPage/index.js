@@ -11,6 +11,9 @@ import Tab from '@material-ui/core/Tab'
 import { AlignCenter, CenterDiv } from '../styles/core'
 import { readUserQueryExpanded } from '../../graphql/userQueries'
 import UserPageActions from './actions'
+import AreYouSureModal from '../util/AreYouSureModal'
+import { refundOrderMutation } from '../../graphql/orderQueries'
+import { refundPaymentMutation } from '../../graphql/paymentQueries'
 
 class UserPage extends Component {
   constructor(props) {
@@ -47,7 +50,7 @@ class UserPage extends Component {
                 <TableCell align="right">{order.location}</TableCell>
                 <TableCell align="right">{order.status}</TableCell>
                 <TableCell align="right">
-                  <Button onClick={(e) => {
+                  <Button disabled={order.status === 'Refunded'} onClick={(e) => {
                     openOrderHistoryMenu(order, e.target)
                   }}>
                     <MoreVert/>
@@ -70,6 +73,7 @@ class UserPage extends Component {
             <TableCell align="left">Date</TableCell>
             <TableCell align="right">Amount</TableCell>
             <TableCell align="right">Type</TableCell>
+            <TableCell align="right">Status</TableCell>
             <TableCell align="right">Options</TableCell>
           </TableRow>
         </TableHead>
@@ -80,8 +84,9 @@ class UserPage extends Component {
                 <TableCell align="left">2-19-2019</TableCell>
                 <TableCell align="right">{`$${(payment.amount / 100).toFixed(2)}`}</TableCell>
                 <TableCell align="right">{payment.type.charAt(0).toUpperCase() + payment.type.slice(1)}</TableCell>
+                <TableCell align="right">{payment.status}</TableCell>
                 <TableCell align="right">
-                  <Button onClick={(e) => {
+                  <Button disabled={payment.status === 'Refunded'} onClick={(e) => {
                     openPaymentHistoryMenu(payment, e.target)
                   }}>
                     <MoreVert/>
@@ -102,7 +107,12 @@ class UserPage extends Component {
       selectedTab,
       paymentHistoryMenu,
       orderHistoryMenu,
-      closeOrderPaymentHistoryMenu
+      closeOrderPaymentHistoryMenu,
+      areYouSure,
+      closeAreYouSure,
+      openAreYouSure,
+      refundOrderMutate,
+      refundPaymentMutate
     } = this.props
 
     if (readUserQueryExpandedResult.loading) return (
@@ -120,19 +130,37 @@ class UserPage extends Component {
 
     return (
       <div>
-
+        <AreYouSureModal open={!!areYouSure} message="Are you sure?" subText={(areYouSure && areYouSure.subText) || ''} onClose={closeAreYouSure} onSubmit={(areYouSure && areYouSure.onSubmit) || null}/>
         <Menu id="menu" open={menuIsOpen} anchorEl={anchorEl} onClose={closeOrderPaymentHistoryMenu}>
           {orderHistoryMenu && (
             <MenuItem>
               <Button onClick={() => {
-
+                openAreYouSure('Are You Sure?', 'This will refund the order amount to the customer\'s wallet.', () => {
+                  refundOrderMutate({
+                    variables: {
+                      orderId: orderHistoryMenu.order.id
+                    }
+                  }).then(() => {
+                    closeAreYouSure()
+                    readUserQueryExpandedResult.refetch()
+                  })
+                })
               }}>Refund Order</Button>
             </MenuItem>
           )}
           {paymentHistoryMenu && (
             <MenuItem>
               <Button onClick={() => {
-
+                openAreYouSure('Are You Sure?', 'This will refund the payment amount to the source of the funds (cash or card).', () => {
+                  refundPaymentMutate({
+                    variables: {
+                      paymentId: paymentHistoryMenu.payment.id
+                    }
+                  }).then(() => {
+                    closeAreYouSure()
+                    readUserQueryExpandedResult.refetch()
+                  })
+                })
               }}>Refund Payment</Button>
             </MenuItem>
           )}
@@ -168,7 +196,8 @@ const mapStateToProps = ({userpage}) => {
   return {
     selectedTab: userpage.selectedTab,
     paymentHistoryMenu: userpage.paymentHistoryMenu,
-    orderHistoryMenu: userpage.orderHistoryMenu
+    orderHistoryMenu: userpage.orderHistoryMenu,
+    areYouSure: userpage.areYouSure
   }
 }
 
@@ -177,7 +206,9 @@ const mapDispatchToProps = dispatch => {
     changeTab: (selectedTab) => dispatch(UserPageActions.changeTab(selectedTab)),
     openOrderHistoryMenu: (order, anchorEl) => dispatch(UserPageActions.openOrderHistoryMenu(order, anchorEl)),
     closeOrderPaymentHistoryMenu: () => dispatch(UserPageActions.closeOrderPaymentHistoryMenu()),
-    openPaymentHistoryMenu: (payment, anchorEl) => dispatch(UserPageActions.openPaymentHistoryMenu(payment, anchorEl))
+    openPaymentHistoryMenu: (payment, anchorEl) => dispatch(UserPageActions.openPaymentHistoryMenu(payment, anchorEl)),
+    closeAreYouSure: () => dispatch(UserPageActions.closeAreYouSure()),
+    openAreYouSure: (message, subText, onSubmit) => dispatch(UserPageActions.openAreYouSure(message, subText, onSubmit))
   }
 }
 
@@ -191,6 +222,12 @@ export default compose(
         }
       }
     }
+  }),
+  graphql(refundOrderMutation, {
+    name: 'refundOrderMutate'
+  }),
+  graphql(refundPaymentMutation, {
+    name: 'refundPaymentMutate'
   }),
   connect(mapStateToProps, mapDispatchToProps)
 )(UserPage)
