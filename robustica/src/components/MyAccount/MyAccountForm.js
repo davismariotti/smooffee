@@ -6,8 +6,7 @@ import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
 import { StyledFormRow, StyledFormRowItem } from '../styles/forms'
 import { AlignCenter } from '../styles/core'
-import { validateIsRequired} from '../../utils/formUtils'
-import { connect } from 'react-redux'
+import { validateIsRequired } from '../../utils/formUtils'
 
 class MyAccountForm extends React.Component {
   componentDidMount() {
@@ -15,7 +14,7 @@ class MyAccountForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, invalid, pristine} = this.props
+    const { handleSubmit, invalid, pristine } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -26,12 +25,12 @@ class MyAccountForm extends React.Component {
           </AlignCenter>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="firstName" validate={validateIsRequired} component={TextField} label="First Name"/>
+              <Field style={{ width: '300px' }} fullWidth name="firstName" validate={validateIsRequired} component={TextField} label="First Name"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="lastName" validate={validateIsRequired} component={TextField} label="Last Name"/>
+              <Field style={{ width: '300px' }} fullWidth name="lastName" validate={validateIsRequired} component={TextField} label="Last Name"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>

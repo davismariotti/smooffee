@@ -5,8 +5,6 @@ import { compose } from 'redux'
 import { Field, propTypes, reduxForm } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { connect } from 'react-redux'
-
-import firebaseApp from '../../../services/AuthService'
 import history from '../../../utils/history'
 import { signUpMutation } from '../../../graphql/userQueries'
 import { StorageService } from '../../../services/StorageService'
@@ -18,9 +16,9 @@ import AuthActions from '../actions'
 class SignupContinued extends Component {
   render() {
 
-    const {signUpMutate, handleSubmit, signInError} = this.props
+    const { signUpMutate, handleSubmit, signInError } = this.props
 
-    const submit = ({firstName, lastName}) => {
+    const submit = ({ firstName, lastName }) => {
 
       const userInput = {
         firstName,

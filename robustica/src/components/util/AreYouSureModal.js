@@ -20,7 +20,7 @@ const styles = theme => ({
 
 class AreYouSureModal extends Component {
   render() {
-    const {open, message, onClose, onSubmit, classes, subText} = this.props
+    const { open, message, onClose, onSubmit, classes, subText } = this.props
 
     const handleYes = () => {
       onSubmit()
@@ -34,7 +34,7 @@ class AreYouSureModal extends Component {
             <AlignCenter>
               <Typography variant="h4">{message}</Typography>
               <Typography variant="subtitle1">
-                <div style={{color: '#E83323', marginTop: '8px'}}>{subText}</div>
+                <div style={{ color: '#E83323', marginTop: '8px' }}>{subText}</div>
               </Typography>
               <StyledFormRow>
                 <StyledFormRowItem>

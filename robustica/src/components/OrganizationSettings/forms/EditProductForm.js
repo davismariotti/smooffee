@@ -14,7 +14,7 @@ class EditProductForm extends React.Component {
   }
 
   render() {
-    const {editProduct, handleSubmit, invalid, pristine} = this.props
+    const { editProduct, handleSubmit, invalid, pristine } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>

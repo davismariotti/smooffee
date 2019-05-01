@@ -49,7 +49,7 @@ export default {
         case OrganizationSettingsActions.OPEN_PRODUCT_MENU:
           return {
             ...state,
-            productMenu: {...action.payload}
+            productMenu: { ...action.payload }
           }
         case OrganizationSettingsActions.CLOSE_PRODUCT_MENU:
           return {
@@ -84,7 +84,7 @@ export default {
         case OrganizationSettingsActions.OPEN_USER_MENU:
           return {
             ...state,
-            userMenu: {...action.payload}
+            userMenu: { ...action.payload }
           }
         case OrganizationSettingsActions.CLOSE_USER_MENU:
           return {
@@ -106,7 +106,7 @@ export default {
         case OrganizationSettingsActions.OPEN_DELIVERY_PERIOD_MENU:
           return {
             ...state,
-            deliveryPeriodMenu: {...action.payload}
+            deliveryPeriodMenu: { ...action.payload }
           }
         case OrganizationSettingsActions.CLOSE_DELIVERY_PERIOD_MENU:
           return {

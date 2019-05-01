@@ -25,24 +25,16 @@ const styles = {
 
 class Order extends Component {
   render() {
-    const {order, classes, updateOrderStatusMutate, refetch} = this.props
+    const { order, classes, updateOrderStatusMutate, refetch } = this.props
 
     return (
       <GridListTile className={classes.gridTile}>
         <Card className={classes.card}>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h3">
-              {order.product.name}
-            </Typography>
-            <Typography component="p">
-              {order.recipient}
-            </Typography>
-            <Typography component="p">
-              {order.location}
-            </Typography>
-            <Typography component="p">
-              {order.notes}
-            </Typography>
+            <Typography gutterBottom variant="h5" component="h3">{order.product.name}</Typography>
+            <Typography component="p">{order.recipient}</Typography>
+            <Typography component="p">{order.location}</Typography>
+            <Typography component="p">{order.notes}</Typography>
           </CardContent>
           <CardActions>
             {order.status === 1 ?
@@ -88,7 +80,8 @@ Order.propTypes = {
 }
 
 Order.defaultProps = {
-  refetch: () => {}
+  refetch: () => {
+  }
 }
 
 export default compose(

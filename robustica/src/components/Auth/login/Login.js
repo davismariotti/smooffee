@@ -25,7 +25,7 @@ class Login extends Component {
       pristine
     } = this.props
 
-    const submit = ({email, password}) => {
+    const submit = ({ email, password }) => {
       signInWithEmailAndPassword(email, password)
     }
 
@@ -47,7 +47,7 @@ class Login extends Component {
                 <Field fullWidth name="password" type="password" component={TextField} validate={validateIsRequired} label="Password"/>
               </StyledFormRow>
               <StyledFormRow>
-                <Button type="submit" disabled={invalid || pristine} fullWidth variant="contained" style={{marginTop: '20px'}}>Submit</Button>
+                <Button type="submit" disabled={invalid || pristine} fullWidth variant="contained" style={{ marginTop: '20px' }}>Submit</Button>
               </StyledFormRow>
             </form>
             <br/>
@@ -66,7 +66,7 @@ Login.propTypes = {
   authError: PropTypes.string
 }
 
-const mapStateToProps = ({auth}) => {
+const mapStateToProps = ({ auth }) => {
   return {
     authError: auth.authError
   }

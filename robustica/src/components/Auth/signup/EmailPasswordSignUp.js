@@ -11,9 +11,9 @@ import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
 
 class EmailPasswordSignUp extends Component {
   render() {
-    const {handleSubmit, createUserWithEmailAndPassword, invalid, pristine} = this.props
+    const { handleSubmit, createUserWithEmailAndPassword, invalid, pristine } = this.props
 
-    const submit = ({email, password}) => {
+    const submit = ({ email, password }) => {
       createUserWithEmailAndPassword(email, password)
     }
 

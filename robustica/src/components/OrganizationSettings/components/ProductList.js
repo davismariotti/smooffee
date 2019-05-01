@@ -35,7 +35,8 @@ const mapDispatchToProps = (dispatch) => {
 
 class ProductList extends Component {
   render() {
-    const {classes,
+    const {
+      classes,
       openCreateProductModal,
       openProductMenu,
       openEditProductModal,
@@ -69,7 +70,7 @@ class ProductList extends Component {
                   listProductsQueryResult.refetch()
                 })
               })
-            }} style={{color: '#E83323'}}>Delete</Button>
+            }} style={{ color: '#E83323' }}>Delete</Button>
           </MenuItem>
         </Menu>
         <Paper className="paper" elevation={1}>
@@ -168,7 +169,7 @@ ProductList.defaultProps = {
   productMenu: null
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     productMenu: organizationSettings.productMenu,
     areYouSure: organizationSettings.areYouSure

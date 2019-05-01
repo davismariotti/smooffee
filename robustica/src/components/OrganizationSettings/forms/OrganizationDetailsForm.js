@@ -14,25 +14,25 @@ class OrganizationDetailsForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, pristine, invalid} = this.props
+    const { handleSubmit, pristine, invalid } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
           <Typography variant="h5">
             Stripe Settings
           </Typography>
-          <Typography variant="body1" style={{paddingTop: '8px'}}>
+          <Typography variant="body1" style={{ paddingTop: '8px' }}>
             These must both be present for Credit/Debit card processing.
           </Typography>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} name="stripe_pk" component={TextField} validate={validateStripeTokenPk} label="Publishable API Key"/>
+              <Field style={{ width: '300px' }} name="stripe_pk" component={TextField} validate={validateStripeTokenPk} label="Publishable API Key"/>
             </StyledFormRowItem>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="stripe_sk" component={TextField} validate={validateStripeTokenSk} label="Secret API Key"/>
+              <Field style={{ width: '300px' }} fullWidth name="stripe_sk" component={TextField} validate={validateStripeTokenSk} label="Secret API Key"/>
             </StyledFormRowItem>
           </StyledFormRow>
-          <br />
+          <br/>
           <Typography variant="h5">
             Other settings
           </Typography>

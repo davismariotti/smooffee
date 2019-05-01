@@ -21,7 +21,7 @@ class UserList extends Component {
   }
 
   renderTable() {
-    const {listUsersQueryResult, openUserMenu} = this.props
+    const { listUsersQueryResult, openUserMenu } = this.props
     if (listUsersQueryResult.loading) {
       return <div>Loading</div>
     } else if (listUsersQueryResult.error) {
@@ -65,7 +65,7 @@ class UserList extends Component {
   }
 
   render() {
-    const {userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult} = this.props
+    const { userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult } = this.props
 
     return (
       <div>
@@ -107,7 +107,7 @@ UserList.propTypes = {
   closeAddMoreFunds: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     addMoreFunds: organizationSettings.addMoreFunds,
     userMenu: organizationSettings.userMenu

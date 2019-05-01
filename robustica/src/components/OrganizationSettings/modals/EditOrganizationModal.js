@@ -25,8 +25,8 @@ const styles = theme => ({
 class EditOrganizationModal extends Component {
 
   render() {
-    const {open, classes, editOrganizationMutate, organizationId, closeEditOrganizationModal, onSubmit} = this.props
-    const submit = ({name}) => {
+    const { open, classes, editOrganizationMutate, organizationId, closeEditOrganizationModal, onSubmit } = this.props
+    const submit = ({ name }) => {
       editOrganizationMutate({
         variables: {
           organizationId,
@@ -68,7 +68,7 @@ EditOrganizationModal.defaultProps = {
   }
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     organizationId: (organizationSettings.editOrganization && organizationSettings.editOrganization.organizationId) || null
   }

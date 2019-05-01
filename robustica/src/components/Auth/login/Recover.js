@@ -16,9 +16,9 @@ import { validateIsRequired } from '../../../utils/formUtils'
 class Recover extends Component {
   render() {
 
-    const {handleSubmit, recoverWithEmail, recoverResponse, invalid, pristine} = this.props
+    const { handleSubmit, recoverWithEmail, recoverResponse, invalid, pristine } = this.props
 
-    const submit = ({email}) => {
+    const submit = ({ email }) => {
       recoverWithEmail(email)
     }
 
@@ -61,7 +61,7 @@ Recover.propTypes = {
   recoverWithEmail: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({auth}) => {
+const mapStateToProps = ({ auth }) => {
   return {
     recoverResponse: auth.recoverResponse
   }

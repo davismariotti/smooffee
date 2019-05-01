@@ -43,7 +43,7 @@ class App extends Component {
           <ProtectedRoute path="/home" component={Home} allowedRoles={[ADMIN, EMPLOYEE, SUPERVISOR]}/>
           <ProtectedRoute path="/settings" component={OrganizationSettings} allowedRoles={[ADMIN, SUPERVISOR]}/>
           <ProtectedRoute path="/userinfo/:id" component={UserPage} allowedRoles={[ADMIN]}/>
-          <AuthenticatedRoute path="/account" component={MyAccount} />
+          <AuthenticatedRoute path="/account" component={MyAccount}/>
         </Switch>
       </div>
     )

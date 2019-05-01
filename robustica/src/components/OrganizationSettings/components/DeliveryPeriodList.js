@@ -72,7 +72,7 @@ class DeliveryPeriodList extends Component {
                   listDeliveryPeriodsQueryResult.refetch()
                 })
               })
-            }} style={{color: '#E83323'}}>Delete</Button>
+            }} style={{ color: '#E83323' }}>Delete</Button>
           </MenuItem>
         </Menu>
         <Paper className="paper" elevation={1}>
@@ -114,7 +114,8 @@ class DeliveryPeriodList extends Component {
                           {deliveryPeriodItem.classPeriod}
                         </TableCell>
                         {daysOfTheWeek.map(day => {
-                          return <TableCell key={day} align="right" className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
+                          return <TableCell key={day} align="right"
+                                            className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>{deliveryPeriodItem[day.toLowerCase()] == null ? 'No class' : deliveryPeriodItem[day.toLowerCase()]}</TableCell>
                         })}
                         <TableCell align="right" className={deliveryPeriodItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {deliveryPeriodItem.maxQueueSize === 0 ? 'Unlimited' : deliveryPeriodItem.maxQueueSize}
@@ -174,7 +175,7 @@ DeliveryPeriodList.defaultProps = {
   deliveryPeriodMenu: null
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     deliveryPeriodMenu: organizationSettings.deliveryPeriodMenu,
     areYouSure: organizationSettings.areYouSure

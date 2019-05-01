@@ -6,7 +6,7 @@ import { StorageService } from '../services/StorageService'
 
 class UserInfo extends Component {
   render() {
-    const {data} = this.props
+    const { data } = this.props
 
     if (data.loading) return <div>Loading User Info...</div>
     if (data.error) return <div>Error :(</div>

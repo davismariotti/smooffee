@@ -13,7 +13,7 @@ class EditOrganizationForm extends Component {
   }
 
   render() {
-    const {handleSubmit, invalid, pristine} = this.props
+    const { handleSubmit, invalid, pristine } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
