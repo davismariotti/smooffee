@@ -11,7 +11,14 @@ const initialState = Immutable({
   editDeliveryPeriod: false,
   editDeliveryPeriodObject: null,
   deliveryPeriodMenu: null,
+
+  createOrderModifierModalOpen: false,
+  editOrderModifier: false,
+  editOrderModifierObject: null,
+  orderModifierMenu: null,
+
   userMenu: null,
+
   areYouSure: null,
   editOrganization: null,
   addMoreFunds: null
@@ -22,6 +29,9 @@ export default {
     initialState,
     reducer(state = initialState, action) {
       switch (action.type) {
+
+        // Products
+
         case OrganizationSettingsActions.OPEN_CREATE_PRODUCT_MODAL:
           return {
             ...state,
@@ -56,6 +66,9 @@ export default {
             ...state,
             productMenu: null
           }
+
+        // Are you Sure?
+
         case OrganizationSettingsActions.OPEN_ARE_YOU_SURE_MODAL:
           return {
             ...state,
@@ -68,6 +81,9 @@ export default {
             ...state,
             areYouSure: null,
           }
+
+        // Edit Organization
+
         case OrganizationSettingsActions.OPEN_EDIT_ORGANIZATION_MODAL:
           return {
             ...state,
@@ -81,6 +97,9 @@ export default {
             ...state,
             editOrganization: null
           }
+
+        // User Menu
+
         case OrganizationSettingsActions.OPEN_USER_MENU:
           return {
             ...state,
@@ -91,6 +110,9 @@ export default {
             ...state,
             userMenu: null
           }
+
+        // Add funs
+
         case OrganizationSettingsActions.OPEN_ADD_FUNDS_MODAL:
           return {
             ...state,
@@ -102,6 +124,8 @@ export default {
             ...state,
             addMoreFunds: null
           }
+
+        // Delivery Period
 
         case OrganizationSettingsActions.OPEN_DELIVERY_PERIOD_MENU:
           return {
@@ -137,6 +161,44 @@ export default {
             editDeliveryPeriodObject: action.payload,
             deliveryPeriodMenu: null,
           }
+
+        // Order Modifiers
+
+        case OrganizationSettingsActions.OPEN_ORDER_MODIFIER_MENU:
+          return {
+            ...state,
+            orderModifierMenu: { ...action.payload }
+          }
+        case OrganizationSettingsActions.CLOSE_ORDER_MODIFIER_MENU:
+          return {
+            ...state,
+            orderModifierMenu: null
+          }
+        case OrganizationSettingsActions.OPEN_CREATE_ORDER_MODIFIER_MODAL:
+          return {
+            ...state,
+            createOrderModifierModalOpen: true,
+            editOrderModifier: false,
+            editOrderModifierObject: null,
+            orderModifierMenu: null,
+          }
+        case OrganizationSettingsActions.CLOSE_CREATE_ORDER_MODIFIER_MODAL:
+          return {
+            ...state,
+            createOrderModifierModalOpen: false,
+            editOrderModifier: false,
+            editOrderModifierObject: null,
+            orderModifierMenu: null,
+          }
+        case OrganizationSettingsActions.OPEN_EDIT_ORDER_MODIFIER_MODAL:
+          return {
+            ...state,
+            createOrderModifierModalOpen: true,
+            editOrderModifier: true,
+            editOrderModifierObject: action.payload,
+            orderModifierMenu: null,
+          }
+
         default:
           return {
             ...state

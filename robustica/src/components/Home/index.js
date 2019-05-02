@@ -165,7 +165,6 @@ export default compose(
   graphql(listOrdersQuery, {
     name: 'listOrdersQueryResult',
     options: props => {
-      console.log('proprsoposopds', props)
       return {
         notifyOnNetworkStatusChange: true,
         variables: {
