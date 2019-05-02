@@ -12,6 +12,9 @@ class ProductOptions extends React.Component {
     title: 'Options'
   }
 
+  static getProductName() {
+    return this.product.name
+  }
   render() {
     const {navigation} = this.props
     const itemId = navigation.getParam('itemId', 'NO-ID')
@@ -65,7 +68,7 @@ export default graphql(readProductModifiers, {
   options: {
     variables: {
       organizationId: 3,
-      name: {drinkSelected}
+      name: ProductOptions.getProductName.bind(this)
 
     }
   }
