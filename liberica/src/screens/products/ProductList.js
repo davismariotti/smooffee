@@ -3,7 +3,8 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { graphql } from 'react-apollo'
 import { readProductQuery } from '../../graphql/productQuery'
 import LoadScreen from '../LoadScreen'
-import Product from './Product'
+import { ListItem, Card } from 'react-native-elements';
+import {formatCurrency} from '../../utils/currencyUtils'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
 
 class ProductList extends React.Component {
   static navigationOptions = {
-    title: 'Products'
+    title: 'New Order'
   }
 
   render() {
@@ -28,13 +29,21 @@ class ProductList extends React.Component {
       )
     }
     return (
-      <ScrollView>
+      <Card containerStyle={{padding:0}}>
         {readProductQueryResult.product.list.map(product => {
           return (
-            <Product key={product.id} name={product.name} price={product.price} description={product.description}/>
+            <ListItem 
+            key={product.id}
+             title={product.name} 
+             subtitle={formatCurrency(product.price)}
+             onPress={() => {
+              this.props.navigation.navigate('ProductOptions',
+              {itemId: product.id,
+              item: product.name,
+              })}}/>
           )
         })}
-      </ScrollView>
+      </Card>
     )
   }
 }

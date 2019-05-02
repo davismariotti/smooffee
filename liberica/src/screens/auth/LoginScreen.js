@@ -26,11 +26,13 @@ class LoginScreen extends React.Component {
 
     return (
       <View>
+      <View style={styles.container}>
         <Image
           source={require('../../assets/images/Logo.png')}
           style={styles.image}
         />
-        <Text style={styles.title}> Login</Text>
+        <Text style={styles.title}>Login</Text>
+        </View>
         <LoginForm/>
 
         {authError && <Text>{authError}</Text>}
@@ -51,11 +53,10 @@ class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
   image: {
+    marginTop:20,
     width: 200,
     height: 200,
     resizeMode: 'contain',
-    marginTop: 30,
-    marginLeft: 110
   },
   title: {
     fontSize: 30,
@@ -63,7 +64,11 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     lineHeight: 50,
     textAlign: 'center'
-  }
+  },
+  container:{
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
 const mapStateToProps = ({auth}) => {
