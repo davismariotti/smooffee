@@ -4,6 +4,7 @@ import { readProductsQuery } from '../../graphql/productQueries'
 import LoadScreen from '../LoadScreen'
 import { Card, ListItem } from 'react-native-elements'
 import { formatCurrency } from '../../utils/currencyUtils'
+import Status from '../../utils/Status'
 
 
 class ProductList extends React.Component {
@@ -41,8 +42,19 @@ export default graphql(readProductsQuery, {
   name: 'readProductsQueryResult',
   options: {
     variables: {
-      organizationId: 3
-
+      organizationId: 3,
+      parameters: {
+        order: [
+          'name',
+          'asc'
+        ],
+        filter: {
+          eq: {
+            field: 'status',
+            value: Status.ACTIVE
+          }
+        }
+      }
     }
   }
 })
