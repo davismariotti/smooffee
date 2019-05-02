@@ -15,7 +15,7 @@ import { LogOut } from '../screens/settings/LogOut'
 import SettingsScreen from '../screens/settings/SettingsScreen'
 import ProductList from '../screens/products/ProductList'
 import ProductInformation from '../screens/products/ProductInformation'
-import { ProductOptions } from '../screens/products/ProductOptions'
+import ProductOptions from '../screens/products/ProductOptions'
 
 const AuthStack = createStackNavigator({
   LoginScreen,
@@ -87,7 +87,7 @@ export default createAppContainer(
       Auth: AuthStack
     },
     {
-      initialRouteName: 'Auth'
+      initialRouteName: 'App'
     }
   )
 )
