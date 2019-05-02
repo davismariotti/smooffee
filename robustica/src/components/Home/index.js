@@ -50,7 +50,7 @@ class Home extends Component {
   }
 
   render() {
-    const {anchorEl} = this.state
+    const { anchorEl } = this.state
 
     const {
       classes,
@@ -62,8 +62,6 @@ class Home extends Component {
       selectedDeliveryPeriod
     } = this.props
 
-    console.log(this.props)
-
     if (listOrdersQueryResult.loading || listDeliveryPeriodsQueryResult.loading) return (
       <CenterDiv>
         <Loader type="line-scale" active color="black"/>
@@ -73,7 +71,7 @@ class Home extends Component {
 
     return (
       <MainView>
-        <Paper style={{float: 'right', maxWidth: '360px'}}>
+        <Paper style={{ float: 'right', maxWidth: '360px' }}>
           <List component="nav">
             <ListItem
               button
@@ -81,7 +79,7 @@ class Home extends Component {
               aria-controls="lock-menu"
               aria-label="Choose a Class Period"
               onClick={event => {
-                this.setState({anchorEl: event.currentTarget})
+                this.setState({ anchorEl: event.currentTarget })
               }}
             >
               <ListItemText
@@ -96,7 +94,7 @@ class Home extends Component {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={() => {
-            this.setState({anchorEl: null})
+            this.setState({ anchorEl: null })
           }}
         >
           {listDeliveryPeriodsQueryResult.deliveryPeriod.list.map(deliveryPeriod => (
@@ -105,7 +103,7 @@ class Home extends Component {
               selected={!!selectedDeliveryPeriod && deliveryPeriod.id === selectedDeliveryPeriod.id}
               onClick={event => {
                 chooseClassPeriod(deliveryPeriod)
-                this.setState({anchorEl: null})
+                this.setState({ anchorEl: null })
                 listOrdersQueryResult.refetch()
               }}
             >
@@ -145,7 +143,7 @@ Home.defaultProps = {
   listOrdersQueryResult: {}
 }
 
-const mapStateToProps = ({home}) => {
+const mapStateToProps = ({ home }) => {
   return {
     showModal: home.createOrderModalOpen,
     selectedDeliveryPeriod: home.selectedDeliveryPeriod
@@ -165,7 +163,6 @@ export default compose(
   graphql(listOrdersQuery, {
     name: 'listOrdersQueryResult',
     options: props => {
-      console.log('proprsoposopds', props)
       return {
         notifyOnNetworkStatusChange: true,
         variables: {

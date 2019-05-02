@@ -6,7 +6,7 @@ import { setContext } from 'apollo-link-context'
 import { AuthService } from './AuthService'
 import { getArabicaUri } from './env'
 
-const httpLink = new HttpLink({uri: getArabicaUri()})
+const httpLink = new HttpLink({ uri: getArabicaUri() })
 
 const asyncAuthLink = setContext(
   () => {
@@ -24,7 +24,7 @@ const asyncAuthLink = setContext(
   }
 )
 
-const afterware = onError(({networkError, graphQLErrors, operation}) => {
+const afterware = onError(({ networkError, graphQLErrors, operation }) => {
   if (graphQLErrors) console.error(`GraphQL Error with ${operation.operationName}`, graphQLErrors)
   if (networkError && networkError.statusCode === 401) AuthService.signout()
 })

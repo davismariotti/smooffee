@@ -70,7 +70,7 @@ export default class AuthMiddleware {
     StorageService.setUserId(result.uid)
     firebaseApp.auth().currentUser.getToken().then(token => {
       StorageService.setAuthToken(token)
-      client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+      client.query({ query: readCurrentUserQuery }).then(({ error, data }) => {
         if (error) {
           dispatch(AuthActions.signInError(error))
         } else if (data.user.currentUser.role === CUSTOMER) {

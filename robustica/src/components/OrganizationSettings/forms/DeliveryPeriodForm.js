@@ -17,7 +17,7 @@ class DeliveryPeriodForm extends React.Component {
   }
 
   render() {
-    const {editProduct, handleSubmit, invalid, pristine} = this.props
+    const { editProduct, handleSubmit, invalid, pristine } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -28,7 +28,8 @@ class DeliveryPeriodForm extends React.Component {
           </AlignCenter>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="classPeriod" helperText="e.g. The period number" validate={[validateIsRequired, validateMustBeInteger]} component={TextField} label="Class Period"/>
+              <Field style={{ width: '300px' }} fullWidth name="classPeriod" helperText="e.g. The period number" validate={[validateIsRequired, validateMustBeInteger]} component={TextField}
+                     label="Class Period"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <AlignCenter>
@@ -43,14 +44,14 @@ class DeliveryPeriodForm extends React.Component {
             return (
               <StyledFormRow>
                 <StyledFormRowItem>
-                  <Field style={{width: '300px'}} fullWidth name={day.toLowerCase()} helperText="e.g. 8:00a-8:55a" component={TextField} label={day}/>
+                  <Field style={{ width: '300px' }} fullWidth name={day.toLowerCase()} helperText="e.g. 8:00a-8:55a" component={TextField} label={day}/>
                 </StyledFormRowItem>
               </StyledFormRow>
             )
           })}
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{width: '300px'}} fullWidth name="maxQueueSize" helperText="Set to 0 for unlimited" validate={validateIsRequired} component={TextField} label="Max Queue Size" />
+              <Field style={{ width: '300px' }} fullWidth name="maxQueueSize" helperText="Set to 0 for unlimited" validate={validateIsRequired} component={TextField} label="Max Queue Size"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>

@@ -1,36 +1,33 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Field, propTypes, reduxForm } from 'redux-form'
 import { Button, Typography } from '@material-ui/core'
 import { compose } from 'redux'
 import * as PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'
-import { StyledFormRow, StyledFormRowItem } from '../styles/forms'
-import { AlignCenter } from '../styles/core'
-import { validateIsRequired } from '../../utils/formUtils'
+import { StyledFormRow, StyledFormRowItem } from '../../styles/forms'
+import { AlignCenter } from '../../styles/core'
+import { validateIsRequired } from '../../../utils/formUtils'
 
-class MyAccountForm extends React.Component {
+class OrderModifierForm extends React.Component {
   componentDidMount() {
     this.props.initialize(this.props.initialValues)
   }
 
   render() {
-    const { handleSubmit, invalid, pristine } = this.props
+    const { editProduct, handleSubmit, invalid, pristine } = this.props
     return (
       <div>
         <form onSubmit={handleSubmit}>
           <AlignCenter>
             <Typography variant="headline">
-              Update Account Information
+              {editProduct ? 'Edit' : 'Create'} Order Modifier
             </Typography>
           </AlignCenter>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{ width: '300px' }} fullWidth name="firstName" validate={validateIsRequired} component={TextField} label="First Name"/>
-            </StyledFormRowItem>
-          </StyledFormRow>
-          <StyledFormRow>
-            <StyledFormRowItem>
-              <Field style={{ width: '300px' }} fullWidth name="lastName" validate={validateIsRequired} component={TextField} label="Last Name"/>
+              <Field style={{ width: '300px' }} fullWidth name="name" helperText="e.g. Caramel Sauce" validate={validateIsRequired} component={TextField}
+                     label="Name"/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
@@ -46,17 +43,17 @@ class MyAccountForm extends React.Component {
   }
 }
 
-MyAccountForm.propTypes = {
+OrderModifierForm.propTypes = {
   ...propTypes,
-  enableReinitialize: PropTypes.bool,
-}
-
-MyAccountForm.defaultProps = {
-  enableReinitialize: true
+  editOrderModifier: PropTypes.bool.isRequired
 }
 
 export default compose(
   reduxForm({
-    form: 'myAccountForm'
-  })
-)(MyAccountForm)
+    form: 'editorderModifierForm'
+  }),
+  connect(state => ({
+    enableReinitialize: true,
+    initialValues: (state.organizationSettings.editOrderModifierObject && state.organizationSettings.editOrderModifierObject.orderModifier) || null
+  }))
+)(OrderModifierForm)

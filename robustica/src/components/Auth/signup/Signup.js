@@ -12,7 +12,7 @@ import AuthMiddleware from '../AuthMiddleware'
 
 class Signup extends Component {
   render() {
-    const {authError, signInWithGoogle} = this.props
+    const { authError, signInWithGoogle } = this.props
 
     return (
       <main>
@@ -44,7 +44,7 @@ Signup.propTypes = {
   signInWithGoogle: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({auth}) => {
+const mapStateToProps = ({ auth }) => {
   return {
     authError: auth.authError
   }

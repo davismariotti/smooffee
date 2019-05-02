@@ -5,8 +5,6 @@ import { compose } from 'redux'
 import { Field, propTypes, reduxForm } from 'redux-form'
 import { TextField } from 'redux-form-material-ui'
 import { connect } from 'react-redux'
-
-import firebaseApp from '../../../services/AuthService'
 import history from '../../../utils/history'
 import { signUpMutation } from '../../../graphql/userQueries'
 import { StorageService } from '../../../services/StorageService'
@@ -18,9 +16,9 @@ import AuthActions from '../actions'
 class SignupContinued extends Component {
   render() {
 
-    const {signUpMutate, handleSubmit, signInError} = this.props
+    const { signUpMutate, handleSubmit, signInError } = this.props
 
-    const submit = ({firstName, lastName}) => {
+    const submit = ({ firstName, lastName }) => {
 
       const userInput = {
         firstName,
@@ -33,7 +31,6 @@ class SignupContinued extends Component {
           userInput
         }
       }).then((result) => {
-        console.log('user', result)
         StorageService.setOrganizationId(result.data.user.create.organizationId)
         StorageService.setUserRole(result.data.user.create.role)
         signInError('Your account is created, but you must login with the mobile app.')

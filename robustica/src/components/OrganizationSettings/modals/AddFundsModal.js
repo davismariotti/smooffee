@@ -25,9 +25,9 @@ const styles = theme => ({
 class AddFundsModal extends Component {
 
   render() {
-    const {classes, addCashFundsMutate, addMoreFunds, onSubmit, closeAddFundsModal} = this.props
+    const { classes, addCashFundsMutate, addMoreFunds, onSubmit, closeAddFundsModal } = this.props
 
-    const submit = ({amount}) => {
+    const submit = ({ amount }) => {
       addCashFundsMutate({
         variables: {
           userId: addMoreFunds.id,
@@ -72,7 +72,7 @@ AddFundsModal.defaultProps = {
   addMoreFunds: null
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     addMoreFunds: organizationSettings.addMoreFunds
   }

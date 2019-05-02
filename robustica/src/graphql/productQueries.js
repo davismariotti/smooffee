@@ -9,6 +9,11 @@ query ListProducts($organizationId: Long!, $parameters: QLFinder) {
       description
       name
       status
+      orderModifiers {
+        id
+        name
+        status
+      }
     }
   }
 }

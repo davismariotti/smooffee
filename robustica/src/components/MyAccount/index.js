@@ -26,9 +26,9 @@ class MyAccount extends Component {
   }
 
   render() {
-    const {readCurrentUserQueryResult, updateUserMutate, reinitializeForm, doResetPasswordLinkSent, resetPasswordLinkSent} = this.props
+    const { readCurrentUserQueryResult, updateUserMutate, reinitializeForm, doResetPasswordLinkSent, resetPasswordLinkSent } = this.props
 
-    const submit = ({firstName, lastName}) => {
+    const submit = ({ firstName, lastName }) => {
       updateUserMutate({
         variables: {
           userId: StorageService.getUserId(),
@@ -80,14 +80,14 @@ class MyAccount extends Component {
                 <AlignCenter>
                   <Typography variant="h5">Change Password</Typography>
                   Click the button below to receive an email link at {readCurrentUserQueryResult.user.currentUser.email} to reset your password.
-                  <br />
+                  <br/>
                   {resetPasswordLinkSent && (
                     <div>
                       Sent!
-                      <br />
+                      <br/>
                     </div>
                   )}
-                  <Button style={{marginTop: '10px'}} variant="contained" onClick={resetPassword}>Reset Password</Button>
+                  <Button style={{ marginTop: '10px' }} variant="contained" onClick={resetPassword}>Reset Password</Button>
                 </AlignCenter>
               </Paper>
             )}
@@ -105,7 +105,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const mapStateToProps = ({myaccount}) => {
+const mapStateToProps = ({ myaccount }) => {
   return {
     resetPasswordLinkSent: myaccount.resetPasswordLinkSent
   }

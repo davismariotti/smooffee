@@ -24,7 +24,7 @@ class UserPage extends Component {
 
   renderOrdersTable(orders) {
 
-    const {openOrderHistoryMenu} = this.props
+    const { openOrderHistoryMenu } = this.props
 
     return (
       <Table>
@@ -65,7 +65,7 @@ class UserPage extends Component {
   }
 
   renderPaymentsTable(payments) {
-    const {openPaymentHistoryMenu} = this.props
+    const { openPaymentHistoryMenu } = this.props
     return (
       <Table>
         <TableHead>
@@ -130,7 +130,8 @@ class UserPage extends Component {
 
     return (
       <div>
-        <AreYouSureModal open={!!areYouSure} message="Are you sure?" subText={(areYouSure && areYouSure.subText) || ''} onClose={closeAreYouSure} onSubmit={(areYouSure && areYouSure.onSubmit) || null}/>
+        <AreYouSureModal open={!!areYouSure} message="Are you sure?" subText={(areYouSure && areYouSure.subText) || ''} onClose={closeAreYouSure}
+                         onSubmit={(areYouSure && areYouSure.onSubmit) || null}/>
         <Menu id="menu" open={menuIsOpen} anchorEl={anchorEl} onClose={closeOrderPaymentHistoryMenu}>
           {orderHistoryMenu && (
             <MenuItem>
@@ -168,7 +169,7 @@ class UserPage extends Component {
 
         <Paper className="paper" elevation={1}>
           <AlignCenter>
-            <Typography style={{margin: '10px'}} variant="h5" component="h3">
+            <Typography style={{ margin: '10px' }} variant="h5" component="h3">
               {`${readUser.firstName} ${readUser.lastName}`}
             </Typography>
             {readUser.email}
@@ -192,7 +193,7 @@ class UserPage extends Component {
   }
 }
 
-const mapStateToProps = ({userpage}) => {
+const mapStateToProps = ({ userpage }) => {
   return {
     selectedTab: userpage.selectedTab,
     paymentHistoryMenu: userpage.paymentHistoryMenu,

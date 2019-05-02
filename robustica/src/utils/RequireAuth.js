@@ -5,7 +5,7 @@ export default (nextState, replace) => {
   if (!user) {
     replace({
       pathname: '/login',
-      state: {nextPathname: nextState.location.pathname}
+      state: { nextPathname: nextState.location.pathname }
     })
   }
 }

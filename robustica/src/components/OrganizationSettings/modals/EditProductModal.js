@@ -4,10 +4,14 @@ import * as PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { compose, graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import Loader from 'react-loaders'
 import { createProductMutation, editProductMutation } from '../../../graphql/productQueries'
 import OrganizationSettingsActions from '../actions'
 import EditProductForm from '../forms/EditProductForm'
 import { StorageService } from '../../../services/StorageService'
+import { listOrderModifiersQuery } from '../../../graphql/orderModifierQueries'
+import Status from '../../../utils/Status'
+import { CenterDiv } from '../../styles/core'
 
 const styles = theme => ({
   paper: {
@@ -30,7 +34,7 @@ function getModalStyle() {
 
 class EditProductModal extends Component {
   render() {
-    const {onSubmit} = this.props
+    const { onSubmit, listOrderModifiersQueryResult } = this.props
 
     const {
       classes,
@@ -46,7 +50,8 @@ class EditProductModal extends Component {
       const productInput = {
         price: values.price,
         description: values.description,
-        name: values.name
+        name: values.name,
+        orderModifiers: values.orderModifiers
       }
       if (editProduct) {
         editProductMutate({
@@ -71,11 +76,22 @@ class EditProductModal extends Component {
       }
     }
 
+    if (listOrderModifiersQueryResult.loading) {
+      if (createProductModalOpen) {
+        return (
+          <CenterDiv>
+            <Loader type="line-scale" active color="black"/>
+          </CenterDiv>
+        )
+      }
+      return null
+    }
+
     return (
       <div>
         <Modal open={createProductModalOpen} onClose={closeCreateProductModal}>
           <div style={getModalStyle()} className={classes.paper}>
-            <EditProductForm editProduct={editProduct} onSubmit={submit}/>
+            <EditProductForm availableOrderModifiers={listOrderModifiersQueryResult.orderModifier.list} editProduct={editProduct} onSubmit={submit}/>
           </div>
         </Modal>
       </div>
@@ -100,10 +116,10 @@ EditProductModal.defaultProps = {
   }
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     createProductModalOpen: organizationSettings.createProductModalOpen,
-    currentProduct: {...(organizationSettings.editProductObject && organizationSettings.editProductObject.product) || null},
+    currentProduct: { ...(organizationSettings.editProductObject && organizationSettings.editProductObject.product) || null },
     editProduct: organizationSettings.editProduct
   }
 }
@@ -122,5 +138,25 @@ export default compose(
   }),
   graphql(editProductMutation, {
     name: 'editProductMutate'
+  }),
+  graphql(listOrderModifiersQuery, {
+    name: 'listOrderModifiersQueryResult',
+    options: {
+      variables: {
+        organizationId: StorageService.getOrganizationId(),
+        parameters: {
+          order: [
+            'name',
+            'asc'
+          ],
+          filter: {
+            eq: {
+              field: 'status',
+              value: Status.ACTIVE
+            }
+          }
+        }
+      }
+    }
   })
 )(EditProductModal)

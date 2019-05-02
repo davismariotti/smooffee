@@ -30,7 +30,7 @@ function getModalStyle() {
 
 class EditDeliveryPeriodModal extends Component {
   render() {
-    const {onSubmit} = this.props
+    const { onSubmit } = this.props
 
     const {
       classes,
@@ -104,10 +104,10 @@ EditDeliveryPeriodModal.defaultProps = {
   }
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     createDeliveryPeriodModalOpen: organizationSettings.createDeliveryPeriodModalOpen,
-    currentDeliveryPeriod: {...(organizationSettings.editDeliveryPeriodObject && organizationSettings.editDeliveryPeriodObject.deliveryPeriod) || null},
+    currentDeliveryPeriod: { ...(organizationSettings.editDeliveryPeriodObject && organizationSettings.editDeliveryPeriodObject.deliveryPeriod) || null },
     editDeliveryPeriod: organizationSettings.editDeliveryPeriod
   }
 }

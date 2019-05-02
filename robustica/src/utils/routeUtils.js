@@ -1,7 +1,7 @@
 import { Redirect, Route } from 'react-router-dom'
 import React from 'react'
 import { AuthService } from '../services/AuthService'
-import { ANONYMOUS} from './role'
+import { ANONYMOUS } from './role'
 
 export const ProtectedRoute = (
   {
@@ -15,7 +15,7 @@ export const ProtectedRoute = (
     <Route
       {...rest}
       render={props =>
-        AuthService.isSignedIn() && (AuthService.userInRoles(allowedRoles || [ANONYMOUS])) ? <Component {...rest} {...props} /> : <Redirect to={{pathname, state: {from: props.location}}}/>
+        AuthService.isSignedIn() && (AuthService.userInRoles(allowedRoles || [ANONYMOUS])) ? <Component {...rest} {...props} /> : <Redirect to={{ pathname, state: { from: props.location } }}/>
       }
     />
   )
@@ -31,10 +31,10 @@ export const AuthenticatedRoute = (
     <Route
       {...rest}
       render={props =>
-        AuthService.isSignedIn() ? <Component {...rest} {...props} /> : <Redirect to={{pathname, state: {from: props.location}}}/>
+        AuthService.isSignedIn() ? <Component {...rest} {...props} /> : <Redirect to={{ pathname, state: { from: props.location } }}/>
       }
     />
   )
 }
 
-ProtectedRoute.defaultProps = {redirect: '/login', allowedRoles: [ANONYMOUS]}
+ProtectedRoute.defaultProps = { redirect: '/login', allowedRoles: [ANONYMOUS] }

@@ -17,7 +17,7 @@ class OrganizationDetails extends Component {
       <div>
         <Paper className="paper" elevation={1}>
           <AlignCenter>
-            <Typography style={{margin: '10px'}} variant="h5" component="h3">
+            <Typography style={{ margin: '10px' }} variant="h5" component="h3">
               Details
             </Typography>
             <br/>
@@ -35,7 +35,7 @@ OrganizationDetails.propTypes = {
   editOrganization: PropTypes.object
 }
 
-const mapStateToProps = ({organizationSettings}) => {
+const mapStateToProps = ({ organizationSettings }) => {
   return {
     editOrganization: organizationSettings.editOrganization
   }
