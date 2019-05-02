@@ -62,8 +62,6 @@ class Home extends Component {
       selectedDeliveryPeriod
     } = this.props
 
-    console.log(this.props)
-
     if (listOrdersQueryResult.loading || listDeliveryPeriodsQueryResult.loading) return (
       <CenterDiv>
         <Loader type="line-scale" active color="black"/>

@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     openCreateProductModal: () => dispatch(OrganizationSettingsActions.openCreateProductModal()),
     closeCreateProductModal: () => dispatch(OrganizationSettingsActions.closeCreateProductModal()),
-    openEditProductModal: (product) => dispatch(OrganizationSettingsActions.openEditProductModal(product)),
+    openEditProductModal: (product, orderModifiers) => dispatch(OrganizationSettingsActions.openEditProductModal(product, orderModifiers)),
     openProductMenu: (row) => dispatch(OrganizationSettingsActions.openProductMenu(row)),
     closeProductMenu: () => dispatch(OrganizationSettingsActions.closeProductMenu()),
     openAreYouSure: (onSubmit) => dispatch(OrganizationSettingsActions.openAreYouSureModal('Are You Sure?', onSubmit)),
@@ -48,6 +48,7 @@ class ProductList extends Component {
       closeAreYouSure,
       closeProductMenu
     } = this.props
+
     return (
       <div>
         <EditProductModal onSubmit={listProductsQueryResult.refetch}/>
@@ -55,7 +56,7 @@ class ProductList extends Component {
         <Menu id="menu" open={!!productMenu} anchorEl={(productMenu && productMenu.anchorEl) || null} onClose={closeProductMenu}>
           <MenuItem>
             <Button onClick={() => {
-              openEditProductModal(productMenu.productItem)
+              openEditProductModal(productMenu.productItem, productMenu.orderModifiers)
             }}>Edit</Button>
           </MenuItem>
           <MenuItem>
@@ -87,6 +88,7 @@ class ProductList extends Component {
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="right">Price</TableCell>
                   <TableCell align="right">Description</TableCell>
+                  <TableCell align="right"># of Order Modifiers</TableCell>
                   <TableCell align="right">Available?</TableCell>
                   <TableCell align="right">Options</TableCell>
                 </TableRow>
@@ -115,6 +117,9 @@ class ProductList extends Component {
                         <TableCell align="right" className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                           {productItem.description}
                         </TableCell>
+                        <TableCell align="right" className={productItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
+                          {productItem.orderModifiers.length}
+                        </TableCell>
                         <TableCell>
                           <AlignRight>
                             <Checkbox checked={productItem.status === Status.ACTIVE} onChange={() => {
@@ -131,7 +136,8 @@ class ProductList extends Component {
                           <Button onClick={(e) => {
                             openProductMenu({
                               anchorEl: e.target,
-                              productItem
+                              productItem,
+                              orderModifiers: productItem.orderModifiers
                             })
                           }}>
                             <MoreVert/>

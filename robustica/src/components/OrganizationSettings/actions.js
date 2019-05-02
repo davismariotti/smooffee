@@ -47,11 +47,12 @@ export default class OrganizationSettingsActions {
     }
   }
 
-  static openEditProductModal(product) {
+  static openEditProductModal(product, orderModifiers) {
     return {
       type: OrganizationSettingsActions.OPEN_EDIT_PRODUCT_MODAL,
       payload: {
-        product
+        product,
+        orderModifiers
       }
     }
   }

@@ -31,7 +31,6 @@ class SignupContinued extends Component {
           userInput
         }
       }).then((result) => {
-        console.log('user', result)
         StorageService.setOrganizationId(result.data.user.create.organizationId)
         StorageService.setUserRole(result.data.user.create.role)
         signInError('Your account is created, but you must login with the mobile app.')

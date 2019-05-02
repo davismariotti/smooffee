@@ -7,6 +7,7 @@ import authReducer from '../components/Auth/reducer'
 import navbarReducer from '../components/Navbar/reducer'
 import myAccountReducer from '../components/MyAccount/reducer'
 import userPageReducer from '../components/UserPage/reducer'
+import OrganizationSettingsActions from '../components/OrganizationSettings/actions'
 
 const reducerList = [
   homeReducer,
@@ -43,7 +44,24 @@ function initialState() {
 
 export default function createNewStore(history) {
   const hasDevTools = !!window.__REDUX_DEVTOOLS_EXTENSION__
-  const middleWare = hasDevTools ? compose(applyMiddleware(routerMiddleware(history)), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()) : applyMiddleware(routerMiddleware(history))
+
+  const actionSanitizer = (action) => {
+    if (action.type === OrganizationSettingsActions.OPEN_PRODUCT_MENU && action.payload) {
+      return { ...action, payload: '<<LONG_BLOB>>' }
+    }
+    return action
+  }
+
+  const stateSanitizer = (state) => {
+    let newState = state.organizationSettings.productMenu ? { ...state, organizationSettings: { ...state.organizationSettings, productMenu: '<<LONG_BLOB>>' } } : state
+    newState = newState.organizationSettings.productMenuObject ? { ...newState, organizationSettings: { ...newState.organizationSettings, productMenuObject: '<<LONG_BLOB>>' } } : newState
+    return newState
+  }
+
+  const middleWare = hasDevTools ? compose(applyMiddleware(routerMiddleware(history)), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({
+    actionSanitizer,
+    stateSanitizer
+  })) : applyMiddleware(routerMiddleware(history))
 
   return createStore(
     combineReducers({
