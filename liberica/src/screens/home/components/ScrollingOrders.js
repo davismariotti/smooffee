@@ -9,7 +9,7 @@ import LoadScreen from '../../LoadScreen'
 class ScrollingOrders extends Component {
   render() {
 
-    const {readOrdersQueryResult} = this.props
+    const { readOrdersQueryResult } = this.props
 
     if (readOrdersQueryResult.loading || readOrdersQueryResult.error) {
       return (

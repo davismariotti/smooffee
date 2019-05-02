@@ -6,7 +6,7 @@ import { setContext } from 'apollo-link-context'
 import AuthService from './AuthService'
 import { getArabicaUri } from './env'
 
-const httpLink = new HttpLink({uri: getArabicaUri()})
+const httpLink = new HttpLink({ uri: getArabicaUri() })
 
 const asyncAuthLink = setContext(
   () => {
@@ -24,7 +24,7 @@ const asyncAuthLink = setContext(
   }
 )
 
-const authAfterware = onError(({networkError}) => {
+const authAfterware = onError(({ networkError }) => {
   if (networkError.statusCode === 401) AuthService.signout()
 })
 

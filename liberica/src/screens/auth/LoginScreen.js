@@ -22,16 +22,16 @@ class LoginScreen extends React.Component {
 
   render() {
 
-    const {authError} = this.props
+    const { authError } = this.props
 
     return (
       <View>
-      <View style={styles.container}>
-        <Image
-          source={require('../../assets/images/Logo.png')}
-          style={styles.image}
-        />
-        <Text style={styles.title}>Login</Text>
+        <View style={styles.container}>
+          <Image
+            source={require('../../assets/images/Logo.png')}
+            style={styles.image}
+          />
+          <Text style={styles.title}>Login</Text>
         </View>
         <LoginForm/>
 
@@ -53,7 +53,7 @@ class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
   image: {
-    marginTop:20,
+    marginTop: 20,
     width: 200,
     height: 200,
     resizeMode: 'contain',
@@ -65,13 +65,13 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     textAlign: 'center'
   },
-  container:{
+  container: {
     justifyContent: 'center',
     alignItems: 'center',
   },
 })
 
-const mapStateToProps = ({auth}) => {
+const mapStateToProps = ({ auth }) => {
   return {
     authError: auth.authError
   }

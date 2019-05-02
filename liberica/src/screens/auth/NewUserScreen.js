@@ -11,8 +11,8 @@ class NewUserScreen extends React.Component {
   }
 
   render() {
-    const {createUserWithEmailAndPassword} = this.props
-    const submit = ({email, password, firstName, lastName}) => {
+    const { createUserWithEmailAndPassword } = this.props
+    const submit = ({ email, password, firstName, lastName }) => {
       createUserWithEmailAndPassword(email, password, firstName, lastName)
     }
     return (

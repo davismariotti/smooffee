@@ -11,9 +11,9 @@ export class ForgotPasswordScreen extends React.Component {
   }
 
   render() {
-    const {recoverWithEmail} = this.props
+    const { recoverWithEmail } = this.props
 
-    const submit = ({email}) => {
+    const submit = ({ email }) => {
       recoverWithEmail(email)
     }
     return (

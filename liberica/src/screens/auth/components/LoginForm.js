@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 class LoginForm extends Component {
   render() {
 
-    const {signInWithEmailAndPassword} = this.props
+    const { signInWithEmailAndPassword } = this.props
 
-    const submit = ({email, password}) => {
+    const submit = ({ email, password }) => {
       signInWithEmailAndPassword(email, password)
     }
 

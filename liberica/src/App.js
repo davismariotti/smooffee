@@ -13,6 +13,7 @@ import NavigationService from './services/NavigationService'
 import createNewStore from './services/store'
 import { ApolloProvider } from 'react-apollo'
 import { client } from './services/apollo'
+
 import { createAppContainer } from 'react-navigation'
 
 const AppContainer = createAppContainer(AppNavigator)
