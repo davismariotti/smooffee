@@ -14,7 +14,7 @@ class HomeScreen extends React.Component {
 
   render() {
 
-    const {readCurrentUserQueryResult} = this.props
+    const { readCurrentUserQueryResult } = this.props
 
     if (readCurrentUserQueryResult.loading || readCurrentUserQueryResult.error) {
       return (

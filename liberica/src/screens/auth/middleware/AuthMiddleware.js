@@ -60,7 +60,7 @@ export default class AuthMiddleware {
   static continueLogin(result, dispatch) {
     StorageService.setUserId(result.uid).then(async () => {
       const userId = await StorageService.getUserId()
-      client.query({query: readCurrentUserQuery}).then(({error, data}) => {
+      client.query({ query: readCurrentUserQuery }).then(({ error, data }) => {
         if (error) {
           dispatch(AuthActions.signInError(error))
         } else {

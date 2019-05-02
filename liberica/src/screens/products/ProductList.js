@@ -1,10 +1,9 @@
 import React from 'react'
 import { graphql } from 'react-apollo'
-import { readProductQuery } from '../../graphql/productQuery'
+import { readProductsQuery } from '../../graphql/productQueries'
 import LoadScreen from '../LoadScreen'
-import { ListItem, Card } from 'react-native-elements';
-import {formatCurrency} from '../../utils/currencyUtils'
-
+import { Card, ListItem } from 'react-native-elements'
+import { formatCurrency } from '../../utils/currencyUtils'
 
 
 class ProductList extends React.Component {
@@ -13,26 +12,24 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const {readProductQueryResult} = this.props
+    const { readProductsQueryResult } = this.props
 
-    if (readProductQueryResult.loading || readProductQueryResult.error) {
+    if (readProductsQueryResult.loading || readProductsQueryResult.error) {
       return (
         <LoadScreen/>
       )
     }
     return (
-      <Card containerStyle={{padding:0}}>
-        {readProductQueryResult.product.list.map(product => {
+      <Card containerStyle={{ padding: 0 }}>
+        {readProductsQueryResult.product.list.map(product => {
           return (
-            <ListItem 
-            key={product.id}
-             title={product.name} 
-             subtitle={formatCurrency(product.price)}
-             onPress={() => {
-              this.props.navigation.navigate('ProductOptions',
-              {itemId: product.id,
-              item: product.name,
-              })}}/>
+            <ListItem
+              key={product.id}
+              title={product.name}
+              subtitle={formatCurrency(product.price)}
+              onPress={() => {
+                this.props.navigation.navigate('ProductOptions', { product })
+              }}/>
           )
         })}
       </Card>
@@ -40,8 +37,8 @@ class ProductList extends React.Component {
   }
 }
 
-export default graphql(readProductQuery, {
-  name: 'readProductQueryResult',
+export default graphql(readProductsQuery, {
+  name: 'readProductsQueryResult',
   options: {
     variables: {
       organizationId: 3

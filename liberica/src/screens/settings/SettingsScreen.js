@@ -1,48 +1,49 @@
 import React from 'react'
-import { Button, StyleSheet, View, FlatList, Text} from 'react-native'
-import {List, ListItem, SearchBar} from 'react-native-elements'
+import { FlatList, StyleSheet, View } from 'react-native'
+import { List, ListItem } from 'react-native-elements'
 import { AccountInfo } from './AccountInfo'
 import { ChangePassword } from './ChangePassword'
-import {ShareFeedback} from "./ShareFeedback";
-import {ManagePayment} from "./ManagePayment";
-import {DeleteAccount} from "./DeleteAccount";
-import {LogOut} from "./LogOut";
+import { ShareFeedback } from './ShareFeedback'
+import { ManagePayment } from './ManagePayment'
+import { DeleteAccount } from './DeleteAccount'
+import { LogOut } from './LogOut'
 
 export default class SettingsScreen extends React.Component {
-    static navigationOptions = {
+  static navigationOptions = {
     title: 'Settings'
-  };
+  }
 
-    render() {
+  render() {
     return (
 
-        <View style={styles.container}>
-            <FlatList
+      <View style={styles.container}>
+        <FlatList
 
-                data={[
-                    {key: 'Account Information', nav: 'AccountInfo'},
-                    {key: 'Change Password', nav: 'ChangePassword'},
-                    {key: 'Manage Payment', nav: 'ManagePayment'},
-                    {key: 'Share Feedback', nav: 'ShareFeedback'},
-                    {key: 'Delete Account', nav:'DeleteAccount'},
-                    {key: 'Log Out', nav: 'LogOut'}
+          data={[
+            { key: 'Account Information', nav: 'AccountInfo' },
+            { key: 'Change Password', nav: 'ChangePassword' },
+            { key: 'Manage Payment', nav: 'ManagePayment' },
+            { key: 'Share Feedback', nav: 'ShareFeedback' },
+            { key: 'Delete Account', nav: 'DeleteAccount' },
+            { key: 'Log Out', nav: 'LogOut' }
 
-                ]}
+          ]}
 
-                renderItem={({item}) => (
-                    <ListItem
-                        title = {`${item.key}`}
-                        containerStyle={{ borderBottomWidth: 0 }}
-                        onPress={() => { this.props.navigation.navigate(item.nav)}}
-                    />
-                )}
-                ItemSeparatorComponent={this.renderSeparator}
-                ListHeaderComponent={this.renderHeader}
+          renderItem={({ item }) => (
+            <ListItem
+              title={`${item.key}`}
+              containerStyle={{ borderBottomWidth: 0 }}
+              onPress={() => { this.props.navigation.navigate(item.nav)}}
             />
+          )}
+          ItemSeparatorComponent={this.renderSeparator}
+          ListHeaderComponent={this.renderHeader}
+        />
 
-          </View>
-    );
+      </View>
+    )
   }
+
   /*
   renderHeader = () => {
     return <SearchBar placeholder="Type Here..." lightTheme round />;
@@ -50,17 +51,17 @@ export default class SettingsScreen extends React.Component {
 */
   renderSeparator = () => {
     return (
-        <View
-            style={{
-              height: 1,
-              width: "100%",
-              backgroundColor: "#CED0CE",
-              marginLeft: "5%",
-              marginRight: "5%"
-            }}
-        />
-    );
-  };
+      <View
+        style={{
+          height: 1,
+          width: '100%',
+          backgroundColor: '#CED0CE',
+          marginLeft: '5%',
+          marginRight: '5%'
+        }}
+      />
+    )
+  }
 
 
 }
@@ -69,7 +70,7 @@ export default class SettingsScreen extends React.Component {
 const styles = StyleSheet.create({
   item: {
     padding: 10,
-    height:44,
+    height: 44,
   },
   container: {
     flex: 1,

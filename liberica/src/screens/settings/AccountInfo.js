@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import EditUserForm from './forms/EditUserForm'
 
 export class AccountInfo extends React.Component {

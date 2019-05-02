@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form'
 import { compose } from 'redux'
 import React from 'react'
 
-const renderTextField = ({placeholder, input: onChange, value}) => {
+const renderTextField = ({ placeholder, input: onChange, value }) => {
   return <Input
     placeholder={placeholder}
     onChangeText={onChange}
@@ -12,7 +12,7 @@ const renderTextField = ({placeholder, input: onChange, value}) => {
 }
 
 const EditUserForm = props => {
-  const {handleSubmit} = props;
+  const { handleSubmit } = props
   // <View>
   // <Button type="button" onPress={() => load(data)} title="Load Account"/>
   //   </View>
