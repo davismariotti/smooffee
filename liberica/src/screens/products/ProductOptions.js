@@ -1,7 +1,13 @@
 import React from 'react'
 import { Button, Picker, Text, View, StyleSheet } from 'react-native'
 
-export class ProductOptions extends React.Component {
+import { graphql } from 'react-apollo'
+import { readProductModifiers } from '../../graphql/productQuery'
+import LoadScreen from '../LoadScreen'
+import { ListItem, Card } from 'react-native-elements';
+import {formatCurrency} from '../../utils/currencyUtils'
+
+class ProductOptions extends React.Component {
   static navigationOptions = {
     title: 'Options'
   }
@@ -9,10 +15,17 @@ export class ProductOptions extends React.Component {
   render() {
     const {navigation} = this.props
     const itemId = navigation.getParam('itemId', 'NO-ID')
-    const drinkOrdered = navigation.getParam('item', 'error')
+    const drinkSelected = navigation.getParam('item', 'error')
+    const {readProductModifiersResult} = this.props
+
+    if (readProductModifiersResult.loading || readProductModifiersResult.error) {
+      return (
+        <LoadScreen/>
+      )
+    }
     return (
       <View >
-        <Text style={styles.drinkText}>{drinkOrdered}</Text>
+        <Text style={styles.drinkText}>{drinkSelected}</Text>
         <View>
           <Text>Choose Size</Text>
           <Picker style={{height: 50, width: 100}}>
@@ -20,10 +33,22 @@ export class ProductOptions extends React.Component {
             <Picker.Item label="Medium" value="Medium"/>
             <Picker.Item label="Large" value="Large"/>
           </Picker>
-          {/* <CheckBox title="Medium" checked={this.state.checked} />
-            <CheckBox title="Large" checked={this.state.checked} /> */}
         </View>
-
+        <Card containerStyle={{padding:0}}>
+        {readProductModifiersResult.product.list.orderModifiers.map(product => {
+          return (
+            <ListItem 
+            key={product.id}
+             title={product.name} 
+             subtitle={formatCurrency(product.price)}
+             onPress={() => {
+              this.props.navigation.navigate('ProductInformation',
+              {itemId: product.id,
+              item: product.name,
+              })}}/>
+          )
+        })}
+        </Card>
         <Button
           title="Next"
           onPress={() => {
@@ -34,6 +59,18 @@ export class ProductOptions extends React.Component {
     )
   }
 }
+
+export default graphql(readProductModifiers, {
+  name: 'readProductModifiersResult',
+  options: {
+    variables: {
+      organizationId: 3,
+      name: {drinkSelected}
+
+    }
+  }
+})
+(ProductOptions)
 
 const styles = StyleSheet.create({
   drinkText: {

@@ -1,17 +1,9 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
 import { graphql } from 'react-apollo'
 import { readProductQuery } from '../../graphql/productQuery'
 import LoadScreen from '../LoadScreen'
 import { ListItem, Card } from 'react-native-elements';
 import {formatCurrency} from '../../utils/currencyUtils'
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-})
 
 
 
@@ -58,3 +50,5 @@ export default graphql(readProductQuery, {
   }
 })
 (ProductList)
+
+
