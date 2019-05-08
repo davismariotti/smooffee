@@ -84,7 +84,7 @@ class Home extends Component {
             >
               <ListItemText
                 primary="Choose a Class Period"
-                secondary={(selectedDeliveryPeriod && selectedDeliveryPeriod.classPeriod) || 'Please choose one'}
+                secondary={(selectedDeliveryPeriod && selectedDeliveryPeriod.classPeriod) || listDeliveryPeriodsQueryResult.deliveryPeriod.list[0].classPeriod}
               />
             </ListItem>
           </List>
@@ -160,8 +160,29 @@ function mapDispatchToProps(dispatch) {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
+  graphql(listDeliveryPeriodsQuery, {
+    name: 'listDeliveryPeriodsQueryResult',
+    options: {
+      variables: {
+        organizationId: StorageService.getOrganizationId(),
+        parameters: {
+          filter: {
+            eq: {
+              field: 'status',
+              value: Status.ACTIVE
+            }
+          },
+          order: [
+            'classPeriod',
+            'asc'
+          ]
+        }
+      }
+    }
+  }),
   graphql(listOrdersQuery, {
     name: 'listOrdersQueryResult',
+    skip: ({listDeliveryPeriodsQueryResult}) => !listDeliveryPeriodsQueryResult.deliveryPeriod,
     options: props => {
       return {
         notifyOnNetworkStatusChange: true,
@@ -179,32 +200,12 @@ export default compose(
                 {
                   eq: {
                     field: 'deliveryPeriod.id',
-                    value: (props.selectedDeliveryPeriod && String(props.selectedDeliveryPeriod.id) || '0')
+                    value: (props.selectedDeliveryPeriod && String(props.selectedDeliveryPeriod.id) || props.listDeliveryPeriodsQueryResult.deliveryPeriod.list[0].id.toString())
                   }
                 }
               ]
             }
           }
-        }
-      }
-    }
-  }),
-  graphql(listDeliveryPeriodsQuery, {
-    name: 'listDeliveryPeriodsQueryResult',
-    options: {
-      variables: {
-        organizationId: StorageService.getOrganizationId(),
-        parameters: {
-          filter: {
-            eq: {
-              field: 'status',
-              value: Status.ACTIVE
-            }
-          },
-          order: [
-            'classPeriod',
-            'asc'
-          ]
         }
       }
     }
