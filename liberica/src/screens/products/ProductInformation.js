@@ -1,16 +1,23 @@
 import React from 'react'
-import { Button, ScrollView, Text } from 'react-native'
+import { Button, ScrollView, Text, StyleSheet } from 'react-native'
+import { Card, ListItem } from 'react-native-elements'
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import OrderActions from './actions';
+import ProductOptions from './ProductOptions';
 
-
-export default class ProductInformation extends React.Component {
+ class ProductInformation extends React.Component {
   static navigationOptions = {
     title: 'Information'
   }
 
   render() {
+    const { navigation } = this.props
+    const product = navigation.getParam('product', {})
     return (
       <ScrollView style={styles.container}>
-        <Text>Finalize Order with notes, location, and delivery time</Text>
+        <Text>{product.name}</Text>
+        <Text>{this.props.</Text>
         <Button
           title="Submit"
           onPress={() => {
@@ -21,4 +28,25 @@ export default class ProductInformation extends React.Component {
     )
   }
 }
+
+const mapStateToProps = ({order}) => {
+  return {
+    selectedSize: order.size,
+    selectedOrderModifiers: order.orderModifiers
+  }
+}
+
+
+export default compose(
+  connect(mapStateToProps)
+)(ProductInformation)
   
+
+const styles = StyleSheet.create({
+  drinkText: {
+    fontSize: 30,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 34,
+    textAlign: 'center'
+  },
+})
