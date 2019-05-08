@@ -58,6 +58,14 @@ public class QLOrganization {
 
             return new OrganizationEntry(organization);
         }
+
+        public OrganizationEntry updateStripeDetails(Long organizationId, String stripePublishableKey, String stripeSecretKey) {
+            Organization organization = Organization.find.byId(organizationId);
+            if (organization == null) throw new QLException("Organization not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_STRIPE_SETTINGS_WRITE, new AuthorizationContext(organization));
+
+            return new OrganizationEntry(OrganizationActions.updateStripeDetails(organization, stripePublishableKey, stripeSecretKey));
+        }
     }
 
     public static class OrganizationInput {
@@ -74,16 +82,22 @@ public class QLOrganization {
 
     public static class OrganizationEntry extends QLEntry {
         private String name;
+        private String stripePublishableKey;
         private Organization organization;
 
         public OrganizationEntry(Organization organization) {
             super(organization);
             this.name = organization.getName();
+            this.stripePublishableKey = organization.getPublisableApiKey();
             this.organization = organization;
         }
 
         public String getName() {
             return name;
+        }
+
+        public String getStripePublishableKey() {
+            return stripePublishableKey;
         }
 
         public List<QLProduct.ProductEntry> getProducts() {
@@ -99,6 +113,29 @@ public class QLOrganization {
         public List<QLDeliveryPeriod.DeliveryPeriodEntry> getDeliveryPeriods() {
             Permission.check(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ, new AuthorizationContext(organization));
             return organization.getDeliveryPeriods().stream().map(QLDeliveryPeriod.DeliveryPeriodEntry::new).collect(Collectors.toList());
+        }
+
+        public StripeDetails stripeDetails() {
+            Permission.check(Permission.THIS_ORGANIZATION_STRIPE_SETTINGS_READ, new AuthorizationContext(organization));
+            return new StripeDetails(organization);
+        }
+    }
+
+    public static class StripeDetails {
+        private String stripePublishableKey;
+        private String stripeSecretKey;
+
+        public StripeDetails(Organization organization) {
+            this.stripePublishableKey = organization.getPublisableApiKey();
+            this.stripeSecretKey = organization.getSecretApiKey();
+        }
+
+        public String getStripePublishableKey() {
+            return stripePublishableKey;
+        }
+
+        public String getStripeSecretKey() {
+            return stripeSecretKey;
         }
     }
 }

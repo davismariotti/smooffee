@@ -6,6 +6,13 @@ type OrganizationEntry {
     deliveryPeriods: [DeliveryPeriodEntry!]!
     users: [UserEntry!]!
     createdAt: String!
+    stripePublishableKey: String
+    stripeDetails: StripeDetails!
+}
+
+type StripeDetails {
+    stripePublishableKey: String
+    stripeSecretKey: String
 }
 
 input OrganizationInput {
@@ -21,4 +28,5 @@ type OrganizationMutation {
     create(input: OrganizationInput!): OrganizationEntry!
     update(organizationId: Long!, organizationInput: OrganizationInput!): OrganizationEntry!
     updateStatus(organizationId: Long!, status: String!): OrganizationEntry!
+    updateStripeDetails(organizationId: Long!, stripePublishableKey: String, stripeSecretKey: String): OrganizationEntry!
 }
