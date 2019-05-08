@@ -5,17 +5,20 @@ import UserList from './components/UserList'
 import OrganizationDetails from './components/OrganizationDetails'
 import DeliveryPeriodList from './components/DeliveryPeriodList'
 import OrderModifierList from './components/OrderModifierList'
+import { AuthService } from '../../services/AuthService'
+import { ADMIN } from '../../utils/role'
 
 class OrganizationSettings extends Component {
   render() {
+    console.log('has', AuthService.userHasRole(ADMIN))
     return (
       <div>
         <OrganizationName/>
-        <OrganizationDetails/>
+        {AuthService.userHasRole(ADMIN) && <OrganizationDetails/>}
         <DeliveryPeriodList/>
         <ProductList/>
         <OrderModifierList/>
-        <UserList/>
+        {AuthService.userHasRole(ADMIN) && <UserList/>}
       </div>
     )
   }

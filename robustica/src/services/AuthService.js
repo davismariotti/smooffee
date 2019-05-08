@@ -2,6 +2,8 @@ import * as firebase from 'firebase'
 import history from '../utils/history'
 import { SYSADMIN } from '../utils/role'
 import { StorageService } from './StorageService'
+import { client } from './apollo'
+import { readCurrentUserQuery } from '../graphql/userQueries'
 
 const config = {
   apiKey: 'AIzaSyBqHXy9cnVIfxuEQ1rO-V2eiZNC873xenY',

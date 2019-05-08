@@ -58,10 +58,6 @@ export default compose(
     form: 'organizationDetailsForm'
   }),
   connect(state => ({
-    enableReinitialize: true,
-    initialValues: {
-      stripe_sk: 'sk_test_3tvt76xb73nkuczbtk5evxwk',
-      stripe_pk: 'pk_test_fgskb3ibyfly83yvfbink37B'
-    }
+    enableReinitialize: true
   }))
 )(OrganizationDetailsForm)
