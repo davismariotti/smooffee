@@ -64,6 +64,7 @@ public class QLOrderTest {
         assertEquals(1, entry.getOrderModifiers().size());
         assertEquals("Caramel Syrup", entry.getOrderModifiers().get(0).getName());
         assertEquals(Setup.defaultOrderModifier.getId(), entry.getOrderModifiers().get(0).getId());
+        assertEquals(750, entry.getTotalCost().intValue());
 
         // Make sure funds were deducted
         Result result = FakeApplication.routeGraphQLRequest(String.format(
@@ -102,7 +103,7 @@ public class QLOrderTest {
     @Test
     public void readOrderTest() {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { read(id: %d) { id location notes product { id } deliveryPeriod { id classPeriod } status recipient } } }",
+                "query { order { read(id: %d) { id location notes product { id } deliveryPeriod { id classPeriod } status recipient totalCost } } }",
                 orderId
         ));
         assertNotNull(result);
@@ -118,6 +119,7 @@ public class QLOrderTest {
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
         assertEquals(Setup.defaultDeliveryPeriod.getId(), entry.getDeliveryPeriod().getId());
         assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
+        assertEquals(750, entry.getTotalCost().intValue());
     }
 
     @Test
@@ -134,7 +136,7 @@ public class QLOrderTest {
         createOrder(orderInput);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id location notes product { id } status recipient } } }",
+                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id location notes product { id } status recipient totalCost } } }",
                 Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
@@ -147,10 +149,12 @@ public class QLOrderTest {
         assertEquals("HUB", entries[0].getLocation());
         assertEquals("Notes", entries[0].getNotes());
         assertEquals("Davis Mariotti", entries[0].getRecipient());
+        assertNotNull(entries[0].getTotalCost());
 
         assertEquals("EJ308", entries[1].getLocation());
         assertEquals("Other notes", entries[1].getNotes());
         assertEquals("Tom Dale", entries[1].getRecipient());
+        assertNotNull(entries[1].getTotalCost());
     }
 
     @Test
@@ -192,7 +196,7 @@ public class QLOrderTest {
         FakeApplication.authToken.push(tempToken);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { updateStatus(orderId: %d, status: %s) { id status } } }",
+                "mutation { order { updateStatus(orderId: %d, status: %s) { id status totalCost } } }",
                 entry.getId(),
                 QL.prepare(BaseModel.CANCELLED_STR)
         ));
@@ -232,7 +236,7 @@ public class QLOrderTest {
 
     public static QLOrder.OrderEntry createOrder(String userId, QLOrder.OrderInput input) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status product { id } deliveryPeriod { id } orderModifiers { id name } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status totalCost product { id } deliveryPeriod { id } orderModifiers { id name } } } }",
                 QL.prepare(userId),
                 QL.prepare(input)
         ));
@@ -253,7 +257,7 @@ public class QLOrderTest {
 
     public static QLOrder.OrderEntry updateOrderStatus(Long orderId, String status) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { updateStatus(orderId: %d, status: %s) { id status } } }",
+                "mutation { order { updateStatus(orderId: %d, status: %s) { id status totalCost } } }",
                 orderId,
                 QL.prepare(status)
         ));

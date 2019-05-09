@@ -42,6 +42,8 @@ public class Order extends BaseModel {
 
     private String notes;
 
+    private Integer totalCost;
+
     public User getUser() {
         return user;
     }
@@ -102,6 +104,15 @@ public class Order extends BaseModel {
 
     public Order setOrderModifiers(Set<OrderModifier> orderModifiers) {
         this.orderModifiers = orderModifiers;
+        return this;
+    }
+
+    public Integer getTotalCost() {
+        return totalCost;
+    }
+
+    public Order setTotalCost(Integer totalCost) {
+        this.totalCost = totalCost;
         return this;
     }
 

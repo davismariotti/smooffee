@@ -45,7 +45,8 @@ public class QLOrderModifier {
 
             return new OrderModifierEntry(OrderModifierActions.createOrderModifier(
                     organization,
-                    orderModifierInput.getName()
+                    orderModifierInput.getName(),
+                    orderModifierInput.getAdditionalCost()
             ));
         }
 
@@ -57,7 +58,8 @@ public class QLOrderModifier {
 
             return new OrderModifierEntry(OrderModifierActions.updateOrderModifier(
                     orderModifier,
-                    orderModifierInput.getName()
+                    orderModifierInput.getName(),
+                    orderModifierInput.getAdditionalCost()
             ));
         }
 
@@ -74,7 +76,7 @@ public class QLOrderModifier {
 
     public static class OrderModifierInput {
         private String name;
-
+        private Integer additionalCost;
 
         public String getName() {
             return name;
@@ -83,19 +85,32 @@ public class QLOrderModifier {
         public void setName(String name) {
             this.name = name;
         }
+
+        public Integer getAdditionalCost() {
+            return additionalCost;
+        }
+
+        public void setAdditionalCost(Integer additionalCost) {
+            this.additionalCost = additionalCost;
+        }
     }
 
     public static class OrderModifierEntry extends QLEntry {
-
         private String name;
+        private Integer additionalCost;
 
         public OrderModifierEntry(OrderModifier orderModifier) {
             super(orderModifier);
             this.name = orderModifier.getName();
+            this.additionalCost = orderModifier.getAdditionalCost();
         }
 
         public String getName() {
             return name;
+        }
+
+        public Integer getAdditionalCost() {
+            return additionalCost;
         }
     }
 }

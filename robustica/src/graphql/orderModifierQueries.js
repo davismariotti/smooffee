@@ -7,6 +7,7 @@ query ListOrderModifier($organizationId: Long!, $parameters: QLFinder) {
       id
       status
       name
+      additionalCost
     }
   }
 }

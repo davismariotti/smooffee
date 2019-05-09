@@ -1,11 +1,13 @@
 input OrderModifierInput {
     name: String!
+    additionalCost: Int!
 }
 
 type OrderModifierEntry {
     id: Long!
     status: String!
     name: String!
+    additionalCost: Int!
     createdAt: String!
 }
 
