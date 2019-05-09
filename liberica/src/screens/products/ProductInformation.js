@@ -17,7 +17,8 @@ import ProductOptions from './ProductOptions';
     return (
       <ScrollView style={styles.container}>
         <Text>{product.name}</Text>
-        <Text>{this.props.</Text>
+        <Text>{this.props.selectedSize}</Text>
+        <Text>{this.props.selectedOrderModifiers}</Text>
         <Button
           title="Submit"
           onPress={() => {

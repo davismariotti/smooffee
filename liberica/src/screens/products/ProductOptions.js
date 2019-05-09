@@ -11,11 +11,13 @@ class ProductOptions extends React.Component {
     title: 'Options'
   }
 
-  static getProductName() {
-    return this.product.name
+  state ={size: 'Small'}
+  //TODO: need to deal with case where user does not change size
+  changeSize(itemValue) {
+      this.props.selectSize(itemValue) 
+      this.setState({size: itemValue}) 
+    
   }
-
-  
   render() {
     const { navigation, selectedOrderModifiers } = this.props
     const product = navigation.getParam('product', {}) 
@@ -24,10 +26,14 @@ class ProductOptions extends React.Component {
         <Text style={styles.drinkText}>{product.name}</Text>
         <View>
           <Text>Choose Size</Text>
-          <Picker style={{ height: 50, width: 100 }}>
-            <Picker.Item label="Small" value="Small"/>
-            <Picker.Item label="Medium" value="Medium"/>
-            <Picker.Item label="Large" value="Large"/>
+          <Picker
+             style={{ height: 50, width: 100 }}
+             selectedValue={this.state.size}
+             onValueChange={ (itemValue) => this.changeSize(itemValue)}
+          >
+            <Picker.Item id='1' label="Small" value="Small"/>
+            <Picker.Item id='2' label="Medium" value="Medium"/>
+            <Picker.Item id='3' label="Large" value="Large"/>
           </Picker>
         </View>
         <View>
@@ -39,7 +45,7 @@ class ProductOptions extends React.Component {
                   title={orderModifier.name}
                   selected = {selectedOrderModifiers.includes(orderModifier.id)}
                   onPress={() => {
-                    this.props.selectOrderModifier(orderModifier.id)
+                    this.props.selectOrderModifier(orderModifier.name)
                   }}/>
               )
             })}
