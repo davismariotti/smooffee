@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import {ApolloProvider, Mutation, qraphql} from 'react-apollo'
 
 export const readProductsQuery = gql`
 query ReadProducts($organizationId: Long!) {
@@ -19,13 +18,11 @@ query ReadProducts($organizationId: Long!) {
 }
 `
 export const newOrderMutation = gql`
-mutation submitNewOrder($organizationId:Long!,
-  $userId:Long!,
-  $productId:Long!,
-  $sizeId:Long!,
-  $orderModifiers: orderModifiers!){
-    newOrder(userId:$userId,productId:$productId,sizeId:$sizeId,orderModifiers:$orderModifiers){
+mutation createOrder($userId: String!, $orderInput: OrderInput!) {
+  order {
+    create(userId: $userId, orderInput: $orderInput) {
       id
     }
-  
-}`
+  }
+}
+`

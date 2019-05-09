@@ -1,27 +1,24 @@
 import React from 'react'
-import { Button, ScrollView, Text, StyleSheet } from 'react-native'
-import { Card, ListItem } from 'react-native-elements'
+import { Button, ScrollView, StyleSheet, Text } from 'react-native'
 import { graphql } from 'react-apollo'
-import { readProductsQuery, newOrderMutation } from '../../graphql/productQueries'
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import OrderActions from './actions';
-import ProductOptions from './ProductOptions';
-import { readCurrentUserQuery } from '../../graphql/userQueries';
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { readCurrentUserQuery } from '../../graphql/userQueries'
+import { newOrderMutation } from '../../graphql/productQueries'
 
- class ProductInformation extends React.Component {
+class ProductInformation extends React.Component {
   static navigationOptions = {
     title: 'Information'
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, readCurrentUserQueryResult } = this.props
     const product = navigation.getParam('product', {})
     const balance = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.balance)
     const id = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.id)
     const firstName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.firstName) || ''
     const lastName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.lastName) || ''
-    
+
     return (
       <ScrollView style={styles.container}>
       <Text>{firstName} "  " {lastName}</Text>
@@ -39,7 +36,7 @@ import { readCurrentUserQuery } from '../../graphql/userQueries';
   }
 }
 
-const mapStateToProps = ({order}) => {
+const mapStateToProps = ({ order }) => {
   return {
     selectedSize: order.size,
     selectedOrderModifiers: order.orderModifiers
@@ -48,22 +45,11 @@ const mapStateToProps = ({order}) => {
 
 
 export default compose(
+  graphql(readCurrentUserQuery, {
+    name: 'readCurrentUserQueryResult'
+  }),
   connect(mapStateToProps),
-  graphql(newOrderMutation),
-  graphql(readCurrentUserQuery), {
-    name: 'readCurrentUserQueryResult',
-    options:{
-      variables:
-      organizationId:3,
-      parameters:{
-
-      }
-    }
-  }
-    )
-  
-(ProductInformation)
-  
+)(ProductInformation)
 
 
 const styles = StyleSheet.create({
