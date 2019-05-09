@@ -106,6 +106,7 @@ public class QLOrder {
         private String location;
         private String notes;
         private String recipient;
+        private Integer totalCost;
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
         private RefundEntry refund;
@@ -117,6 +118,7 @@ public class QLOrder {
             this.location = order.getLocation();
             this.notes = order.getNotes();
             this.recipient = order.getRecipient();
+            this.totalCost = order.getTotalCost();
         }
 
         public String getLocation() {
@@ -129,6 +131,10 @@ public class QLOrder {
 
         public String getNotes() {
             return notes;
+        }
+
+        public Integer getTotalCost() {
+            return totalCost;
         }
 
         public QLProduct.ProductEntry getProduct() {

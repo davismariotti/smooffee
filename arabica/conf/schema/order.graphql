@@ -12,6 +12,7 @@ type OrderEntry {
     status: String!
     location: String!
     notes: String
+    totalCost: Int!
     product: ProductEntry!
     recipient: String!
     deliveryPeriod: DeliveryPeriodEntry!

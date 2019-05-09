@@ -24,6 +24,8 @@ public class OrderModifier extends BaseModel {
     @ManyToMany(mappedBy = "orderModifiers")
     private Set<Product> products;
 
+    private Integer additionalCost;
+
     private Set<Product> getProducts() {
         return products;
     }
@@ -43,6 +45,15 @@ public class OrderModifier extends BaseModel {
 
     public OrderModifier setOrganization(Organization organization) {
         this.organization = organization;
+        return this;
+    }
+
+    public Integer getAdditionalCost() {
+        return additionalCost;
+    }
+
+    public OrderModifier setAdditionalCost(Integer additionalCost) {
+        this.additionalCost = additionalCost;
         return this;
     }
 

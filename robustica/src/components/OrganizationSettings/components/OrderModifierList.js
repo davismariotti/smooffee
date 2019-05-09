@@ -14,6 +14,7 @@ import { editOrderModifierStatusMutation, listOrderModifiersQuery } from '../../
 import { StorageService } from '../../../services/StorageService'
 import Status from '../../../utils/Status'
 import EditOrderModifierModal from '../modals/EditOrderModifierModal'
+import { formatCurrency } from '../../../utils/currencyUtils'
 
 
 const styles = {
@@ -51,6 +52,7 @@ class OrderModifierList extends Component {
         <TableHead>
           <TableRow>
             <TableCell align="left">Name</TableCell>
+            <TableCell align="right">Additional Cost</TableCell>
             <TableCell align="right">Available?</TableCell>
             <TableCell align="right">Options</TableCell>
           </TableRow>
@@ -72,6 +74,9 @@ class OrderModifierList extends Component {
                 <TableRow key={orderModifierItem.id} className={orderModifierItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                   <TableCell align="left" className={orderModifierItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
                     {orderModifierItem.name}
+                  </TableCell>
+                  <TableCell align="right" className={orderModifierItem.status !== Status.ACTIVE ? classes.tableRowDisabled : null}>
+                    {`$${formatCurrency(orderModifierItem.additionalCost)}`}
                   </TableCell>
                   <TableCell align="right">
                     <Checkbox checked={orderModifierItem.status === Status.ACTIVE} onChange={() => {

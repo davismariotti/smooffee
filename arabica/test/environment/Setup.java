@@ -83,6 +83,7 @@ public class Setup {
     public static void createDefaultOrderModifier() {
         defaultOrderModifier = new OrderModifier()
                 .setName("Caramel Syrup")
+                .setAdditionalCost(150)
                 .setOrganization(defaultOrganization)
                 .store();
     }

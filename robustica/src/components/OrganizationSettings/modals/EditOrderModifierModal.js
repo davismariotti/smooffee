@@ -45,6 +45,7 @@ class EditOrderModifierModal extends Component {
     const submit = values => {
       const orderModifierInput = {
         name: values.name,
+        additionalCost: values.additionalCost
       }
       if (editOrderModifier) {
         editOrderModifierMutate({

@@ -20,9 +20,13 @@ public class OrderActions {
             if (currentQueueSize >= deliveryPeriod.getMaxQueueSize()) throw new QLException("Max queue size reached");
         }
 
+        // Get total cost of the order
+        int totalCost = product.getPrice() + orderModifiers.stream().mapToInt(OrderModifier::getAdditionalCost).sum();
+
+
         user.setBalance(balance - product.getPrice());
 
-        Order order = new Order()
+        return new Order()
                 .setProduct(product)
                 .setDeliveryPeriod(deliveryPeriod)
                 .setUser(user)
@@ -30,12 +34,9 @@ public class OrderActions {
                 .setNotes(notes)
                 .setRecipient(recipient)
                 .setOrderModifiers(orderModifiers)
+                .setTotalCost(totalCost)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
-
-        user.save();
-
-        return order;
     }
 
     public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, Set<OrderModifier> orderModifiers) {
