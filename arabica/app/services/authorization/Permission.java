@@ -74,6 +74,7 @@ public class Permission {
             add(Permission.OTHER_USER_INFO_READ);
             add(Permission.OTHER_USER_INFO_WRITE);
             add(Permission.OTHER_USER_PAYMENT_READ);
+            add(Permission.OTHER_USER_PAYMENT_WRITE);
             add(Permission.OTHER_USER_ORDER_READ);
             add(Permission.OTHER_USER_ORDER_WRITE);
 
