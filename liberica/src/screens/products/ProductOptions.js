@@ -3,7 +3,11 @@ import { Button, Picker, StyleSheet, Text, View } from 'react-native'
 import { Card, ListItem } from 'react-native-elements'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { graphql } from 'react-apollo'
 import OrderActions from './actions'
+import { listDeliveryPeriodsQuery } from '../../graphql/deliveryPeriodQueries'
+import LoadScreen from '../LoadScreen'
+import Status from '../../utils/Status'
 
 
 class ProductOptions extends React.Component {
@@ -21,8 +25,15 @@ class ProductOptions extends React.Component {
   }
 
   render() {
-    const { navigation, selectedOrderModifiers } = this.props
+    const { navigation, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
     const product = navigation.getParam('product', {})
+
+    if (!listDeliveryPeriodsQueryResult.deliveryPeriod) {
+      return (
+        <LoadScreen/>
+      )
+    }
+
     return (
       <View>
         <Text style={styles.drinkText}>{product.name}</Text>
@@ -79,7 +90,27 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(listDeliveryPeriodsQuery, {
+    name: 'listDeliveryPeriodsQueryResult',
+    options: {
+      variables: {
+        organizationId: 3,
+        parameters: {
+          filter: {
+            eq: {
+              field: 'status',
+              value: Status.ACTIVE
+            }
+          },
+          order: [
+            'classPeriod',
+            'asc'
+          ]
+        }
+      }
+    }
+  }),
 )(ProductOptions)
 
 const styles = StyleSheet.create({
