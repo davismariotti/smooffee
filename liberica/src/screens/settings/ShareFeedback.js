@@ -1,7 +1,11 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import FeedbackForm from './forms/FeedbackForm'
+import { compose } from 'redux'
+import { graphql } from 'react-apollo'
+import { sendFeedbackMutation } from '../../graphql/userQueries'
 
-export class ShareFeedback extends React.Component {
+class ShareFeedback extends React.Component {
   static navigationOptions = {
     title: 'Share Feedback'
   }
@@ -34,10 +38,28 @@ export class ShareFeedback extends React.Component {
   })
 
   render() {
+    const { sendFeedbackMutate } = this.props
+
+    const submit = values => {
+      sendFeedbackMutate({
+        variables: {
+          message: values.message
+        }
+      }).then(() => {
+        this.props.navigation.goBack()
+      })
+    }
+
     return (
       <View>
-
+        <FeedbackForm onSubmit={submit}/>
       </View>
     )
   }
 }
+
+export default compose(
+  graphql(sendFeedbackMutation, {
+    name: 'sendFeedbackMutate'
+  })
+)(ShareFeedback)
