@@ -16,7 +16,23 @@ query ReadCurrentUser {
   }
 }
 `
-export const creatUserMutation = gql`
+
+export const readUserCardsQuery = gql`
+query ReadUserCards {
+  user {
+    currentUser {
+      id
+      cards {
+        stripeCardId
+        last4
+        brand
+      }
+    }
+  }
+}
+`
+
+export const createUserMutation = gql`
 mutation CreateUser($organizationId:Long!,$userInput:UserInput!) {
   user{
     create(organizationId:$organizationId,userInput:$userInput) {
@@ -46,6 +62,16 @@ query ReadOrders {
           description
         }
       }
+    }
+  }
+}
+`
+
+export const attachCardMutation = gql`
+mutation AttachCard($userId: String!, $stripeToken: String!) {
+  user {
+    attachCard(userId: $userId, stripeToken: $stripeToken) {
+      stripeCardId
     }
   }
 }

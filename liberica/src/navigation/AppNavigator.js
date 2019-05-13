@@ -2,12 +2,12 @@ import React from 'react'
 import { Platform } from 'react-native'
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
-import HomeScreen from '../screens/HomeScreen'
+import HomeScreen from '../screens/home/HomeScreen'
 import LoginScreen from '../screens/auth/LoginScreen'
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen'
 import NewUserScreen from '../screens/auth/NewUserScreen'
 import { ChangePassword } from '../screens/settings/ChangePassword'
-import { ManagePayment } from '../screens/settings/ManagePayment'
+import ManagePayment from '../screens/settings/ManagePayment'
 import { ShareFeedback } from '../screens/settings/ShareFeedback'
 import { DeleteAccount } from '../screens/settings/DeleteAccount'
 import { AccountInfo } from '../screens/settings/AccountInfo'
@@ -16,6 +16,7 @@ import SettingsScreen from '../screens/settings/SettingsScreen'
 import ProductList from '../screens/products/ProductList'
 import ProductInformation from '../screens/products/ProductInformation'
 import ProductOptions from '../screens/products/ProductOptions'
+import AddToBalanceScreen from '../screens/home/AddToBalanceScreen'
 
 const AuthStack = createStackNavigator({
   LoginScreen,
@@ -23,7 +24,8 @@ const AuthStack = createStackNavigator({
   NewUserScreen,
 })
 const HomeStack = createStackNavigator({
-  Home: HomeScreen
+  Home: HomeScreen,
+  AddToBalance: AddToBalanceScreen
 })
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',

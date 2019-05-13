@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Picker, StyleSheet, Text, View } from 'react-native'
 import { Card, ListItem } from 'react-native-elements'
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import OrderActions from './actions';
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import OrderActions from './actions'
 
 
 class ProductOptions extends React.Component {
@@ -11,25 +11,27 @@ class ProductOptions extends React.Component {
     title: 'Options'
   }
 
-  state ={size: 'Small'}
+  state = { size: 'Small' }
+
   //TODO: need to deal with case where user does not change size
   changeSize(itemValue) {
-      this.props.selectSize(itemValue) 
-      this.setState({size: itemValue}) 
-    
+    this.props.selectSize(itemValue)
+    this.setState({ size: itemValue })
+
   }
+
   render() {
     const { navigation, selectedOrderModifiers } = this.props
-    const product = navigation.getParam('product', {}) 
+    const product = navigation.getParam('product', {})
     return (
       <View>
         <Text style={styles.drinkText}>{product.name}</Text>
         <View>
           <Text>Choose Size</Text>
           <Picker
-             style={{ height: 50, width: 100 }}
-             selectedValue={this.state.size}
-             onValueChange={ (itemValue) => this.changeSize(itemValue)}
+            style={{ height: 50, width: 100 }}
+            selectedValue={this.state.size}
+            onValueChange={(itemValue) => this.changeSize(itemValue)}
           >
             <Picker.Item id='1' label="Small" value="Small"/>
             <Picker.Item id='2' label="Medium" value="Medium"/>
@@ -43,7 +45,7 @@ class ProductOptions extends React.Component {
                 <ListItem
                   key={orderModifier.id}
                   title={orderModifier.name}
-                  selected = {selectedOrderModifiers.includes(orderModifier.id)}
+                  selected={selectedOrderModifiers.includes(orderModifier.id)}
                   onPress={() => {
                     this.props.selectOrderModifier(orderModifier.name)
                   }}/>
@@ -54,7 +56,7 @@ class ProductOptions extends React.Component {
         <Button
           title="Next"
           onPress={() => {
-            this.props.navigation.navigate('ProductInformation',{product})
+            this.props.navigation.navigate('ProductInformation', { product })
           }}
         />
       </View>
@@ -62,7 +64,7 @@ class ProductOptions extends React.Component {
   }
 }
 
-const mapStateToProps = ({order}) => {
+const mapStateToProps = ({ order }) => {
   return {
     selectedSize: order.size,
     selectedOrderModifiers: order.orderModifiers

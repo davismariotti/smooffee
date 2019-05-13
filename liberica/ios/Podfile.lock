@@ -116,6 +116,9 @@ PODS:
     - React/RCTBlob
   - RNGestureHandler (1.1.0):
     - React
+  - RNVectorIcons (6.4.2):
+    - React
+  - Stripe (14.0.0)
   - yoga (0.59.6.React)
 
 DEPENDENCIES:
@@ -135,6 +138,8 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - Stripe (~> 14.0.0)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -150,6 +155,7 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMSessionFetcher
     - nanopb
+    - Stripe
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -162,6 +168,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -182,8 +190,10 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   React: 0bb58efca577aa4b3c8f03a9fbf0d9a8ebdb5ac4
   RNGestureHandler: b65d391f4f570178d657b99a16ec99d09b8656b0
+  RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
+  Stripe: db29ad197c74aca6fb981e4e8355cf7ebd0fca5a
   yoga: 8dacc3c5977cb8e07c346e203bb5f4ffe01296df
 
-PODFILE CHECKSUM: e71b8180ac4faa388a7252300f615a82be3c517a
+PODFILE CHECKSUM: e5456f88ebc423fe912add8d7eadbb2996662162
 
 COCOAPODS: 1.6.0
