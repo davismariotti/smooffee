@@ -17,3 +17,12 @@ query ReadProducts($organizationId: Long!) {
   }
 }
 `
+export const newOrderMutation = gql`
+mutation createOrder($userId: String!, $orderInput: OrderInput!) {
+  order {
+    create(userId: $userId, orderInput: $orderInput) {
+      id
+    }
+  }
+}
+`

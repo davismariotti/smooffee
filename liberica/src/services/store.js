@@ -1,9 +1,11 @@
 import { combineReducers, createStore } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 import authReducer from '../screens/auth/reducer'
+import orderReducer from '../screens/products/reducer'
 
 const reducerList = [
   authReducer,
+  orderReducer,
 ]
 
 function reducers() {

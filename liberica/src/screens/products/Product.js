@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { Text, View, } from 'react-native'
 
 class Product extends Component {
-  handleOptionsButton() {
-
-  }
-
   render() {
     return (
       <View>
