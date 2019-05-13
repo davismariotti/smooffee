@@ -23,6 +23,7 @@ target 'liberica' do
   pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
 
   # Pods for liberica
+  pod 'Stripe', '~> 14.0.0'
   pod 'Firebase/Core', '~> 5.15.0'
   pod 'Firebase/Auth', '~> 5.15.0'
 
@@ -33,5 +34,7 @@ target 'liberica' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'tipsi-stripe', :path => '../node_modules/tipsi-stripe'
 
 end

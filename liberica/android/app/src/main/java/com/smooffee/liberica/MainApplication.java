@@ -3,6 +3,7 @@ package com.smooffee.liberica;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.gettipsi.stripe.StripeReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.asList(
                     new MainReactPackage(),
+                    new StripeReactPackage(),
                     new VectorIconsPackage(),
                     new RNGestureHandlerPackage(),
                     new RNFirebasePackage(),

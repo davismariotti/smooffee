@@ -1,10 +1,10 @@
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { List, ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { AccountInfo } from './AccountInfo'
 import { ChangePassword } from './ChangePassword'
 import { ShareFeedback } from './ShareFeedback'
-import { ManagePayment } from './ManagePayment'
+import ManagePayment from './ManagePayment'
 import { DeleteAccount } from './DeleteAccount'
 import { LogOut } from './LogOut'
 

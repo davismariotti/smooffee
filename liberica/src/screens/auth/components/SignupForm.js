@@ -42,5 +42,5 @@ class LoginFormRF extends Component {
 }
 
 export default reduxForm({
-  form: 'loginForm'
+  form: 'signUpForm'
 })(LoginFormRF)

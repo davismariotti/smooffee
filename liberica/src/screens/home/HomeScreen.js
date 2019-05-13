@@ -1,10 +1,10 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import ScrollingOrders from './home/components/ScrollingOrders'
+import { Image, StyleSheet, Text, View, Button } from 'react-native'
+import ScrollingOrders from './components/ScrollingOrders'
 import { graphql } from 'react-apollo'
-import { readCurrentUserQuery } from '../graphql/userQueries'
-import { formatCurrency } from '../utils/currencyUtils'
-import LoadScreen from './LoadScreen'
+import { readCurrentUserQuery } from '../../graphql/userQueries'
+import { formatCurrency } from '../../utils/currencyUtils'
+import LoadScreen from '../LoadScreen'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -32,7 +32,7 @@ class HomeScreen extends React.Component {
         <View style={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
             <Image
-              source={require('../assets/images/Cup.png')}
+              source={require('../../assets/images/Cup.png')}
               style={styles.logoImage}
             />
             <Text style={styles.usernameText}>{`${firstName} ${lastName}`}</Text>
@@ -40,6 +40,7 @@ class HomeScreen extends React.Component {
             <Text style={styles.currentBalanceText}>
               Current Balance: {formatCurrency(balance)}
             </Text>
+            <Button title="Add to Balance" onPress={() => this.props.navigation.navigate('AddToBalance')}/>
           </View>
           <ScrollingOrders style={styles.scrollingContainer}/>
         </View>

@@ -4,7 +4,7 @@ import AuthActions from '../actions'
 import { StorageService } from '../../../services/StorageService'
 import firebase from 'react-native-firebase'
 import NavigationService from '../../../services/NavigationService'
-import { creatUserMutation, readCurrentUserQuery } from '../../../graphql/userQueries'
+import { createUserMutation, readCurrentUserQuery } from '../../../graphql/userQueries'
 
 
 export default class AuthMiddleware {
@@ -20,7 +20,7 @@ export default class AuthMiddleware {
           .then(() => {
             dispatch(AuthActions.signUpSuccess())
             return client.mutate({
-              mutation: creatUserMutation,
+              mutation: createUserMutation,
               variables: {
                 organizationId: 3,
                 userInput: {

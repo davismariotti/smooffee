@@ -20,6 +20,7 @@
     "react-art": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-native": "^0.59.6",
+    "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^1.1.0",
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.1.0",
@@ -30,7 +31,9 @@
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
     "redux-form": "^8.2.0",
+    "redux-form-input-masks": "^2.0.1",
     "seamless-immutable": "^7.1.4",
+    "tipsi-stripe": "^7.5.0",
     "validator": "^10.11.0"
   },
   "devDependencies": {
