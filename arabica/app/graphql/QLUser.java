@@ -10,6 +10,7 @@ import services.AuthenticationService;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import services.authorization.Role;
+import utilities.MailGunEmailProvider;
 import utilities.QLException;
 import utilities.QLFinder;
 import utilities.ThreadStorage;
@@ -112,6 +113,23 @@ public class QLUser {
             Card card = UserActions.addStripeCardToUser(user, stripeToken);
 
             return new CardEntry(card);
+        }
+
+        public String feedback(String message) {
+            // Get the calling user
+            User user = User.findByFirebaseUid(ThreadStorage.get().uid);
+            if (user == null) throw new QLException("User not found.");
+
+            // Get admins in their organization
+            List<User> admins = User.findAdminsByOrganizationId(user.getOrganization().getId());
+
+            String formattedMessage = String.format("The following feedback was sent by %s %s (id: %s): \n\n%s", user.getFirstName(), user.getLastName(), user.getFirebaseUserId(), message);
+
+            for (User admin : admins) {
+                MailGunEmailProvider.sendEmail(String.format("%s %s", admin.getFirstName(), admin.getLastName()), admin.getEmail(), "Feedback from user", formattedMessage);
+            }
+
+            return "Success!";
         }
     }
 
