@@ -44,6 +44,7 @@ public class QLOrderTest {
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
+        orderInput.setSize("Medium");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
         orderInput.setOrderModifiers(new ArrayList<Long>() {{
@@ -56,6 +57,7 @@ public class QLOrderTest {
         assertEquals("Notes", entry.getNotes());
         assertEquals("HUB", entry.getLocation());
         assertEquals("Davis Mariotti", entry.getRecipient());
+        assertEquals("Medium", entry.getSize());
         assertNotNull(entry.getProduct());
         assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
@@ -86,11 +88,12 @@ public class QLOrderTest {
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
+        orderInput.setSize("Medium");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes product { id } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient size product { id } } } }",
                 QL.prepare(Setup.defaultSysadmin.getFirebaseUserId()),
                 QL.prepare(orderInput)
         ));
@@ -103,7 +106,7 @@ public class QLOrderTest {
     @Test
     public void readOrderTest() {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { read(id: %d) { id location notes product { id } deliveryPeriod { id classPeriod } status recipient totalCost } } }",
+                "query { order { read(id: %d) { id location notes product { id } deliveryPeriod { id classPeriod } status recipient totalCost size } } }",
                 orderId
         ));
         assertNotNull(result);
@@ -114,6 +117,7 @@ public class QLOrderTest {
         assertEquals("HUB", entry.getLocation());
         assertEquals("Notes", entry.getNotes());
         assertEquals("Davis Mariotti", entry.getRecipient());
+        assertEquals("Medium", entry.getSize());
         assertNotNull(entry.getProduct());
         assertNotNull(entry.getDeliveryPeriod());
         assertEquals(Setup.defaultProduct.getId(), entry.getProduct().getId());
@@ -130,13 +134,14 @@ public class QLOrderTest {
         orderInput.setLocation("EJ308");
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
+        orderInput.setSize("Large");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
         createOrder(orderInput);
 
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id location notes product { id } status recipient totalCost } } }",
+                "query { order { list(organizationId: %d, parameters: { filter: { eq: { field: \\\"status\\\", value: \\\"Active\\\" } } }) { id location notes product { id } status recipient size totalCost } } }",
                 Setup.defaultOrganization.getId()
         ));
         assertNotNull(result);
@@ -149,11 +154,13 @@ public class QLOrderTest {
         assertEquals("HUB", entries[0].getLocation());
         assertEquals("Notes", entries[0].getNotes());
         assertEquals("Davis Mariotti", entries[0].getRecipient());
+        assertEquals("Medium", entries[0].getSize());
         assertNotNull(entries[0].getTotalCost());
 
         assertEquals("EJ308", entries[1].getLocation());
         assertEquals("Other notes", entries[1].getNotes());
         assertEquals("Tom Dale", entries[1].getRecipient());
+        assertEquals("Large", entries[1].getSize());
         assertNotNull(entries[1].getTotalCost());
     }
 
@@ -165,6 +172,7 @@ public class QLOrderTest {
         orderInput.setLocation("EJ308");
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
+        orderInput.setSize("Medium");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
@@ -184,6 +192,7 @@ public class QLOrderTest {
         orderInput.setLocation("EJ308");
         orderInput.setNotes("Other notes");
         orderInput.setRecipient("Tom Dale");
+        orderInput.setSize("Medium");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
 
@@ -214,6 +223,7 @@ public class QLOrderTest {
         orderInput.setLocation("HUB");
         orderInput.setNotes("Notes");
         orderInput.setRecipient("Davis Mariotti");
+        orderInput.setSize("Medium");
         orderInput.setDeliveryPeriodId(Setup.defaultDeliveryPeriod.getId());
         orderInput.setProductId(Setup.defaultProduct.getId());
         QLOrder.OrderEntry entry = createOrder(orderInput);
@@ -236,7 +246,7 @@ public class QLOrderTest {
 
     public static QLOrder.OrderEntry createOrder(String userId, QLOrder.OrderInput input) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient status totalCost product { id } deliveryPeriod { id } orderModifiers { id name } } } }",
+                "mutation { order { create(userId: %s, orderInput: %s) { id location notes recipient size status totalCost product { id } deliveryPeriod { id } orderModifiers { id name } } } }",
                 QL.prepare(userId),
                 QL.prepare(input)
         ));
@@ -250,6 +260,7 @@ public class QLOrderTest {
         assertEquals(input.getRecipient(), entry.getRecipient());
         assertEquals(input.getNotes(), entry.getNotes());
         assertEquals(input.getProductId(), entry.getProduct().getId());
+        assertEquals(input.getSize(), entry.getSize());
         assertEquals(BaseModel.ACTIVE_STR, entry.getStatus());
 
         return entry;
@@ -257,7 +268,7 @@ public class QLOrderTest {
 
     public static QLOrder.OrderEntry updateOrderStatus(Long orderId, String status) {
         Result result = FakeApplication.routeGraphQLRequest(String.format(
-                "mutation { order { updateStatus(orderId: %d, status: %s) { id status totalCost } } }",
+                "mutation { order { updateStatus(orderId: %d, status: %s) { id status totalCost size } } }",
                 orderId,
                 QL.prepare(status)
         ));

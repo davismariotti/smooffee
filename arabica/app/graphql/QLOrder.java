@@ -57,7 +57,7 @@ public class QLOrder {
 
             Permission.check(Permission.THIS_USER_ORDER_WRITE, new AuthorizationContext(user));
 
-            return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient(), orderModifiers));
+            return new OrderEntry(OrderActions.createOrder(user, deliveryPeriod, product, orderInput.getLocation(), orderInput.getNotes(), orderInput.getRecipient(), orderInput.getSize(), orderModifiers));
         }
 
         public OrderEntry updateStatus(Long orderId, String status) {
@@ -106,6 +106,7 @@ public class QLOrder {
         private String location;
         private String notes;
         private String recipient;
+        private String size;
         private Integer totalCost;
         private QLProduct.ProductEntry product;
         private QLDeliveryPeriod.DeliveryPeriodEntry deliveryPeriod;
@@ -118,6 +119,7 @@ public class QLOrder {
             this.location = order.getLocation();
             this.notes = order.getNotes();
             this.recipient = order.getRecipient();
+            this.size = order.getSize();
             this.totalCost = order.getTotalCost();
         }
 
@@ -131,6 +133,10 @@ public class QLOrder {
 
         public String getNotes() {
             return notes;
+        }
+
+        public String getSize() {
+            return size;
         }
 
         public Integer getTotalCost() {
@@ -168,6 +174,7 @@ public class QLOrder {
         private String notes;
         private Long productId;
         private String recipient;
+        private String size;
         private Long deliveryPeriodId;
 
         private List<Long> orderModifiers;
@@ -202,6 +209,14 @@ public class QLOrder {
 
         public void setRecipient(String recipient) {
             this.recipient = recipient;
+        }
+
+        public String getSize() {
+            return size;
+        }
+
+        public void setSize(String size) {
+            this.size = size;
         }
 
         public Long getDeliveryPeriodId() {

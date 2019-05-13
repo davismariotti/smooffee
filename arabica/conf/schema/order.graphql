@@ -3,6 +3,7 @@ input OrderInput {
     notes: String
     productId: Long
     recipient: String
+    size: String
     deliveryPeriodId: Long
     orderModifiers: [Long!]
 }
@@ -15,6 +16,7 @@ type OrderEntry {
     totalCost: Int!
     product: ProductEntry!
     recipient: String!
+    size: String!
     deliveryPeriod: DeliveryPeriodEntry!
     refund: RefundEntry
     orderModifiers: [OrderModifierEntry!]!
