@@ -83,7 +83,7 @@ class ManagePayment extends React.Component {
     const { attachCardMutate, readUserCardsQueryResult } = this.props
     return stripe
       .paymentRequestWithCardForm({
-        requiredBillingAddressFields: 'full'
+        requiredBillingAddressFields: 'zip'
       })
       .then(async stripeTokenInfo => {
         console.warn('Token created', { stripeTokenInfo })

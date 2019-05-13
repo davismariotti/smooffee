@@ -28,7 +28,7 @@ class ProductOptions extends React.Component {
         <Text style={styles.drinkText}>{product.name}</Text>
         <View>
           <Text>Choose Size</Text>
-          <Picker
+          <Picker // TODO Redux form
             style={{ height: 50, width: 100 }}
             selectedValue={this.state.size}
             onValueChange={(itemValue) => this.changeSize(itemValue)}
@@ -47,7 +47,7 @@ class ProductOptions extends React.Component {
                   title={orderModifier.name}
                   selected={selectedOrderModifiers.includes(orderModifier.id)}
                   onPress={() => {
-                    this.props.selectOrderModifier(orderModifier.name)
+                    this.props.selectOrderModifier(orderModifier.id)
                   }}/>
               )
             })}
