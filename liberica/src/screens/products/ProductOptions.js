@@ -28,9 +28,10 @@ class ProductOptions extends React.Component {
     <Picker style = {{height: 50, width: 1000}} 
       selectedValue={value}
       onValueChange= {(itemValue) =>onChange(itemValue)}>
-      {selectSize.map(size => (
-        <Picker.Item key={selectSize} label={selectedSize} value={selectedSize}/>
-      ))}
+        <Item key='1' label='Small' value='1'/>
+        <Item key='2' label='Medium' value='2'/>
+        <Item key='3' label='Large' value='3'/>
+   
     </Picker>
     )
   }
@@ -38,7 +39,7 @@ class ProductOptions extends React.Component {
 
 
   render() {
-    const { navigation, selectedSize, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
+    const { navigation, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
     const product = navigation.getParam('product', {})
 
     if (!listDeliveryPeriodsQueryResult.deliveryPeriod) {

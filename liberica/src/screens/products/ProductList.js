@@ -29,7 +29,7 @@ class ProductList extends React.Component {
               title={product.name}
               subtitle={formatCurrency(product.price)}
               onPress={() => {
-                this.props.navigation.navigate('ProductOptions', { product, parameters, price, sizes })
+                this.props.navigation.navigate('ProductOptions', { product })
               }}/>
           )
         })}
