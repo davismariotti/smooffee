@@ -106,7 +106,9 @@ class ManagePayment extends React.Component {
     const { readUserCardsQueryResult } = this.props
 
     let cards = readUserCardsQueryResult.user && readUserCardsQueryResult.user.currentUser.cards || []
-    cards.push({ end: true, stripeCardId: 'endKey' })
+    if (cards.length === 0 || (cards[cards.length - 1] && ! cards[cards.length - 1].end)) {
+      cards.push({ end: true, stripeCardId: 'endKey' })
+    }
 
     return (
       <View>
