@@ -11,29 +11,34 @@ import LoadScreen from '../LoadScreen'
 import Status from '../../utils/Status'
 
 
-  const renderPicker = ({ input: {onChange,value,...inputProps},children,...pickerProps}) => (
-    <Picker style = {{height: 50, width: 1000}} 
-      selectedValue={value}
-      onValueChange= {value =>onChange(value)}
-      {...inputProps}
-      {...pickerProps}
-    >
-      {children}
-    </Picker>
-    )
 
 
 class ProductOptions extends React.Component {
   static navigationOptions = {
     title: 'Options'
   }
-
-  state = { size: 'Small' }
+  constructor(props){
+    super(props)
+    this.renderPicker = this.renderPicker.bind(this)
+  }
+  
+  renderPicker({ input: {onChange,value}}){
+    const {sizes} = this.props
+    return (
+    <Picker style = {{height: 50, width: 1000}} 
+      selectedValue={value}
+      onValueChange= {(itemValue) =>onChange(itemValue)}>
+      {selectSize.map(size => (
+        <Picker.Item key={selectSize} label={selectedSize} value={selectedSize}/>
+      ))}
+    </Picker>
+    )
+  }
 
 
 
   render() {
-    const { navigation, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
+    const { navigation, selectedSize, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
     const product = navigation.getParam('product', {})
 
     if (!listDeliveryPeriodsQueryResult.deliveryPeriod) {
@@ -49,13 +54,8 @@ class ProductOptions extends React.Component {
           <Text>Choose Size</Text>
           <Field 
           name="size"
-          mode="dropdown" 
-          component={renderPicker} 
-        >
-          <Item label="8 oz" value="1"/>
-          <Item label="16 oz" value="2"/>
-          <Item label="32 oz" value='3'/>
-        </Field>
+          component={this.renderPicker} 
+        />
           
         </View>
         <View>
