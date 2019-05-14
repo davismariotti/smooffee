@@ -1,12 +1,20 @@
 import React from 'react'
 import { Button, ScrollView, StyleSheet, Text } from 'react-native'
 import { graphql } from 'react-apollo'
+import { Field, reduxForm } from 'redux-form'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { Input } from 'react-native-elements'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
 import { createOrderMutation } from '../../graphql/orderQueries'
 import { StorageService } from '../../services/StorageService'
 
+const renderTextField = ({defaultName , input: { onChange,  value } }) => {
+  return <Input
+    placeholder={defaultName}
+    onChangeText={onChange}
+    input={value}/>
+}
 class ProductInformation extends React.Component {
   static navigationOptions = {
     title: 'Information'
@@ -39,7 +47,11 @@ class ProductInformation extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
-        <Text>{firstName} {lastName}</Text>
+        <Text style={styles.title}>Enter Delivery Info</Text>
+        <Text>Name</Text>
+        <Field name="name" defaultName={firstName} component={renderTextField}/>
+        <Text>Delivery Location</Text>
+        <Field name="room" defaultName="e.g. 'Rob 221'" component={renderTextField}/>
         <Text>{product.name}</Text>
         <Text>{this.props.selectedSize}</Text>
         <Text>{this.props.selectedOrderModifiers}</Text>
@@ -61,6 +73,9 @@ const mapStateToProps = ({ order }) => {
 
 
 export default compose(
+  reduxForm({
+    form:'nameWithOrder'
+  }),
   graphql(readCurrentUserQuery, {
     name: 'readCurrentUserQueryResult'
   }),
@@ -78,4 +93,12 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     textAlign: 'center'
   },
+  title: {
+    fontSize:20,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 40,
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 20
+  }
 })
