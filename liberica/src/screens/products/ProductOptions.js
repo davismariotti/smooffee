@@ -1,13 +1,26 @@
 import React from 'react'
-import { Button, Picker, StyleSheet, Text, View } from 'react-native'
-import { Card, ListItem } from 'react-native-elements'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import { Card, Input, ListItem, Item, Picker } from 'react-native-elements'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { Field, reduxForm } from 'redux-form'
 import { graphql } from 'react-apollo'
 import OrderActions from './actions'
 import { listDeliveryPeriodsQuery } from '../../graphql/deliveryPeriodQueries'
 import LoadScreen from '../LoadScreen'
 import Status from '../../utils/Status'
+
+
+  const renderPicker = ({ input: {onChange,value,...inputProps},children,...pickerProps}) => (
+    <Picker style = {{height: 50, width: 1000}} 
+      selectedValue={value}
+      onValueChange= {value =>onChange(value)}
+      {...inputProps}
+      {...pickerProps}
+    >
+      {children}
+    </Picker>
+    )
 
 
 class ProductOptions extends React.Component {
@@ -17,12 +30,7 @@ class ProductOptions extends React.Component {
 
   state = { size: 'Small' }
 
-  //TODO: need to deal with case where user does not change size
-  changeSize(itemValue) {
-    this.props.selectSize(itemValue)
-    this.setState({ size: itemValue })
 
-  }
 
   render() {
     const { navigation, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
@@ -39,15 +47,16 @@ class ProductOptions extends React.Component {
         <Text style={styles.drinkText}>{product.name}</Text>
         <View>
           <Text>Choose Size</Text>
-          <Picker // TODO Redux form
-            style={{ height: 50, width: 100 }}
-            selectedValue={this.state.size}
-            onValueChange={(itemValue) => this.changeSize(itemValue)}
-          >
-            <Picker.Item id='1' label="Small" value="Small"/>
-            <Picker.Item id='2' label="Medium" value="Medium"/>
-            <Picker.Item id='3' label="Large" value="Large"/>
-          </Picker>
+          <Field 
+          name="size"
+          mode="dropdown" 
+          component={renderPicker} 
+        >
+          <Item label="8 oz" value="1"/>
+          <Item label="16 oz" value="2"/>
+          <Item label="32 oz" value='3'/>
+        </Field>
+          
         </View>
         <View>
           <Card containerStyle={{ padding: 0 }}>
@@ -90,6 +99,9 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default compose(
+  reduxForm({
+    form:'productOptions'
+  }),
   connect(mapStateToProps, mapDispatchToProps),
   graphql(listDeliveryPeriodsQuery, {
     name: 'listDeliveryPeriodsQueryResult',
