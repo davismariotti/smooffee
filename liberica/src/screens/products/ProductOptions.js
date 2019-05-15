@@ -1,11 +1,9 @@
 import React from 'react'
-import { Button, StyleSheet, Text, View, Picker } from 'react-native'
+import { Button, Picker, StyleSheet, Text, View } from 'react-native'
 import { Card, ListItem } from 'react-native-elements'
 import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { graphql } from 'react-apollo'
-import OrderActions from './actions'
 import { listDeliveryPeriodsQuery } from '../../graphql/deliveryPeriodQueries'
 import LoadScreen from '../LoadScreen'
 import Status from '../../utils/Status'
@@ -26,16 +24,34 @@ class ProductOptions extends React.Component {
       <Picker style={{ height: 50, width: 1000 }}
               selectedValue={value}
               onValueChange={(itemValue) => onChange(itemValue)}>
-        <Picker.Item key='1' label='Small' value='1'/>
-        <Picker.Item key='2' label='Medium' value='2'/>
-        <Picker.Item key='3' label='Large' value='3'/>
+        <Picker.Item key='1' label='Small' value='Small'/>
+        <Picker.Item key='2' label='Medium' value='Medium'/>
+        <Picker.Item key='3' label='Large' value='Large'/>
       </Picker>
+    )
+  }
+
+  renderCard({ product, input: { onChange, value } }) {
+    return (
+      <Card containerStyle={{ padding: 0 }}>
+        {product.orderModifiers.map(orderModifier => {
+          return (
+            <ListItem
+              key={orderModifier.id}
+              title={orderModifier.name}
+              selected={value === orderModifier.id}
+              onPress={() => {
+                onChange(orderModifier.id)
+              }}/>
+          )
+        })}
+      </Card>
     )
   }
 
 
   render() {
-    const { navigation, selectedOrderModifiers, listDeliveryPeriodsQueryResult } = this.props
+    const { navigation, listDeliveryPeriodsQueryResult } = this.props
     const product = navigation.getParam('product', {})
 
     if (!listDeliveryPeriodsQueryResult.deliveryPeriod) {
@@ -45,31 +61,11 @@ class ProductOptions extends React.Component {
     }
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.drinkText}>{product.name}</Text>
-        <View>
-          <Text>Choose Size</Text>
-          <Field
-            name="size"
-            component={this.renderPicker}
-          />
-
-        </View>
-        <View>
-          <Card containerStyle={{ padding: 0 }}>
-            {product.orderModifiers.map(orderModifier => {
-              return (
-                <ListItem
-                  key={orderModifier.id}
-                  title={orderModifier.name}
-                  selected={selectedOrderModifiers.includes(orderModifier.id)}
-                  onPress={() => {
-                    this.props.selectOrderModifier(orderModifier.id)
-                  }}/>
-              )
-            })}
-          </Card>
-        </View>
+        <Text>Choose Size</Text>
+        <Field name="size" component={this.renderPicker}/>
+        <Field name="orderModifiers" component={this.renderCard} product={product}/>
         <Button
           title="Next"
           onPress={() => {
@@ -81,25 +77,10 @@ class ProductOptions extends React.Component {
   }
 }
 
-const mapStateToProps = ({ order }) => {
-  return {
-    selectedSize: order.size,
-    selectedOrderModifiers: order.orderModifiers
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    selectSize: (size) => dispatch(OrderActions.selectSize(size)),
-    selectOrderModifier: (orderModifier) => dispatch(OrderActions.selectOrderModifier(orderModifier))
-  }
-}
-
 export default compose(
   reduxForm({
     form: 'productOptions'
   }),
-  connect(mapStateToProps, mapDispatchToProps),
   graphql(listDeliveryPeriodsQuery, {
     name: 'listDeliveryPeriodsQueryResult',
     options: {
@@ -123,6 +104,9 @@ export default compose(
 )(ProductOptions)
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+  },
   drinkText: {
     fontSize: 30,
     color: 'rgba(96,100,109, 1)',
