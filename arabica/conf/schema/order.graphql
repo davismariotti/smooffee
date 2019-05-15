@@ -1,10 +1,10 @@
 input OrderInput {
-    location: String
+    location: String!
     notes: String
-    productId: Long
-    recipient: String
-    size: String
-    deliveryPeriodId: Long
+    productId: Long!
+    recipient: String!
+    size: String!
+    deliveryPeriodId: Long!
     orderModifiers: [Long!]
 }
 
