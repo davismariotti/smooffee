@@ -6,7 +6,10 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Input, Card } from 'react-native-elements'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
+import {listDeliveryPeriodsQuery} from '../../graphql/deliveryPeriodQueries'
 import { createOrderMutation } from '../../graphql/orderQueries'
+import LoadScreen from '../LoadScreen'
+import Status  from '../../utils/Status'
 import { StorageService } from '../../services/StorageService'
 import DeliveryForm from './DeliveryForm';
 
@@ -15,8 +18,9 @@ class ProductInformation extends React.Component {
     title: 'Information'
   }
 
+
   render() {
-    const { navigation, readCurrentUserQueryResult, createOrderMutate } = this.props
+    const { navigation, readCurrentUserQueryResult, createOrderMutate, listDeliveryPeriodsQueryResult } = this.props
     const product = navigation.getParam('product', {})
     const balance = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.balance)
     const firstName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.firstName) || ''
@@ -40,6 +44,11 @@ class ProductInformation extends React.Component {
       })
     }
     
+    if (listDeliveryPeriodsQueryResult.loading || listDeliveryPeriodsQueryResult.error) {
+      return (
+        <LoadScreen/>
+      )
+    }
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Order Confirmation</Text>
@@ -47,7 +56,7 @@ class ProductInformation extends React.Component {
         <Text style={styles.drinkInfo}>{product.name}  ({this.props.selectedSize})</Text>
         <Text style={styles.drinkInfo}>{this.props.selectedOrderModifiers}</Text>
         </Card>
-        <DeliveryForm firstName={firstName} onSubmit={submit}/>
+        <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list}/>
       </ScrollView>
     )
   }
@@ -68,6 +77,27 @@ export default compose(
   graphql(createOrderMutation, {
     name: 'createOrderMutate'
   }),
+
+graphql(listDeliveryPeriodsQuery, {
+  name: 'listDeliveryPeriodsQueryResult',
+  options: {
+    variables: {
+      organizationId: 3,
+      parameters: {
+        filter: {
+          eq: {
+            field: 'status',
+            value: Status.ACTIVE
+          }
+        },
+        order: [
+          'classPeriod',
+          'asc'
+        ]
+      }
+    }
+  }
+}),
   connect(mapStateToProps),
 )(ProductInformation)
 

@@ -51,14 +51,8 @@ class ProductOptions extends React.Component {
 
 
   render() {
-    const { navigation, listDeliveryPeriodsQueryResult } = this.props
+    const { navigation } = this.props
     const product = navigation.getParam('product', {})
-
-    if (!listDeliveryPeriodsQueryResult.deliveryPeriod) {
-      return (
-        <LoadScreen/>
-      )
-    }
 
     return (
       <View style={styles.container}>
@@ -81,26 +75,7 @@ export default compose(
   reduxForm({
     form: 'productOptions'
   }),
-  graphql(listDeliveryPeriodsQuery, {
-    name: 'listDeliveryPeriodsQueryResult',
-    options: {
-      variables: {
-        organizationId: 3,
-        parameters: {
-          filter: {
-            eq: {
-              field: 'status',
-              value: Status.ACTIVE
-            }
-          },
-          order: [
-            'classPeriod',
-            'asc'
-          ]
-        }
-      }
-    }
-  }),
+  
 )(ProductOptions)
 
 const styles = StyleSheet.create({
