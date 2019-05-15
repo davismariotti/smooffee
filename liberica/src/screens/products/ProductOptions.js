@@ -3,10 +3,6 @@ import { Button, Picker, StyleSheet, Text, View } from 'react-native'
 import { Card, ListItem } from 'react-native-elements'
 import { compose } from 'redux'
 import { Field, reduxForm } from 'redux-form'
-import { graphql } from 'react-apollo'
-import { listDeliveryPeriodsQuery } from '../../graphql/deliveryPeriodQueries'
-import LoadScreen from '../LoadScreen'
-import Status from '../../utils/Status'
 
 class ProductOptions extends React.Component {
   static navigationOptions = {
@@ -73,9 +69,8 @@ class ProductOptions extends React.Component {
 
 export default compose(
   reduxForm({
-    form: 'productOptions'
+    form: 'orderForm'
   }),
-  
 )(ProductOptions)
 
 const styles = StyleSheet.create({

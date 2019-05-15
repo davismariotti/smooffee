@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { Button, Picker, ScrollView, StyleSheet, Text } from 'react-native'
 import { Input } from 'react-native-elements'
-import { compose } from 'react-apollo';
+import { compose } from 'react-apollo'
 
 
 const renderTextField = ({ placeholder, input: { onChange, value } }) => {
@@ -21,12 +21,17 @@ class DeliveryForm extends Component {
 
   renderPickerField({ input: { onChange, value } }) {
 
-  const { deliveryPeriods } = this.props
+    const { deliveryPeriods } = this.props
+
+    console.log('deliveryPeriods', deliveryPeriods)
+
     return (
       <Picker selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)}>
-        {deliveryPeriods.map ( deliveryPeriod => (
-          <Picker.Item key={deliveryPeriod.id} label={deliveryPeriod.classPeriod} value={deliveryPeriod.id}/>
-        ))}
+        {
+          deliveryPeriods.map(deliveryPeriod => (
+            <Picker.Item key={deliveryPeriod.id} label={`${deliveryPeriod.classPeriod.toString()} - ${deliveryPeriod.monday}`} value={deliveryPeriod.id}/>
+          ))
+        }
       </Picker>
     )
   }
@@ -51,11 +56,10 @@ class DeliveryForm extends Component {
 }
 
 export default compose(
-   reduxForm({
-  form: 'deliveryForm'
-})
+  reduxForm({
+    form: 'orderForm'
+  })
 )(DeliveryForm)
-
 
 const styles = StyleSheet.create({
   smallerText: {
@@ -71,5 +75,6 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     textAlign: 'center',
     marginTop: 10,
+    marginBottom: 10,
   }
 })

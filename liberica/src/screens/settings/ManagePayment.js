@@ -29,15 +29,9 @@ stripe.setOptions({
 // ]
 
 class ManagePayment extends React.Component {
-  constructor(props) {
-    super(props)
-    this.requestPayment = this.requestPayment.bind(this)
-  }
-
   static navigationOptions = {
     title: 'Manage Payment'
   }
-
   static styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -64,6 +58,11 @@ class ManagePayment extends React.Component {
       marginTop: 1,
     },
   })
+
+  constructor(props) {
+    super(props)
+    this.requestPayment = this.requestPayment.bind(this)
+  }
 
   renderSeparator = () => {
     return (
@@ -106,7 +105,7 @@ class ManagePayment extends React.Component {
     const { readUserCardsQueryResult } = this.props
 
     let cards = readUserCardsQueryResult.user && readUserCardsQueryResult.user.currentUser.cards || []
-    if (cards.length === 0 || (cards[cards.length - 1] && ! cards[cards.length - 1].end)) {
+    if (cards.length === 0 || (cards[cards.length - 1] && !cards[cards.length - 1].end)) {
       cards.push({ end: true, stripeCardId: 'endKey' })
     }
 
