@@ -124,6 +124,7 @@ public class QLDeliveryPeriodTest {
         orderInput.setRecipient("recipient");
         orderInput.setProductId(Setup.defaultProduct.getId());
         orderInput.setLocation("location");
+        orderInput.setSize("Medium");
         orderInput.setNotes("notes");
 
         // Create two orders

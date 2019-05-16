@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View, Button } from 'react-native'
+import { Button, Image, StyleSheet, Text, View } from 'react-native'
 import ScrollingOrders from './components/ScrollingOrders'
 import { graphql } from 'react-apollo'
 import { readCurrentUserQuery } from '../../graphql/userQueries'
@@ -41,6 +41,7 @@ class HomeScreen extends React.Component {
               Current Balance: {formatCurrency(balance)}
             </Text>
             <Button title="Add to Balance" onPress={() => this.props.navigation.navigate('AddToBalance')}/>
+            <Button title="Refresh" onPress={readCurrentUserQueryResult.refetch}/>
           </View>
           <ScrollingOrders style={styles.scrollingContainer}/>
         </View>
