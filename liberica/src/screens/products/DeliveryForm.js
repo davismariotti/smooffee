@@ -1,54 +1,51 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Button, Picker, ScrollView, StyleSheet, Text } from 'react-native'
+import { Button, ScrollView, StyleSheet, Text } from 'react-native'
 import { Input } from 'react-native-elements'
 import { compose } from 'react-apollo'
+import { validateIsRequired } from '../../utils/formUtils'
+import { Icon, Picker } from 'native-base'
 
 
-const renderTextField = ({ placeholder, input: { onChange, value } }) => {
+const renderTextField = ({ placeholder, label, input: { onChange, value }, meta: { error } }) => {
   return <Input
+    label={label}
     placeholder={placeholder}
     onChangeText={onChange}
-    input={value}/>
+    input={value}
+    errorMessage={error}
+  />
 }
 
+const renderPicker = ({ label, deliveryPeriods, input: { onChange, value } }) => {
+  return (
+    <Picker
+      note
+      mode="dropdown"
+      placeholder={label}
+      iosIcon={<Icon name="arrow-down"/>}
+      style={{ width: 120 }}
+      selectedValue={value}
+      onValueChange={onChange}
+    >
+      {deliveryPeriods.map(deliveryPeriod => (
+        <Picker.Item key={deliveryPeriod.id} label={`${deliveryPeriod.classPeriod.toString()} - ${deliveryPeriod.monday}`} value={deliveryPeriod.id}/>
+      ))}
+    </Picker>
+  )
+}
 
 class DeliveryForm extends Component {
-  constructor(props) {
-    super(props)
-    this.renderPickerField = this.renderPickerField.bind(this)
-  }
-
-  renderPickerField({ input: { onChange, value } }) {
-
-    const { deliveryPeriods } = this.props
-
-    console.log('deliveryPeriods', deliveryPeriods)
-
-    return (
-      <Picker selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)}>
-        {
-          deliveryPeriods.map(deliveryPeriod => (
-            <Picker.Item key={deliveryPeriod.id} label={`${deliveryPeriod.classPeriod.toString()} - ${deliveryPeriod.monday}`} value={deliveryPeriod.id}/>
-          ))
-        }
-      </Picker>
-    )
-  }
 
   render() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, deliveryPeriods } = this.props
     return (
       <ScrollView>
         <Text style={styles.title}>Enter Delivery Info</Text>
-        <Text style={styles.smallerText}>Name</Text>
-        <Field name="name" placeholder={this.props.firstName} component={renderTextField}/>
-        <Text style={styles.smallerText}>Delivery Location</Text>
-        <Field name="room" placeholder="e.g. 'Rob 221'" component={renderTextField}/>
-        <Text style={styles.smallerText}>Extra Notes</Text>
-        <Text style={styles.smallerText}>Delivery Period</Text>
-        <Field name="deliveryPeriod" component={this.renderPickerField}/>
-        <Field name="notes" placeholder='N/A' component={renderTextField}/>
+        <Field name="name" placeholder={this.props.firstName} component={renderTextField} label="Name" validate={validateIsRequired}/>
+        <Field name="room" placeholder="e.g. 'Rob 221'" component={renderTextField} label="Delivery Location" validate={validateIsRequired}/>
+        <Field name="deliveryPeriod" label="Choose a delivery period" component={renderPicker} validate={validateIsRequired} deliveryPeriods={deliveryPeriods}/>
+        <Field name="notes" placeholder='N/A' component={renderTextField} label="Notes"/>
         <Button title="Submit" onPress={handleSubmit}/>
       </ScrollView>
     )

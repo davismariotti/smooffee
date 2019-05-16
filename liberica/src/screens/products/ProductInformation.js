@@ -10,6 +10,8 @@ import LoadScreen from '../LoadScreen'
 import Status from '../../utils/Status'
 import { StorageService } from '../../services/StorageService'
 import DeliveryForm from './DeliveryForm'
+import { getFormValues } from 'redux-form'
+import { connect } from 'react-redux'
 
 class ProductInformation extends React.Component {
   static navigationOptions = {
@@ -18,14 +20,14 @@ class ProductInformation extends React.Component {
 
 
   render() {
-    const { navigation, readCurrentUserQueryResult, createOrderMutate, listDeliveryPeriodsQueryResult } = this.props
+    const { navigation, readCurrentUserQueryResult, createOrderMutate, listDeliveryPeriodsQueryResult, orderForm } = this.props
+
     const product = navigation.getParam('product', {})
     const balance = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.balance)
     const firstName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.firstName) || ''
     const lastName = (readCurrentUserQueryResult.user && readCurrentUserQueryResult.user.currentUser.lastName) || ''
 
     const submit = async (values) => {
-      console.log(values)
       const { room, notes, name, deliveryPeriod, size, orderModifiers } = values
       createOrderMutate({
         variables: {
@@ -37,7 +39,7 @@ class ProductInformation extends React.Component {
             recipient: name,
             size,
             deliveryPeriodId: deliveryPeriod,
-            orderModifiers: [orderModifiers]
+            orderModifiers: orderModifiers
           }
         }
       }).then(() => {
@@ -51,14 +53,18 @@ class ProductInformation extends React.Component {
       )
     }
 
-    console.log('listDeliveryPeriodsQueryResult', listDeliveryPeriodsQueryResult)
+    const orderModifierNames = orderForm.orderModifiers && product.orderModifiers.filter(orderModifier => orderForm.orderModifiers.includes(orderModifier.id)).map(orderModifier => orderModifier.name) || []
+
+    console.log('orderModifierNames', orderModifierNames)
+    console.log('product.orderModifiers', product.orderModifiers)
+    console.log('orderForm.orderModifiers', orderForm.orderModifiers)
 
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Order Confirmation</Text>
         <Card>
-          <Text style={styles.drinkInfo}>{product.name} ({'this.props.selectedSize'})</Text>
-          <Text style={styles.drinkInfo}>{'this.props.selectedOrderModifiers'}</Text>
+          <Text style={styles.drinkInfo}>{product.name} - {orderForm.size}</Text>
+          {orderModifierNames.map(name => <Text>{`+ ${name}`}</Text>)}
         </Card>
         <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list}/>
       </ScrollView>
@@ -93,6 +99,9 @@ export default compose(
       }
     }
   }),
+  connect(state => ({
+    orderForm: getFormValues('orderForm')(state),
+  }))
 )(ProductInformation)
 
 
