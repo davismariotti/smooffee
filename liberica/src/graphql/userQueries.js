@@ -68,6 +68,16 @@ mutation AttachCard($userId: String!, $stripeToken: String!) {
 }
 `
 
+export const updateUserMutation = gql`
+mutation UpdateUser($userId: String!, $userInput: UserInput!) {
+  user {
+    update(userId: $userId, userInput: $userInput) {
+      id
+    }
+  }
+}
+`
+
 export const sendFeedbackMutation = gql`
 mutation SendFeedback($message: String!) {
   user {

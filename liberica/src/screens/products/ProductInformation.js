@@ -55,10 +55,6 @@ class ProductInformation extends React.Component {
 
     const orderModifierNames = orderForm.orderModifiers && product.orderModifiers.filter(orderModifier => orderForm.orderModifiers.includes(orderModifier.id)).map(orderModifier => orderModifier.name) || []
 
-    console.log('orderModifierNames', orderModifierNames)
-    console.log('product.orderModifiers', product.orderModifiers)
-    console.log('orderForm.orderModifiers', orderForm.orderModifiers)
-
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Order Confirmation</Text>

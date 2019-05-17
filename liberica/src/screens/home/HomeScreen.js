@@ -29,7 +29,6 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <NavigationEvents
           onWillFocus={() => readCurrentUserQueryResult.refetch()}
-          onDidFocus={payload => console.log('did focus', payload)}
         />
         <View style={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
