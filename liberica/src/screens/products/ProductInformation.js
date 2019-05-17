@@ -12,6 +12,7 @@ import { StorageService } from '../../services/StorageService'
 import DeliveryForm from './DeliveryForm'
 import { getFormValues } from 'redux-form'
 import { connect } from 'react-redux'
+import { formatCurrency } from '../../utils/currencyUtils'
 
 class ProductInformation extends React.Component {
   static navigationOptions = {
@@ -44,7 +45,9 @@ class ProductInformation extends React.Component {
         }
       }).then(() => {
         this.props.navigation.navigate('Home')
-      })
+      }).catch((error => {
+        console.log('error', error)
+      }))
     }
 
     if (listDeliveryPeriodsQueryResult.loading || listDeliveryPeriodsQueryResult.error) {
@@ -53,16 +56,27 @@ class ProductInformation extends React.Component {
       )
     }
 
-    const orderModifierNames = orderForm.orderModifiers && product.orderModifiers.filter(orderModifier => orderForm.orderModifiers.includes(orderModifier.id)).map(orderModifier => orderModifier.name) || []
+    const orderModifiers = orderForm.orderModifiers && product.orderModifiers.filter(orderModifier => orderForm.orderModifiers.includes(orderModifier.id)) || []
+    const orderModifierNames = orderModifiers && orderModifiers.map(orderModifier => orderModifier.name) || []
 
+    let totalCost = product.price
+    for (const orderModifier of orderModifiers) {
+      totalCost = totalCost + orderModifier.additionalCost
+      console.log('orderModifier', orderModifier)
+    }
+
+    console.log(totalCost)
+    
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Order Confirmation</Text>
         <Card>
           <Text style={styles.drinkInfo}>{product.name} - {orderForm.size}</Text>
-          {orderModifierNames.map(name => <Text>{`+ ${name}`}</Text>)}
+          {orderModifierNames.map(name => <Text key={name}>{`+ ${name}`}</Text>)}
+          <Text style={styles.drinkInfo}>Total Price: {formatCurrency(totalCost)}</Text>
         </Card>
-        <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list}/>
+        <Text style={{ color: 'red', margin: 10, textAlign: 'center' }}>NOT ENOUGH BALANCE</Text>
+        <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list} hasBalance={false}/>
       </ScrollView>
     )
   }
@@ -108,7 +122,8 @@ const styles = StyleSheet.create({
   drinkInfo: {
     fontSize: 20,
     color: 'rgba(96,100,109, 1)',
-    textAlign: 'left'
+    textAlign: 'left',
+    padding: 5
   },
   title: {
     fontSize: 25,

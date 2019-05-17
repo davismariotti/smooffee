@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 80,
     resizeMode: 'contain',
-    marginTop: 5,
+    marginTop: 15,
     marginLeft: -10
   },
   getStartedContainer: {

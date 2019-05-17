@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Button, ScrollView, StyleSheet, Text } from 'react-native'
+import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements'
 import { compose } from 'react-apollo'
 import { validateIsRequired } from '../../utils/formUtils'
@@ -17,36 +17,41 @@ const renderTextField = ({ placeholder, label, input: { onChange, value }, meta:
   />
 }
 
-const renderPicker = ({ label, deliveryPeriods, input: { onChange, value } }) => {
+const renderPicker = ({ label, deliveryPeriods, input: { onChange, value }, meta: { error } }) => {
   return (
-    <Picker
-      note
-      mode="dropdown"
-      placeholder={label}
-      iosIcon={<Icon name="arrow-down"/>}
-      style={{ width: 120 }}
-      selectedValue={value}
-      onValueChange={onChange}
-    >
-      {deliveryPeriods.map(deliveryPeriod => (
-        <Picker.Item key={deliveryPeriod.id} label={`${deliveryPeriod.classPeriod.toString()} - ${deliveryPeriod.monday}`} value={deliveryPeriod.id}/>
-      ))}
-    </Picker>
+    <View>
+      <Picker
+        note
+        mode="dropdown"
+        placeholder={label}
+        iosIcon={<Icon name="arrow-down"/>}
+        style={{ width: 120 }}
+        selectedValue={value}
+        onValueChange={onChange}
+      >
+        {deliveryPeriods.map(deliveryPeriod => (
+          <Picker.Item key={deliveryPeriod.id} label={`${deliveryPeriod.classPeriod.toString()} - ${deliveryPeriod.monday}`} value={deliveryPeriod.id}/>
+        ))}
+      </Picker>
+      {error && <Text style={{ marginLeft: 10, color: 'red', fontSize: 10 }}>{error}</Text>}
+    </View>
   )
 }
 
 class DeliveryForm extends Component {
 
   render() {
-    const { handleSubmit, deliveryPeriods } = this.props
+    const { handleSubmit, deliveryPeriods, hasBalance } = this.props
     return (
       <ScrollView>
         <Text style={styles.title}>Enter Delivery Info</Text>
         <Field name="name" placeholder={this.props.firstName} component={renderTextField} label="Name" validate={validateIsRequired}/>
         <Field name="room" placeholder="e.g. 'Rob 221'" component={renderTextField} label="Delivery Location" validate={validateIsRequired}/>
         <Field name="deliveryPeriod" label="Choose a delivery period" component={renderPicker} validate={validateIsRequired} deliveryPeriods={deliveryPeriods}/>
-        <Field name="notes" placeholder='N/A' component={renderTextField} label="Notes"/>
-        <Button title="Submit" onPress={handleSubmit}/>
+        <View style={{ paddingTop: 5 }}>
+          <Field name="notes" placeholder='N/A' component={renderTextField} label="Notes"/>
+        </View>
+        <Button title="Submit" disabled={!hasBalance} onPress={handleSubmit}/>
       </ScrollView>
     )
   }
