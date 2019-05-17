@@ -1,25 +1,28 @@
-import React, {Component} from 'react'
-import {Button, StyleSheet, Text, View,} from 'react-native'
-import {Card} from "react-native-elements";
-import {formatCurrency} from '../../../utils/currencyUtils'
+import React, { Component } from 'react'
+import { StyleSheet, Text, View, } from 'react-native'
+import { Card } from 'react-native-elements'
+import { formatCurrency } from '../../../utils/currencyUtils'
+
 class Order extends Component {
   handleOptionsButton() {
 
   }
 
   render() {
+    const { order } = this.props
+
+    console.log(order)
+
     return (
-      <View style={{paddingBottom:10 }}>
-        <Card containerStyle={{padding: 40, width:300}}>
+      <View style={{ paddingBottom: 10 }}>
+        <Card containerStyle={{ padding: 40, width: 300 }}>
           <View style={styles.rowAlign}>
-            <Text style={styles.title}>{this.props.name}</Text>
-            <Text style={styles.money}>   {formatCurrency(this.props.price)}</Text>
+            <Text style={styles.title}>{order.product.name}</Text>
+            <Text style={styles.money}>   {formatCurrency(order.product.price)}</Text>
           </View>
-          <Text>{this.props.description}</Text>
-          <View style={styles.rowAlign}>
-            <Text style={styles.timeAndSpace}>Location</Text>
-            <Text style={styles.timeAndSpace}>Time</Text>
-          </View>
+          <Text>{order.product.description}</Text>
+          <Text style={styles.timeAndSpace}>Location: {order.location}</Text>
+          <Text style={styles.timeAndSpace}>Time: {order.createdAt}</Text>
         </Card>
       </View>
     )
@@ -27,15 +30,15 @@ class Order extends Component {
 }
 
 const styles = StyleSheet.create({
-  timeAndSpace:{
-    color:'grey'
+  timeAndSpace: {
+    color: 'grey'
   },
-  money:{
-    color:'red'
+  money: {
+    color: 'red'
   },
-  rowAlign:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  rowAlign: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   container: {
     alignItems: 'center'

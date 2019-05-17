@@ -54,10 +54,7 @@ export default compose(
   graphql(readCurrentUserQuery, {
     name: 'readCurrentUserQueryResult',
     fetchPolicy: 'network-only'
-  }),
-  // graphql(readOrdersQuery, {
-  //   name: 'readOrdersQueryResult'
-  // })
+  })
 )(HomeScreen)
 
 

@@ -1,57 +1,40 @@
 import React, { Component } from 'react'
-import {FlatList, View, StyleSheet, ScrollView, Text} from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { graphql } from 'react-apollo'
 
 import Order from './Order'
 import { readOrdersQuery } from '../../../graphql/userQueries'
 import LoadScreen from '../../LoadScreen'
-import Status from "../../../utils/Status";
-import {Card, ListItem} from "react-native-elements";
+import Status from '../../../utils/Status'
 
 class ScrollingOrders extends Component {
   render() {
 
-    const { readOrdersQueryResult } = this.props
+    const { orders } = this.props
 
-    if (readOrdersQueryResult.loading || readOrdersQueryResult.error) {
-      return (
-        <LoadScreen/>
-      )
-    }
-    const orders = readOrdersQueryResult.user.currentUser.orders
-    const activeOrders = orders.filter(order => (order.status === Status.ACTIVE))
+
     return (
       <ScrollView>
         <Text style={styles.title}>Active Orders</Text>
-          <View style={styles.active}>
-            {readOrdersQueryResult.user.currentUser.orders.filter(order => (order.status === Status.ACTIVE || order.status === Status.IN_PROGRESS)).map(order => {
-              return (
-                  <Order
-                      key={order.id}
-                      name={order.product.name}
-                      price={order.product.price}
-                      description={order.product.description}
-                  />
-              )
-            })}
+        <View style={styles.active}>
+          {orders.filter(order => (order.status === Status.ACTIVE || order.status === Status.IN_PROGRESS)).map(order => {
+            return (
+              <Order key={order.id} order={order}/>
+            )
+          })}
 
-          </View>
+        </View>
 
         <Text style={styles.titleCompleted}>Completed Orders</Text>
 
-            <View style={styles.completed}>
-              {readOrdersQueryResult.user.currentUser.orders.filter(order => (order.status === Status.COMPLETED)).map(order => {
-                return (
-                  <Order
-                    key={order.id}
-                    name={order.product.name}
-                    price={order.product.price}
-                    description={order.product.description}
-                />
-                )
-              })}
+        <View style={styles.completed}>
+          {orders.filter(order => (order.status === Status.COMPLETED)).map(order => {
+            return (
+              <Order key={order.id} order={order}/>
+            )
+          })}
 
-            </View>
+        </View>
 
       </ScrollView>
 
@@ -59,6 +42,7 @@ class ScrollingOrders extends Component {
     )
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
@@ -70,7 +54,7 @@ const styles = StyleSheet.create({
     color: 'red'
   },
   titleCompleted: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
     color: 'green'
@@ -81,26 +65,6 @@ const styles = StyleSheet.create({
   active: {
     alignItems: 'center'
   }
-});
-
-export default graphql(readOrdersQuery, {
-  name: 'readOrdersQueryResult',
-  options: {
-    variables: {
-      organizationId: 3,
-      parameters: {
-        order: [
-          'name',
-          'asc'
-        ],
-        filter: {
-          eq: {
-            field: 'status',
-            value: Status.ACTIVE
-          }
-        }
-      }
-    }
-  }
 })
-(ScrollingOrders)
+
+export default ScrollingOrders
