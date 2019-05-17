@@ -37,13 +37,6 @@ const styles = theme => ({
   },
 })
 
-const options = [
-  '1',
-  '2',
-  '3',
-  '4',
-]
-
 class Home extends Component {
   state = {
     anchorEl: null,
@@ -101,7 +94,7 @@ class Home extends Component {
             <MenuItem
               key={deliveryPeriod.id}
               selected={!!selectedDeliveryPeriod && deliveryPeriod.id === selectedDeliveryPeriod.id}
-              onClick={event => {
+              onClick={() => {
                 chooseClassPeriod(deliveryPeriod)
                 this.setState({ anchorEl: null })
                 listOrdersQueryResult.refetch()
@@ -204,7 +197,13 @@ export default compose(
                   }
                 }
               ]
-            }
+            },
+            order: [
+              'status',
+              'desc',
+              'createdAt',
+              'asc'
+            ]
           }
         }
       }

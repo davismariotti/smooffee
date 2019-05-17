@@ -13,6 +13,7 @@ import AddFundsModal from '../modals/AddFundsModal'
 import { StorageService } from '../../../services/StorageService'
 import { translateRole } from '../../../utils/role'
 import history from '../../../utils/history'
+import PromoteUserModal from '../modals/PromoteUserModal'
 
 class UserList extends Component {
   constructor(props) {
@@ -65,16 +66,22 @@ class UserList extends Component {
   }
 
   render() {
-    const { userMenu, closeUserMenu, openAddMoreFunds, listUsersQueryResult } = this.props
+    const { userMenu, closeUserMenu, openAddMoreFunds, openPromoteUser, listUsersQueryResult } = this.props
 
     return (
       <div>
         <AddFundsModal onSubmit={listUsersQueryResult.refetch}/>
+        <PromoteUserModal onSubmit={listUsersQueryResult.refetch}/>
         <Menu id="menu" open={!!userMenu} anchorEl={(userMenu && userMenu.anchorEl) || null} onClose={closeUserMenu}>
           <MenuItem>
             <Button onClick={() => {
               openAddMoreFunds(userMenu.userItem)
             }}>Add Funds</Button>
+          </MenuItem>
+          <MenuItem>
+            <Button onClick={() => {
+              openPromoteUser(userMenu.userItem)
+            }}>Change user role</Button>
           </MenuItem>
           <MenuItem>
             <Button onClick={() => {
@@ -104,7 +111,6 @@ UserList.propTypes = {
   closeUserMenu: PropTypes.func.isRequired,
   openUserMenu: PropTypes.func.isRequired,
   openAddMoreFunds: PropTypes.func.isRequired,
-  closeAddMoreFunds: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ({ organizationSettings }) => {
@@ -119,7 +125,7 @@ const mapDispatchToProps = dispatch => {
     closeUserMenu: () => dispatch(OrganizationSettingsActions.closeUserMenu()),
     openUserMenu: (row) => dispatch(OrganizationSettingsActions.openUserMenu(row)),
     openAddMoreFunds: (user) => dispatch(OrganizationSettingsActions.openAddMoreFundsModal(user)),
-    closeAddMoreFunds: () => dispatch(OrganizationSettingsActions.closeAddFundsModal())
+    openPromoteUser: (user) => dispatch(OrganizationSettingsActions.openPromoteUserModal(user))
   }
 }
 
