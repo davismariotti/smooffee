@@ -153,6 +153,13 @@ public class User extends BaseModel {
                 .findList();
     }
 
+    public static List<User> findAdminsByOrganizationId(Long organizationId) {
+        return find.query().where()
+                .eq("organization_id", organizationId)
+                .eq("role", Role.ADMIN.getValue())
+                .findList();
+    }
+
 
     public static class UserFinder extends Finder<Long, User> {
         UserFinder() {

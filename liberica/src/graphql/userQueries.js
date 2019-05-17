@@ -77,3 +77,11 @@ mutation UpdateUser($userId: String!, $userInput: UserInput!) {
   }
 }
 `
+
+export const sendFeedbackMutation = gql`
+mutation SendFeedback($message: String!) {
+  user {
+    feedback(message: $message)
+  }
+}
+`

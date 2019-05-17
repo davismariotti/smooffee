@@ -51,6 +51,7 @@ public class Permission {
     public static final int THIS_ORGANIZATION_CREATE_ORDER_REFUND   = 311;
     public static final int THIS_ORGANIZATION_STRIPE_SETTINGS_READ  = 312;
     public static final int THIS_ORGANIZATION_STRIPE_SETTINGS_WRITE = 313;
+    public static final int THIS_ORGANIZATION_SHARE_FEEDBACK        = 314;
 
 
     // ALL OTHER PERMISSIONS
@@ -91,6 +92,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_CREATE_ORDER_REFUND);
             add(Permission.THIS_ORGANIZATION_STRIPE_SETTINGS_READ);
             add(Permission.THIS_ORGANIZATION_STRIPE_SETTINGS_WRITE);
+            add(Permission.THIS_ORGANIZATION_SHARE_FEEDBACK);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -114,6 +116,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+            add(Permission.THIS_ORGANIZATION_SHARE_FEEDBACK);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -136,6 +139,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_SETTINGS_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+            add(Permission.THIS_ORGANIZATION_SHARE_FEEDBACK);
 
             add(Permission.ORGANIZATION_LIST);
         }});
@@ -152,6 +156,7 @@ public class Permission {
             add(Permission.THIS_ORGANIZATION_READ);
             add(Permission.THIS_ORGANIZATION_PRODUCTS_READ);
             add(Permission.THIS_ORGANIZATION_DELIVERY_PERIODS_READ);
+            add(Permission.THIS_ORGANIZATION_SHARE_FEEDBACK);
 
             add(Permission.ORGANIZATION_LIST);
         }});
