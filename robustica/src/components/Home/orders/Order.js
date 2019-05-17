@@ -8,11 +8,12 @@ import CardActions from '@material-ui/core/CardActions'
 import { compose } from 'redux'
 import { graphql } from 'react-apollo'
 import { editOrderStatusMutation } from '../../../graphql/orderQueries'
+import Status from '../../../utils/Status'
 
 const styles = {
   card: {
-    width: 200,
-    height: 200,
+    minWidth: 200,
+    minHeight: 200,
     margin: '10px'
   },
   media: {
@@ -32,12 +33,13 @@ class Order extends Component {
         <Card className={classes.card}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h3">{order.product.name}</Typography>
+            <Typography component="p">{order.createdAt}</Typography>
             <Typography component="p">{order.recipient}</Typography>
             <Typography component="p">{order.location}</Typography>
             <Typography component="p">{order.notes}</Typography>
           </CardContent>
           <CardActions>
-            {order.status === 1 ?
+            {order.status === Status.ACTIVE ?
               <Button variant="contained" size="small" color="primary" onClick={() => {
                 updateOrderStatusMutate({
                   variables: {
@@ -50,7 +52,7 @@ class Order extends Component {
               }}>
                 Start Order
               </Button> :
-              <Button variant="contained" size="small" color="primary" onClick={() => {
+              <Button variant="contained" size="small" color="secondary" onClick={() => {
                 updateOrderStatusMutate({
                   variables: {
                     orderId: order.id,

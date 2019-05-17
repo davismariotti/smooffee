@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   static userHasRole(role) {
-    return StorageService.getUserRole() === role
+    return StorageService.getUserRole() === role || StorageService.getUserRole() === SYSADMIN
   }
 
   static userInRoles(roles) {

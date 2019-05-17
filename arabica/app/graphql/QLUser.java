@@ -100,7 +100,7 @@ public class QLUser {
             // TODO use int values of role
             if (role.equals(Role.SYSADMIN.getName()) || role.equals(Role.ANONYMOUS.getName())) throw new Permission.AccessDeniedException(); // Can't make a user a sysadmin
 
-            return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
+            return new UserEntry(user.setRole(Role.fromName(role).getValue()).store());
         }
 
         public CardEntry attachCard(String userId, String stripeToken) {
