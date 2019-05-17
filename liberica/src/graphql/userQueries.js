@@ -67,3 +67,11 @@ mutation AttachCard($userId: String!, $stripeToken: String!) {
   }
 }
 `
+
+export const sendFeedbackMutation = gql`
+mutation SendFeedback($message: String!) {
+  user {
+    feedback(message: $message)
+  }
+}
+`
