@@ -106,6 +106,9 @@ export default compose(
 
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 10
+  },
   drinkInfo: {
     fontSize: 20,
     color: 'rgba(96,100,109, 1)',
