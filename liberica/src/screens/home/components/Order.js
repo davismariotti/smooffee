@@ -18,7 +18,7 @@ class Order extends Component {
         <Card containerStyle={{ padding: 40, width: 300 }}>
           <View style={styles.rowAlign}>
             <Text style={styles.title}>{order.product.name}</Text>
-            <Text style={styles.money}>   {formatCurrency(order.product.price)}</Text>
+            <Text style={styles.money}>   {formatCurrency(order.totalCost)}</Text>
           </View>
           <Text>{order.product.description}</Text>
           <Text style={styles.timeAndSpace}>Location: {order.location}</Text>

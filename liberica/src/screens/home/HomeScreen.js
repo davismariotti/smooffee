@@ -41,7 +41,6 @@ class HomeScreen extends React.Component {
               Current Balance: {formatCurrency(currentUser.balance)}
             </Text>
             <Button title="Add to Balance" onPress={() => this.props.navigation.navigate('AddToBalance')}/>
-            <Button title="Refresh" onPress={() => readCurrentUserQueryResult.refetch()}/>
           </View>
           <ScrollingOrders style={styles.scrollingContainer} orders={readCurrentUserQueryResult.user.currentUser.orders}/>
         </View>
