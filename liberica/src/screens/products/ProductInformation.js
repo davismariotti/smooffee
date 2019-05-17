@@ -65,8 +65,8 @@ class ProductInformation extends React.Component {
       console.log('orderModifier', orderModifier)
     }
 
-    console.log(totalCost)
-    
+    const hasBalance = balance >= totalCost
+
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Order Confirmation</Text>
@@ -75,8 +75,8 @@ class ProductInformation extends React.Component {
           {orderModifierNames.map(name => <Text key={name}>{`+ ${name}`}</Text>)}
           <Text style={styles.drinkInfo}>Total Price: {formatCurrency(totalCost)}</Text>
         </Card>
-        <Text style={{ color: 'red', margin: 10, textAlign: 'center' }}>NOT ENOUGH BALANCE</Text>
-        <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list} hasBalance={false}/>
+        {!hasBalance && <Text style={{ color: 'red', margin: 10, textAlign: 'center' }}>NOT ENOUGH BALANCE</Text>}
+        <DeliveryForm firstName={firstName} onSubmit={submit} deliveryPeriods={listDeliveryPeriodsQueryResult.deliveryPeriod.list} hasBalance={hasBalance}/>
       </ScrollView>
     )
   }
