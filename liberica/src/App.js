@@ -13,6 +13,7 @@ import NavigationService from './services/NavigationService'
 import createNewStore from './services/store'
 import { ApolloProvider } from 'react-apollo'
 import { client } from './services/apollo'
+import { Root } from 'native-base'
 
 import { createAppContainer } from 'react-navigation'
 
@@ -25,13 +26,15 @@ const store = createNewStore()
 export default class App extends Component<Props> {
   render() {
     return (
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <AppContainer ref={navigatorRef => {
-            NavigationService.setTopLevelNavigator(navigatorRef)
-          }}/>
-        </Provider>
-      </ApolloProvider>
+      <Root>
+        <ApolloProvider client={client}>
+          <Provider store={store}>
+            <AppContainer ref={navigatorRef => {
+              NavigationService.setTopLevelNavigator(navigatorRef)
+            }}/>
+          </Provider>
+        </ApolloProvider>
+      </Root>
     )
   }
 }

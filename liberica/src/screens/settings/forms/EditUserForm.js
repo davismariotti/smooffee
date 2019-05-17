@@ -1,53 +1,42 @@
 import { Input } from 'react-native-elements'
-import { Button, Text, View } from 'react-native'
+import { Button, View } from 'react-native'
 import { Field, reduxForm } from 'redux-form'
 import { compose } from 'redux'
-import React from 'react'
+import React, { Component } from 'react'
+import { validateIsRequired } from '../../../utils/formUtils'
+import { connect } from 'react-redux'
 
-const renderTextField = ({ placeholder, input: onChange, value }) => {
+const renderTextField = ({ placeholder, label, input: { onChange, value }, meta: { error } }) => {
   return <Input
+    label={label}
     placeholder={placeholder}
     onChangeText={onChange}
-    input={value}/>
+    value={value}
+    errorMessage={error}
+  />
 }
 
-const EditUserForm = props => {
-  const { handleSubmit } = props
-  // <View>
-  // <Button type="button" onPress={() => load(data)} title="Load Account"/>
-  //   </View>
-  return (
-    <View>
+class EditUserForm extends Component {
+  render() {
+    const { handleSubmit, invalid, pristine } = this.props
+    return (
       <View>
-        <Text>First Name</Text>
-        <View>
-          <Field
-            name="firstName"
-            component={renderTextField}
-            placeholder="First Name"
-          />
-        </View>
+        <Field name="firstName" placeholder='John' component={renderTextField} validate={validateIsRequired} label="First Name"/>
+        <Field name="lastName" placeholder='Smith' component={renderTextField} validate={validateIsRequired} label="Last Name"/>
+        <Button type="button" title="Submit" disabled={invalid || pristine} onPress={handleSubmit}/>
       </View>
-      <View>
-        <Text> Last Name</Text>
-        <View>
-          <Field
-            name="lastName"
-            component={renderTextField}
-            placeholder="Last Name"
-          />
-        </View>
-      </View>
-      <Button type="button" title="Submit" onPress={handleSubmit}/>
-    </View>
-  )
+    )
+  }
 }
 
 export default compose(
-  reduxForm({
-    form: 'settings',
+  connect((state, ownProps) => {
+    return {
+      initialValues: { firstName: ownProps.currentUser.firstName, lastName: ownProps.currentUser.lastName }
+    }
   }),
-  // connect(() => {
-  //   return {initialValues: data}
-  // })
+  reduxForm({
+    form: 'editUserForm',
+    enableReinitialize: true
+  })
 )(EditUserForm)

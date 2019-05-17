@@ -4,9 +4,6 @@ import { Button, Picker, View } from 'react-native'
 import { Input } from 'react-native-elements'
 import { currencyMask, validateIsRequired } from '../../../utils/formUtils'
 
-
-// leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-
 const renderAmountField = ({ input: { onChange, value } }) => {
   return <Input
     placeholder='Amount'
