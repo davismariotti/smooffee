@@ -99,6 +99,7 @@ export default compose(
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
+    padding: 10
   },
   drinkText: {
     fontSize: 30,

@@ -1,36 +1,32 @@
 import React, { Component } from 'react'
-import { ScrollView } from 'react-native'
-import { graphql } from 'react-apollo'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 import Order from './Order'
-import { readOrdersQuery } from '../../../graphql/userQueries'
-import LoadScreen from '../../LoadScreen'
 
 class ScrollingOrders extends Component {
   render() {
 
-    const { readOrdersQueryResult } = this.props
-
-    if (readOrdersQueryResult.loading || readOrdersQueryResult.error) {
-      return (
-        <LoadScreen/>
-      )
-    }
+    const { orders } = this.props
 
     return (
-      <ScrollView>
-        {readOrdersQueryResult.user.currentUser.orders.map(order => {
-          return (
-            <Order key={order.id} name={order.product.name} price={order.product.price} description={order.product.description}/>
-          )
-        })}
-      </ScrollView>
-
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator>
+          {orders.map(order => {
+            return (
+              <Order key={order.id} order={order}/>
+            )
+          })}
+        </ScrollView>
+      </View>
     )
   }
 }
 
-export default graphql(readOrdersQuery, {
-  name: 'readOrdersQueryResult'
+export default ScrollingOrders
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    backgroundColor: '#D3D3D3'
+  },
 })
-(ScrollingOrders)

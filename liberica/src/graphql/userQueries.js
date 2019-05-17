@@ -12,6 +12,20 @@ query ReadCurrentUser {
       status
       balance
       email
+      orders {
+        id
+        status
+        recipient
+        location
+        notes
+        totalCost
+        product {
+          id
+          name
+          price
+          description
+        }
+      }
     }
   }
 }
@@ -39,29 +53,6 @@ mutation CreateUser($organizationId:Long!,$userInput:UserInput!) {
       id
       firstName
       lastName
-    }
-  }
-}
-`
-
-export const readOrdersQuery = gql`
-query ReadOrders {
-  user {
-    currentUser {
-      id
-      orders {
-        id
-        status
-        recipient
-        location
-        notes
-        product {
-          id
-          name
-          price
-          description
-        }
-      }
     }
   }
 }

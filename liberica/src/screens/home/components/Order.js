@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Text, View, } from 'react-native'
+import { formatCurrency } from '../../../utils/currencyUtils'
 
 class Order extends Component {
   handleOptionsButton() {
@@ -7,11 +8,16 @@ class Order extends Component {
   }
 
   render() {
+
+    const { order } = this.props
+
     return (
       <View>
-        <Text>{this.props.name}</Text>
-        <Text>{this.props.price}</Text>
-        <Text>{this.props.description}</Text>
+        <Text>{order.product.name}</Text>
+        <Text>{order.recipient}</Text>
+        <Text>{formatCurrency(order.totalCost)}</Text>
+        <Text>{order.product.description}</Text>
+        <Text>{order.status}</Text>
         <Button title='options' onPress={this.handleOptionsButton.bind(this)}/>
       </View>
     )

@@ -49,7 +49,7 @@ const renderOrderModifiers = props => {
   const { availableOrderModifiers, input: { onChange, value }, label } = props
   return (
     <div>
-      <FormControl style={{width: 300}}>
+      <FormControl style={{ width: 300 }}>
         <InputLabel htmlFor="select-multiple-chip">{label}</InputLabel>
         <Select
           multiple
@@ -107,7 +107,7 @@ class EditProductForm extends React.Component {
           </StyledFormRow>
           <StyledFormRow>
             <StyledFormRowItem>
-              <Field style={{ width: '300px' }} fullWidth name="orderModifiers" component={renderOrderModifiers} label="Choose order modifiers" availableOrderModifiers={availableOrderModifiers} />
+              <Field style={{ width: '300px' }} fullWidth name="orderModifiers" component={renderOrderModifiers} label="Choose order modifiers" availableOrderModifiers={availableOrderModifiers}/>
             </StyledFormRowItem>
           </StyledFormRow>
           <StyledFormRow>
