@@ -12,6 +12,7 @@ query ReadProducts($organizationId: Long!) {
         id
         status
         name
+        additionalCost
       }
     }
   }
