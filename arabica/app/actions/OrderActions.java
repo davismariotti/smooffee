@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class OrderActions {
 
-    public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, Set<OrderModifier> orderModifiers) {
-        if (user == null || deliveryPeriod == null || product == null || location == null || recipient == null) return null;
+    public static Order createOrder(User user, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, String size, Set<OrderModifier> orderModifiers) {
+        if (user == null || deliveryPeriod == null || product == null || location == null || recipient == null || size == null) return null;
 
         // Check user funds
         int balance = user.getBalance();
@@ -33,14 +33,15 @@ public class OrderActions {
                 .setLocation(location)
                 .setNotes(notes)
                 .setRecipient(recipient)
+                .setSize(size)
                 .setOrderModifiers(orderModifiers)
                 .setTotalCost(totalCost)
                 .setStatus(BaseModel.ACTIVE)
                 .store();
     }
 
-    public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, Set<OrderModifier> orderModifiers) {
-        if (order == null || deliveryPeriod == null || product == null || location == null || notes == null || recipient == null) return null;
+    public static Order updateOrder(Order order, DeliveryPeriod deliveryPeriod, Product product, String location, String notes, String recipient, String size, Set<OrderModifier> orderModifiers) {
+        if (order == null || deliveryPeriod == null || product == null || location == null || notes == null || recipient == null || size == null) return null;
 
         return order
                 .setDeliveryPeriod(deliveryPeriod)
@@ -48,6 +49,7 @@ public class OrderActions {
                 .setRecipient(recipient)
                 .setNotes(notes)
                 .setLocation(location)
+                .setSize(size)
                 .setOrderModifiers(orderModifiers)
                 .store();
     }

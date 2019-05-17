@@ -13,7 +13,7 @@ public class QLEntry {
     public QLEntry(BaseModel model) {
         this.id = model.getId();
         this.status = BaseModel.statusIntToString(model.getStatus());
-        this.createdAt = new SimpleDateFormat("MM-dd-yyyy").format(model.getCreatedAt());
+        this.createdAt = new SimpleDateFormat("h:m a M-d-yyyy").format(model.getCreatedAt());
     }
 
     public Long getId() {

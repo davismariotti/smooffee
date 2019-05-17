@@ -1,6 +1,6 @@
 input UserInput {
-    firstName: String
-    lastName: String
+    firstName: String!
+    lastName: String!
 }
 
 type UserEntry {
@@ -37,4 +37,5 @@ type UserMutation {
     updateStatus(userId: String!, status: String!): UserEntry!
     updateRole(userId: String!, role: String!): UserEntry!
     attachCard(userId: String!, stripeToken: String!): CardEntry!
+    feedback(message: String): String!
 }

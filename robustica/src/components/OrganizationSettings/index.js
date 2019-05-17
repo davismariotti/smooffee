@@ -10,7 +10,6 @@ import { ADMIN } from '../../utils/role'
 
 class OrganizationSettings extends Component {
   render() {
-    console.log('has', AuthService.userHasRole(ADMIN))
     return (
       <div>
         <OrganizationName/>

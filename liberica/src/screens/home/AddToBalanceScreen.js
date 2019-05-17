@@ -9,8 +9,7 @@ import { StorageService } from '../../services/StorageService'
 
 class AddToBalanceScreen extends React.Component {
   static navigationOptions = {
-    // Don't show a header
-    header: null
+    title: 'Add to Balance'
   }
 
   render() {

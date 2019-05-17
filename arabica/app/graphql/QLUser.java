@@ -3,6 +3,7 @@ package graphql;
 import actions.UserActions;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.stripe.model.Card;
+import com.sun.jersey.api.client.ClientResponse;
 import models.BaseModel;
 import models.Organization;
 import models.User;
@@ -10,9 +11,7 @@ import services.AuthenticationService;
 import services.authorization.AuthorizationContext;
 import services.authorization.Permission;
 import services.authorization.Role;
-import utilities.QLException;
-import utilities.QLFinder;
-import utilities.ThreadStorage;
+import utilities.*;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -100,7 +99,7 @@ public class QLUser {
             // TODO use int values of role
             if (role.equals(Role.SYSADMIN.getName()) || role.equals(Role.ANONYMOUS.getName())) throw new Permission.AccessDeniedException(); // Can't make a user a sysadmin
 
-            return new UserEntry(user.setRole(Role.valueOf(role).getValue()).store());
+            return new UserEntry(user.setRole(Role.fromName(role).getValue()).store());
         }
 
         public CardEntry attachCard(String userId, String stripeToken) {
@@ -112,6 +111,25 @@ public class QLUser {
             Card card = UserActions.addStripeCardToUser(user, stripeToken);
 
             return new CardEntry(card);
+        }
+
+        public String feedback(String message) {
+            // Get the calling user
+            User user = User.findByFirebaseUid(ThreadStorage.get().uid);
+            if (user == null) throw new QLException("User not found.");
+            Permission.check(Permission.THIS_ORGANIZATION_SHARE_FEEDBACK, new AuthorizationContext(user.getOrganization()));
+
+            // Get admins in their organization
+            List<User> admins = User.findAdminsByOrganizationId(user.getOrganization().getId());
+
+            String formattedMessage = String.format("The following feedback was sent by %s %s (id: %s): \n\n%s", user.getFirstName(), user.getLastName(), user.getFirebaseUserId(), message);
+
+            for (User admin : admins) {
+                ClientResponse rsp = MailGunEmailProvider.sendEmail(String.format("%s %s", admin.getFirstName(), admin.getLastName()), admin.getEmail(), "Feedback from user", formattedMessage);
+                ArabicaLogger.logger.debug("test");
+            }
+
+            return "Success!";
         }
     }
 

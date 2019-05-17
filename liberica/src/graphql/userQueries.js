@@ -12,6 +12,20 @@ query ReadCurrentUser {
       status
       balance
       email
+      orders {
+        id
+        status
+        recipient
+        location
+        notes
+        totalCost
+        product {
+          id
+          name
+          price
+          description
+        }
+      }
     }
   }
 }
@@ -44,35 +58,30 @@ mutation CreateUser($organizationId:Long!,$userInput:UserInput!) {
 }
 `
 
-export const readOrdersQuery = gql`
-query ReadOrders {
-  user {
-    currentUser {
-      id
-      orders {
-        id
-        status
-        recipient
-        location
-        notes
-        product {
-          id
-          name
-          price
-          description
-        }
-      }
-    }
-  }
-}
-`
-
 export const attachCardMutation = gql`
 mutation AttachCard($userId: String!, $stripeToken: String!) {
   user {
     attachCard(userId: $userId, stripeToken: $stripeToken) {
       stripeCardId
     }
+  }
+}
+`
+
+export const updateUserMutation = gql`
+mutation UpdateUser($userId: String!, $userInput: UserInput!) {
+  user {
+    update(userId: $userId, userInput: $userInput) {
+      id
+    }
+  }
+}
+`
+
+export const sendFeedbackMutation = gql`
+mutation SendFeedback($message: String!) {
+  user {
+    feedback(message: $message)
   }
 }
 `

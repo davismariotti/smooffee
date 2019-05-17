@@ -44,6 +44,9 @@ public class Order extends BaseModel {
 
     private Integer totalCost;
 
+    @Column(name = "drink_size")
+    private String size;
+
     public User getUser() {
         return user;
     }
@@ -113,6 +116,15 @@ public class Order extends BaseModel {
 
     public Order setTotalCost(Integer totalCost) {
         this.totalCost = totalCost;
+        return this;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public Order setSize(String size) {
+        this.size = size;
         return this;
     }
 

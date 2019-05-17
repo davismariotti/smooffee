@@ -21,7 +21,8 @@ const initialState = Immutable({
 
   areYouSure: null,
   editOrganization: null,
-  addMoreFunds: null
+  addMoreFunds: null,
+  promoteUser: null
 })
 
 export default {
@@ -111,7 +112,7 @@ export default {
             userMenu: null
           }
 
-        // Add funs
+        // Add funds
 
         case OrganizationSettingsActions.OPEN_ADD_FUNDS_MODAL:
           return {
@@ -123,6 +124,20 @@ export default {
           return {
             ...state,
             addMoreFunds: null
+          }
+
+        // Promote User
+
+        case OrganizationSettingsActions.OPEN_PROMOTE_USER_MODAL:
+          return {
+            ...state,
+            userMenu: null,
+            promoteUser: action.payload
+          }
+        case OrganizationSettingsActions.CLOSE_PROMOTE_USER_MODAL:
+          return {
+            ...state,
+            promoteUser: null
           }
 
         // Delivery Period

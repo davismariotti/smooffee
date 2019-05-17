@@ -7,6 +7,7 @@ query ListOrders($organizationId: Long!, $parameters: QLFinder) {
       id
       notes
       location
+      createdAt
       product {
         id
         name

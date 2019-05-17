@@ -126,5 +126,14 @@ mutation AddsFunds($userId: String!, $paymentInput: PaymentInput!) {
     }
   }
 }
- 
+`
+
+export const updateRoleMutation = gql`
+mutation UpdateRole($userId: String!, $role: String!) {
+  user {
+    updateRole(userId: $userId, role: $role) {
+      id
+    }
+  }
+}
 `

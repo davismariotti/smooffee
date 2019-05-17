@@ -12,6 +12,7 @@ public enum Role {
     CUSTOMER("customer", 4);
 
     private static final Map<Integer, Role> intToTypeMap = new HashMap<>();
+    private static final Map<String , Role> nameToTypeMap = new HashMap<>();
 
     private final String name;
     private final int value;
@@ -32,6 +33,7 @@ public enum Role {
     static {
         for (Role type : Role.values()) {
             intToTypeMap.put(type.value, type);
+            nameToTypeMap.put(type.name, type);
         }
     }
 
@@ -39,6 +41,14 @@ public enum Role {
         Role type = intToTypeMap.get(i);
         if (type == null)
             return Role.ANONYMOUS;
+        return type;
+    }
+
+    public static Role fromName(String name) {
+        Role type = nameToTypeMap.get(name);
+        if (type == null) {
+            return Role.ANONYMOUS;
+        }
         return type;
     }
 }

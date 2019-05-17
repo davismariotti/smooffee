@@ -29,15 +29,9 @@ stripe.setOptions({
 // ]
 
 class ManagePayment extends React.Component {
-  constructor(props) {
-    super(props)
-    this.requestPayment = this.requestPayment.bind(this)
-  }
-
   static navigationOptions = {
     title: 'Manage Payment'
   }
-
   static styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -65,6 +59,11 @@ class ManagePayment extends React.Component {
     },
   })
 
+  constructor(props) {
+    super(props)
+    this.requestPayment = this.requestPayment.bind(this)
+  }
+
   renderSeparator = () => {
     return (
       <View
@@ -83,7 +82,7 @@ class ManagePayment extends React.Component {
     const { attachCardMutate, readUserCardsQueryResult } = this.props
     return stripe
       .paymentRequestWithCardForm({
-        requiredBillingAddressFields: 'full'
+        requiredBillingAddressFields: 'zip'
       })
       .then(async stripeTokenInfo => {
         console.warn('Token created', { stripeTokenInfo })
@@ -106,7 +105,9 @@ class ManagePayment extends React.Component {
     const { readUserCardsQueryResult } = this.props
 
     let cards = readUserCardsQueryResult.user && readUserCardsQueryResult.user.currentUser.cards || []
-    cards.push({ end: true, stripeCardId: 'endKey' })
+    if (cards.length === 0 || (cards[cards.length - 1] && !cards[cards.length - 1].end)) {
+      cards.push({ end: true, stripeCardId: 'endKey' })
+    }
 
     return (
       <View>

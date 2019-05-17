@@ -33,6 +33,9 @@ export default class OrganizationSettingsActions {
   static OPEN_ADD_FUNDS_MODAL = 'OPEN_ADD_FUNDS_MODAL'
   static CLOSE_ADD_FUNDS_MODAL = 'CLOSE_ADD_FUNDS_MODAL'
 
+  static OPEN_PROMOTE_USER_MODAL = 'OPEN_PROMOTE_USER_MODAL'
+  static CLOSE_PROMOTE_USER_MODAL = 'CLOSE_PROMOTE_USER_MODAL'
+
   // Products
 
   static openCreateProductModal() {
@@ -138,6 +141,23 @@ export default class OrganizationSettingsActions {
   static closeAddFundsModal() {
     return {
       type: OrganizationSettingsActions.CLOSE_ADD_FUNDS_MODAL
+    }
+  }
+
+  // Promote User
+
+  static openPromoteUserModal(user) {
+    return {
+      type: OrganizationSettingsActions.OPEN_PROMOTE_USER_MODAL,
+      payload: {
+        ...user
+      }
+    }
+  }
+
+  static closePromoteUserModal() {
+    return {
+      type: OrganizationSettingsActions.CLOSE_PROMOTE_USER_MODAL
     }
   }
 
