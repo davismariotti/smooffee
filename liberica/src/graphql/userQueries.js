@@ -19,6 +19,7 @@ query ReadCurrentUser {
         location
         notes
         totalCost
+        createdAt
         product {
           id
           name
