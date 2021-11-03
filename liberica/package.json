@@ -36,7 +36,7 @@
     "redux-form-input-masks": "^2.0.1",
     "seamless-immutable": "^7.1.4",
     "tipsi-stripe": "^7.5.0",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
